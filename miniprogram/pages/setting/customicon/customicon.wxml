@@ -1,0 +1,31 @@
+<view class="cu-custom">
+  <view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;background: #000000;">
+    <view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+      <text class="cuIcon-back" bindtap="BackPage"></text>
+      <button open-type="share" style="background:none;border:none">
+        <text class="cuIcon-upload"></text>
+      </button>
+    </view>
+    <view class="content" style="top:{{StatusBar}}px">
+      <slot name="content"></slot>图标
+    </view>
+    <slot name="right"></slot>
+  </view>
+</view>
+
+<view style="padding-top: {{CustomBar}}px;">
+
+  <sc-radio-group class="block" bindchange="themeRadioChange">
+    <view class="cu-list menu text-left" style="width: 100%;margin-top: 0;">
+      <label class="flex justify-left align-center flex-sub" >
+        <sc-radio label="图标1" value="图标1" style="width:100%;;border-bottom:1px solid #131313"></sc-radio>
+      </label>
+    </view>
+    <view class="cu-list menu text-left" style="width: 100%;margin-top: 0;">
+      <label class="flex justify-left align-center flex-sub" >
+        <sc-radio label="图标2" value="图标2" style="width:100%;;border-bottom:1px solid #131313"></sc-radio>
+      </label>
+    </view>
+  </sc-radio-group>
+
+</view>

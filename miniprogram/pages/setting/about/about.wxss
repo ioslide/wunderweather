@@ -1,0 +1,69 @@
+page {
+  /* background-color: rgba(89, 162, 251, 0.61); */
+  background: #010101;
+}
+
+.slide-bar {
+  position: relative;
+  color: transparent;
+  animation: fill-text-white 2s 1.6s forwards;
+}
+.slide-bar::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #35b9f1;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: slide-in-out 2s cubic-bezier(0.75, 0, 0, 1) forwards;
+}
+
+@keyframes slide-in-out {
+  50% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50.1% {
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+@keyframes fill-text-white {
+  to {
+    color: white;
+  }
+}
+
+.xhytextAni .title,
+.xhytextAni .subtitle {
+  width: 250px;
+  height: 30px;
+}
+.xhytextAni .title {
+  margin: 0;
+  font-family: Lato, sans-serif;
+  font-size: 26px;
+  line-height: 30px;
+}
+.xhytextAni .title::before {
+  background: #FF4081;
+}
+.xhytextAni .subtitle {
+  margin: 10px 0 0 0;
+  font-family: Lato, sans-serif;
+  font-size: 12px;
+  line-height: 30px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  animation-delay: 3.2s;
+}
+.xhytextAni .subtitle::before {
+  background: #03A9F4;
+  animation-delay: 2s;
+}

@@ -1,0 +1,12 @@
+
+.weatherIcon {
+  width: 45px;
+  height: 45px;
+  background: rgba(190, 174, 174, 0.314);
+  border-radius: 50%;
+}
+
+.weatherIconCircle {
+  width: 30px;
+  height: 30px;
+}

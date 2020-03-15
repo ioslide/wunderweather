@@ -1,0 +1,42 @@
+@import "/weatherui/assets/wxss/main.wxss";
+@import "/weatherui/assets/wxss/icon.wxss";
+
+
+button::after {
+border: none;
+}
+.cube {
+    transform: translate3d(0,0,0);
+}
+
+.mt5 {
+    margin-top: 5rpx;
+}
+
+.mt10 {
+    margin-top: 10rpx;
+}
+
+.mt15 {
+    margin-top: 15rpx;
+}
+
+.mt16 {
+    margin-top: 16rpx;
+}
+
+.mt20 {
+    margin-top: 20rpx;
+}
+
+.mt30 {
+    margin-top: 30rpx;
+}
+
+.mt40 {
+    margin-top: 40rpx;
+}
+
+.mt50 {
+    margin-top: 50rpx;
+}

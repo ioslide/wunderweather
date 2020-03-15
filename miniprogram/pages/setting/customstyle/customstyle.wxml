@@ -1,0 +1,95 @@
+<page-meta background-color="{{bgColor}}" background-color-top="{{bgColorTop}}" background-color-bottom="{{bgColorBottom}}" scroll-duration="1000" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}" bindresize="pageResize" bindscrolldone="pageScrollDone">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+
+<view class="cu-custom">
+	<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+			<text class="cuIcon-back" bindtap="backPage"></text>
+			<button open-type="share" style="background:none;border:none">
+				<text class="cuIcon-upload"></text>
+			</button>
+		</view>
+		<view class="content" style="top:{{StatusBar}}px">
+			<slot name="content">样式</slot>
+		</view>
+		<slot name="right"></slot>
+	</view>
+</view>
+<view style="padding-top: {{CustomBar}}px;">
+
+	<view class="cu-list menu text-left" style="width: 100%;">
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">图片</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.imageSwitchChange}}" bind:change="switchChange" data-cur="imageSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">天气特效</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="weatherAniSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">详情</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.detailSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="detailSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">未来24小时</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailyhourSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailyhourSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">未来7天</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySevenSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySevenSwitchChange"></sc-switch>
+		</label>
+		<!-- <label class="flex justify-left align-center flex-sub">
+      <n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+        <text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">降水几率</text>
+      </n-cell>
+      <sc-switch class="sc-switch" name="switch" checked="{{$.style.rainfallSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="rainfallSwitchChange"></sc-switch>
+    </label> -->
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">空气质量指数</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.aqiSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="aqiSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">日照</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.sunlightSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="sunlightSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">月相</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.moonSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="moonSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">风速</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.windSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="windSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">雷达</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.radarSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="radarSwitchChange"></sc-switch>
+		</label>
+		<label class="flex justify-left align-center flex-sub">
+			<n-cell right-icon="iconfont icon-right" value="switch" style="width:85%;">
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-lg">屏幕常亮</text>
+			</n-cell>
+			<sc-switch class="sc-switch" name="switch" checked="{{$.style.KeepScreenOnSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="KeepScreenOnSwitchChange"></sc-switch>
+		</label>
+	</view>
+</view>

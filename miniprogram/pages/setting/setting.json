@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group",
+    "sc-radio": "/weatherui/components/scRadio/sc-radio",
+    "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group"
+  },
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#010101",
+  "backgroundColorTop": "#010101",
+  "backgroundColorBottom":"#010101"
+}

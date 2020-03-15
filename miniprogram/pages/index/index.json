@@ -1,0 +1,14 @@
+{
+  "usingComponents": {
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group",
+    "canvasdrawer": "/weatherui/components/canvasdrawer/canvasdrawer",
+    "sc-button":"/weatherui/components/scButton/sc-button",
+    "sc-radio": "/weatherui/components/scRadio/sc-radio",
+    "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group",
+    "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker"
+  },
+  "navigationStyle": "custom",
+  "onReachBottomDistance": 100,
+  "enablePullDownRefresh": true
+}

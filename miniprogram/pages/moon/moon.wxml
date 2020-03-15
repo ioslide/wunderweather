@@ -1,0 +1,33 @@
+<page-meta background-color="{{bgColor}}" background-color-top="{{bgColorTop}}" background-color-bottom="{{bgColorBottom}}" scroll-duration="1000" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}" bindresize="pageResize" bindscrolldone="pageScrollDone">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+
+<view class="cu-custom">
+	<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+			<text class="cuIcon-back" bindtap="backPage"></text>
+			<button open-type="share" style="background:none;border:none">
+				<text class="cuIcon-upload"></text>
+			</button>
+		</view>
+		<view class="content" style="top:{{StatusBar}}px">
+			<slot name="content">未来48小时</slot>
+		</view>
+		<slot name="right"></slot>
+	</view>
+</view>
+<view style="padding-top: {{CustomBar}}px;">
+	<view class="{{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{moonPhaseLists}}" wx:key="index" wx:if="{{item&&index<16}}">
+		<sc-cell right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}">
+			<text slot="subheader1">{{item.moonTimeDate}}</text>
+			<text slot="subheader">{{item.moonTimePhaseCN}}</text>
+			<text slot="subbottom">{{item.moonTimePhaseEN}}</text>
+			<view slot="iconimage">
+				<view class="flex align-center justify-center margin-sm">
+					<image class="flex align-center justify-center moonIconCircle" mode="aspectFit" src="https://teaimg.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
+				</view>
+			</view>
+		</sc-cell>
+	</view>
+
+</view>

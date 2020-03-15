@@ -1,0 +1,64 @@
+<view class="cu-custom">
+	<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;background: #000000;">
+		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+			<text class="cuIcon-back" bindtap="backPage"></text>
+			<button open-type="share" style="background:none;border:none">
+				<text class="cuIcon-upload"></text>
+			</button>
+		</view>
+		<view class="content" style="top:{{StatusBar}}px">
+			<slot name="content"></slot>
+		</view>
+		<slot name="right"></slot>
+	</view>
+</view>
+
+<view style="padding-top: {{CustomBar}}px;">
+	<view class="flex justify-center align-center padding">
+		<view class="flex-between">
+			<view class="flex justify-center margin align-center padding-top">
+				<image style="height:80px;width:80px" mode="aspectFit" src="https://teaimg.ioslide.com/weather/weatherlogo.png"></image>
+			</view>
+			<view class="flex justify-center align-center text-white text-xxxl" style="font-family: 'Lato', sans-serif;font-weight:300">
+				奇妙天气
+			</view>
+			<view class="flex justify-center align-center text-white margin-top" style="font-family: 'Lato', sans-serif;">
+				1.1.4</view>
+		</view>
+	</view>
+
+	<view class="flex text-white margin-top padding-top-xs padding-bottom-xs" style="width:100%;border-top:1px solid #131313">
+		<sc-cell right-icon="iconfont icon-right" style="width:100%;">
+			<text class="text-lg">评分</text>
+			<text class="text-s text-default" slot="subheader">喜欢奇妙天气这款应用吗？</text>
+		</sc-cell>
+	</view>
+	<view class="flex text-white padding-top-xs padding-bottom-xs" style="width:100%;border-top:1px solid #131313">
+		<button open-type="feedback" bindcontact="handleContact" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
+		</button>
+		<sc-cell right-icon="iconfont icon-right" style="width:100%;">
+			<text class="text-lg">反馈</text>
+			<text class="text-s text-default" slot="subheader">报告任何bug和问题</text>
+		</sc-cell>
+	</view>
+	<view class="flex text-white padding-top-xs padding-bottom-xs" style="width:100%;border-top:1px solid #131313">
+		<button open-type="share" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
+		</button>
+		<sc-cell right-icon="iconfont icon-right" style="width:100%;">
+			<text class="text-lg">分享</text>
+			<text class="text-s text-default" slot="subheader">分享给你的朋友和家人</text>
+		</sc-cell>
+	</view>
+	<!-- <view class="flex text-white padding-top-xs padding-bottom-xs" style="width:100%;border-top:1px solid #131313">
+		<official-account bindload="EventHandle" binderror="EventHandle" style="width: 100%;padding: 0px 14px;"></official-account>
+	</view> -->
+</view>
+
+<view style="position:fixed;bottom:20px;left:20px">
+	<view class="xhytextAni">
+		<h1 class="title slide-bar">I'm XHY.</h1>
+	</view>
+	<view class="xhytextAni">
+		<p class="subtitle slide-bar">Mini Program Author</p>
+	</view>
+</view>
