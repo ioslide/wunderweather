@@ -6,6 +6,9 @@
 			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="margin-top: 6px;">
 				<slot name="subheader1"></slot>
 			</view>
+			<view class="sc-cell-header {{themeValue == '明亮'?'text-grey':'text-white'}} text-lg">
+				<slot name="customstyle"></slot>
+			</view>
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="margin-top: 6px;">
 				<slot name="subheader"></slot>
 			</view>

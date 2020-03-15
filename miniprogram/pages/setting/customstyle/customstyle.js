@@ -46,10 +46,29 @@ create(store, {
     }
   },
   switchChange(e) {
-    console.log(e)
-    var style = wx.getStorageSync("$$").style
-    style[e.currentTarget.dataset.cur] = e.detail.value
-    app.changeStorage('style', style)
+    const changeStyle = (target,result) =>{
+      let style = wx.getStorageSync("$$").style
+      style[target] = result
+      app.changeStorage('style', style)
+    }
+    const keepScreenOnSwitchChange = (keepScreenOnSwitch) =>{
+      wx.setKeepScreenOn({
+        keepScreenOn: keepScreenOnSwitch
+      })
+    }
+    const event = (target,result) => {
+      switch (true) {
+        case (target == 'KeepScreenOnSwitchChange'):
+          keepScreenOnSwitchChange(result),
+          changeStyle(target,result)
+          break
+        default:
+          changeStyle(target,result)
+          break
+      }
+    }
+    event(e.currentTarget.dataset.cur,e.detail.value)
+    log('[switchChange] =>',e)
   },
   onHide: function () {
     const t = this

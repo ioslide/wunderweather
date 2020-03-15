@@ -179,15 +179,20 @@ App({
   },
   changeStorage(i, t) {
     log([i],'=>', t)
-    let $$ = wx.getStorageSync("$$")
-    $$[i] = t
-    log($$[i])
-    log($$)
-    wx.setStorage({
-      data: $$,
+    wx.getStorage({
       key: '$$',
+      success: (result) => {
+        let $$ = result.data
+        $$[i] = t
+        wx.setStorage({
+          data: $$,
+          key: '$$',
+        })
+      },
+      fail: (res) => {
+        console.warn('res')
+      }
     })
-    // wx.setStorageSync('$$', $$);
   },
   bioCheck () {
     const startSoterAuthentication = () => {

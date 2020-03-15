@@ -8,7 +8,7 @@
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view>
 					<view class="flex justify-center padding align-center" bindtap="checkLocationAuth">
-						<image style="height:150px;width:150px" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weatherlogo.png"></image>
+						<image style="height:150px;width:150px" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding align-center">
 						<text class="text-4a5568 text-xl text-weight-300">你好</text>
@@ -142,7 +142,7 @@
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view>
 					<view class="flex justify-center padding align-center" bindtap="checkLocationAuth">
-						<image style="height:150px;width:150px" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weatherlogo.png"></image>
+						<image style="height:150px;width:150px" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding align-center">
 						<text class="text-4a5568 text-xl text-weight-300">你好</text>

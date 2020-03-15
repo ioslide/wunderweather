@@ -20,7 +20,7 @@ create(store, {
     ]
   },
   onLoad: function (e) {
-    wx.hideLoading()
+    // wx.hideLoading()
   },
   onShow: function (e) {
     const t = this

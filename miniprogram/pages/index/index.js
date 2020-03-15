@@ -123,46 +123,13 @@ create(store, {
       'temperatureUnit'
     ]
   },
-  props: {
-    // refresh: {
-    //   type: Boolean,
-    //   value: !1
-    // }
-  },
-  mounted() {
-    // const t = this,
-    //   r = new Date(),
-    //   a = r.getFullYear(),
-    //   n = r.getMonth() + 1,
-    //   l = r.getDate(),
-    //   i = e.default.li.trans(a, n, l);
-    // t.set({
-    //   li: i
-    // });
-  },
-  watch: {
-    // refresh: function () {
-    //   if (this.data.refresh) {
-    //     const t = this,
-    //       r = new Date(),
-    //       a = r.getFullYear(),
-    //       n = r.getMonth() + 1,
-    //       l = r.getDate(),
-    //       i = e.default.li.trans(a, n, l);
-    //     t.set({
-    //       li: i
-    //     });
-    //   }
-    // }
-  },
   onLoad(a) {
     warn('[onLoad]')
     const t = this
     const handler = function (evt) {
-      log('[', evt, '] =>', evt)
+      log('['+ evt +']'+'=>', evt)
     }
     store.onChange(handler)
-    // t.loadFont()
     wx.getNetworkType({
       success: res => {
         const networkType = res.networkType
@@ -510,13 +477,7 @@ create(store, {
   manualSetLocation() {
     warn('[manualSetLocation]')
     const t = this
-    var locationKey = '';
-    if (t.store.data.themeValue == '明亮') {
-      locationKey = '7EYBZ-6K6L4-TPQUT-XTTZJ-OZUUF-Y5F24'
-    }
-    if (t.store.data.themeValue == '黑夜') {
-      locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO'
-    }
+    var locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO'
     const appReferer = '奇妙天气-小程序';
     const locationCategory = '奇妙天气,XHY';
     wx.navigateTo({
@@ -1572,7 +1533,8 @@ create(store, {
     t.setData({
       'isGettingLocation': true
     })
-    let time = util.formatDate(new Date()),
+    let 
+      time = util.formatDate(new Date()),
       date = util.getDates(7, time)
     t.saveData("lastRefreshTime", date[0].time)
     t.saveData('manualSetLocation', false)
