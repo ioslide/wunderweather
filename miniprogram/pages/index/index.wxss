@@ -642,7 +642,6 @@ button::after {
   top: 0;
   background: #f5f6f7
 }
-
 .authScreenNextCell {
   position: absolute;
   right: 25px;

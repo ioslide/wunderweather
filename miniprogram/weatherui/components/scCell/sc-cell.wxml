@@ -15,6 +15,9 @@
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="margin-top: 6px;">
 				<slot name="subbottom"></slot>
 			</view>
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="margin-top: 6px;">
+				<slot name="subbottom1"></slot>
+			</view>
 		</view>
 	</view>
 	<view class="sc-cell-right">

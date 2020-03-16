@@ -71,7 +71,7 @@
   -webkit-box-align: start;
   -webkit-align-items: start;
   align-items: start;
-  padding: 0 16rpx;
+  padding: 0 26rpx;
 }
 
 .sc-cell-left-container .sc-cell-header {

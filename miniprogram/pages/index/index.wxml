@@ -113,6 +113,14 @@
 									<view class="text-gray text-d flex justify-between">华氏度/摄氏度</view>
 								</view>
 							</view>
+							<view class="cu-item" bindtap="showModal" data-target="temperatureUnit">
+								<view class="cu-avatar m" style="background-image:url(https://teaimg.ioslide.com/weather/authScreenTemperature.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">距离单位</view>
+									<view class="text-gray text-d flex justify-between">metric/SI/imperial</view>
+								</view>
+							</view>
 							<view class="cu-item">
 								<view class="cu-avatar m" style="background-image:url(https://teaimg.ioslide.com/weather/authScreenSub.svg);">
 								</view>
@@ -255,7 +263,7 @@
 	</view>
 
 	<view class="flex padding-left justify-left" style="min-height:20px;">
-		<view class="text-left text-grey text-s padding-top-sm">{{forecastData.todayRain}}</view>
+		<view class="text-left text-grey text-s padding-top-sm">{{forecastData.hourlyKeypoint}}</view>
 	</view>
 
 
@@ -334,7 +342,7 @@
 					<view class="flex align-end">
 						<view class="flex-sub text-center">
 							<!-- <canvas class="daily-icon text-sm" id="{{item.id}}" type="2d"></canvas> -->
-							<image class="daily-icon text-sm" src="{{item.iconPath}}"></image>
+							<image class="daily-icon text-sm" src="{{item.iconPath}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 							<view class="daily-date text-sm text-grey">{{item.date}}</view>
 						</view>
 					</view>
@@ -783,10 +791,9 @@
 							<view class="flex-sub">
 								<view class="flex align-start justify-end margin-top-lg margin-right-lg">
 									<view class="flex align-center justify-center weatherIcon">
-										<image class="flex align-center justify-center weatherIconCircle" src="{{item.icon}}"></image>
+										<image class="flex align-center justify-center weatherIconCircle" src="{{item.aniIconPath}}"></image>
 									</view>
 								</view>
-
 							</view>
 						</view>
 					</view>
