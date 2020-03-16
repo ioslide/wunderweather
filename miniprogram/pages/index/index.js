@@ -128,7 +128,7 @@ create(store, {
       dailyWeather: [],
       serviceData: [],
       bodyFeel: {},
-      todayAqi: {},
+      airQuality: {},
       alarmInfo: []
     },
     use: [
@@ -584,15 +584,16 @@ create(store, {
         windDirection: this.getWindDirect(t.wind.direction)
       },
       n = {
-        aqi: t.aqi,
-        aqiName: o.getAqiData(t.aqi).name,
+        aqi: t.air_quality.aqi.chn,
+        aqiName: t.air_quality.description.chn,
+        aqiDescription:o.getAqiDescription(t.air_quality.aqi.chn),
         aqiLevel: o.getAqiData(t.aqi).level,
-        no2: t.no2,
-        o3: t.o3,
-        pm10: t.pm10,
-        pm25: t.pm25,
-        so2: t.so2,
-        co: t.co
+        no2: t.air_quality.no2,
+        o3: t.air_quality.o3,
+        pm10: t.air_quality.pm10,
+        pm25: t.air_quality.pm25,
+        so2: t.air_quality.so2,
+        co: t.air_quality.co
       },
       time = util.formatDate(new Date()),
       date = util.getDates(7, time),
@@ -613,7 +614,7 @@ create(store, {
         'forecastData.nowWeather': e[i],
         // 'forecastData.nowWeatherBackground': "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
         'forecastData.bodyFeel': r,
-        'forecastData.todayAqi': n,
+        'forecastData.airQuality': n,
         'forecastData.skycon': t.skycon,
         'aqiColor': aqiColor,
         'curDetailTime': curDetailTime
@@ -673,17 +674,15 @@ create(store, {
     // },o.store.data.refreshfrequencyValue.replace('小时', '') * 100000000000000060 * 60);
     // },99999999999999999999999999999)
   },
-  getTemperatureChartsData(a, b) {
+  getTemperatureChartsData(a) {
     let
-      e = 1,
-      h = 1
-    return a <= 5 ? (e = a * 23, h = b * 2) : 5 < a && a <= 10 ? (
-      e = a * 14, h = b * 1.8) : 10 < a && a <= 15 ? (e = a * 9, h = b * 1.5) : 15 < a && a <= 20 ? (
-      e = a * 7, h = b) : 20 < a && a <= 30 ? (e = a * 5, h = b * 0.6) : 20 < a && a <= 30 ? (
-      e = a * 3, h = b * 0.5) : a > 30 && (
-      e = a * 1, h = b * 0.2), {
-      chartsHeight: e,
-      chartsmargin: h
+      e = 1
+    return a <= 5 ? (e = a * 23) : 5 < a && a <= 10 ? (
+      e = a * 14) : 10 < a && a <= 15 ? (e = a * 9) : 15 < a && a <= 20 ? (
+      e = a * 7) : 20 < a && a <= 30 ? (e = a * 5) : 20 < a && a <= 30 ? (
+      e = a * 3) : a > 30 && (
+      e = a * 1), {
+      chartsHeight: e
     }
   },
   setTimelyWeather(a) {
@@ -723,10 +722,13 @@ create(store, {
       g < 10 && (g = "0" + g), h < 10 && (h = "0" + h);
       let p = g + "月" + h + '日'
 
-      let chartsMargin = Math.abs(Math.round(d.temperature[f].min))
+      let chartsMargin = Math.round(d.temperature[f].min)
+      //Set a horizontal line
+      if(chartsMargin < 0){
+        chartsMargin = Math.round(d.temperature[f].min) + 20
+      }
       let chartsHeight = Math.abs(Math.round(d.temperature[f].max) - Math.round(d.temperature[f].min))
-      let getTemperatureChartsData = that.getTemperatureChartsData(chartsHeight, chartsMargin)
-      let aqiData = that.getAqiData(d.air_quality.aqi[f].avg.chn)
+      let getTemperatureChartsData = that.getTemperatureChartsData(chartsHeight)
       
       let dailyTempMin =  Math.round(d.temperature[f].min)
       let dailyTempMax =  Math.round(d.temperature[f].max)
@@ -747,17 +749,19 @@ create(store, {
         tempMin: dailyTempMin,
         tempMax: dailyTempMax,
         temperatureChartsHeight: getTemperatureChartsData.chartsHeight,
-        temperatureChartsMargin: getTemperatureChartsData.chartsMargin,
+        temperatureChartsMargin: chartsMargin,
         monthday: p,
         id: d.skycon[f].value,
-        aqi: Math.round(aqiData),
-        aqiName: aqiData.name,
-        aqiColor: aqiData.color,
+        aqi:d.air_quality.aqi[f].avg.chn ,
+        astro:{
+          date:d.astro[f].date.substring(0,10),
+          sunrise:d.astro[f].sunrise,
+          sunset:d.astro[f].sunset
+        },
         windLevel: that.getWindLevel(d.wind[f].avg.speed),
         windDirect: that.getWindDirect(d.wind[f].avg.direction)
       });
     }
-
     let swtemperature = d.temperature[0].avg
     if(that.store.data.temperatureUnit.temperatureUnitValueC == true){
       swtemperature = swtemperature
@@ -835,6 +839,10 @@ create(store, {
       color: o,
       level: e
     };
+  },
+  getAqiDescription(a) {
+    let d = '令人满意的空气质量'
+    return a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"),d;
   },
   getWindLevel(a) {
     let t = 0;

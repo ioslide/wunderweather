@@ -362,40 +362,15 @@
 		<view class="flex padding opacity-0" animation="{{thirdObserverAni}}">
 			<view class="flex-sub">
 				<view class="text-left text-xxsl" style="font-weight:100;color:{{aqiColor}};font-family: 'Lato', sans-serif;">
-					{{forecastData.todayAqi.aqi}}
+					{{forecastData.airQuality.aqi}}
 				</view>
 			</view>
 			<view class="flex-twice padding">
 				<view class="flex align-start text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="padding-top: 5px;">
-					<view class="{{forecastData.todayAqi.aqi <= 50 ?'show':' none'}}">优
-					</view>
-					<view class="{{forecastData.todayAqi.aqi > 50 && forecastData.todayAqi.aqi<100 ?'show':' none'}}">良
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 100 && forecastData.todayAqi.aqi<150 ?'show':' none'}}">不益于健康和敏感人群
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 150 && forecastData.todayAqi.aqi<200 ?'show':' none'}}">轻度污染
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 200 && forecastData.todayAqi.aqi<300 ?'show':' none'}}">
-						重度污染
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 300 ?'show':' none'}}">
-						严重污染
-					</view>
+					{{forecastData.airQuality.aqiName}}
 				</view>
-
 				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 5px;">
-					<view class="{{forecastData.todayAqi.aqi <= 50  ?'show':' none'}}">令人满意的空气质量
-					</view>
-					<view class="{{forecastData.todayAqi.aqi > 50 && forecastData.todayAqi.aqi<100 ?'show':' none'}}">可以接受的空气质量
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 100 && forecastData.todayAqi.aqi<150 ?'show':' none'}}">敏感人群可能会感到不适
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 150 && forecastData.todayAqi.aqi<200 ?'show':' none'}}">一般人群应避免户外活动
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 200 && forecastData.todayAqi.aqi<300 ?'show':' none'}}">健康预警：一般人群可能会出现不适应症状
-					</view>
-					<view class="{{forecastData.todayAqi.aqi >= 300 ?'show':' none'}}">紧急情况下的健康预警
-					</view>
+					{{forecastData.airQuality.aqiDescription}}
 				</view>
 			</view>
 		</view>
@@ -424,7 +399,7 @@
 			</view>
 
 			<view class="flex flex-wrap">
-				<view class="flex justify-end" style="flex-basis: {{(forecastData.todayAqi.aqi-8)*100/500}}%;">
+				<view class="flex justify-end" style="flex-basis: {{(forecastData.airQuality.aqi-8)*100/500}}%;">
 					<view>
 						<view class="polute-line" decode="{{true}}"></view>
 					</view>
