@@ -791,7 +791,7 @@
 							<view class="flex-sub">
 								<view class="flex align-start justify-end margin-top-lg margin-right-lg">
 									<view class="flex align-center justify-center weatherIcon">
-										<image class="flex align-center justify-center weatherIconCircle" src="{{item.aniIconPath}}"></image>
+										<image class="flex align-center justify-center weatherIconCircle" src="{{item.whitePath}}"></image>
 									</view>
 								</view>
 							</view>
