@@ -27,11 +27,28 @@ var a,
       a && a.__esModule;
     },
     (require("../../libs/config.js")), {
-      CLEAR_DAY: "晴天",
+      CLEAR_DAY: "晴",
       CLEAR_NIGHT: "晴夜",
-      PARTLY_CLOUDY_DAY: "多云",
-      PARTLY_CLOUDY_NIGHT: "多云",
+      PARTLY_CLOUDY_DAY: "白天多云",
+      PARTLY_CLOUDY_NIGHT: "夜间多云",
       CLOUDY: "阴",
+      LIGHT_HAZE:"轻度雾霾",
+      MODERATE_HAZE	:"中度雾霾",
+      HEAVY_HAZE:"重度雾霾",
+      LIGHT_RAIN:"小雨",
+      MODERATE_RAIN:"中雨",
+      HEAVY_RAIN:"大雨",
+      STORM_RAIN:"暴雨",
+      FOG:"雾",
+      LIGHT_SNOW:"小雪",
+      MODERATE_SNOW:"中雪",
+      HEAVY_SNOW:"大雪",
+      STORM_SNOW:"暴雪",
+      DUST:"浮尘",
+      SAND:"沙尘",
+      THUNDER_SHOWER:"雷阵雨",
+      HAIL:"冰雹",
+      SLEET:"雨夹雪",
       RAIN: "雨",
       WIND: "风",
       SNOW: "雪",
@@ -83,7 +100,6 @@ create(store, {
     shareImage: '',
     touchS: [0, 0],
     touchE: [0, 0],
-    // li: null,
     headContentcurTime: null,
     // headContentSwitch: false,
     canDrawSunCalcAgain: false,
@@ -100,8 +116,8 @@ create(store, {
     forecastData: {
       nowTemp: "",
       nowWeather: "",
-      todayWeather: "",
-      todayRain: "",
+      hourlyKeypoint: "",
+      minutelyKeypoint: "",
       // nowWeatherBackground: "",
       hourlyWeather: [],
       todayWeatherQuantity: [],
@@ -490,23 +506,20 @@ create(store, {
     let e = ''
     // p = ''
     if (isChoseLocation == true) {
-      e = "https://api.caiyunapp.com/v2/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
-      // p = "https://api.caiyunapp.com/v2/TAkhjf8d1nlSlspN/" + choseLocationData.longitude + "," + choseLocationData.latitude
+      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
     }
     if (isChoseLocation == false) {
-      e = "https://api.caiyunapp.com/v2/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
-      // p = "https://api.caiyunapp.com/v2/TAkhjf8d1nlSlspN/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
+      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
     }
     const
       o = e + "/realtime.json",
-      s = e + "/forecast.json?dailysteps=15&alert=true"
-    // q = p + "/daily.json?lang=en_US&dailysteps=360";  //时区不同
+      s = e + "/forecast.json?lang=zh_CN&dailysteps=30&alert=true&unit=metric"
     const requestWeatherData = () => {
       wx.request({
         url: o,
         success: a => {
-          let e = a.data.result;
-          log('[getNowWeather] => [setNowWeather]')
+          let e = a.data.result.realtime;
+          log('[getNowWeather] => [setNowWeather]',e)
           t.setNowWeather(e)
           t.saveData("nowdata", e);
         }
@@ -515,10 +528,9 @@ create(store, {
         url: s,
         success: a => {
           let e = a.data.result;
-          log('[getNowWeather] => [setTimelyWeather]')
+          warn('[getNowWeather] => [setTimelyWeather]',e)
           t.setTimelyWeather(e)
           t.saveData("forecastData", e);
-          log(`[forecastData] =>`, e)
         },
         complete: () => {
           a && a();
@@ -610,12 +622,11 @@ create(store, {
       log(`[setNowWeather] = >`, t)
 
     const getNowCityData = () => {
-      // let tempcity = o.data.forecastData.city
-      // tempcity = tempcity.slice(0, 8) + '...'
       let data = {
         address: o.data.forecastData.address,
         city: o.data.forecastData.city,
-        icon: "https://teaimg.ioslide.com/weather/" + t.skycon + "-icon-ani.svg",
+        aniIconPath: "https://teaimg.ioslide.com/weather/icon/0/" + t.skycon + "-icon-ani.svg",
+        iconPath: "https://teaimg.ioslide.com/weather/icon/0/" + t.skycon + "-icon.svg",
         backgroundBg: "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
         nowTemp: nowTemp,
         skycon: t.skycon,
@@ -676,9 +687,9 @@ create(store, {
   },
   setTimelyWeather(a) {
     const that = this;
-    log('[setTimelyWeather]')
-    log('[setTimelyWeather] => [hourlyWeather]', a.hourly)
-    //hourly weather
+    warn('[setTimelyWeather]')
+
+    warn('[setTimelyWeather] => [hourlyWeather]', a.hourly)
     for (var t = a.hourly, i = [], r = new Date().getHours(), n = 0; n < 48; n++) {
       let c = n + r;
       let hourlyTemp =  t.temperature[n].value
@@ -690,16 +701,17 @@ create(store, {
       }
       i.push({
         time: c % 24 + ".00",
-        iconPath: "https://teaimg.ioslide.com/weather/" + t.skycon[n].value + "-icon",
-        aniIconPath: "https://teaimg.ioslide.com/weather/" + t.skycon[n].value + "-icon-ani.svg",
+        weather:e[t.skycon[n].value],
+        iconPath: "https://teaimg.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
+        aniIconPath: "https://teaimg.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon-ani.svg",
         temp: Math.round(hourlyTemp)+'°',
         wind: that.getWindDirect(t.wind[n].direction) + " " + that.getWindLevel(t.wind[n].speed) + "级",
         value: t.skycon[n].value
       });
     }
-    log('[setTimelyWeather] => [dailyWeather]', a.daily)
-    //daily weather
-    for (var d = a.daily, u = [], f = 0; f < 15; f++) {
+
+    warn('[setTimelyWeather] => [dailyWeather]', a.daily)
+    for (var d = a.daily, u = [], f = 0; f < 16; f++) {
       let l = new Date().getDay() + f;
       l %= 7;
       let D = new Date();
@@ -713,7 +725,7 @@ create(store, {
       let chartsMargin = Math.abs(Math.round(d.temperature[f].min))
       let chartsHeight = Math.abs(Math.round(d.temperature[f].max) - Math.round(d.temperature[f].min))
       let getTemperatureChartsData = that.getTemperatureChartsData(chartsHeight, chartsMargin)
-      let aqiData = that.getAqiData(d.aqi[f].avg)
+      let aqiData = that.getAqiData(d.air_quality.aqi[f].avg.chn)
       
       let dailyTempMin =  Math.round(d.temperature[f].min)
       let dailyTempMax =  Math.round(d.temperature[f].max)
@@ -729,14 +741,15 @@ create(store, {
       u.push({
         date: "星期" + "天一二三四五六".charAt(l),
         weather: e[d.skycon[f].value],
-        iconPath: "https://teaimg.ioslide.com/weather/" + d.skycon[f].value + "-icon-ani.svg",
+        iconPath: "https://teaimg.ioslide.com/weather/icon/0/" + d.skycon[f].value+"-icon",
+        aniIconPath: "https://teaimg.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon-ani.svg",
         tempMin: dailyTempMin,
         tempMax: dailyTempMax,
         temperatureChartsHeight: getTemperatureChartsData.chartsHeight,
         temperatureChartsMargin: getTemperatureChartsData.chartsMargin,
         monthday: p,
         id: d.skycon[f].value,
-        aqi: Math.round(d.aqi[f].avg),
+        aqi: Math.round(aqiData),
         aqiName: aqiData.name,
         aqiColor: aqiData.color,
         windLevel: that.getWindLevel(d.wind[f].avg.speed),
@@ -759,7 +772,7 @@ create(store, {
       name: "湿度",
       type: "sw-humidity"
     }, {
-      desc: Math.round(d.ultraviolet[0].index),
+      desc: Math.round(d.life_index.ultraviolet[0].index),
       name: "紫外线指数",
       type: "sw-ultraviolet"
     }, {
@@ -771,9 +784,9 @@ create(store, {
       name: "云量",
       type: "sw-cloudrate"
     }, {
-      desc: Math.round(d.pres[0].avg) + "mb",
+      desc: Math.round(d.pressure[0].avg) + "mb",
       name: "气压",
-      type: "sw-pres"
+      type: "sw-pressure"
     }]
 
     // let todayWeatherQuantity = JSON.parse(JSON.stringify(i));
@@ -781,8 +794,8 @@ create(store, {
       'forecastData.todayWeatherQuantity': JSON.parse(JSON.stringify(i)),
       'forecastData.dailyWeather': u,
       'forecastData.hourlyWeather': i,
-      'forecastData.todayRain': a.minutely.description,
-      'forecastData.todayWeather': a.hourly.description,
+      'forecastData.minutelyKeypoint': a.minutely.description,
+      'forecastData.hourlyKeypoint': a.hourly.description,
       'forecastData.serviceData': m,
     });
 
@@ -1821,7 +1834,7 @@ create(store, {
   onShareAppMessage(a) {
     const t = this
     return {
-      title: t.data.forecastData.city + ",今天" + t.data.forecastData.nowTemp + "," + t.data.forecastData.nowWeather + "," + t.data.forecastData.todayRain,
+      title: '奇妙天气',
       path: "/pages/index/index"
     };
   },

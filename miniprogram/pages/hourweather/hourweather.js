@@ -9,10 +9,10 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    hourlyWeather:[]
-    // use: [
-    //   'forecastData'
-    // ]
+    hourlyWeather:[],
+    use: [
+      'themeValue'
+    ]
   },
   onLoad: function (options) {
     const i = getCurrentPages()[0].data.forecastData.hourlyWeather
