@@ -1053,7 +1053,6 @@ create(store, {
     const requestBing = () =>{
       wx.request({
         url: 'https://www.benweng.com/api/bing/lists',
-        // https://www.benweng.com/api/bing/lists
         header: {
           "content-type": "application/json"
         },
