@@ -630,6 +630,7 @@ create(store, {
         iconPath: "https://teaimg.ioslide.com/weather/icon/0/" + t.skycon + "-icon.svg",
         whitePath:"https://teaimg.ioslide.com/weather/icon/0/" + t.skycon + "-icon-white.svg",
         backgroundBg: "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
+        // backgroundBg: o.data.bingImage.img_url,
         nowTemp: nowTemp,
         skycon: t.skycon,
         nowWeather: e[i],
@@ -1052,11 +1053,12 @@ create(store, {
     const requestBing = () =>{
       wx.request({
         url: 'https://www.benweng.com/api/bing/lists',
-        data: {},
+        // https://www.benweng.com/api/bing/lists
         header: {
           "content-type": "application/json"
         },
         success: res => {
+          log('[requestBing]',res)
           let bingImage = res.data.data[0]
           t.setData({
             bingImage: bingImage
@@ -1474,7 +1476,7 @@ create(store, {
     event(e.currentTarget.dataset.cur)
   },
   showModal(e) {
-    log('[showModal]')
+    log('[showModal]',e)
     const t = this
     const setData = (modalName) => {
       t.setData({
@@ -1501,7 +1503,8 @@ create(store, {
           setData(result)
       }
     }
-    event(e.currentTarget.dataset.target)
+    // event(e.currentTarget.dataset.target)
+    event(e.detail)
   },
   hideModal(e) {
     log('[hideModal]')

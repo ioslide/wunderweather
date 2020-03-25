@@ -1,12 +1,13 @@
-page {
-  /* background-color: rgba(89, 162, 251, 0.61); */
-  background: #010101;
-}
 
 .slide-bar {
   position: relative;
   color: transparent;
-  animation: fill-text-white 2s 1.6s forwards;
+}
+.fill-text-white{
+  animation: fill-white 2s 1.6s forwards;
+}
+.fill-text-dark{
+  animation: fill-dark 2s 1.6s forwards;
 }
 .slide-bar::before {
   position: absolute;
@@ -34,12 +35,16 @@ page {
     transform-origin: right;
   }
 }
-@keyframes fill-text-white {
+@keyframes fill-white {
   to {
-    color: white;
+    color: #ffffff;
   }
 }
-
+@keyframes fill-dark {
+  to {
+    color: #8799A3;
+  }
+}
 .xhytextAni .title,
 .xhytextAni .subtitle {
   width: 250px;

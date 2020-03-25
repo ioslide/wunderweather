@@ -6,6 +6,9 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
+    use:[
+      'themeValue'
+    ]
   },
   handleContact(e) {
     console.log(e.detail.path)

@@ -34,5 +34,8 @@
   "navigateToMiniProgramAppIdList": [
     "wx4ffcd811b31b23ac"
   ],
+  "usingComponents": {
+    "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule"
+  },
   "sitemapLocation": "sitemap.json"
 }

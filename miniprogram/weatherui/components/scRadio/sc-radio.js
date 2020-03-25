@@ -52,9 +52,6 @@ Component({
     _changeRadio: function (e) {
       // log(e)
       var t = this
-      setTimeout(function () {
-        t.store.data.modalName = null
-      }, 150);
       if (t.data.checked == !1) {
         t.setData(
           {

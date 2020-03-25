@@ -1,0 +1,23 @@
+<view class="cu-custom">
+	<view class="cu-bar fixed" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{isBack == true ? themeValue == '明亮'?'background:#F1F1F1':'background:#010101':'background:none'}}">
+		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+			<block wx:if="{{isBack == true}}">
+				<text class="cuIcon-back" bindtap="backPage"></text>
+				<button open-type="share" style="background:none;border:none">
+					<text class="cuIcon-upload"></text>
+				</button>
+			</block>
+			<block wx:if="{{isBack == false}}">
+				<text class="cuIcon-upload"  bindtap="onTap" id="DrawerModalB">
+        </text>
+				<text class="cuIcon-all"  bindtap="onTap" id="DrawerModalL">
+        </text>
+			</block>
+		</view>
+
+		<view class="content {{themeValue == '明亮'?'text-grey':'text-white'}}" style="top:{{StatusBar}}px">
+			{{contentText}}
+		</view>
+		<slot name="right"></slot>
+	</view>
+</view>

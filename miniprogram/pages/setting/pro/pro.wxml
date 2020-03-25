@@ -1,14 +1,4 @@
-<view class="cu-custom">
-  <view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;background: #000000;">
-    <view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
-      <text class="cuIcon-back" bindtap="BackPage"></text>
-      <button open-type="share" style="background:none;border:none">
-        <text class="cuIcon-upload"></text>
-      </button>
-    </view>
-    <view class="content" style="top:{{StatusBar}}px">
-      <slot name="content"></slot>专业模式
-    </view>
-    <slot name="right"></slot>
-  </view>
-</view>
+<page-meta background-color="{{$.themeValue == '明亮'?'#F1F1F1':'#010101'}}"  scroll-duration="1000"  bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F1F1F1':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>

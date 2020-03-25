@@ -7,7 +7,7 @@ App({
     CustomBar: "",
     Custom: "",
     clientId: "c3d88ee29b2337915fd0",
-    language:'zh_CN'
+    language: 'zh_CN'
   },
   onShow(options) {
     wx.BaaS.reportTemplateMsgAnalytics(options)
@@ -29,40 +29,43 @@ App({
     wx.loadFontFace({
       family: 'wencangshufang',
       source: 'url("https://teaimg.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-      success:res =>{
-        log('[loadFontFace]',res)
+      success: res => {
+        log('[loadFontFace]', res)
       }
     })
   },
   dataPrePull() {
-      wx.getBackgroundFetchData({
-        fetchType: 'periodic',
-        success(res) {
-          log('[getBackgroundFetchData] => periodic =>',res)
-          wx.setStorage({
-            data: res.fetchedData,
-            key: 'dataPrePull',
-          })
-          wx.setStorage({
-            data: true,
-            key: 'canPrePull',
-          })
-        },
-        fail(res){
-          log("[getBackgroundFetchData] => periodic => fail");
-        },complete(){
-          log("[getBackgroundFetchData] => completed");
-        }
-      })
-      wx.setBackgroundFetchToken({
-        token: '19980313',
-        success: res => {
-          log('[setBackgroundFetchToken] => success =>',res)
-        },
-        fail: err => {
-          log('[setBackgroundFetchToken] => fail',err)
-        }
-      })
+    const t = this
+    wx.getBackgroundFetchData({
+      fetchType: 'periodic',
+      success(res) {
+        log('[getBackgroundFetchData] => periodic =>', res)
+        t.loadFontFace(res)
+        wx.setStorage({
+          data: res.fetchedData,
+          key: 'dataPrePull',
+        })
+        wx.setStorage({
+          data: true,
+          key: 'canPrePull',
+        })
+      },
+      fail(res) {
+        log("[getBackgroundFetchData] => periodic => fail");
+      },
+      complete() {
+        log("[getBackgroundFetchData] => completed");
+      }
+    })
+    wx.setBackgroundFetchToken({
+      token: '19980313',
+      success: res => {
+        log('[setBackgroundFetchToken] => success =>', res)
+      },
+      fail: err => {
+        log('[setBackgroundFetchToken] => fail', err)
+      }
+    })
   },
   autologin() {
     log('[autologin]')
@@ -96,13 +99,13 @@ App({
     // })
     wx.BaaS = requirePlugin('sdkPlugin')
     wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    let clientID = 'c3d88ee29b2337915fd0'  // 应用名称: 奇妙天气
+    let clientID = 'c3d88ee29b2337915fd0' // 应用名称: 奇妙天气
     wx.BaaS.init(clientID)
   },
   getSystemInfo() {
     wx.getSystemInfo({
       success: res => {
-        log(`[getSystemInfo]`,res)
+        log(`[getSystemInfo]`, res)
         this.globalData.language = res.language;
         this.globalData.StatusBar = res.statusBarHeight;
         let capsule = wx.getMenuButtonBoundingClientRect();
@@ -112,7 +115,7 @@ App({
         } else {
           this.globalData.CustomBar = res.statusBarHeight + 50;
         }
-        log('[globalData] => ' ,this.globalData)
+        log('[globalData] => ', this.globalData)
       }
     })
   },
@@ -156,7 +159,7 @@ App({
       })
     }
   },
-  compareVersion (v1, v2) {
+  compareVersion(v1, v2) {
     v1 = v1.split('.')
     v2 = v2.split('.')
     const len = Math.max(v1.length, v2.length)
@@ -178,23 +181,12 @@ App({
     return 0
   },
   changeStorage(i, t) {
-    log([i],'=>', t)
-    wx.getStorage({
-      key: '$$',
-      success: (result) => {
-        let $$ = result.data
-        $$[i] = t
-        wx.setStorage({
-          data: $$,
-          key: '$$',
-        })
-      },
-      fail: (res) => {
-        console.warn('res')
-      }
-    })
+    log([i], t)
+    let $$ = wx.getStorageSync('$$')
+    $$[i] = t
+    wx.setStorageSync('$$', $$)
   },
-  bioCheck () {
+  bioCheck() {
     const startSoterAuthentication = () => {
       wx.startSoterAuthentication({
         requestAuthModes: [AUTH_MODE],
@@ -263,13 +255,13 @@ App({
       data: t
     });
   },
-  isToday(str){
-    var d = new Date(str.replace(/-/g,"/"));
+  isToday(str) {
+    var d = new Date(str.replace(/-/g, "/"));
     var todaysDate = new Date();
-    if(d.setHours(0,0,0,0) == todaysDate.setHours(0,0,0,0)){
-        return true;
+    if (d.setHours(0, 0, 0, 0) == todaysDate.setHours(0, 0, 0, 0)) {
+      return true;
     } else {
-        return false;
+      return false;
     }
   }
 })

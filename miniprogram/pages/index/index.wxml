@@ -1,6 +1,11 @@
-<page-meta background-color="{{bgColor}}" background-color-top="{{bgColorTop}}" background-color-bottom="{{bgColorBottom}}" scroll-duration="1000" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}" bindresize="pageResize" bindscrolldone="pageScrollDone">
+<page-meta background-color="{{$.themeValue == '明亮'?'#F1F1F1':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F1F1F1':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
+
+<view class="cu-custom {{modalName=='DrawerModalL'?'cuBarFadeOut':'cuBarFadeIn'}}">
+	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModal">
+	</sc-capsule>
+</view>
 
 <view class="{{$.themeValue == '明亮'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="width:{{$.startScreen == '授权' ? mobileWidth*4 : mobileWidth}}px " catchtouchmove="true">
 	<block wx:if="{{$.startScreen == '授权'}}">
@@ -164,29 +169,64 @@
 	</block>
 </view>
 
-<view class="cu-custom {{modalName=='DrawerModalL'?'cuBarFadeOut':'cuBarFadeIn'}}">
-	<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{bgImage?'background-image:url(' + bgImage+')':''}}">
-		<view class="action border-custom" bindtap="BackPage" wx:if="{{isBack}}" style="width:{{Custom.width-40}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
-			<text class="cuIcon-back"></text>
-			<slot name="backText"></slot>
+<view class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
+	<view class="cu-dialog" catchtap>
+		<view class="cu-bar justify-start" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">主题</button>
+			</view>
 		</view>
-
-		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
-			<!-- <button open-type="share" style="background:none;border:none"> -->
-			<text class="cuIcon-upload" bindtap="showModal" data-target="DrawerModalB" ></text>
-			<!-- </button> -->
-			<text class="cuIcon-all" bindtap="showModal" data-target="DrawerModalL"></text>
+		<sc-radio-group class="block" bindchange="themeRadioChange">
+			<view class="cu-list menu text-left" style="width: 100%;">
+				<view class="cu-item" value="明亮" catchtap>
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="明亮" checked="{{$.theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item" value="黑夜" catchtap>
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="黑夜" checked="{{$.theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
+					</label>
+				</view>
+			</view>
+		</sc-radio-group>
+		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+			</view>
 		</view>
-
-		<view class="content" style="top:{{StatusBar}}px">
-			<!-- <view class="{{headContentSwitch==false?'fadeOutUp none':'fadeInUp'}}">{{headContentcurTime}}</view> -->
-			<!-- <view class="{{headContentSwitch==false?'fadeInUp':'fadeOutUp none'}}">{{forecastData.city}} </view> -->
-			<view>{{forecastData.city}}</view>
-			<slot name="content"></slot>
-		</view>
-		<slot name="right"></slot>
 	</view>
 </view>
+
+<view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
+	<view class="cu-dialog" catchtap>
+		<view class="cu-bar justify-start" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">温度单位</button>
+			</view>
+		</view>
+		<sc-radio-group class="block" bindchange="temperatureUnitValueRadioChange">
+			<view class="cu-list menu text-left" style="width: 100%;">
+				<view class="cu-item" bindtap="temperatureUnitTap" id='temperatureUnitValueF' value="华氏度">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="华氏度" checked="{{$.temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item" bindtap="temperatureUnitTap" id='temperatureUnitValueC' value="摄氏度">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="摄氏度" checked="{{$.temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
+					</label>
+				</view>
+			</view>
+		</sc-radio-group>
+		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+			</view>
+		</view>
+	</view>
+</view>
+
 
 <view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
 
@@ -365,18 +405,17 @@
 					{{forecastData.airQuality.aqi}}
 				</view>
 			</view>
-			<view class="flex-twice padding">
+			<view class="flex-treble padding">
 				<view class="flex align-start text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="padding-top: 5px;">
 					{{forecastData.airQuality.aqiName}}
 				</view>
-				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 5px;">
+				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 10px;">
 					{{forecastData.airQuality.aqiDescription}}
 				</view>
 			</view>
 		</view>
 
 		<view class="padding padding-top-xs opacity-0" animation="{{thirdObserverAni}}">
-
 			<view class="flex flex-wrap {{$.themeValue == '明亮'?'text-grey':'text-white'}}" style="padding-bottom: 15px;">
 				<view class="basis-xxs" style="height:4px">
 					<text class="text-xs" decode="{{true}}">0</text>
@@ -812,67 +851,6 @@
 		</view>
 	</view>
 </view>
-
-
-<view catchtouchmove="return" class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal">
-	<view class="cu-dialog" catchtap>
-		<view class="cu-bar justify-start" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">主题</button>
-			</view>
-		</view>
-		<sc-radio-group class="block" bindchange="themeRadioChange">
-			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item" value="明亮" catchtap>
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="明亮" checked="{{$.theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-				<view class="cu-item" value="黑夜" catchtap>
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="黑夜" checked="{{$.theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-			</view>
-		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
-			</view>
-		</view>
-	</view>
-</view>
-
-
-<view catchtouchmove="return" class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="hideModal">
-	<view class="cu-dialog" catchtap>
-		<view class="cu-bar justify-start" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">温度单位</button>
-			</view>
-		</view>
-		<sc-radio-group class="block" bindchange="temperatureUnitValueRadioChange">
-			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item" bindtap="temperatureUnitTap" id='temperatureUnitValueF' value="华氏度">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="华氏度" checked="{{$.temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-				<view class="cu-item" bindtap="temperatureUnitTap" id='temperatureUnitValueC' value="摄氏度">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="摄氏度" checked="{{$.temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-			</view>
-		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
-			</view>
-		</view>
-	</view>
-</view>
-
 
 <sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
 <view class="cu-modal {{modalName=='shareImage'?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">

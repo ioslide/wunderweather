@@ -1,8 +1,7 @@
 const app = getApp();
 import create from '../../utils/create'
 import store from '../../store/index'
-// const $$ = wx.getStorageSync('$$')
-var log = console.log.bind(console)
+const log = console.log.bind(console)
 
 create(store, {
   data: {
@@ -55,29 +54,28 @@ create(store, {
       })
     }
   },
-  themeTap: function (e) {
-    var 
-      t = this,
-      id = e.currentTarget.id,
+
+  themeRadioChange: function (e) {
+    log('[themeRadioChange]', e.detail.value)
+    let t = this,
+      themeValue = e.detail.value.toString(),
       theme = {
-        switch_themeChecked_auto: false,
         switch_themeChecked_light: false,
         switch_themeChecked_dark: false
       }
-    theme[id] = true
+    if(themeValue == '明亮'){
+      theme['switch_themeChecked_light'] = true
+    }else{
+      theme['switch_themeChecked_dark'] = true
+    }
     t.setData({
-      theme: theme
-    })
-    app.changeStorage('theme', theme)
-  },
-  themeRadioChange: function (e) {
-    var t = this
-    t.setData({
-      themeValue: e.detail.value.toString(),
+      themeValue: themeValue,
+      theme: theme,
       modalName: null
     })
-    t.store.data.themeValue = e.detail.value.toString()
-    app.changeStorage('themeValue', e.detail.value.toString())
+    t.store.data.themeValue = themeValue
+    app.changeStorage('themeValue', themeValue)
+    app.changeStorage('theme', theme)
   },
   refreshfrequencyTap: function (e) {
     var t = this,
@@ -259,7 +257,7 @@ create(store, {
       data: t
     });
   },
-  onHide : function () {
+  onHide: function () {
     var t = this
     // t.store.data.refreshfrequencyValue = t.data.refreshfrequencyValue
     // t.store.data.languageValue = t.data.languageValue

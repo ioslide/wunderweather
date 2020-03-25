@@ -1,21 +1,9 @@
-<page-meta background-color="{{bgColor}}" background-color-top="{{bgColorTop}}" background-color-bottom="{{bgColorBottom}}" scroll-duration="1000" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}" bindresize="pageResize" bindscrolldone="pageScrollDone">
+<page-meta background-color="{{$.themeValue == '明亮'?'#F1F1F1':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F1F1F1':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
-<view class="cu-custom">
-	<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
-		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
-			<text class="cuIcon-back" bindtap="backPage"></text>
-			<button open-type="share" style="background:none;border:none">
-				<text class="cuIcon-upload"></text>
-			</button>
-		</view>
-		<view class="content" style="top:{{StatusBar}}px">
-			<slot name="content">设置</slot>
-		</view>
-		<slot name="right"></slot>
-	</view>
-</view>
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
+
 
 <view style="padding-top: {{CustomBar}}px;">
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
@@ -99,19 +87,14 @@
 		</view>
 		<sc-radio-group class="block" bindchange="themeRadioChange">
 			<view class="cu-list menu text-left" style="width: 100%;">
-				<!-- <view class="cu-item" bindtap="themeTap" id='switch_themeChecked_auto' value="自动">
+				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="自动" checked="{{theme.switch_themeChecked_auto}}" value="自动" style="width:100%;"></sc-radio>
-					</label>
-				</view> -->
-				<view class="cu-item" bindtap="themeTap" id='switch_themeChecked_light' value="明亮">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="明亮" checked="{{theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
+						<sc-radio label="明亮" value="明亮" checked="{{theme.switch_themeChecked_light}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
-				<view class="cu-item" bindtap="themeTap" id='switch_themeChecked_dark' value="黑夜">
+				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="黑夜" checked="{{theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
+						<sc-radio label="黑夜" value="黑夜" checked="{{theme.switch_themeChecked_dark}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
