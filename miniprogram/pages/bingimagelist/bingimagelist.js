@@ -25,9 +25,33 @@ create(store, {
   onLoad: function () {
     // const i = getCurrentPages()[0].data.forecastData.bingLists
     // console.log(i)
-    this.setData({
-      bingLists: wx.getStorageSync('bingLists')
-    })
+    const t = this
+    let hasBingLists = wx.getStorageSync('hasBingLists') || false
+    if(hasBingLists == false){
+      wx.request({
+        url: 'https://www.benweng.com/api/bing/lists',
+        header: {
+          "content-type": "application/json"
+        },
+        success: res => {
+          log('[requestBing]',res)
+          t.setData({
+            bingLists: res.data.data
+          });
+          t.saveData('bingLists', res.data.data)
+          t.saveData('hasBingLists',true)
+        },
+        fail: err =>{
+          warn('requestBing',err)
+          t.saveData('hasBingLists',false)
+        }
+      });
+    }
+    else if(hasBingLists == false){
+      t.setData({
+        bingLists: wx.getStorageSync('bingLists')
+      });
+    }
   },
   onShow() {
     const t = this
@@ -73,7 +97,7 @@ create(store, {
   onShareAppMessage: function (a) {
     return {
       title: '奇妙天气',
-      imageUrl: 'https://teaimg.ioslide.com/shareimg.png',
+      imageUrl: 'https://weather.ioslide.com/shareimg.png',
       path: "/pages/index/index"
     };
   },

@@ -8,8 +8,8 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    themeValue: '',
     theme: {},
+    distanceUnit:{},
     refreshfrequencyValue: '',
     refreshfrequency: {},
     languageValue: '',
@@ -26,33 +26,13 @@ create(store, {
     let $$ = wx.getStorageSync('$$')
     t.setData({
       theme: $$.theme,
-      themeValue: $$.themeValue,
+      temperatureUnit : $$.temperatureUnit,
+      distanceUnit : $$.distanceUnit,
       refreshfrequency: $$.refreshfrequency,
       refreshfrequencyValue: $$.refreshfrequencyValue,
       language: $$.language,
       languageValue: $$.languageValue
     })
-    if (t.store.data.themeValue == '明亮') {
-      log('[setBackgroundColor] => light')
-      wx.setBackgroundColor({
-        backgroundColor: '#F5F6F7',
-        backgroundColorTop: '#F5F6F7',
-        backgroundColorBottom: '#F5F6F7'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'dark'
-      })
-    } else {
-      log('[setBackgroundColor] => dark')
-      wx.setBackgroundColor({
-        backgroundColor: '#010101',
-        backgroundColorTop: '#010101',
-        backgroundColorBottom: '#010101'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'light'
-      })
-    }
   },
 
   themeRadioChange: function (e) {
@@ -247,7 +227,7 @@ create(store, {
   onShareAppMessage: function (a) {
     return {
       title: '奇妙天气',
-      imageUrl: 'https://teaimg.ioslide.com/shareimg.png',
+      imageUrl: 'https://weather.ioslide.com/shareimg.png',
       path: "/pages/index/index"
     };
   },

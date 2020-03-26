@@ -71,7 +71,7 @@ create(store, {
   onShareAppMessage: function (a) {
     return {
       title: '奇妙天气',
-      imageUrl: 'https://teaimg.ioslide.com/shareimg.png',
+      imageUrl: 'https://weather.ioslide.com/shareimg.png',
       path: "/pages/index/index"
     };
   },

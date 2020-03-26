@@ -9,7 +9,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">主题</text>
-			<text slot="subbottom">{{themeValue}}</text>
+			<text slot="subbottom">{{$.themeValue}}</text>
 		</sc-cell>
 	</view>
 

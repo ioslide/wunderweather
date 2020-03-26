@@ -8,7 +8,7 @@
 	<view class="flex justify-center align-center padding">
 		<view class="flex-between">
 			<view class="flex justify-center margin align-center padding-top">
-				<image style="height:80px;width:80px" mode="aspectFit" src="https://teaimg.ioslide.com/weather/weatherlogo.png"></image>
+				<image style="height:80px;width:80px" mode="aspectFit" src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
 			</view>
 			<view class="flex justify-center align-center text-xxxl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="font-family: 'Lato', sans-serif;font-weight:300">
 				奇妙天气

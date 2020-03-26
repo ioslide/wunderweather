@@ -21,7 +21,7 @@
 		</view>
 	</view>
 	<view class="sc-cell-right">
-		<slot name="iconimage"></slot>
+		<slot name="iconimageright"></slot>
 		<text class="right-text">
     <slot name="righttext"></slot>
     </text>

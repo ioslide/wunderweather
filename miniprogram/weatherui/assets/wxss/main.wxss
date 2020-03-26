@@ -3281,8 +3281,6 @@ scroll-view.cu-steps .cu-item {
           布局
  ==================== */
 
-/*  -- flex弹性布局 -- */
-
 .flex {
 	display: flex;
 }

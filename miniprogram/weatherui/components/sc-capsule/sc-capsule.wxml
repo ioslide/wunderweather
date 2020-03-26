@@ -8,9 +8,9 @@
 				</button>
 			</block>
 			<block wx:if="{{isBack == false}}">
-				<text class="cuIcon-upload"  bindtap="onTap" id="DrawerModalB">
+				<text class="cuIcon-upload"  bindtap="onCapTap" data-target="DrawerModalB">
         </text>
-				<text class="cuIcon-all"  bindtap="onTap" id="DrawerModalL">
+				<text class="cuIcon-all"  bindtap="onCapTap" data-target="DrawerModalL">
         </text>
 			</block>
 		</view>

@@ -6,13 +6,13 @@
 
 <view style="padding-top: {{CustomBar}}px;">
 	<view class="{{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{moonPhaseLists}}" wx:key="index" wx:if="{{item&&index<16}}">
-		<sc-cell right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}">
+		<sc-cell right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}" >
 			<text slot="subheader1">{{item.moonTimeDate}}</text>
 			<text slot="subheader">{{item.moonTimePhaseCN}}</text>
 			<text slot="subbottom">{{item.moonTimePhaseEN}}</text>
-			<view slot="iconimage">
+			<view slot="iconimageright">
 				<view class="flex align-center justify-center margin-sm">
-					<image class="flex align-center justify-center moonIconCircle" mode="aspectFit" src="https://teaimg.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
+					<image class="flex align-center justify-center moonIconCircle" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 				</view>
 			</view>
 		</sc-cell>

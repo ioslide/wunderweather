@@ -8,7 +8,6 @@
     "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group",
     "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker"
   },
-  "navigationStyle": "custom",
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true
 }

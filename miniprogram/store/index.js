@@ -1,7 +1,4 @@
-let 
-  style = {},
-  startScreen = '',
-  $$ = {}
+let $$ = {}
 let c = wx.getStorageSync('hasUserLocation') || false
 if (c == false) {
   $$ = {
@@ -27,12 +24,16 @@ if (c == false) {
       switch_themeChecked_dark: false
     },
     themeValue: '明亮',
-    // temperatureUnitValue: '摄氏度',
+    temperatureUnitValue: '摄氏度',
     temperatureUnit: {
       temperatureUnitValueF: false,
       temperatureUnitValueC: true
     },
-    startScreen:'诗词',
+    distanceUnit:{
+      distanceUnitValueM:false,
+      distanceUnitValueI:true
+    },
+    startScreen:'授权',
     style: {
       dailySevenSwitchChange: true,
       dailyhourSwitchChange: true,
@@ -49,31 +50,19 @@ if (c == false) {
     },
     proMode: false
   }
-  startScreen = '授权'
-  function toSave$$() {
-    return new Promise(resolve => {
-      setTimeout(() =>
-        wx.setStorage({
-          data: $$,
-          key: '$$'
-        }), 1000);
-    });
-  }
-  async function event() {
-    const v = await toSave$$();
-    console.log(v);
-  }
-  event();
+  wx.setStorage({
+    data: $$,
+    key: '$$'
+  })
 }
 if (c == true) {
   $$ = wx.getStorageSync('$$')
-  startScreen = $$.startScreen
 }
 console.log('[hasUserLocation] =>', c, ' => ', $$)
 
 export default {
   data: {
-    startScreen: startScreen,
+    startScreen: $$.startScreen,
     style: $$.style,
     // refreshfrequencyValue: info.refreshfrequencyValue,
     themeValue: $$.themeValue,
@@ -81,6 +70,7 @@ export default {
     theme: $$.theme,
     // temperatureUnitValue: $$.temperatureUnitValuem,
     temperatureUnit: $$.temperatureUnit,
+    distanceUnit:$$.distanceUnit
     // language: info.language,
   },
   // 无脑全部更新，组件或页面不需要声明 use

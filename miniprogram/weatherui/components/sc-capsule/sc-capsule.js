@@ -45,9 +45,9 @@ Component({
         url: '/pages/index/index',
       })
     },
-    onTap: function (e) {
+    onCapTap: function (e) {
       console.log(e)
-      let modalName = e.currentTarget.id
+      let modalName = e.currentTarget.dataset.target
       this.triggerEvent('showModalListener', modalName)
     }
   }

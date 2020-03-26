@@ -23,7 +23,7 @@ App({
     this.loadFontFace()
     this.initCloud()
     this.autologin()
-    this.dataPrePull()
+    // this.dataPrePull()
   },
   loadFontFace() {
     wx.loadFontFace({
