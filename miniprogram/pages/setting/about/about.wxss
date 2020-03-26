@@ -45,21 +45,21 @@
     color: #8799A3;
   }
 }
-.xhytextAni .title,
-.xhytextAni .subtitle {
+.olyTextAni .title,
+.olyTextAni .subtitle {
   width: 250px;
   height: 30px;
 }
-.xhytextAni .title {
+.olyTextAni .title {
   margin: 0;
   font-family: Lato, sans-serif;
   font-size: 26px;
   line-height: 30px;
 }
-.xhytextAni .title::before {
+.olyTextAni .title::before {
   background: #FF4081;
 }
-.xhytextAni .subtitle {
+.olyTextAni .subtitle {
   margin: 10px 0 0 0;
   font-family: Lato, sans-serif;
   font-size: 12px;
@@ -68,7 +68,7 @@
   text-transform: uppercase;
   animation-delay: 3.2s;
 }
-.xhytextAni .subtitle::before {
+.olyTextAni .subtitle::before {
   background: #03A9F4;
   animation-delay: 2s;
 }
