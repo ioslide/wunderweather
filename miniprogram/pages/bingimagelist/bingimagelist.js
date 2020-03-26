@@ -38,12 +38,12 @@ create(store, {
           t.setData({
             bingLists: res.data.data
           });
-          t.saveData('bingLists', res.data.data)
-          t.saveData('hasBingLists',true)
+          app.saveData('bingLists', res.data.data)
+          app.saveData('hasBingLists',true)
         },
         fail: err =>{
           warn('requestBing',err)
-          t.saveData('hasBingLists',false)
+          app.saveData('hasBingLists',false)
         }
       });
     }

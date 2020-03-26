@@ -1756,16 +1756,18 @@ button::after {
   }
 }
 
-.cuBarFadeOut {
+.capsuleFadeOut {
   opacity: 0;
   animation: fadeOut 0.7s ease;
 }
 
-.cuBarFadeIn {
+.capsuleFadeIn {
   opacity: 1;
   animation: fadeIn 0.7s ease-in;
 }
-
+.DrawerModalR-left{
+  position: ;
+}
 /* @-webkit-keyframes fadeInUp {
   from {
     opacity: 0;

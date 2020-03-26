@@ -23,13 +23,13 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="customstyle">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">样式</text>
-			<text slot="subbottom">首页样式</text>
+			<text slot="subbottom">自定义</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customicon">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">图标包</text>
+			<text slot="subheader1">图标</text>
 			<text slot="subbottom">默认</text>
 		</sc-cell>
 	</view>
@@ -37,7 +37,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customunit">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">单位</text>
-			<text slot="subbottom">摄氏度</text>
+			<text slot="subbottom">距离单位/温度单位</text>
 		</sc-cell>
 	</view>
 
@@ -72,7 +72,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="about">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">关于</text>
-			<text slot="subbottom">版本1.1.4</text>
+			<text slot="subbottom">版本1.1.6</text>
 		</sc-cell>
 	</view>
 </view>

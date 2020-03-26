@@ -2,7 +2,7 @@
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
-<view class="cu-custom {{modalName=='DrawerModalL'?'cuBarFadeOut':'cuBarFadeIn'}}">
+<view class="cu-custom {{modalName=='DrawerModalL' || modalName =='DrawerModalR'?'capsuleFadeOut':'capsuleFadeIn'}}">
 	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
 	</sc-capsule>
 </view>
@@ -126,7 +126,7 @@
 									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
 								</view>
 							</view>
-							<view class="cu-item">
+							<view class="cu-item" bindtap="subDailyWeather">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -169,92 +169,92 @@
 	</block>
 </view>
 
-<view class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
-	<view class="cu-dialog" catchtap>
-		<view class="cu-bar justify-start" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">主题</button>
-			</view>
-		</view>
-		<sc-radio-group class="block" bindchange="themeRadioChange">
-			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item" value="明亮" catchtap>
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="明亮" checked="{{theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-				<view class="cu-item" value="黑夜" catchtap>
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="黑夜" checked="{{theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
-					</label>
+<block wx:if="{{$.startScreen == '授权'}}">
+	<view class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">主题</button>
 				</view>
 			</view>
-		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
-			</view>
-		</view>
-	</view>
-</view>
-
-<view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
-	<view class="cu-dialog" catchtap>
-		<view class="cu-bar justify-start" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">温度单位</button>
-			</view>
-		</view>
-		<sc-radio-group class="block" bindchange="temperatureUnitValueRadioChange">
-			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="华氏度" checked="{{temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
-					</label>
+			<sc-radio-group class="block" bindchange="themeRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item" value="明亮" catchtap>
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="明亮" checked="{{theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item" value="黑夜" catchtap>
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="黑夜" checked="{{theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
+						</label>
+					</view>
 				</view>
-				<view class="cu-item">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="摄氏度" checked="{{temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
-					</label>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
 				</view>
-			</view>
-		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
 			</view>
 		</view>
 	</view>
-</view>
-
-<view class="cu-modal {{modalName=='distanceUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
-	<view class="cu-dialog" catchtap>
-		<view class="cu-bar justify-start" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">距离单位</button>
-			</view>
-		</view>
-		<sc-radio-group class="block" bindchange="distanceUnitValueRadioChange">
-			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="metric" checked="{{distanceUnit.distanceUnitValueM}}" value="metric" style="width:100%;"></sc-radio>
-					</label>
-				</view>
-				<view class="cu-item">
-					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="imperial" checked="{{distanceUnit.distanceUnitValueI}}" value="imperial" style="width:100%;"></sc-radio>
-					</label>
+	<view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">温度单位</button>
 				</view>
 			</view>
-		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
-			<view class="action">
-				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+			<sc-radio-group class="block" bindchange="temperatureUnitValueRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="华氏度" checked="{{temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="摄氏度" checked="{{temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+				</view>
 			</view>
 		</view>
 	</view>
-</view>
+	<view class="cu-modal {{modalName=='distanceUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">距离单位</button>
+				</view>
+			</view>
+			<sc-radio-group class="block" bindchange="distanceUnitValueRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="metric" checked="{{distanceUnit.distanceUnitValueM}}" value="metric" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="imperial" checked="{{distanceUnit.distanceUnitValueI}}" value="imperial" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+				</view>
+			</view>
+		</view>
+	</view>
+</block>
 
 <view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
 
@@ -634,6 +634,17 @@
 <view class='navslideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
 <view class="drawerR-modal drawer-modal justify-end {{modalName=='DrawerModalR'?'show':''}}" bindtap="hideModal" data-target="DrawerModalR" catchtouchmove="preventTouchMove">
+
+	
+	<!-- <view class="cu-custom {{modalName =='DrawerModalR'?'capsuleFadeIn':'capsuleFadeOut'}}">
+		<view class="cu-bar fixed" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+			<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+				<text class="text-xl {{$.themeValue == '明亮'?'text-grey':'text-black'}}">首页样式设置
+        </text>
+			</view>
+		</view>
+	</view> -->
+
 	<view class="cu-dialog-drawerR basis-sm {{$.themeValue == '明亮'?'cu-dialog-drawerR-bg-light':'cu-dialog-drawerR-bg-dark'}}" catchtap style="">
 		<view class="flex padding-xs justify-center align-center" style="height: 20%;">
 			<view style="width:50%" bindtap="autoSetLocation">
@@ -681,7 +692,7 @@
 						</view>
 					</block>
 				</view>
-				<view class="{{$.themeValue == '明亮'?'item-text-light':'item-text-dark'}}">每日图片</view>
+				<view class="{{$.themeValue == '明亮'?'item-text-light':'item-text-dark'}}">顶部图片</view>
 			</view>
 			<view style="width:50%" bindtap="switchChange" data-cur="detailSwitchChange">
 				<view class="flex padding-xs justify-center align-center">

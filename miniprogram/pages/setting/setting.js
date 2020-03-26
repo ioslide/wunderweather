@@ -26,8 +26,10 @@ create(store, {
     let $$ = wx.getStorageSync('$$')
     t.setData({
       theme: $$.theme,
-      temperatureUnit : $$.temperatureUnit,
-      distanceUnit : $$.distanceUnit,
+      // temperatureUnit : $$.temperatureUnit,
+      // temperatureUnitValue:$$.temperatureUnitValue,
+      // distanceUnit : $$.distanceUnit,
+      // distanceUnitValue:$$.distanceUnitValue,
       refreshfrequency: $$.refreshfrequency,
       refreshfrequencyValue: $$.refreshfrequencyValue,
       language: $$.language,

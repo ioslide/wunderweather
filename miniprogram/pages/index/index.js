@@ -111,7 +111,6 @@ create(store, {
     authScreen: false,
     strSunSet: "",
     strSunRise: "",
-    bingLists: {},
     bingImage: "",
     forecastData: {
       nowTemp: "",
@@ -134,9 +133,7 @@ create(store, {
     use: [
       'style',
       'themeValue',
-      'startScreen',
-      // 'temperatureUnit',
-      // 'distanceUnit'
+      'startScreen'
     ]
   },
   onLoad(a) {
@@ -187,9 +184,9 @@ create(store, {
       t.authScreenNext('canNavToFinalScreen')
       async function save() {
         log('[onShow] => save()')
-        await t.saveData('citydata', location.name)
-        await t.saveData('chooseLocation', location)
-        await t.saveData('manualSetLocation', true)
+        await app.saveData('citydata', location.name)
+        await app.saveData('chooseLocation', location)
+        await app.saveData('manualSetLocation', true)
       }
       save()
     }
@@ -273,13 +270,10 @@ create(store, {
         }
       }),
       wx.getStorage({
-        key: "bingLists",
+        key: "bingImage",
         success: res => {
           t.setData({
-            'bingImage': {
-              img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
-            },
-            'bingLists': res.data
+            'bingImage': res.data
           });
         }
       }),
@@ -375,7 +369,7 @@ create(store, {
                 'forecastData.city': e.district,
                 'forecastData.address': e.street
               })
-              t.saveData('citydata', e)
+              app.saveData('citydata', e)
               t.getNowWeather(null, false, true)
             },
             fail: err => {
@@ -428,7 +422,7 @@ create(store, {
               'forecastData.address': e.street,
               'authLocationMethod': 'autoSetLocation'
             })
-            t.saveData('citydata', e)
+            app.saveData('citydata', e)
             log('[autoSetLocation] => getNowWeather(null, false, false)')
             t.getNowWeather(null, false, false)
           },
@@ -441,7 +435,7 @@ create(store, {
         warn(`[getLocation] => fail => ${err}`)
       }
     });
-    t.saveData('manualSetLocation', false)
+    app.saveData('manualSetLocation', false)
   },
   manualSetLocation() {
     warn('[manualSetLocation]')
@@ -477,7 +471,7 @@ create(store, {
           let e = a.data.result.realtime;
           log('[getNowWeather] => [setNowWeather]', e)
           t.setNowWeather(e)
-          t.saveData("nowdata", e);
+          app.saveData("nowdata", e);
         }
       })
       wx.request({
@@ -486,7 +480,7 @@ create(store, {
           let e = a.data.result;
           warn('[getNowWeather] => [setTimelyWeather]', e)
           t.setTimelyWeather(e)
-          t.saveData("forecastData", e);
+          app.saveData("forecastData", e);
         },
         complete: () => {
           a && a();
@@ -556,7 +550,7 @@ create(store, {
       curDetailTime = date[0].time + " " + date[0].week,
       aqiColor = setAqiColor(t.aqi)
 
-    o.saveData("lastRefreshTime", date[0].time)
+      app.saveData("lastRefreshTime", date[0].time)
 
     let nowTemp = Math.round(s)
     if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
@@ -586,7 +580,7 @@ create(store, {
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon.svg",
         whitePath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon-white.svg",
         backgroundBg: "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
-        // backgroundBg: o.data.bingImage.img_url,
+        // backgroundBg: o.data.bingImagebingImage.img_url,
         nowTemp: nowTemp,
         skycon: t.skycon,
         nowWeather: e[i],
@@ -612,7 +606,7 @@ create(store, {
     async function saveHistoryCityData() {
       let cityData = await getNowCityData()
       let historyCityList = await reduceHistoryCityData(cityData)
-      o.saveData("historyCityList", historyCityList)
+      app.saveData("historyCityList", historyCityList)
       return historyCityList
     }
     saveHistoryCityData().then(val => {
@@ -986,7 +980,7 @@ create(store, {
         'modalName': null
       }),
       t.getNowWeather(null, false, false);
-    t.saveData('manualSetLocation', false)
+      app.saveData('manualSetLocation', false)
   },
   // async setBingImage() {
   //   log('[setBingImage]')
@@ -1068,7 +1062,7 @@ create(store, {
         t.setData({
           bingImage: bingImage
         });
-        // t.saveData('bingLists', res.data.data)
+        t.saveData('bingImage', res.data.img)
       },
       fail: err => {
         warn('requestBing', err)
@@ -1180,7 +1174,7 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 0,
     });
-    defaultScreenAction.opacity(1).translateY('10px').step()
+    defaultScreenAction.opacity(1).translate3d(0,'10px',0).step()
     t.setData({
       logoScreenAni: defaultScreenAction.export(),
     })
@@ -1217,7 +1211,7 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 0,
     });
-    authScreenAction.translateX(-mobileWidth * 3).opacity(0).step()
+    authScreenAction.translate3d(-mobileWidth * 3,0,0).opacity(0).step()
     t.setData({
         defaultScreenAni: authScreenAction.export(),
       }),
@@ -1239,7 +1233,7 @@ create(store, {
           log(`[authSetting] =>`, res)
           if (res.authSetting['scope.userLocation']) {
             transX(mobileWidth * 2)
-            t.saveData('hasUserLocation', true)
+            app.saveData('hasUserLocation', true)
             app.changeStorage('startScreen', '诗词')
             log('[hasUserLocation] => setLocation()')
           }
@@ -1249,7 +1243,7 @@ create(store, {
               success: res => {
                 log('check => [wx.authorize] =>', res)
                 transX(mobileWidth * 2)
-                t.saveData('hasUserLocation', true)
+                app.saveData('hasUserLocation', true)
                 app.changeStorage('startScreen', '诗词')
               },
               fail: err => {
@@ -1267,7 +1261,7 @@ create(store, {
                           log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
                           if (res.authSetting['scope.userLocation'] == true) {
                             transX(mobileWidth * 2)
-                            t.saveData('hasUserLocation', true)
+                            app.saveData('hasUserLocation', true)
                             app.changeStorage('startScreen', '诗词')
                             log('[scope.userLocation] success')
                           }
@@ -1292,7 +1286,7 @@ create(store, {
         timingFunction: 'ease-in-out',
         delay: 0
       });
-      stepAction.translateX(-steps).step()
+      stepAction.translate3d(-steps,0,0).step()
       t.setData({
         defaultScreenAni: stepAction.export(),
       })
@@ -1338,7 +1332,7 @@ create(store, {
         timingFunction: 'ease-in-out',
         delay: 0
       });
-      authFirstStep.translateX(-steps).step()
+      authFirstStep.translate3d(-steps,0,0).step()
       t.setData({
         defaultScreenAni: authFirstStep.export(),
       })
@@ -1387,7 +1381,7 @@ create(store, {
         log(`[savePoetry] => poetryData =>`, poetryData)
         result.data.content = result.data.content.substring(0, result.data.content.lastIndexOf('。'))
         poetryData.unshift(result.data)
-        t.saveData("poetry_storage", [...new Set(poetryData)])
+        app.saveData("poetry_storage", [...new Set(poetryData)])
       })
   }),
   touchStart(e) {
@@ -1579,8 +1573,8 @@ create(store, {
     let
       time = util.formatDate(new Date()),
       date = util.getDates(7, time)
-    t.saveData("lastRefreshTime", date[0].time)
-    t.saveData('manualSetLocation', false)
+    app.saveData("lastRefreshTime", date[0].time)
+    app.saveData('manualSetLocation', false)
     t.getNowWeather(function () {
       wx.stopPullDownRefresh();
     });
@@ -1888,7 +1882,7 @@ create(store, {
           // let base64Img = wx.arrayBufferToBase64(buffer).replace(/[\r\n]/g, "")
           let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
           t.formatImg(base64Img)
-          t.saveData(`[qrCodeBase64] = > ${base64Img}`)
+          app.saveData(`[qrCodeBase64] = > ${base64Img}`)
         },
         fail: err => {
           warn(`[getWXACode] => ${err}`)
