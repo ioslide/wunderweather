@@ -137,6 +137,9 @@
     right: 8vw;
     bottom: 15vw;
 }
+.bingImage{
+    max-height: 215px;
+}
 .settings {
     width: 10vw;
     height: 10vw;

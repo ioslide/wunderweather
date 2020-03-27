@@ -8,7 +8,7 @@
 <view class="cu-card case" wx:for="{{bingLists}}" wx:key="index">
   <view class="cu-item shadow" bindtap="showModal" data-target="Image" data-order="{{index}}" style="background: none;">
     <view class="image">
-      <image class="blurloaded" bindchange="swipeEnd" src="{{item.img_url}}" lazy-load='true' mode="widthFix"></image>
+      <image class="blurloaded bingImage" bindchange="swipeEnd" src="{{item.img_url}}" lazy-load='true' mode="widthFix"></image>
       <view class="cu-tag tag" style="background: rgba(0, 0, 0, 0.384);color: #fff;border-bottom-left-radius: 10px;border-top-right-radius: 5px;">{{item.datesign}}</view>
       <view class="cu-bar {{$.themeValue == '明亮'?'bg-shadeBottom-light':'bg-shadeBottom-dark'}}">
         <text class="text-cut">{{item.titlelong}}</text>

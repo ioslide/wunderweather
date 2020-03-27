@@ -23,11 +23,21 @@ create(store, {
     ]
   },
   onLoad: function () {
-    // const i = getCurrentPages()[0].data.forecastData.bingLists
-    // console.log(i)
     const t = this
-    let hasBingLists = wx.getStorageSync('hasBingLists') || false
-    if(hasBingLists == false){
+    let 
+      lists = wx.getStorageSync('bingLists') || [{
+        datesign : "1998-03-13"
+      }],
+      isToday = app.isToday(lists[0].datesign),
+      hasBingLists = wx.getStorageSync('hasBingLists') || false
+    const loadBingListFromeStorage = () =>{
+      log('[loadBingListFromeNet]')
+      t.setData({
+        bingLists: lists
+      });
+    }
+    const loadBingListFromeNet = () => {
+        log('[loadBingListFromeNet')
       wx.request({
         url: 'https://www.benweng.com/api/bing/lists',
         header: {
@@ -47,11 +57,20 @@ create(store, {
         }
       });
     }
-    else if(hasBingLists == false){
-      t.setData({
-        bingLists: wx.getStorageSync('bingLists')
-      });
+    const event = (isToday,hasBingLists) => {
+      switch (true) {
+        case (isToday == true && hasBingLists == true):
+          loadBingListFromeStorage()
+          break
+        case (hasBingLists == false):
+          loadBingListFromeNet()
+          break
+        default:
+          loadBingListFromeNet()
+          break
+      }
     }
+    event(isToday,hasBingLists)
   },
   onShow() {
     const t = this

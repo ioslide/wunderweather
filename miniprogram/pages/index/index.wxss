@@ -1765,9 +1765,9 @@ button::after {
   opacity: 1;
   animation: fadeIn 0.7s ease-in;
 }
-.DrawerModalR-left{
+/* .DrawerModalR-left{
   position: ;
-}
+} */
 /* @-webkit-keyframes fadeInUp {
   from {
     opacity: 0;
@@ -3167,7 +3167,8 @@ button::after {
 
 .item-bg-active {
   animation: fadeIn 1s linear;
-  background: #4197FE;
+  background: #7093BF;
+  /* background:#4197FE */
   border-radius: 50%;
   width: 50px;
   height: 50px;

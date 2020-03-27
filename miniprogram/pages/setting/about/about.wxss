@@ -57,7 +57,7 @@
   line-height: 30px;
 }
 .olyTextAni .title::before {
-  background: #FF4081;
+  background: #E5F0FF;
 }
 .olyTextAni .subtitle {
   margin: 10px 0 0 0;

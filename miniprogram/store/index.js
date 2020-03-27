@@ -48,7 +48,8 @@ if (c == false) {
       windSwitchChange: true,
       KeepScreenOnSwitchChange: true
     },
-    proMode: false
+    proMode: false,
+    indexHeadImage:"bing"
   }
   wx.setStorage({
     data: $$,
@@ -64,6 +65,7 @@ export default {
   data: {
     startScreen: $$.startScreen,
     style: $$.style,
+    indexHeadImage:$$.indexHeadImage,
     // refreshfrequencyValue: info.refreshfrequencyValue,
     themeValue: $$.themeValue,
     // languageValue: info.languageValue,

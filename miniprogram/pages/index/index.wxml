@@ -429,11 +429,11 @@
 					{{forecastData.airQuality.aqi}}
 				</view>
 			</view>
-			<view class="flex-treble padding">
-				<view class="flex align-start text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="padding-top: 5px;">
+			<view class="flex-treble" style="padding:22rpx">
+				<view class="flex align-start text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="padding-top: 4px;">
 					{{forecastData.airQuality.aqiName}}
 				</view>
-				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 10px;">
+				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 13px;">
 					{{forecastData.airQuality.aqiDescription}}
 				</view>
 			</view>

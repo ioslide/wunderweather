@@ -50,9 +50,9 @@
 
 <view style="position:fixed;bottom:20px;left:20px">
 	<view class="olyTextAni">
-		<h1 class="title slide-bar {{$.themeValue == '明亮'?'fill-text-dark':'fill-text-white'}}">Special thanks</h1>
+		<h1 class="title slide-bar {{$.themeValue == '明亮'?'fill-text-dark':'fill-text-white'}}">OLY</h1>
 	</view>
 	<view class="olyTextAni">
-		<p class="subtitle slide-bar {{$.themeValue == '明亮'?'fill-text-dark':'fill-text-white'}}">OLY</p>
+		<p class="subtitle slide-bar {{$.themeValue == '明亮'?'fill-text-dark':'fill-text-white'}}">Special thanks</p>
 	</view>
 </view>
