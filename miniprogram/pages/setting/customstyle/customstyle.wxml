@@ -1,4 +1,4 @@
-<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}"  scroll-duration="1000"  bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
@@ -6,78 +6,102 @@
 <view style="padding-top: {{CustomBar}}px;">
 	<view class="cu-list menu text-left" style="width: 100%;">
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">图片</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:100%;">
+				<text >图片</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.imageSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="imageSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.imageSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="imageSwitchChange"></sc-switch>
 		</label>
 
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">天气特效</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >天气特效</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="weatherAniSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="weatherAniSwitchChange"></sc-switch>
 		</label>
 
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">详情</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >详情</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.detailSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="detailSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.detailSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="detailSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">未来24小时</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0"  style="width:100%;">
+				<text >未来24小时</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailyhourSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailyhourSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailyhourSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailyhourSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">未来7天</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >未来7天</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySevenSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySevenSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySevenSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySevenSwitchChange"></sc-switch>
 		</label>
 		<!-- <label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
       <sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-        <text slot="customstyle">降水几率</text>
+        <text >降水几率</text>
+								<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="imageSwitchChange"></sc-switch>
+				</view>
       </sc-cell>
-      <sc-switch class="sc-switch" name="switch" checked="{{$.style.rainfallSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="rainfallSwitchChange"></sc-switch>
     </label> -->
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">空气质量指数</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >空气质量指数</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.aqiSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="aqiSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.aqiSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="aqiSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">日照</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >日照</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.sunlightSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="sunlightSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.sunlightSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="sunlightSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">月相</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >月相</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.moonSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="moonSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.moonSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="moonSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">风速</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >风速</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.windSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="windSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.windSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="windSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">雷达</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >雷达</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.radarSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="radarSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.radarSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="radarSwitchChange"></sc-switch>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-				<text slot="customstyle">屏幕常亮</text>
+			<sc-cell right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text >屏幕常亮</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.KeepScreenOnSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="KeepScreenOnSwitchChange"></sc-switch>
+				</view>
 			</sc-cell>
-			<sc-switch class="sc-switch" name="switch" checked="{{$.style.KeepScreenOnSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="KeepScreenOnSwitchChange"></sc-switch>
 		</label>
 	</view>
 </view>

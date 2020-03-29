@@ -1,21 +1,22 @@
-<view class="sc-class sc-cell" capture-bind:tap="{{ripple ? '_tap' : ''}}" capture-bind:longpress="{{ripple ? '_longPress' : ''}}" capture-bind:touchend="{{ripple ? '_touchEnd' : ''}}" style="padding: 8px 13px">
+<view class="sc-class sc-cell" capture-bind:tap="{{ripple ? '_tap' : ''}}" capture-bind:longpress="{{ripple ? '_longPress' : ''}}" capture-bind:touchend="{{ripple ? '_touchEnd' : ''}}" style="margin-left:calc(750rpx - {{Custom.right}}px);">
 	<view class="sc-cell-left">
 		<i class="iconfont left-icon"></i>
 		<slot name="iconimageleft"></slot>
 		<view class="sc-cell-left-container">
-			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="margin-top: 6px;">
-				<slot name="subheader1"></slot>
-			</view>
-			<view class="sc-cell-header {{themeValue == '明亮'?'text-grey':'text-white'}} text-lg">
-				<slot name="customstyle"></slot>
-			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="margin-top: 6px;">
+			<view class="sc-cell-header text-lg {{themeValue == '明亮'?'text-grey':'text-white'}}">
+				<slot></slot>
 				<slot name="subheader"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="margin-top: 6px;">
+			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="padding-top: {{subheader1PaddingTop}}px 0px">
+				<slot name="subheader1"></slot>
+			</view>
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}">
+				<slot name="subheader"></slot>
+			</view>
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="padding-top: {{subbottomPaddingTop}}px">
 				<slot name="subbottom"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="margin-top: 6px;">
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">
 				<slot name="subbottom1"></slot>
 			</view>
 		</view>
@@ -23,10 +24,13 @@
 	<view class="sc-cell-right">
 		<slot name="iconimageright"></slot>
 		<text class="right-text">
-    <slot name="righttext"></slot>
+    	<slot name="righttext"></slot>
     </text>
 		<i class="iconfont right-icon"></i>
 		<slot name="action"></slot>
+		<!-- <block wx:if="{{switch}}">
+			<sc-switch class="sc-switch" name="switch" checked="{{checked}}" bind:change="_switchChange" themeValue="{{themeValue}}" data-cur="{{switchTarget}}"></sc-switch>
+		</block> -->
 	</view>
 	<view wx:for="{{rippleList}}" wx:key="rippleId" id="{{item.rippleId}}" style="width:{{item.width}}px;height:{{item.height}}px;left:{{item.left}}px;top:{{item.top}}px" class="sc-ripple {{item.startAnimate ? item.holdAnimate ? 'sc-ripple-animation-slow-hold' :'sc-ripple-animation-slow' : ''}}" bind:animationend="{{item.holdAnimate ? null : '_rippleAnimationEnd'}}"></view>
 </view>

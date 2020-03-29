@@ -1,5 +1,6 @@
 const app = getApp()
 const log = console.log.bind(console)
+const xhy = require('weatherui/sc-ui')
 
 App({
   globalData: {
@@ -15,6 +16,9 @@ App({
       console.warn('[onMemoryWarningReceive]')
     })
   },
+  onPageNotFound: function () {
+
+  },
   onLaunch() {
     console.warn('[onLaunch]')
     this.checkVersion()
@@ -24,6 +28,7 @@ App({
     this.initCloud()
     this.autologin()
     // this.dataPrePull()
+    log(xhy)
   },
   loadFontFace() {
     wx.loadFontFace({

@@ -83,6 +83,20 @@
 					"id": -1,
 					"name": "pages/setting/about/about",
 					"pathName": "pages/setting/about/about",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/customstyle/customstyle",
+					"pathName": "pages/setting/customstyle/customstyle",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/setting",
+					"pathName": "pages/setting/setting",
 					"scene": null
 				}
 			]

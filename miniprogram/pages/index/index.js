@@ -1430,20 +1430,10 @@ create(store, {
   switchChange(e) {
     log('[switchChange]')
     const t = this
-    var temp = wx.getStorageSync("$$").style,
-      style = JSON.parse(JSON.stringify(temp));
-
     const changeStoreage = (result) => {
-      if (temp[result] == true) {
-        log('style[' + result + '] == true')
-        style[result] = false
-      }
-      if (temp[result] == false) {
-        log('style[' + result + '] == true')
-        style[result] = true
-      }
-      t.store.data.style = style
-      app.changeStorage('style', style)
+      t.store.data.style[result] = !t.store.data.style[result]
+      log(result,t.store.data.style[result])
+      app.changeStorage('style', t.store.data.style)
     }
     const event = (result) => {
       switch (true) {

@@ -1,6 +1,9 @@
 "use strict";
 var swicthCount = 1;
+// import create from '../../../utils/create'
 Component({
+// create({
+  // use:['style'],
   properties: {
     checked: {
       type: Boolean,

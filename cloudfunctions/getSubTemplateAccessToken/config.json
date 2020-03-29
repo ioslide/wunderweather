@@ -3,7 +3,7 @@
     {
       "name": "timerGetAccessToken",
       "type": "timer",
-      "config": "0 */40 19-20 * * * *"
+      "config": "0 */20 8 * * * *"
     }
   ]
 }

@@ -16,7 +16,7 @@
 						<image style="height:150px;width:150px" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding align-center">
-						<text class="text-4a5568 text-xl text-weight-300">你好</text>
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
 					</view>
 					<view class="flex justify-center align-center">
 						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
@@ -31,7 +31,7 @@
 			<view class="flex justify-left padding" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view style="margin-top:{{StatusBar*4}}px;width:100%">
 					<view class="flex justify-left padding align-center">
-						<text class="text-4a5568 text-xxxl text-weight-300">你好</text>
+						<text class="text-4a5568 text-xxxl font-weight-300">你好</text>
 					</view>
 					<view class="flex justify-left align-center padding-left">
 						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
@@ -66,7 +66,7 @@
 			<view class="flex justify-left padding" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view style="margin-top:{{StatusBar*4}}px;width:100%">
 					<view class="flex justify-left padding align-center">
-						<text class="text-4a5568 text-xxxl text-weight-300">位置</text>
+						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
 					</view>
 					<view class="flex justify-left align-center padding-left">
 						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，您也可随时更改授权</text>
@@ -95,7 +95,7 @@
 			<view class="flex justify-left padding" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view style="margin-top:{{StatusBar*4}}px;width:100%">
 					<view class="flex justify-left padding align-center">
-						<text class="text-4a5568 text-xxxl text-weight-300">最后</text>
+						<text class="text-4a5568 text-xxxl font-weight-300">最后</text>
 					</view>
 					<view class="flex justify-left align-center padding-left">
 						<text class="text-4a5568 text-lg letter-spacing-1">还有一些设置你需要核对</text>
@@ -158,7 +158,7 @@
 						<image style="height:150px;width:150px" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding align-center">
-						<text class="text-4a5568 text-xl text-weight-300">你好</text>
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
 					</view>
 					<view class="flex justify-center align-center">
 						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
@@ -335,7 +335,7 @@
 
 
 	<block wx:if="{{$.style.dailyhourSwitchChange == true}}">
-		<view class="today margin-top-xl" bindtap="navChange" data-cur="hourweather" style="min-height:180px;">
+		<view class="margin-top-xl" bindtap="navChange" data-cur="hourweather" style="min-height:180px;">
 			<scroll-view scroll-with-animation="true" scroll-x="true" scroll-y="false">
 				<view class="forecast-list margin-left margin-right">
 					<view class="{{$.themeValue == '明亮'?'forecast-item-light':'forecast-item-dark'}}" style="width:{{mobileWidth/6-5}}px" wx:for="{{forecastData.hourlyWeather}}" wx:key="index">
@@ -362,7 +362,7 @@
 					<view class="grid col-3 margin-bottom text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="service" wx:if="{{item&&index<8}}" wx:for="{{forecastData.serviceData}}" wx:key="index">
 							<view class="{{$.themeValue == '明亮'?'item-inner-light':'item-inner-dark'}}">
-								<image class="icon-service" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+								<image class="square-28" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 								<text class="mt15 text-sm {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}">{{item.name}}</text>
 								<text class="mt20 text-xl {{$.themeValue == '明亮'?'cell-col-light':'cell-col-dark'}}">{{item.desc}}</text>
 							</view>
@@ -383,7 +383,6 @@
 			</view>
 		</view>
 		<view class="dailycanvas flex margin-top-60 margin-bottom opacity-0 {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="margin-left: 5px;" bindtap="navChange" data-cur="dailyweather" animation="{{secondObserverAni}}">
-			<!-- <view class="forday-img"></view> -->
 			<view class="grid col-7 margin-bottom text-center" style="width:100%">
 				<view class="daily-item flex" wx:for="{{forecastData.dailyWeather}}" wx:key="index" wx:if="{{item&&index<7}}">
 					<view class="flex align-end justify-center" style="height:190px">
@@ -406,7 +405,7 @@
 					<view class="flex align-end">
 						<view class="flex-sub text-center">
 							<!-- <canvas class="daily-icon text-sm" id="{{item.id}}" type="2d"></canvas> -->
-							<image class="daily-icon text-sm" src="{{item.iconPath}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
+							<image class="square-30 margin-top-sm margin-bottom-sm text-sm" src="{{item.iconPath}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 							<view class="daily-date text-sm text-grey">{{item.date}}</view>
 						</view>
 					</view>
@@ -424,17 +423,27 @@
 		</view>
 
 		<view class="flex padding opacity-0" animation="{{thirdObserverAni}}">
-			<view class="flex-sub">
-				<view class="text-left text-xxsl" style="font-weight:100;color:{{aqiColor}};font-family: 'Lato', sans-serif;">
-					{{forecastData.airQuality.aqi}}
+			<view class="flex justify-start">
+				<view class="flex align-center">
+					<view class="text-left text-xxsl" style="font-weight:100;color:{{aqiColor}};font-family: 'Lato', sans-serif;">
+						{{forecastData.airQuality.aqi}}
+					</view>
 				</view>
 			</view>
-			<view class="flex-treble" style="padding:22rpx">
-				<view class="flex align-start text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="padding-top: 4px;">
-					{{forecastData.airQuality.aqiName}}
-				</view>
-				<view class="flex align-end text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}" style="padding-top: 13px;">
-					{{forecastData.airQuality.aqiDescription}}
+			<view class="flex justify-start padding-left">
+				<view class="flex align-center justify-start">
+					<view class="flex flex-direction">
+						<view class="flex align-start">
+							<view class="text-xl {{$.themeValue == '明亮'?'text-grey':'text-white'}} ">
+								{{forecastData.airQuality.aqiName}}
+							</view>
+						</view>
+						<view class="flex align-end padding-top-sm">
+							<view class="text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}">
+								{{forecastData.airQuality.aqiDescription}}
+							</view>
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -542,7 +551,7 @@
 					<view class="grid col-3 margin-bottom text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="moon" wx:if="{{item&&index<3}}" wx:for="{{moonPhaseLists}}" wx:key="index">
 							<view class="item-phase-inner">
-								<image class="icon-moon" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+								<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 								<text class="t1 mt10 text-sm text-grey padding-top">{{item.moonTimePhaseCN}}</text>
 								<text class="t2 mt15 text-sm {{$.themeValue == '明亮'?'moon-text-c9d7e6cc':'moon-text-grey'}}">{{item.moonTimeDate}}</text>
 							</view>
@@ -629,13 +638,13 @@
 	<view class="{{$.themeValue == '明亮'?'text-grey':'text-black'}} refer">Powered by XHY</view>
 </view>
 
-<view class='navslide justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd' data-target="DrawerModalR" catchtouchmove="ture"></view>
+<view class='navSlide justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class='navslideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
+<view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
 <view class="drawerR-modal drawer-modal justify-end {{modalName=='DrawerModalR'?'show':''}}" bindtap="hideModal" data-target="DrawerModalR" catchtouchmove="preventTouchMove">
 
-	
+
 	<!-- <view class="cu-custom {{modalName =='DrawerModalR'?'capsuleFadeIn':'capsuleFadeOut'}}">
 		<view class="cu-bar fixed" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
 			<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
@@ -651,12 +660,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.startScreen == '诗词'?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.startScreen == '诗词'?' soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -666,12 +675,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.weatherAniSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/weatherAni{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/weatherAni{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.weatherAniSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/weatherAni{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/weatherAni{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -683,12 +692,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.imageSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/image{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/image{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.imageSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/image{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/image{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -698,12 +707,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.detailSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.detailSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -715,12 +724,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.dailyhourSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/hourly{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/hourly{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.dailyhourSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/hourly{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/hourly{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -731,12 +740,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.dailySevenSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/daily{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/daily{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.dailySevenSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/daily{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/daily{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -748,12 +757,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.sunlightSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/sunrise{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/sunrise{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.sunlightSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/sunrise{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/sunrise{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -763,12 +772,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.aqiSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/airIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/airIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.aqiSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/airIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/airIndex{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -780,12 +789,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.windSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/wind{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/wind{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.windSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/wind{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/wind{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -795,12 +804,12 @@
 				<view class="flex padding-xs justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
 						<view class="flex padding-xs justify-center align-center {{$.style.moonSwitchChange == true?'item-bg-active':'item-bg-grey'}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/moon{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/moon{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
 						<view class="flex padding-xs justify-center align-center soft-button {{$.style.moonSwitchChange == true?'soft-button-pushed':''}}">
-							<image class="item-img" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/moon{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/moon{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
 						</view>
 					</block>
 				</view>
@@ -825,12 +834,12 @@
 		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{mobileHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
 			<block class='item' wx:for="{{historyCityList}}" wx:key="i">
 				<view class="cu-card dynamic" data-bean="{{item}}" bindtap="setHistoryCityLocation">
-					<view class="cu-item shadow" style="margin: 2px 3px 2px 2px;height:{{mobileHeight/4.5}}px;background: #010101;">
-						<view class="flex" style="shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;;background-image: url({{item.backgroundBg}});">
+					<view class="cu-item shadow" style="margin: 2px 3px;height:{{(mobileHeight-CustomBar)/4.5}}px;">
+						<view class="flex" style="height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;;background-image: url({{item.backgroundBg}});">
 							<view class="flex-twice">
 								<view class="flex align-start margin-left-sm margin-top-lg " style="width: {{mobileWidth/2.5}}px;height:30px;">
 									<!-- <text class="historyCityLists-text"> -->
-									<text class="ellipsis-text text-weight-300 text-white text-xxl">{{item.address}}</text>
+									<text class="ellipsis-text font-weight-300 text-white text-xxl">{{item.address}}</text>
 									<!-- </text> -->
 								</view>
 								<view class="flex align-end temp">
