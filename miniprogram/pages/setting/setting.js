@@ -33,6 +33,7 @@ create(store, {
       refreshfrequency: $$.refreshfrequency,
       refreshfrequencyValue: $$.refreshfrequencyValue,
       language: $$.language,
+      indexHeadImage:$$.indexHeadImage,
       languageValue: $$.languageValue
     })
   },

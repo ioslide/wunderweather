@@ -1,5 +1,8 @@
 const app = getApp()
 const log = console.log.bind(console)
+const group = console.group.bind(console)
+const groupEnd = console.groupEnd.bind(console)
+
 const xhy = require('weatherui/sc-ui')
 
 App({
@@ -17,7 +20,7 @@ App({
     })
   },
   onPageNotFound: function () {
-
+      log('onPageNotFound')
   },
   onLaunch() {
     console.warn('[onLaunch]')
@@ -139,11 +142,15 @@ App({
     updateManager.onUpdateReady(function () {
       wx.showModal({
         title: '更新提示',
-        content: '请立即更新以获取最佳体验',
+        content: '请更新以保证正常使用',
         success: res => {
           if (res.confirm) {
-            log('call applyUpdate && restart')
-            updateManager.applyUpdate()
+            wx.clearStorage({
+              complete: (res) => {
+                log('call applyUpdate && restart')
+                updateManager.applyUpdate()
+              },
+            })
           }
         }
       })

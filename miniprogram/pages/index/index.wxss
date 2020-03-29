@@ -182,6 +182,7 @@ button::after {
   font-weight: 200;
   font-family: 'Lato', sans-serif;
 }
+
 /* 
 .hideaqiProgress {
   display: none;
@@ -240,6 +241,7 @@ button::after {
   border-bottom: 1px dashed #5c5c5c;
   width: 100%;
 }
+
 /* 
 .forecastCanvas {
   position: relative;
@@ -642,6 +644,7 @@ button::after {
   top: 0;
   background: #f5f6f7
 }
+
 .authScreenNextCell {
   position: absolute;
   right: 25px;
@@ -1756,15 +1759,17 @@ button::after {
   }
 }
 
-.capsuleFadeOut {
-  opacity: 0;
-  animation: fadeOut 0.7s ease;
-}
 
 .capsuleFadeIn {
   opacity: 1;
-  animation: fadeIn 0.7s ease-in;
+  animation: fadeIn 1s ease-in;
 }
+
+.capsuleFadeOut {
+  opacity: 0;
+  animation: fadeOut 1s ease;
+}
+
 /* .DrawerModalR-left{
   position: ;
 } */
@@ -2293,9 +2298,9 @@ button::after {
   bottom: -15%;
   right: -8%;
   background: rgb(188, 229, 250);
-  background: -moz-radial-gradient(circle at 0% -70%,rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
-  background: -webkit-radial-gradient(circle at 0% -70%,rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
-  background: radial-gradient(circle at 0% -70%,rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
+  background: -moz-radial-gradient(circle at 0% -70%, rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
+  background: -webkit-radial-gradient(circle at 0% -70%, rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
+  background: radial-gradient(circle at 0% -70%, rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
   border-radius: 50%;
 }
 
@@ -2306,7 +2311,7 @@ button::after {
   height: 100%;
   border-radius: 50%;
   /* background: #e8f4fa; */
-  background: radial-gradient(circle at 0% -70%,rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
+  background: radial-gradient(circle at 0% -70%, rgb(193, 198, 204) 0%, rgb(224, 229, 233) 85%);
   position: absolute;
   left: -150%;
   bottom: 5%;
@@ -3170,6 +3175,15 @@ button::after {
   border-radius: 50%;
   width: 50px;
   height: 50px;
+}
+
+.shareFriends {
+  border: none;
+  background: none;
+  width: 33.33%;
+  height: 100%;
+  position: absolute;
+  bottom: 1px
 }
 
 /* .item-img {

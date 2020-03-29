@@ -2,7 +2,7 @@
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
-<view class="cu-custom {{modalName=='DrawerModalL' || modalName =='DrawerModalR'?'capsuleFadeOut':'capsuleFadeIn'}}">
+<view class="cu-custom {{modalName=='DrawerModalL' || modalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
 	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
 	</sc-capsule>
 </view>
@@ -257,7 +257,6 @@
 </block>
 
 <view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
-
 	<view class="flex padding justify-center" style="padding-top: {{CustomBar}}px;padding-bottom:0">
 	</view>
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
@@ -879,7 +878,7 @@
 		<view class="flex padding-xs justify-center align-center" style="width: 100%;">
 			<!-- <view style="width:33.33%" bindtap="shareFriends"> -->
 			<view style="width:33.33%">
-				<button openType="share" style="border: none;background: none;width: 33.33%;height: 100%;position: absolute;"></button>
+				<button openType="share" class="shareFriends" ></button>
 				<!-- <canvas id="shareFriends-lottie" type="2d"  style="height:30px;width:30px"></canvas> -->
 				<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg!wxminiapp" style="height:30px;width:30px"></image>
 				<view style="color:#010101">分享朋友</view>

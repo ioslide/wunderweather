@@ -15,6 +15,7 @@ const poetry = require ('../../utils/poetry.js')
 // import calcSunUtil from '../../utils/calcnew.js'
 import create from '../../utils/create'
 import store from '../../store/index'
+import style from '../../store/style'
 import lazyFunction from "../../utils/lazyFunction"
 
 var a,
@@ -299,10 +300,8 @@ create(store, {
     let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
     if (hasUserLocation == true) {
       log('[loadDataFromNet] => t.setLocation()')
-      let $$ = wx.getStorageSync('$$')
       t.screenFadeIn()
       t.setLocation()
-      t.store.data.style = $$.style
     } else {
       t.authScreenFadeIn(false)
       t.setData({
@@ -1433,6 +1432,7 @@ create(store, {
     const changeStoreage = (result) => {
       t.store.data.style[result] = !t.store.data.style[result]
       log(result,t.store.data.style[result])
+      // t.changeStyleStorage('style')
       app.changeStorage('style', t.store.data.style)
     }
     const event = (result) => {
@@ -1530,7 +1530,7 @@ create(store, {
       }
     }
     event(e.currentTarget.dataset.target)
-
+    wx.hideLoading()
     // const t = this
     // t.setData({
     //   modalName: null
@@ -1581,8 +1581,10 @@ create(store, {
       title: 'Loading',
       mask: true
     })
+    setTimeout(function () {
+      wx.hideLoading()
+    }, 2000)
     const t = this
-    const $$ = wx.getStorageSync('$$')
     t.setData({
       painting: {
         width: 300,
@@ -1590,7 +1592,7 @@ create(store, {
         clear: true,
         views: [{
             type: 'image',
-            url: t.data.bingImage.img_url, //背景
+            url: t.data.bingImage,
             top: 0,
             left: 0,
             width: 300,
@@ -1606,7 +1608,7 @@ create(store, {
           },
           {
             type: 'text',
-            content: t.data.bingImage.title,
+            content: t.data.forecastData.hourlyKeypoint,
             fontSize: 14,
             lineHeight: 21,
             color: '#383549',
@@ -1673,11 +1675,9 @@ create(store, {
     const
       t = this,
       templateId = '3HGni7nX2GM6bmaKk-_Mldf-mPFCmhFYIpEWBksBmUI'
-    // $$ = wx.getStorageSync('$$')
     const subDailyWeatherCloudFn = () => {
       let cloudData = {
         action: 'saveSubscribeMessage',
-        // id: $$.data.created_by,
         page: 'pages/index/index',
         latitude: t.data.forecastData.cur_latitude,
         city: t.data.forecastData.city,
@@ -1870,11 +1870,11 @@ create(store, {
         },
         success: res => {
           log(`[getWXACode] =>`, res)
-          // let buffer = res.result.buffer
+          // let buffer = res.result.wxacodeResult.buffer
           // let base64Img = wx.arrayBufferToBase64(buffer).replace(/[\r\n]/g, "")
           let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
           t.formatImg(base64Img)
-          app.saveData(`[qrCodeBase64] = > ${base64Img}`)
+          t.saveData('qrCodeBase64',base64Img)
         },
         fail: err => {
           warn(`[getWXACode] => ${err}`)
@@ -1882,12 +1882,10 @@ create(store, {
       })
     }
   },
-  formatImg(bodyData) {
+  formatImg(base64Img) {
     let t = this
-    // let flight = this.data.flightDetail
     let fsm = wx.getFileSystemManager();
-    let FILE_BASE_NAME = 'wonderful-weather';
-    let base64Img = bodyData.replace(/[\r\n]/g, "")
+    let FILE_BASE_NAME = 'weatherLogo';
     let buffer = wx.base64ToArrayBuffer(base64Img);
     const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
     fsm.writeFile({
@@ -1959,4 +1957,7 @@ create(store, {
     app.changeStorage('temperatureUnitValue', e.detail.value.toString())
     app.changeStorage('temperatureUnit', temperatureUnit)
   },
+  changeStyleStorage: lazyFunction.throttle(function (e) {
+    wx.setStorageSync('style',this.store.data.style)
+  })
 });

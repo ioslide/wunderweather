@@ -97,6 +97,13 @@
 					"id": -1,
 					"name": "pages/setting/setting",
 					"pathName": "pages/setting/setting",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/bingimagelist/bingimagelist",
+					"pathName": "pages/bingimagelist/bingimagelist",
 					"scene": null
 				}
 			]

@@ -37,6 +37,19 @@ async function getWXACode(event) {
     wxacodeResult:wxacodeResult
   }
   return obj
+  // const wxacodeResult = await cloud.openapi.wxacode.get({
+  //   path: 'pages/openapi/openapi',
+  // })
+  // const fileExtensionMatches = wxacodeResult.contentType.match(/\/([^\/]+)/)
+  // const fileExtension = (fileExtensionMatches && fileExtensionMatches[1]) || 'jpg'
+  // const uploadResult = await cloud.uploadFile({
+  //   cloudPath: `wxacode_default_openapi_page.${fileExtension}`,
+  //   fileContent: wxacodeResult.buffer,
+  // })
+  // if (!uploadResult.fileID) {
+  //   throw new Error(`upload failed with empty fileID and storage server status code ${uploadResult.statusCode}`)
+  // }
+  // return uploadResult.fileID
 }
 
 async function getOpenData(event) {

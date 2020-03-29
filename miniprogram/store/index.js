@@ -1,6 +1,8 @@
+
 let $$ = {}
 let c = wx.getStorageSync('hasUserLocation') || false
-if (c == false) {
+
+const setStoreage = () =>{
   $$ = {
     id: '',
     data: {},
@@ -48,33 +50,40 @@ if (c == false) {
       KeepScreenOnSwitchChange: true
     },
     proMode: false,
-    indexHeadImage:"bing"
+    indexHeadImage:"Bing"
   }
   wx.setStorage({
     data: $$,
     key: '$$'
   })
 }
-if (c == true) {
+const getStoreage = () =>{
   $$ = wx.getStorageSync('$$')
 }
-console.log('[hasUserLocation] =>', c, ' => ', $$)
+const event = (result) => {
+  switch (true) {
+    case (result == true):
+      getStoreage(result)
+      break
+    case (result == false):
+      setStoreage(result)
+      break
+    default:
+      setStoreage(result)
+  }
+}
+event(c)
 
 export default {
   data: {
     startScreen: $$.startScreen,
     style: $$.style,
     indexHeadImage:$$.indexHeadImage,
-    // refreshfrequencyValue: info.refreshfrequencyValue,
     themeValue: $$.themeValue,
-    // languageValue: info.languageValue,
     theme: $$.theme,
-    // temperatureUnitValue: $$.temperatureUnitValuem,
     temperatureUnit: $$.temperatureUnit,
     distanceUnit:$$.distanceUnit
-    // language: info.language,
   },
-  // 无脑全部更新，组件或页面不需要声明 use
   updateAll: true,
   debug: true
 }
