@@ -32,12 +32,39 @@ create(store, {
       // distanceUnitValue:$$.distanceUnitValue,
       refreshfrequency: $$.refreshfrequency,
       refreshfrequencyValue: $$.refreshfrequencyValue,
-      language: $$.language,
+      indexHeadImageValue:$$.indexHeadImageValue,
       indexHeadImage:$$.indexHeadImage,
+      language: $$.language,
       languageValue: $$.languageValue
     })
   },
-
+  indexHeadImageRadioChange:function(e){
+    log('[indexHeadImageRadioChange]', e.detail.value)
+    let t = this,
+      indexHeadImageValue = e.detail.value.toString(),
+      indexHeadImage = {
+        indexHeadImageBing:false,
+        indexHeadImageNASA:false,
+        indexHeadImageCus:false
+      }
+    if(indexHeadImageValue == 'Bing'){
+      indexHeadImage['indexHeadImageBing'] = true
+    }
+    else if(indexHeadImageValue == 'NASA'){
+      indexHeadImage['indexHeadImageNASA'] = true
+    }
+    else{
+      indexHeadImage['indexHeadImageCus'] = true
+    }
+    t.setData({
+      indexHeadImageValue: indexHeadImageValue,
+      indexHeadImage: indexHeadImage,
+      modalName: null
+    })
+    t.store.data.indexHeadImageValue = indexHeadImageValue
+    app.changeStorage('indexHeadImageValue', indexHeadImageValue)
+    app.changeStorage('indexHeadImage', indexHeadImage)
+  },
   themeRadioChange: function (e) {
     log('[themeRadioChange]', e.detail.value)
     let t = this,

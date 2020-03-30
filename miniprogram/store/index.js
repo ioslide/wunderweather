@@ -50,7 +50,12 @@ const setStoreage = () =>{
       KeepScreenOnSwitchChange: true
     },
     proMode: false,
-    indexHeadImage:"Bing"
+    indexHeadImage:{
+      indexHeadImageBing:true,
+      indexHeadImageNASA:false,
+      indexHeadImageCus:false
+    },
+    indexHeadImageValue:'Bing'
   }
   wx.setStorage({
     data: $$,
@@ -79,6 +84,7 @@ export default {
     startScreen: $$.startScreen,
     style: $$.style,
     indexHeadImage:$$.indexHeadImage,
+    indexHeadImageValue:$$.indexHeadImageValue,
     themeValue: $$.themeValue,
     theme: $$.theme,
     temperatureUnit: $$.temperatureUnit,

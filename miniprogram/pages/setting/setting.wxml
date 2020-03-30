@@ -69,10 +69,10 @@
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="language">
+	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="indexHeadImage">
 		<sc-cell right-icon="iconfont icon-right" style="width:100%;" subbottomPaddingTop="5" subheader1PaddingTop="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">封面图</text>
-			<text slot="subbottom">{{indexHeadImage}}</text>
+			<text slot="subbottom">{{indexHeadImageValue}}</text>
 		</sc-cell>
 	</view>
 
@@ -182,6 +182,40 @@
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="中文繁體" value="中文繁體" style="width:100%;" checked="{{language.switch_languageChecked_ChineseTraditional}}"></sc-radio>
+					</label>
+				</view>
+			</view>
+		</sc-radio-group>
+		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+			</view>
+		</view>
+	</view>
+</view>
+
+<view catchtouchmove="return" class="cu-modal {{modalName=='indexHeadImage'?'show':''}}" bindtap="hideModal">
+	<view class="cu-dialog" catchtap>
+		<view class="cu-bar justify-start" style="background: #2D2D2D;">
+			<view class="action">
+				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">封面图</button>
+			</view>
+		</view>
+		<sc-radio-group class="block" bindchange="indexHeadImageRadioChange">
+			<view class="cu-list menu text-left" style="width: 100%;">
+				<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="Bing" value="Bing" style="width:100%;" checked="{{indexHeadImage.indexHeadImageBing}}"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="自定义" value="自定义" style="width:100%;" checked="{{indexHeadImage.indexHeadImageCus}}"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="NASA" value="NASA" style="width:100%;" checked="{{indexHeadImage.indexHeadImageNASA}}"></sc-radio>
 					</label>
 				</view>
 			</view>

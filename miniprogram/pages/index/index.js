@@ -102,13 +102,13 @@ create(store, {
     shareImage: '',
     touchS: [0, 0],
     touchE: [0, 0],
-    headContentcurTime: null,
+    headContentcurTime: '',
     // headContentSwitch: false,
     canDrawSunCalcAgain: false,
-    curDetailTime: null,
+    curDetailTime: '',
     moonPhaseLists: [],
     // scrollTop: 0,
-    aqiColor: null,
+    aqiColor: '',
     historyCityList: [],
     authScreen: false,
     strSunSet: "",
@@ -136,7 +136,7 @@ create(store, {
       'style',
       'themeValue',
       'startScreen',
-      'indexHeadImage'
+      'indexHeadImageValue'
     ]
   },
   onLoad(a) {
@@ -1129,7 +1129,7 @@ create(store, {
       }),
       setTimeout(() => {
         t.setData({
-          headWeatherBackgroundAni: true,
+          headBackgroundAni: true,
           authScreen: true
         })
       }, 3000)
@@ -1194,7 +1194,7 @@ create(store, {
       }),
       setTimeout(() => {
         t.setData({
-          headWeatherBackgroundAni: true,
+          headBackgroundAni: true,
           authScreen: true
         })
       }, 2200)
@@ -1218,7 +1218,7 @@ create(store, {
       }),
       setTimeout(() => {
         t.setData({
-          headWeatherBackgroundAni: true,
+          headBackgroundAni: true,
           authScreen: true
         })
       }, 1600)

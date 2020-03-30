@@ -261,31 +261,42 @@
 	</view>
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-xs justify-left margin-xs" style="min-height:280px">
-			<view bindtap="navChange" data-cur="bingimagelist" class="headWeatherBackground {{headWeatherBackgroundAni == true ?'imageBlurloaded' :''}}" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill">
-				<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
-					<block wx:if="{{forecastData.nowWeather == '雨'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '雪'}}">
+			<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
+				<view class="headBackground {{headBackgroundAni == true ?'imageBlurloaded' :''}}" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="bingimagelist">
+					<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+						<block wx:if="{{forecastData.nowWeather == '雨'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '晴天'}}">
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '雪'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '晴夜'}}">
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '晴天'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '风'}}">
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '晴夜'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '阴' ||forecastData.nowWeather == '多云'}}">
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '风'}}">
 
-					</block>
-					<block wx:if="{{forecastData.nowWeather == '雾霾沙尘'}}">
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '阴' ||forecastData.nowWeather == '多云'}}">
 
+						</block>
+						<block wx:if="{{forecastData.nowWeather == '雾霾沙尘'}}">
+
+						</block>
 					</block>
-				</block>
-			</view>
+				</view>
+			</block>
+			<block wx:if="{{$.indexHeadImageValue == '自定义'}}">
+				<view class="flex align-center justify-center">
+					<view class="flex align-center justify-center">
+						<text class="cuIcon-moreandroid"></text>
+					</view>
+				</view>
+			</block>
+
 			<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
 				<view class="networkType">
 					<view class="networkType-button" bindtap="refresh">
@@ -540,7 +551,7 @@
 				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">月相</text>
 			</view>
 			<view class="action" bindtap="navChange" data-cur="moon" style="width: 50px;margin-right: 0px;height: 30px;">
-				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}}  text-sm"></text>
+				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
 
@@ -831,9 +842,9 @@
 			</view>
 		</view>
 		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{mobileHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
-			<block class='item' wx:for="{{historyCityList}}" wx:key="i">
+			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
 				<view class="cu-card dynamic" data-bean="{{item}}" bindtap="setHistoryCityLocation">
-					<view class="cu-item shadow" style="margin: 2px 3px;height:{{(mobileHeight-CustomBar)/4.5}}px;">
+					<view class="cu-item shadow" style="margin: 2px 3px;height:{{(mobileHeight-CustomBar)/4}}px;">
 						<view class="flex" style="height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;;background-image: url({{item.backgroundBg}});">
 							<view class="flex-twice">
 								<view class="flex align-start margin-left-sm margin-top-lg " style="width: {{mobileWidth/2.5}}px;height:30px;">
@@ -868,7 +879,7 @@
 					</block>
 
 				</view>
-			</block>
+			</view>
 		</scroll-view>
 	</view>
 </view>
@@ -878,7 +889,7 @@
 		<view class="flex padding-xs justify-center align-center" style="width: 100%;">
 			<!-- <view style="width:33.33%" bindtap="shareFriends"> -->
 			<view style="width:33.33%">
-				<button openType="share" class="shareFriends" ></button>
+				<button openType="share" class="shareFriends"></button>
 				<!-- <canvas id="shareFriends-lottie" type="2d"  style="height:30px;width:30px"></canvas> -->
 				<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg!wxminiapp" style="height:30px;width:30px"></image>
 				<view style="color:#010101">分享朋友</view>

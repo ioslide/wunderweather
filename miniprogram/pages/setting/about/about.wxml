@@ -14,7 +14,7 @@
 				奇妙天气
 			</view>
 			<view class="flex justify-center align-center margin-top {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="font-family: 'Lato', sans-serif;">
-				1.1.4</view>
+				1.1.6</view>
 		</view>
 	</view>
 

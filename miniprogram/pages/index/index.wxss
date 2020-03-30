@@ -2854,7 +2854,7 @@ button::after {
 }
 
 
-.headWeatherBackground {
+.headBackground {
   filter: blur(20px);
   position: relative;
   /* background: linear-gradient(to bottom, #1a2238 40%, #222 100%); */

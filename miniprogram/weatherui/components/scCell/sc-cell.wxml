@@ -1,4 +1,4 @@
-<view class="sc-class sc-cell" capture-bind:tap="{{ripple ? '_tap' : ''}}" capture-bind:longpress="{{ripple ? '_longPress' : ''}}" capture-bind:touchend="{{ripple ? '_touchEnd' : ''}}" style="margin-left:calc(750rpx - {{Custom.right}}px);">
+<view class="sc-class sc-cell" capture-bind:tap="{{ripple ? '_tap' : ''}}" capture-bind:longpress="{{ripple ? '_longPress' : ''}}" capture-bind:touchend="{{ripple ? '_touchEnd' : ''}}" style="padding-left:calc(750rpx - {{Custom.right}}px);">
 	<view class="sc-cell-left">
 		<i class="iconfont left-icon"></i>
 		<slot name="iconimageleft"></slot>
