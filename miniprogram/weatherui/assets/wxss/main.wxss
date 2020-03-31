@@ -4673,7 +4673,14 @@ scroll-view.cu-steps .cu-item {
 	height: 80px;
 	width:80px
 }
-
+.square-100{
+	width: 100%;
+	height: 100%;
+}
+.square-150{
+	width: 150px;
+	height: 150px;
+}
 .border-bottom-1e1e1e {
   border-bottom: 1px solid #1E1E1E
 }

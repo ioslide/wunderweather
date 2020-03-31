@@ -1959,5 +1959,27 @@ create(store, {
   },
   changeStyleStorage: lazyFunction.throttle(function (e) {
     wx.setStorageSync('style',this.store.data.style)
-  })
+  }),
+  chooseImage(e){
+    let type = e.currentTarget.dataset.type
+    log('[chooseImage]',type)
+    const t = this
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: [type],
+      success (res) {
+        log(res)
+        const tempFilePaths = res.tempFilePaths
+        t.setData({
+          cusImage:tempFilePaths,
+          hascusImage:true
+        })
+        t.saveData('hascusImage',true)
+      },
+      fail(err){
+        log(err)
+      }
+    })
+  }
 });
