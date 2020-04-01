@@ -3186,6 +3186,18 @@ button::after {
   bottom: 1px
 }
 
+.headImageIcon-RightBottom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.headImageIcon-Center {
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
 /* .item-img {
   height: 30px;
   width: 30px

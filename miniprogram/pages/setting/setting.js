@@ -39,8 +39,9 @@ create(store, {
     })
   },
   indexHeadImageRadioChange:function(e){
-    log('[indexHeadImageRadioChange]', e.detail.value)
-    let t = this,
+    log('[indexHeadImageRadioChange]', e.detail.value )
+    let
+      t = this,
       indexHeadImageValue = e.detail.value.toString(),
       indexHeadImage = {
         indexHeadImageBing:false,
@@ -82,6 +83,12 @@ create(store, {
       themeValue: themeValue,
       theme: theme,
       modalName: null
+    })
+    let
+      pages = getCurrentPages(),
+      prevPage = pages[pages.length - 2];
+    prevPage.setData({
+      canDrawSunCalcAgain: true
     })
     t.store.data.themeValue = themeValue
     app.changeStorage('themeValue', themeValue)
@@ -239,12 +246,6 @@ create(store, {
     })
   },
   backPage: function () {
-    let
-      pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
-    prevPage.setData({
-      canDrawSunCalcAgain: true
-    })
     wx.navigateBack({
       delta: 1
     });

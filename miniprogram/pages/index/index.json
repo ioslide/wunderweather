@@ -6,7 +6,8 @@
     "sc-button":"/weatherui/components/scButton/sc-button",
     "sc-radio": "/weatherui/components/scRadio/sc-radio",
     "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group",
-    "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker"
+    "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker",
+    "sc-headImage":"/weatherui/components/sc-headImage/sc-headImage"
   },
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true

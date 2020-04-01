@@ -262,6 +262,7 @@
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-xs justify-left margin-xs" style="min-height:280px">
 			<view class="headBackground {{headBackgroundAni == true ?'imageBlurloaded' :''}}">
+				<!-- <sc-headImage indexHeadImageValue="{{$.indexHeadImageValue}}" networkType="{{networkType}}"></sc-headImage> -->
 				<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
 					<view class="square-100" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="bingimagelist">
 						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
@@ -290,15 +291,17 @@
 					</view>
 				</block>
 				<block wx:if="{{$.indexHeadImageValue == '自定义'}}">
-					<view class="square-100" style="background-image: url('{{cusImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill">
-						<view class="square-100 flex align-center justify-center">
-							<view class="flex justify-center padding align-center" bindtap="showModal" data-target="DrawerModalHeadImage">
-								<image class="square-40" mode="aspectFit" src="https://teaimg.ioslide.com/weather/camera.svg"></image>
-							</view>
+					<!-- <view class="flex square-100"> -->
+					<view class="flex square-100 align-center justify-center">
+						<image class="square-100" style="background-size: cover;background-position: 50% 99%;" mode="aspectFill" src="{{cusImage}}" mode="aspectFit"></image>
+						<view class="padding {{hasCusImage == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="showModal" data-target="DrawerModalHeadImage">
+							<image class="square-40" mode="aspectFit" src="https://teaimg.ioslide.com/weather/camera.svg"></image>
 						</view>
 					</view>
+					<!-- </view> -->
 				</block>
-
+				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
+				</block>
 				<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
 					<view class="networkType">
 						<view class="networkType-button" bindtap="refresh">

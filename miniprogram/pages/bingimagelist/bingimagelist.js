@@ -103,12 +103,12 @@ create(store, {
     }
   },
   BackPage: function () {
-    let
-    pages = getCurrentPages(),
-    prevPage = pages[pages.length - 2];
-    prevPage.setData({
-      isBackFromBing: true
-    })
+    // let
+    // pages = getCurrentPages(),
+    // prevPage = pages[pages.length - 2];
+    // prevPage.setData({
+    //   isBackFromBing: true
+    // })
     wx.navigateBack({
       delta: 1
     });

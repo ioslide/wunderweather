@@ -1,4 +1,3 @@
-const app = getApp()
 const log = console.log.bind(console)
 const group = console.group.bind(console)
 const groupEnd = console.groupEnd.bind(console)
@@ -11,10 +10,11 @@ App({
     CustomBar: "",
     Custom: "",
     clientId: "c3d88ee29b2337915fd0",
-    language: 'zh_CN'
+    language: 'zh_CN',
+    openid:''
   },
   onShow(options) {
-    wx.BaaS.reportTemplateMsgAnalytics(options)
+    // wx.BaaS.reportTemplateMsgAnalytics(options)
     wx.onMemoryWarning(function () {
       console.warn('[onMemoryWarningReceive]')
     })
@@ -26,10 +26,10 @@ App({
     console.warn('[onLaunch]')
     this.checkVersion()
     this.updateManager()
+    this.wxLogin()
     this.getSystemInfo()
     this.loadFontFace()
     this.initCloud()
-    this.autologin()
     // this.dataPrePull()
     log(xhy)
   },
@@ -75,40 +75,20 @@ App({
       }
     })
   },
-  autologin() {
-    log('[autologin]')
-    // // 登录
-    // wx.login({
-    //   success: res => {
-    //     // 发送 res.code 到后台换取 openId, sessionKey, unionId
-    //   }
-    // })
-    // wx.BaaS = requirePlugin('sdkPlugin')
-    // wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    // wx.BaaS.auth.loginWithWechat(null, {
-    //   createUser: false
-    // }).then(user => {
-    //   wx.BaaS.auth.getCurrentUser().then(user => {
-    //     if (user._anonymous) {
-    //       wx.BaaS.auth.anonymousLogin().then(user => {
-    //         log("[anonymousLogin] => ", user)
-    //       }).catch(err => {
-    //         // HError
-    //       })
-    //     } else {
-    //       wx.setStorage({
-    //         data: user,
-    //         key: 'userInfo_storage',
-    //       })
-    //     }
-    //   })
-    // }, err => {
-    //   log('[login] => fail')
-    // })
+  wxLogin() {
     wx.BaaS = requirePlugin('sdkPlugin')
     wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    let clientID = 'c3d88ee29b2337915fd0' // 应用名称: 奇妙天气
+    let clientID = 'c3d88ee29b2337915fd0'
     wx.BaaS.init(clientID)
+    wx.BaaS.auth.loginWithWechat(null, { 
+      createUser:true
+      // withUnionID:true
+    }).then(user => {
+      log('[wxLogin]',user)
+      this.globalData.openid = user.openid
+    }, err => {
+      log(err)
+    })
   },
   getSystemInfo() {
     wx.getSystemInfo({

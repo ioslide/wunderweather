@@ -95,6 +95,7 @@ create(store, {
     lastRefreshTime: '',
     isGettingLocation: false,
     isBackFromBing: false,
+    hasCusImage:false,
     networkType: '4g',
     imageBase64: '',
     qrImageURL: '',
@@ -162,18 +163,31 @@ create(store, {
           t.setData({
             networkType: networkType
           })
-        }
-        if (networkType == 'wifi' || networkType == '4g' || networkType == '5g' || networkType == '3g') {
+        }else{
           log('[onLoad] => loadDataFromNet()')
           t.loadDataFromNet()
         }
+        // if (networkType == 'wifi' || networkType == '4g' || networkType == '5g' || networkType == '3g') {
+
+        // }
       }
     })
   },
   onShow() {
-    var t = this
     warn('[onShow]')
+    const t = this
     const location = chooseLocation.getLocation();
+    let hasCusImage = wx.getStorageSync('hasCusImage') || false
+    if(hasCusImage == true){
+      let cusImageFileID = wx.getStorageSync('cusImageFileID')
+      if(cusImageFileID){
+        t.setData({
+          cusImage:cusImageFileID,
+          hasCusImage : true
+        })
+        log('hasCusImage,cusImage')
+      }
+    }
     log(`[chooseLocation.getLocation()] =>`, location)
     if (location !== null) {
       t.setData({
@@ -197,33 +211,33 @@ create(store, {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
-    if (t.data.isBackFromBing == true) {
-      log('[isBackFromBing] => true')
-    }
-    if (t.data.isBackFromBing == false) {
-      log('[isBackFromBing] => false')
-      if (t.store.data.themeValue == '明亮') {
-        log('[setBackgroundColor] => light')
-        wx.setBackgroundColor({
-          backgroundColor: '#F5F6F7',
-          backgroundColorTop: '#F5F6F7',
-          backgroundColorBottom: '#F5F6F7'
-        })
-        wx.setBackgroundTextStyle({
-          textStyle: 'dark'
-        })
-      } else {
-        log('[setBackgroundColor] => dark')
-        wx.setBackgroundColor({
-          backgroundColor: '#010101',
-          backgroundColorTop: '#010101',
-          backgroundColorBottom: '#010101'
-        })
-        wx.setBackgroundTextStyle({
-          textStyle: 'light'
-        })
-      }
-    }
+    // if (t.data.isBackFromBing == true) {
+    //   log('[isBackFromBing] => true')
+    // }
+    // if (t.data.isBackFromBing == false) {
+    //   log('[isBackFromBing] => false')
+    //   if (t.store.data.themeValue == '明亮') {
+    //     log('[setBackgroundColor] => light')
+    //     wx.setBackgroundColor({
+    //       backgroundColor: '#F5F6F7',
+    //       backgroundColorTop: '#F5F6F7',
+    //       backgroundColorBottom: '#F5F6F7'
+    //     })
+    //     wx.setBackgroundTextStyle({
+    //       textStyle: 'dark'
+    //     })
+    //   } else {
+    //     log('[setBackgroundColor] => dark')
+    //     wx.setBackgroundColor({
+    //       backgroundColor: '#010101',
+    //       backgroundColorTop: '#010101',
+    //       backgroundColorBottom: '#010101'
+    //     })
+    //     wx.setBackgroundTextStyle({
+    //       textStyle: 'light'
+    //     })
+    //   }
+    // }
   },
   onReady() {
     warn('[onReady]')
@@ -1964,18 +1978,41 @@ create(store, {
     let type = e.currentTarget.dataset.type
     log('[chooseImage]',type)
     const t = this
+    const cloudUpload = (p,n) =>{
+      wx.cloud.uploadFile({
+        cloudPath:  'cusImage/' + n,
+        filePath: p, 
+      }).then(res => {
+        log(res)
+        wx.setStorage({
+          data: res.fileID,
+          key: 'cusImageFileID',
+        })
+      }).catch(error => {
+        log(error)
+      })
+    }
     wx.chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: [type],
       success (res) {
         log(res)
-        const tempFilePaths = res.tempFilePaths
+        const 
+          tempFilePaths = res.tempFilePaths[0],
+          name = app.globalData.openid
+        log('[chooseImage]',tempFilePaths)
+        log('[chooseImage]',name)
         t.setData({
           cusImage:tempFilePaths,
-          hascusImage:true
+          hasCusImage:true,
+          modalName:null
         })
-        t.saveData('hascusImage',true)
+        cloudUpload(tempFilePaths,name)
+        wx.setStorage({
+          data: true,
+          key: 'hasCusImage',
+        })
       },
       fail(err){
         log(err)
