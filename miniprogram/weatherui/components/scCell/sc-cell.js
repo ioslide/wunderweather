@@ -29,11 +29,7 @@ create.Component(store,{
       type: Boolean,
       value: !1
     },
-    subbottomPaddingTop:{
-      type:Number,
-      value:0
-    },
-    subheader1PaddingTop:{
+    subheader1Padding:{
       type:Number,
       value:0
     },
@@ -64,8 +60,7 @@ create.Component(store,{
       themeValue: e.themeValue,
       switch: e.switch,
       cellHeight:e.cellHeight,
-      subbottomPaddingTop:e.subbottomPaddingTop,
-      subheader1PaddingTop:e.subheader1PaddingTop
+      subheader1Padding:e.subheader1Padding
       // switchTarget: e.switchTarget
       // checked: style[e.switchTarget]
     })

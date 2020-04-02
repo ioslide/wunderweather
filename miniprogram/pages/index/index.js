@@ -15,7 +15,7 @@ const poetry = require ('../../utils/poetry.js')
 // import calcSunUtil from '../../utils/calcnew.js'
 import create from '../../utils/create'
 import store from '../../store/index'
-import style from '../../store/style'
+// import style from '../../store/style'
 import lazyFunction from "../../utils/lazyFunction"
 
 var a,
@@ -2005,19 +2005,21 @@ create(store, {
   },
   //裁剪图片回调
   cropCallback(event) {
-    const cloudUpload = (p,n) => {
-      const t = this
-      wx.cloud.uploadFile({
-        cloudPath:  'cusImage/' + n,
-        filePath: p, 
-      }).then(res => {
-        log(res)
-        t.saveData('cusImageFileID',res.fileID)
-      }).catch(error => {
-        log(error)
-      })
-    },
-    const t = this
+    const
+      t = this,
+      cloudUpload = (p,n) => {
+        const t = this
+        wx.cloud.uploadFile({
+          cloudPath:  'cusImage/' + n,
+          filePath: p, 
+        }).then(res => {
+          log(res)
+          t.saveData('cusImageFileID',res.fileID)
+        }).catch(error => {
+          log(error)
+        })
+      }
+    
     log('[cropCallback]',event);
     this.setData({
       visible: false,

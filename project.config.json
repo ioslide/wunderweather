@@ -118,6 +118,13 @@
 					"id": -1,
 					"name": "pages/setting/customstyle/customstyle",
 					"pathName": "pages/setting/customstyle/customstyle",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/hourweather/hourweather",
+					"pathName": "pages/hourweather/hourweather",
 					"scene": null
 				}
 			]

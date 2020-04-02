@@ -7,13 +7,13 @@
 				<slot></slot>
 				<slot name="subheader"></slot>
 			</view>
-			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="padding-top: {{subheader1PaddingTop}}px 0px">
+			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="padding: {{subheader1Padding}}px 0px">
 				<slot name="subheader1"></slot>
 			</view>
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}">
-				<slot name="subheader"></slot>
+				<slot name="subheader2"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="padding-top: {{subbottomPaddingTop}}px">
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">
 				<slot name="subbottom"></slot>
 			</view>
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">

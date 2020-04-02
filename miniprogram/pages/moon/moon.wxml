@@ -1,4 +1,4 @@
-<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}"  scroll-duration="1000"  bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
@@ -6,9 +6,9 @@
 
 <view style="padding-top: {{CustomBar}}px;">
 	<view class="{{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{moonPhaseLists}}" wx:key="index" wx:if="{{item&&index<16}}">
-		<sc-cell right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}" >
-			<text slot="subheader1">{{item.moonTimeDate}}</text>
-			<text slot="subheader">{{item.moonTimePhaseCN}}</text>
+		<sc-cell cellHeight="80" subheader1Padding="5" right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}">
+			<text slot="subheader">{{item.moonTimeDate}}</text>
+			<text slot="subheader1">{{item.moonTimePhaseCN}}</text>
 			<text slot="subbottom">{{item.moonTimePhaseEN}}</text>
 			<view slot="iconimageright">
 				<view class="flex align-center justify-center margin-sm">
@@ -17,5 +17,4 @@
 			</view>
 		</sc-cell>
 	</view>
-
 </view>
