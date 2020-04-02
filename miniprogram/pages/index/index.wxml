@@ -57,7 +57,7 @@
 						</view>
 					</view>
 					<view class="authScreenNextCell" bindtap="authScreenNext" data-target="authSecondStep">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" style="height:35px"></image>
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
 					</view>
 				</view>
 			</view>
@@ -86,7 +86,7 @@
 						</view>
 					</view>
 					<view class="authScreenPreCell" bindtap="authScreenBack" data-target="authSecondStep">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenLeft.svg" style="height:35px"></image>
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenLeft.svg" class="square-35"></image>
 					</view>
 				</view>
 			</view>
@@ -137,7 +137,7 @@
 						</view>
 					</view>
 					<view class="authScreenNextCell" bindtap="authFinalScreenFadeOut">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" style="height:35px"></image>
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
 					</view>
 				</view>
 			</view>

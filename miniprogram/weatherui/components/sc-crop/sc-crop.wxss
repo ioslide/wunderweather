@@ -180,7 +180,11 @@
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAsCAQAAACnWtJ+AAABHklEQVR42u3UsUrDQBzH8YvFrYOhvoLp0BcohA5dhIzZdexrZHMU+wrt2sG9Q9LBICg4CkV0CfQFdBP9OpikqebSS//UQfJbj3zucv/7/5WqCBaWkocBz9xIkUMu+ACQMSfckUbCjHgDIcQx12xkN+aUFYghLvmkPK8siZhwhr2d6WGSd0L8auiAK+2JfibGrX1H2oxp1a4abRyGBDxsLM052vkd0WVWoB63UQ73+vLT56Vwqpag1+iwWN+VSfc/cavdaE25Jo9UO4/o5D8YS0dNPz+TL6WyCoZSqJs3ji2lsid6rvBIjFoiwSuBgnR1qgwZgKQEGqZrkaJGSnvgO0sp1M5GnxBS+fcN9AfQL7GBGuifQaJRW4REw38P+QIQNLRX56aQYgAAAABJRU5ErkJggg==);
     background-size: 100% 100%;
 }
-
+image {
+	display: inline-block;
+	position: relative;
+	z-index: 0;
+}
 /* iphoneX */
 @media only screen and (device-width : 375px) and (device-height : 812px) and (-webkit-device-pixel-ratio : 3),
 (device-width : 414px) and (device-height : 896px) {

@@ -1982,51 +1982,13 @@ create(store, {
     app.changeStorage('temperatureUnitValue', e.detail.value.toString())
     app.changeStorage('temperatureUnit', temperatureUnit)
   },
-  cloudUpload (p,n){
-    const t = this
-    wx.cloud.uploadFile({
-      cloudPath:  'cusImage/' + n,
-      filePath: p, 
-    }).then(res => {
-      log(res)
-      t.saveData('cusImageFileID',res.fileID)
-    }).catch(error => {
-      log(error)
-    })
-  },
-  // chooseCropImage(e){
-  //   let type = e.currentTarget.dataset.type
-  //   log('[chooseCropImage]',type)
-  //   const t = this
-  //   wx.chooseImage({
-  //     count: 1,
-  //     sizeType: ['compressed'],
-  //     sourceType: [type],
-  //     success (res) {
-  //       log(res)
-  //       const 
-  //         tempFilePaths = res.tempFilePaths[0]
-  //       log('[chooseImage]',tempFilePaths)
-  //       t.setData({
-  //         cusImage:tempFilePaths,
-  //         hasCusImage:true,
-  //         modalName:null,
-  //         visible: true
-  //       })
-  //       t.saveData('hasCusImage',true)
-  //     },
-  //     fail(err){
-  //       log(err)
-  //     }
-  //   })
-  // },
   //选取裁剪图片
-  chooseCropImage: function (e) {
+  chooseCropImage(e) {
     let self = this;
     let type = e.currentTarget.dataset.type
     wx.chooseImage({
       count:1,
-      sizeType: ["compressed"],// ios 选择原图容易 crash
+      sizeType: ["compressed"],
       sourceType	:[type],
       success(res) {
         console.log(res)
@@ -2042,7 +2004,19 @@ create(store, {
     });
   },
   //裁剪图片回调
-  cropCallback: function (event) {
+  cropCallback(event) {
+    const cloudUpload = (p,n) => {
+      const t = this
+      wx.cloud.uploadFile({
+        cloudPath:  'cusImage/' + n,
+        filePath: p, 
+      }).then(res => {
+        log(res)
+        t.saveData('cusImageFileID',res.fileID)
+      }).catch(error => {
+        log(error)
+      })
+    },
     const t = this
     log('[cropCallback]',event);
     this.setData({
@@ -2052,17 +2026,17 @@ create(store, {
     });
     let name = app.globalData.openid,
     tempFilePaths = event.detail.resultSrc
-    t.cloudUpload(tempFilePaths,name)
+    cloudUpload(tempFilePaths,name)
     t.saveData('hasCusImage',true)
   },
   
   //选取裁剪图片成功回调
-  uploadCallback: function (event) {
+  uploadCallback(event) {
     log('[uploadCallback]',event);
   },
 
   //关闭回调
-  closeCallback: function (event) {
+  closeCallback(event) {
     log('[closeCallback]',event);
     this.setData({
       visible: false,

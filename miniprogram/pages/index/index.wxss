@@ -3197,8 +3197,3 @@ button::after {
   align-items: center;
   position: absolute;
 }
-
-/* .item-img {
-  height: 30px;
-  width: 30px
-} */
