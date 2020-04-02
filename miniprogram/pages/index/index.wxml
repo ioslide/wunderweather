@@ -301,6 +301,31 @@
 					<!-- </view> -->
 				</block>
 				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
+					<view class="square-100" style="background-image: url('{{nasaImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="nasaimagelist">
+						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+							<block wx:if="{{forecastData.nowWeather == '雨'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '雪'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '晴天'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '晴夜'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '风'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '阴' ||forecastData.nowWeather == '多云'}}">
+
+							</block>
+							<block wx:if="{{forecastData.nowWeather == '雾霾沙尘'}}">
+
+							</block>
+						</block>
+					</view>
 				</block>
 				<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
 					<view class="networkType">
@@ -910,11 +935,11 @@
 				</view>
 			</block>
 			<block wx:if="{{modalName=='DrawerModalHeadImage'}}">
-				<view style="width:40.40%" bindtap="chooseImage" data-type="album">
+				<view style="width:40.40%" bindtap="chooseCropImage" data-type="album">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/album1.svg!wxminiapp" style="height:30px;width:30px"></image>
 					<view style="color:#010101">相册</view>
 				</view>
-				<view style="width:40.40%" bindtap="chooseImage" data-type="camera">
+				<view style="width:40.40%" bindtap="chooseCropImage" data-type="camera">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/camera1.svg!wxminiapp" style="height:30px;width:30px"></image>
 					<view style="color:#010101">拍摄</view>
 				</view>
@@ -923,7 +948,10 @@
 	</view>
 </view>
 
+<sc-crop wx:if="{{visible}}" size="{{size}}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="{{borderColor}}" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
+
 <sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
+
 <view class="cu-modal {{modalName=='shareImage'?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">
 	<view class="shareImage-dialog" style="margin-top:80rpx" catchtap>
 		<canvasdrawer painting="{{painting}}" class="canvasdrawer" bind:getImage="eventGetImage" />

@@ -115,6 +115,17 @@ create(store, {
     strSunSet: "",
     strSunRise: "",
     bingImage: "",
+
+    src: null,
+    visible: false,
+    size: {
+      width: 400,
+      height: 300
+    },
+    cropSizePercent: 0.9,
+    borderColor: '#fff',
+    result: '',
+
     forecastData: {
       nowTemp: "",
       nowWeather: "",
@@ -1971,52 +1982,87 @@ create(store, {
     app.changeStorage('temperatureUnitValue', e.detail.value.toString())
     app.changeStorage('temperatureUnit', temperatureUnit)
   },
-  changeStyleStorage: lazyFunction.throttle(function (e) {
-    wx.setStorageSync('style',this.store.data.style)
-  }),
-  chooseImage(e){
-    let type = e.currentTarget.dataset.type
-    log('[chooseImage]',type)
-    const t = this
-    const cloudUpload = (p,n) =>{
-      wx.cloud.uploadFile({
-        cloudPath:  'cusImage/' + n,
-        filePath: p, 
-      }).then(res => {
-        log(res)
-        wx.setStorage({
-          data: res.fileID,
-          key: 'cusImageFileID',
-        })
-      }).catch(error => {
-        log(error)
+  cloudUpload (p,n){
+    wx.cloud.uploadFile({
+      cloudPath:  'cusImage/' + n,
+      filePath: p, 
+    }).then(res => {
+      log(res)
+      wx.setStorage({
+        data: res.fileID,
+        key: 'cusImageFileID',
       })
-    }
+    }).catch(error => {
+      log(error)
+    })
+  },
+  // chooseCropImage(e){
+  //   let type = e.currentTarget.dataset.type
+  //   log('[chooseCropImage]',type)
+  //   const t = this
+  //   wx.chooseImage({
+  //     count: 1,
+  //     sizeType: ['compressed'],
+  //     sourceType: [type],
+  //     success (res) {
+  //       log(res)
+  //       const 
+  //         tempFilePaths = res.tempFilePaths[0]
+  //       log('[chooseImage]',tempFilePaths)
+  //       t.setData({
+  //         cusImage:tempFilePaths,
+  //         hasCusImage:true,
+  //         modalName:null,
+  //         visible: true
+  //       })
+  //       t.saveData('hasCusImage',true)
+  //     },
+  //     fail(err){
+  //       log(err)
+  //     }
+  //   })
+  // },
+  //选取裁剪图片
+  chooseCropImage: function () {
+    let self = this;
     wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: [type],
-      success (res) {
-        log(res)
-        const 
-          tempFilePaths = res.tempFilePaths[0],
-          name = app.globalData.openid
-        log('[chooseImage]',tempFilePaths)
-        log('[chooseImage]',name)
-        t.setData({
-          cusImage:tempFilePaths,
-          hasCusImage:true,
-          modalName:null
-        })
-        cloudUpload(tempFilePaths,name)
-        wx.setStorage({
-          data: true,
-          key: 'hasCusImage',
+      count:1,
+      sizeType: ["original","compressed"],// ios 选择原图容易 crash
+      sourceType	:['album'],
+      success(res) {
+        console.log(res)
+        const tempFilePaths = res.tempFiles[0].path
+        self.setData({
+          visible: true,
+          src: tempFilePaths,
         })
       },
       fail(err){
-        log(err)
+        console.log(err)
       }
-    })
+    });
+  },
+  //裁剪图片回调
+  cropCallback: function (event) {
+    log('[cropCallback]',event);
+    this.setData({
+      visible: false,
+    });
+    let name = app.globalData.openid,
+    tempFilePaths = this.data.cusImage
+    t.cloudUpload(tempFilePaths,name)
+  },
+  
+  //选取裁剪图片成功回调
+  uploadCallback: function (event) {
+    log('[uploadCallback]',event);
+  },
+
+  //关闭回调
+  closeCallback: function (event) {
+    log('[closeCallback]',event);
+    this.setData({
+      visible: false,
+    });
   }
 });
