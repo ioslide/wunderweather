@@ -80,7 +80,6 @@ Component({
     cropContentStyle: '', // 裁剪图片样式
     lineationWidth: 0, // 旋转刻度盘总宽度
     visibleSrc: '',
-    src:'',
     lineationArr: [],
     statusBtns: {
       close: false,
@@ -770,11 +769,9 @@ Component({
     load: function () {
       var self = this;
       var src = this.data.src;
-      console.log('[load]',this.data)
       wx.getImageInfo({
         src: src,
         success(res) {
-          console.log(res)
           self.originImage = res;
           self._orientation = self.orientationToNumber(res.orientation);
           self.getRealCotentSize();
@@ -784,7 +781,7 @@ Component({
               self.transformCoordinates(image);
               self.init();
             }
-            image.src = res.path;
+            image.src = src;
           }, 50) // ios delay 保证 canvas style 尺寸生效
         }
       })
@@ -869,13 +866,9 @@ Component({
       wx.canvasToTempFilePath({
         canvas: self.$cropContent,
         success(res) {
-          console.log('[canvasToTempFilePath]',res)
           self.setData({
             visibleSrc: res.tempFilePath
           })
-        },
-        fail(err){
-          console.log(err)
         }
       }, self);
     },

@@ -293,7 +293,7 @@
 				<block wx:if="{{$.indexHeadImageValue == '自定义'}}">
 					<!-- <view class="flex square-100"> -->
 					<view class="flex square-100 align-center justify-center">
-						<image class="square-100" style="background-size: cover;background-position: 50% 99%;" mode="aspectFill" src="{{cusImage}}" mode="aspectFit"></image>
+						<image class="square-100" style="background-size: cover;" mode="aspectFill" src="{{cusImage}}"></image>
 						<view class="padding {{hasCusImage == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="showModal" data-target="DrawerModalHeadImage">
 							<image class="square-40" mode="aspectFit" src="https://teaimg.ioslide.com/weather/camera.svg"></image>
 						</view>
