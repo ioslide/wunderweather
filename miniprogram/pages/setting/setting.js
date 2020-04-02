@@ -94,29 +94,42 @@ create(store, {
     app.changeStorage('themeValue', themeValue)
     app.changeStorage('theme', theme)
   },
-  refreshfrequencyTap: function (e) {
-    var t = this,
-      id = e.currentTarget.id,
+  refreshfrequencyRadioChange:function(e){
+    log('[refreshfrequencyRadioChange]', e.detail.value )
+    let
+      t = this,
+      refreshfrequencyValue = e.detail.value.toString(),
       refreshfrequency = {
+        switch_refreshfrequencyChecked_1: false,
+        switch_refreshfrequencyChecked_5: false,
+        switch_refreshfrequencyChecked_10: false,
         switch_refreshfrequencyChecked_30: false,
-        switch_refreshfrequencyChecked_60: false,
-        switch_refreshfrequencyChecked_120: false,
-        switch_refreshfrequencyChecked_180: false
+        switch_refreshfrequencyChecked_60: false
       }
-    refreshfrequency[id] = true
-    app.changeStorage('refreshfrequency', refreshfrequency)
-  },
-  refreshfrequencyRadioChange: function (e) {
-    var t = this
-    console.log('radio change', e, e.detail.value.toString())
-    this.setData({
-      refreshfrequencyValue: e.detail.value.toString(),
+    if(refreshfrequencyValue == '1分钟'){
+        refreshfrequency['switch_refreshfrequencyChecked_1'] = true
+    }
+    else if(refreshfrequencyValue == '5分钟'){
+      refreshfrequency['switch_refreshfrequencyChecked_5'] = true
+    }
+    else if(refreshfrequencyValue == '10分钟'){
+      refreshfrequency['switch_refreshfrequencyChecked_10'] = true
+    }
+    else if(refreshfrequencyValue == '30分钟'){
+      refreshfrequency['switch_refreshfrequencyChecked_30'] = true
+    }
+    else{
+      refreshfrequency['switch_refreshfrequencyChecked_60'] = true
+    }
+    t.setData({
+      refreshfrequencyValue: refreshfrequencyValue,
+      refreshfrequency: refreshfrequency,
       modalName: null
     })
-    app.changeStorage('refreshfrequencyValue', e.detail.value.toString())
-    // t.saveData("isRequestUserInfoAgain", 1);
+    t.store.data.refreshfrequencyValue = refreshfrequencyValue
+    app.changeStorage('refreshfrequencyValue', refreshfrequencyValue)
+    app.changeStorage('refreshfrequency', refreshfrequency)
   },
-
   // languageTap: function (e) {
   //   var t = this,
   //     id = e.currentTarget.id,
@@ -276,8 +289,8 @@ create(store, {
   },
   onDev: function () {
     wx.showModal({
-      title: '正在开发中',
-      content: '敬请期待',
+      title: '没钱开发中',
+      content: '不要期待',
       success(res) {}
     })
   },

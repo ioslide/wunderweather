@@ -125,6 +125,13 @@
 					"id": -1,
 					"name": "pages/hourweather/hourweather",
 					"pathName": "pages/hourweather/hourweather",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/about/about",
+					"pathName": "pages/setting/about/about",
 					"scene": null
 				}
 			]

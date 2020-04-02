@@ -5,9 +5,9 @@ const error = console.error.bind(console)
 const warn = console.warn.bind(console)
 const chooseLocation = requirePlugin('chooseLocation');
 const scui = require('../../weatherui/sc-ui');
-const util = require ('../../utils/util.js')
-const sunCalc = require ('../../utils/sunCalc.js')
-const poetry = require ('../../utils/poetry.js')
+const util = require('../../utils/util.js')
+const sunCalc = require('../../utils/sunCalc.js')
+const poetry = require('../../utils/poetry.js')
 
 
 // import base64src from '../../utils/base64src.js'
@@ -95,7 +95,7 @@ create(store, {
     lastRefreshTime: '',
     isGettingLocation: false,
     isBackFromBing: false,
-    hasCusImage:false,
+    hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
     qrImageURL: '',
@@ -148,7 +148,8 @@ create(store, {
       'style',
       'themeValue',
       'startScreen',
-      'indexHeadImageValue'
+      'indexHeadImageValue',
+      'refreshfrequencyValue'
     ]
   },
   onLoad(a) {
@@ -174,7 +175,7 @@ create(store, {
           t.setData({
             networkType: networkType
           })
-        }else{
+        } else {
           log('[onLoad] => loadDataFromNet()')
           t.loadDataFromNet()
         }
@@ -189,12 +190,12 @@ create(store, {
     const t = this
     const location = chooseLocation.getLocation();
     let hasCusImage = wx.getStorageSync('hasCusImage') || false
-    if(hasCusImage == true){
+    if (hasCusImage == true) {
       let cusImageFileID = wx.getStorageSync('cusImageFileID')
-      if(cusImageFileID){
+      if (cusImageFileID) {
         t.setData({
-          cusImage:cusImageFileID,
-          hasCusImage : true
+          cusImage: cusImageFileID,
+          hasCusImage: true
         })
         log('hasCusImage,cusImage')
       }
@@ -252,12 +253,13 @@ create(store, {
   },
   onReady() {
     warn('[onReady]')
-    let t = this
+    const t = this
     t.getMoonPhaseList()
     t.setBingImage()
     t.savePoetry()
     t.data.datePicker = scui.DatePicker("#datepicker");
     // t.onGetWXACode()
+    t.refreshWeather()
   },
   getNetworkType() {
     warn('[getNetworkType]')
@@ -576,7 +578,7 @@ create(store, {
       curDetailTime = date[0].time + " " + date[0].week,
       aqiColor = setAqiColor(t.aqi)
 
-      app.saveData("lastRefreshTime", date[0].time)
+    app.saveData("lastRefreshTime", date[0].time)
 
     let nowTemp = Math.round(s)
     if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
@@ -642,14 +644,16 @@ create(store, {
       log(`[setNowWeather] => [saveHistoryCityData] =>`, val)
       o.drawSunCalc(o.data.forecastData.cur_latitude, o.data.forecastData.cur_longitude)
     });
-
-    //刷新天气频率
-    // clearInterval(a)
-    // a = setInterval(
-    // function () {
-
-    // },o.store.data.refreshfrequencyValue.replace('小时', '') * 100000000000000060 * 60);
-    // },99999999999999999999999999999)
+  },
+  refreshWeather() {
+    const t = this
+    let temp = t.store.data.refreshfrequencyValue.replace('分钟', ''),
+      refreshTime = temp * 60 * 1000
+    log('[refreshTime]',refreshTime)
+    setInterval(() => {
+      log('[refreshWeather] => setInterval()', refreshTime)
+      t.getNowWeather(null, false, false)
+    }, refreshTime);
   },
   getTemperatureChartsData(a) {
     let
@@ -819,7 +823,7 @@ create(store, {
   },
   getAqiDescription(a) {
     let d = '暂无描述'
-    return a = 0 ? (d = "暂无描述"): a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
+    return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
   },
   getWindLevel(a) {
     let t = 0;
@@ -1006,7 +1010,7 @@ create(store, {
         'modalName': null
       }),
       t.getNowWeather(null, false, false);
-      app.saveData('manualSetLocation', false)
+    app.saveData('manualSetLocation', false)
   },
   // async setBingImage() {
   //   log('[setBingImage]')
@@ -1200,7 +1204,7 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 0,
     });
-    defaultScreenAction.opacity(1).translate3d(0,'10px',0).step()
+    defaultScreenAction.opacity(1).translate3d(0, '10px', 0).step()
     t.setData({
       logoScreenAni: defaultScreenAction.export(),
     })
@@ -1237,7 +1241,7 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 0,
     });
-    authScreenAction.translate3d(-mobileWidth * 3,0,0).opacity(0).step()
+    authScreenAction.translate3d(-mobileWidth * 3, 0, 0).opacity(0).step()
     t.setData({
         defaultScreenAni: authScreenAction.export(),
       }),
@@ -1312,7 +1316,7 @@ create(store, {
         timingFunction: 'ease-in-out',
         delay: 0
       });
-      stepAction.translate3d(-steps,0,0).step()
+      stepAction.translate3d(-steps, 0, 0).step()
       t.setData({
         defaultScreenAni: stepAction.export(),
       })
@@ -1358,7 +1362,7 @@ create(store, {
         timingFunction: 'ease-in-out',
         delay: 0
       });
-      authFirstStep.translate3d(-steps,0,0).step()
+      authFirstStep.translate3d(-steps, 0, 0).step()
       t.setData({
         defaultScreenAni: authFirstStep.export(),
       })
@@ -1456,7 +1460,7 @@ create(store, {
     const t = this
     const changeStoreage = (result) => {
       t.store.data.style[result] = !t.store.data.style[result]
-      log(result,t.store.data.style[result])
+      log(result, t.store.data.style[result])
       // t.changeStyleStorage('style')
       app.changeStorage('style', t.store.data.style)
     }
@@ -1899,7 +1903,7 @@ create(store, {
           // let base64Img = wx.arrayBufferToBase64(buffer).replace(/[\r\n]/g, "")
           let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
           t.formatImg(base64Img)
-          t.saveData('qrCodeBase64',base64Img)
+          t.saveData('qrCodeBase64', base64Img)
         },
         fail: err => {
           warn(`[getWXACode] => ${err}`)
@@ -1908,10 +1912,11 @@ create(store, {
     }
   },
   formatImg(base64Img) {
-    let t = this
-    let fsm = wx.getFileSystemManager();
-    let FILE_BASE_NAME = 'weatherLogo';
-    let buffer = wx.base64ToArrayBuffer(base64Img);
+    const t = this
+    let 
+      fsm = wx.getFileSystemManager(),
+      FILE_BASE_NAME = 'weatherLogo',
+      buffer = wx.base64ToArrayBuffer(base64Img);
     const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
     fsm.writeFile({
       filePath,
@@ -1987,9 +1992,9 @@ create(store, {
     let self = this;
     let type = e.currentTarget.dataset.type
     wx.chooseImage({
-      count:1,
+      count: 1,
       sizeType: ["compressed"],
-      sourceType	:[type],
+      sourceType: [type],
       success(res) {
         console.log(res)
         const tempFilePaths = res.tempFiles[0].path
@@ -1998,7 +2003,7 @@ create(store, {
           src: tempFilePaths,
         })
       },
-      fail(err){
+      fail(err) {
         console.log(err)
       }
     });
@@ -2007,39 +2012,39 @@ create(store, {
   cropCallback(event) {
     const
       t = this,
-      cloudUpload = (p,n) => {
+      cloudUpload = (p, n) => {
         const t = this
         wx.cloud.uploadFile({
-          cloudPath:  'cusImage/' + n,
-          filePath: p, 
+          cloudPath: 'cusImage/' + n,
+          filePath: p,
         }).then(res => {
           log(res)
-          t.saveData('cusImageFileID',res.fileID)
+          t.saveData('cusImageFileID', res.fileID)
         }).catch(error => {
           log(error)
         })
       }
-    
-    log('[cropCallback]',event);
+
+    log('[cropCallback]', event);
     this.setData({
       visible: false,
       cusImage: event.detail.resultSrc,
-      hasCusImage:true
+      hasCusImage: true
     });
     let name = app.globalData.openid,
-    tempFilePaths = event.detail.resultSrc
-    cloudUpload(tempFilePaths,name)
-    t.saveData('hasCusImage',true)
+      tempFilePaths = event.detail.resultSrc
+    cloudUpload(tempFilePaths, name)
+    t.saveData('hasCusImage', true)
   },
-  
+
   //选取裁剪图片成功回调
   uploadCallback(event) {
-    log('[uploadCallback]',event);
+    log('[uploadCallback]', event);
   },
 
   //关闭回调
   closeCallback(event) {
-    log('[closeCallback]',event);
+    log('[closeCallback]', event);
     this.setData({
       visible: false,
     });

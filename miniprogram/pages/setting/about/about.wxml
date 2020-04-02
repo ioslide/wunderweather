@@ -14,12 +14,12 @@
 				奇妙天气
 			</view>
 			<view class="flex justify-center align-center margin-top {{$.themeValue == '明亮'?'text-grey':'text-white'}} " style="font-family: 'Lato', sans-serif;">
-				1.1.6</view>
+				1.4.10</view>
 		</view>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
-		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">评分</text>
 			<text slot="subbottom">喜欢奇妙天气这款应用吗？</text>
 		</sc-cell>
@@ -28,7 +28,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
 			<button open-type="feedback" bindcontact="handleContact" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
 		</button>
-		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">反馈</text>
 			<text slot="subbottom">报告任何bug和问题</text>
 		</sc-cell>
@@ -37,7 +37,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
 		<button open-type="share" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
 		</button>
-		<sc-cell right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">分享</text>
 			<text slot="subbottom">分享给你的朋友和家人</text>
 		</sc-cell>

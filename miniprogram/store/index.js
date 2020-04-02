@@ -15,10 +15,11 @@ const setStoreage = () =>{
     },
     languageValue: '中文简体',
     refreshfrequency: {
-      switch_refreshfrequencyChecked_30: true,
-      switch_refreshfrequencyChecked_60: false,
-      switch_refreshfrequencyChecked_120: false,
-      switch_refreshfrequencyChecked_180: false
+      switch_refreshfrequencyChecked_1: true,
+      switch_refreshfrequencyChecked_5: true,
+      switch_refreshfrequencyChecked_10: false,
+      switch_refreshfrequencyChecked_30: false,
+      switch_refreshfrequencyChecked_60: false
     },
     refreshfrequencyValue: '30分钟',
     theme: {
@@ -85,6 +86,7 @@ export default {
     style: $$.style,
     indexHeadImage:$$.indexHeadImage,
     indexHeadImageValue:$$.indexHeadImageValue,
+    refreshfrequencyValue:$$.refreshfrequencyValue,
     themeValue: $$.themeValue,
     theme: $$.theme,
     temperatureUnit: $$.temperatureUnit,
