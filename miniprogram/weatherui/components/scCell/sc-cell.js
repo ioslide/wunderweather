@@ -36,6 +36,10 @@ create.Component(store,{
     subheader1PaddingTop:{
       type:Number,
       value:0
+    },
+    cellHeight:{
+      type:Number,
+      value:60
     }
     // switchTarget: {
     //   type: String,
@@ -59,6 +63,7 @@ create.Component(store,{
     this.setData({
       themeValue: e.themeValue,
       switch: e.switch,
+      cellHeight:e.cellHeight,
       subbottomPaddingTop:e.subbottomPaddingTop,
       subheader1PaddingTop:e.subheader1PaddingTop
       // switchTarget: e.switchTarget

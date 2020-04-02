@@ -111,6 +111,13 @@
 					"id": -1,
 					"name": "pages/nasaimagelist/nasaimagelist",
 					"pathName": "pages/nasaimagelist/nasaimagelist",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/customstyle/customstyle",
+					"pathName": "pages/setting/customstyle/customstyle",
 					"scene": null
 				}
 			]

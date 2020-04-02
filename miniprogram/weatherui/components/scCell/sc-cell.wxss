@@ -1,4 +1,5 @@
 .sc-cell {
+  height: 80px;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -22,7 +23,7 @@
   max-height: 180rpx;
   font-size: 32rpx;
   overflow: hidden;
-  padding: 22rpx 0rpx;
+  /* padding: 22rpx 0rpx; */
   /* border-bottom: 1px solid #d3d3d3; */
   box-sizing: border-box;
 }
