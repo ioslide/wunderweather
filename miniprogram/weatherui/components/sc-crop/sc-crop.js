@@ -865,6 +865,7 @@ Component({
       var self = this;
       wx.canvasToTempFilePath({
         canvas: self.$cropContent,
+        fileType:'jpg',
         success(res) {
           self.setData({
             visibleSrc: res.tempFilePath

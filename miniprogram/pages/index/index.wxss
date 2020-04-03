@@ -21,10 +21,10 @@
   }
 }
 
-page {
+page{
   overflow: visible;
+  background:#F5F6F7
 }
-
 .dark-page {
   animation: fade-in 0.6s ease-in;
   background: #010101;

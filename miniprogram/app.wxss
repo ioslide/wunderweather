@@ -1,7 +1,6 @@
 @import "/weatherui/assets/wxss/main.wxss";
 @import "/weatherui/assets/wxss/icon.wxss";
 
-
 button::after {
 border: none;
 }

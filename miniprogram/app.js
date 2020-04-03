@@ -1,4 +1,5 @@
 const log = console.log.bind(console)
+const warn = console.warn.bind(console)
 const group = console.group.bind(console)
 const groupEnd = console.groupEnd.bind(console)
 
@@ -16,14 +17,14 @@ App({
   onShow(options) {
     // wx.BaaS.reportTemplateMsgAnalytics(options)
     wx.onMemoryWarning(function () {
-      console.warn('[onMemoryWarningReceive]')
+      warn('[onMemoryWarningReceive]')
     })
   },
   onPageNotFound: function () {
       log('onPageNotFound')
   },
   onLaunch() {
-    console.warn('[onLaunch]')
+    group('[onLaunch]')
     this.checkVersion()
     this.updateManager()
     this.wxLogin()
@@ -32,6 +33,7 @@ App({
     this.initCloud()
     // this.dataPrePull()
     log(xhy)
+    groupEnd('[onLaunch]')
   },
   loadFontFace() {
     wx.loadFontFace({
@@ -112,7 +114,7 @@ App({
       env: 'subweather-5hkjz',
       traceUser: true,
     });
-    log('[initCloud] => OK')
+    log('[initCloud]')
   },
   updateManager() {
     const updateManager = wx.getUpdateManager()
@@ -127,7 +129,7 @@ App({
           if (res.confirm) {
             wx.clearStorage({
               complete: (res) => {
-                log('call applyUpdate && restart')
+                log('call applyUpdate && restart',res)
                 updateManager.applyUpdate()
               },
             })

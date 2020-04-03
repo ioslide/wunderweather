@@ -1,4 +1,8 @@
 
+page{
+  overflow: visible;
+  background:#F5F6F7
+}
 .slide-bar {
   position: relative;
   color: transparent;

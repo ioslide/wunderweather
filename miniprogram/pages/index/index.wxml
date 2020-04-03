@@ -983,7 +983,7 @@
 	</view>
 </view>
 
-<sc-crop wx:if="{{visible}}" size="{width: 400,height: 300}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="#ffffff" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
+<sc-crop wx:if="{{visible}}" size="{{size}}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="#ffffff" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
 
 <sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
 

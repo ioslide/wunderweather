@@ -1,5 +1,9 @@
 @import "/weatherui/sc-ui.wxss";
 @import "/weatherui/assets/font-icon/material.wxss";
+page{
+  overflow: visible;
+  background:#F5F6F7
+}
 /* 
 .appliances {
   display: flex;

@@ -105,7 +105,7 @@ create(store, {
     shareImage: '',
     touchS: [0, 0],
     touchE: [0, 0],
-    headContentcurTime: '',
+    // headContentcurTime: '',
     // headContentSwitch: false,
     canDrawSunCalcAgain: false,
     curDetailTime: '',
@@ -119,10 +119,10 @@ create(store, {
     bingImage: "",
     src: null,
     visible: false,
-    // size: {
-    //   width: 400,
-    //   height: 300
-    // },
+    size: {
+      width: 400,
+      height: 300
+    },
     cropSizePercent: 0.9,
 
     forecastData: {
@@ -153,7 +153,8 @@ create(store, {
     ]
   },
   onLoad(a) {
-    warn('[onLoad]')
+    group('[onLoad]')
+    log('[onLoad]')
     const t = this
     const handler = function (evt) {
       log('[' + evt + ']' + '=>', evt)
@@ -184,9 +185,11 @@ create(store, {
         // }
       }
     })
+    groupEnd('[onLoad]')
   },
   onShow() {
-    warn('[onShow]')
+    group('[onShow]')
+    log('[onShow]')
     const t = this
     const location = chooseLocation.getLocation();
     let hasCusImage = wx.getStorageSync('hasCusImage') || false
@@ -212,7 +215,7 @@ create(store, {
         t.getNowWeather(location, true, false)
       t.authScreenNext('canNavToFinalScreen')
       async function save() {
-        log('[onShow] => save()')
+        log('[onShow] => saveData()')
         await app.saveData('citydata', location.name)
         await app.saveData('chooseLocation', location)
         await app.saveData('manualSetLocation', true)
@@ -227,9 +230,11 @@ create(store, {
       log('[isLanguageValueChange] => true')
       t.getNowWeather(null, false, true)
     }
+    groupEnd('[onShow]')
   },
   onReady() {
-    warn('[onReady]')
+    group('[onReady]')
+    log('[onReady]')
     const t = this
     t.getMoonPhaseList()
     t.setBingImage()
@@ -237,9 +242,11 @@ create(store, {
     t.data.datePicker = scui.DatePicker("#datepicker");
     // t.onGetWXACode()
     t.refreshWeather()
+    groupEnd('[onReady]')
   },
   getNetworkType() {
-    warn('[getNetworkType]')
+    group('[getNetworkType]')
+    log('[getNetworkType]')
     const t = this
     wx.getNetworkType({
       success: res => {
@@ -251,55 +258,59 @@ create(store, {
         return networkType
       }
     })
+    groupEnd('[getNetworkType]')
   },
   loadDataFromStorage() {
-    warn('[loadDataFromStorage]')
+    group('[loadDataFromStorage]')
+    log('[loadDataFromStorage]')
     const t = this
     wx.getStorage({
-        key: "nowdata",
-        success: res => {
-          t.setNowWeather(res.data);
-        }
-      }),
-      wx.getStorage({
-        key: "forecastData",
-        success: res => {
-          t.setTimelyWeather(res.data);
-        }
-      }),
-      wx.getStorage({
-        key: "citydata",
-        success: res => {
-          t.data.forecastData.city = res.data,
-            t.setData({
-              'forecastData.city': res.data,
-            });
-        }
-      }),
-      wx.getStorage({
-        key: "bingImage",
-        success: res => {
+      key: "nowdata",
+      success: res => {
+        t.setNowWeather(res.data);
+      }
+    }),
+    wx.getStorage({
+      key: "forecastData",
+      success: res => {
+        t.setTimelyWeather(res.data);
+      }
+    }),
+    wx.getStorage({
+      key: "citydata",
+      success: res => {
+        t.data.forecastData.city = res.data,
           t.setData({
-            'bingImage': res.data
+            'forecastData.city': res.data,
           });
-        }
-      }),
-      wx.getStorage({
-        key: "lastRefreshTime",
-        success: res => {
-          t.setData({
-            'lastRefreshTime': res.data
-          });
-        }
-      }),
-      t.screenFadeIn()
+      }
+    }),
+    wx.getStorage({
+      key: "bingImage",
+      success: res => {
+        t.setData({
+          'bingImage': res.data
+        });
+      }
+    }),
+    wx.getStorage({
+      key: "lastRefreshTime",
+      success: res => {
+        t.setData({
+          'lastRefreshTime': res.data
+        });
+      }
+    }),
+    t.screenFadeIn()
+    groupEnd('[loadDataFromStorage]')
   },
   refresh() {
-    warn('[refresh')
+    log('[refresh')
     this.loadDataFromNet('refresh')
   },
   loadDataFromNet(msg) {
-    warn('[loadDataFromNet]')
+    group('[loadDataFromNet]')
+    log('[loadDataFromNet]')
     const t = this
     let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
     if (hasUserLocation == true) {
@@ -335,9 +346,10 @@ create(store, {
         })
       }, 2500);
     }
+    groupEnd('[loadDataFromNet]')
   },
   setLocation() {
-    warn('[setLocation]')
+    group('[setLocation]')
     const t = this
     let locationSelect = wx.getStorageSync('manualSetLocation')
     const setLocationFromManual = () => {
@@ -356,7 +368,9 @@ create(store, {
       log('[setLocation] => setLocationFromAuto()')
       wx.getLocation({
         success: res => {
+          group('[setLocation] => setLocationFromAuto()')
           log(`[getLocation] => success => `, res)
+          groupEnd('[setLocation] => setLocationFromAuto()')
           t.setData({
             'isGettingLocation': true,
             'forecastData.cur_latitude': res.latitude,
@@ -378,12 +392,12 @@ create(store, {
               t.getNowWeather(null, false, true)
             },
             fail: err => {
-              warn(`[reverseGeocoder] = > ${err}`)
+              log(`[reverseGeocoder] = > ${err}`)
             }
           });
         },
         fail: err => {
-          warn(`[getLocation] => fail => ${err}`)
+          log(`[getLocation] => fail => ${err}`)
         }
       });
     }
@@ -401,9 +415,11 @@ create(store, {
       }
     }
     event(locationSelect)
+    groupEnd('[setLocation]')
   },
   autoSetLocation() {
-    warn('[autoSetLocation]')
+    group('[autoSetLocation]')
+    log('[autoSetLocation]')
     const t = this
     t.authScreenNext('canNavToFinalScreen')
     wx.getLocation({
@@ -432,18 +448,20 @@ create(store, {
             t.getNowWeather(null, false, false)
           },
           fail: err => {
-            warn(`[reverseGeocoder] = > ${err}`)
+            log(`[reverseGeocoder] = > ${err}`)
           }
         });
       },
       fail: err => {
-        warn(`[getLocation] => fail => ${err}`)
+        log(`[getLocation] => fail => ${err}`)
       }
     });
     app.saveData('manualSetLocation', false)
+    groupEnd('[autoSetLocation]')
   },
   manualSetLocation() {
-    warn('[manualSetLocation]')
+    group('[manualSetLocation]')
+    log('[manualSetLocation]')
     const t = this
     var locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO'
     const appReferer = '奇妙天气-小程序';
@@ -454,9 +472,11 @@ create(store, {
     wx.navigateTo({
       url: 'plugin://chooseLocation/index?key=' + locationKey + '&referer=' + appReferer + '&category=' + locationCategory
     });
+    groupEnd('[manualSetLocation]')
   },
   getNowWeather(choseLocationData, isChoseLocation, fadeout) {
-    warn('[getNowWeather]')
+    group('[getNowWeather]')
+    log('[getNowWeather]')
     const t = this
     let e = ''
     if (isChoseLocation == true) {
@@ -473,7 +493,6 @@ create(store, {
         url: o,
         success: a => {
           let e = a.data.result.realtime;
-          log('[getNowWeather] => [setNowWeather]', e)
           t.setNowWeather(e)
           app.saveData("nowdata", e);
         }
@@ -482,7 +501,6 @@ create(store, {
         url: s,
         success: a => {
           let e = a.data.result;
-          warn('[getNowWeather] => [setTimelyWeather]', e)
           t.setTimelyWeather(e)
           app.saveData("forecastData", e);
         },
@@ -493,7 +511,7 @@ create(store, {
     }
     async function fade() {
       await requestWeatherData()
-      log(`[getNowWeather] => [screenFadeOut] => ${fadeout}`)
+      // log(`[getNowWeather] => [screenFadeOut] => ${fadeout}`)
       if (fadeout == true) {
         await t.screenFadeOut()
       } else {}
@@ -502,9 +520,11 @@ create(store, {
     t.setData({
       'isGettingLocation': false
     })
+    groupEnd('[getNowWeather]')
   },
   setNowWeather(t) {
-    warn('[setNowWeather]')
+    group('[setNowWeather]')
+    log(`[setNowWeather] = >`, t)
     const o = this
     const setAqiColor = (result) => {
       switch (true) {
@@ -552,17 +572,13 @@ create(store, {
       time = util.formatDate(new Date()),
       date = util.getDates(7, time),
       curDetailTime = date[0].time + " " + date[0].week,
-      aqiColor = setAqiColor(t.aqi)
-
-    app.saveData("lastRefreshTime", date[0].time)
-
-    let nowTemp = Math.round(s)
+      aqiColor = setAqiColor(t.aqi),
+      nowTemp = Math.round(s)
     if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
       nowTemp = nowTemp + '°C'
     } else {
       nowTemp = nowTemp * 1.8 + 32 + '°F'
     }
-
     o.setData({
       'forecastData.nowTemp': nowTemp,
       'forecastData.nowWeather': e[i],
@@ -573,8 +589,6 @@ create(store, {
       'aqiColor': aqiColor,
       'curDetailTime': curDetailTime
     });
-
-    log(`[setNowWeather] = >`, t)
 
     const getNowCityData = () => {
       let data = {
@@ -617,9 +631,11 @@ create(store, {
       o.setData({
         'historyCityList': val
       })
-      log(`[setNowWeather] => [saveHistoryCityData] =>`, val)
       o.drawSunCalc(o.data.forecastData.cur_latitude, o.data.forecastData.cur_longitude)
     });
+    groupEnd('[setNowWeather]')
+    app.saveData("lastRefreshTime", date[0].time)
+
   },
   refreshWeather() {
     const t = this
@@ -644,9 +660,9 @@ create(store, {
   },
   setTimelyWeather(a) {
     const that = this;
-    warn('[setTimelyWeather]')
-
-    warn('[setTimelyWeather] => [hourlyWeather]', a.hourly)
+    group('[setTimelyWeather]')
+    log('[setTimelyWeather]')
+    log('[setTimelyWeather] => [hourlyWeather]', a.hourly)
     for (var t = a.hourly, i = [], r = new Date().getHours(), n = 0; n < 48; n++) {
       let c = n + r;
       let hourlyTemp = t.temperature[n].value
@@ -667,7 +683,7 @@ create(store, {
       });
     }
 
-    warn('[setTimelyWeather] => [dailyWeather]', a.daily)
+    log('[setTimelyWeather] => [dailyWeather]', a.daily)
     for (var d = a.daily, u = [], f = 0; f < 16; f++) {
       let l = new Date().getDay() + f;
       l %= 7;
@@ -702,7 +718,8 @@ create(store, {
         let tweek = ''
         if(that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW'){
           tweek = "星期" + "天一二三四五六".charAt(l)
-        }else if(that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB'){
+        }
+        else if(that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB'){
           tweek = ["Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."][l]
         }
         // log('[tweek]',tweek)
@@ -814,8 +831,6 @@ create(store, {
         type: "sw-pressure"
       }]
     }
-    
-    // let todayWeatherQuantity = JSON.parse(JSON.stringify(i));
     that.setData({
       'forecastData.todayWeatherQuantity': JSON.parse(JSON.stringify(i)),
       'forecastData.dailyWeather': u,
@@ -824,7 +839,6 @@ create(store, {
       'forecastData.hourlyKeypoint': a.hourly.description,
       'forecastData.serviceData': m,
     });
-
     async function alertContent() {
       if (a.alert.content == []) {
         for (var y = a.alert.content, v = [], w = 0; w < y.length; w++) {
@@ -847,6 +861,8 @@ create(store, {
         'forecastData.alarmInfo': val
       })
     })
+    groupEnd('[setTimelyWeather]')
+
   },
   getAqiData(a) {
     let t = "优",
@@ -990,7 +1006,6 @@ create(store, {
           break
       }
     }
-    // log('[getWindDirect]',self.store.data.languageValue,event(self.store.data.languageValue))
     return event(self.store.data.languageValue)
   },
   getMoonPhaseList: lazyFunction.throttle(function (e) {
@@ -1046,6 +1061,7 @@ create(store, {
     log(`[moonPhaseLists] =>`, moonPhaseLists)
   }),
   drawSunCalc(a, b) {
+    group('[drawSunCalc]')
     var
       t = this,
       sunriseTime = '',
@@ -1092,8 +1108,8 @@ create(store, {
     var setStrokeStyleColorSunRise = '',
       setStrokeStyleColorFullDay = ''
     if (t.store.data.themeValue == '黑夜') {
-      setStrokeStyleColorSunRise = '#ffc954'
-      setStrokeStyleColorFullDay = '#5c5c5c'
+      setStrokeStyleColorSunRise = 'rgb(255,201,84)'
+      setStrokeStyleColorFullDay = 'rgb(92,92,92)'
       drawSun(setStrokeStyleColorSunRise, setStrokeStyleColorFullDay)
     }
     if (t.store.data.themeValue == '明亮') {
@@ -1108,6 +1124,7 @@ create(store, {
       strSunSet: sunsetTime,
       strSunRise: sunriseTime
     })
+    groupEnd('[drawSunCalc]')
   },
   setHistoryCityLocation(e) {
     log('[setHistoryCityLocation]')
@@ -1159,7 +1176,7 @@ create(store, {
   //         t.saveData('bingLists', res.data.data)
   //       },
   //       fail: err =>{
-  //         warn('requestBing',err)
+  //         log('requestBing',err)
   //         t.setData({
   //           'bingImage': {
   //             img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
@@ -1192,7 +1209,7 @@ create(store, {
 
   // },
   setBingImage() {
-    log('[setBingImage]')
+    group('[setBingImage]')
     const t = this
     wx.request({
       // url: 'https://www.benweng.com/api/bing/lists',
@@ -1209,7 +1226,7 @@ create(store, {
         app.saveData('bingImage', res.data.img)
       },
       fail: err => {
-        warn('requestBing', err)
+        log('requestBing', err)
         t.setData({
           'bingImage': {
             img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
@@ -1217,6 +1234,8 @@ create(store, {
         });
       }
     });
+    groupEnd('[setBingImage]')
+
   },
   screenFadeIn() {
     log('[screenFadeIn]')
@@ -1240,6 +1259,7 @@ create(store, {
     // t.intersectionObserver()
   },
   screenFadeOut() {
+    group('[screenFadeOut]')
     const t = this
     log('[screenFadeOut] =>', t.store.data.startScreen)
     const event = (result) => {
@@ -1256,9 +1276,10 @@ create(store, {
     }
     event(t.store.data.startScreen)
     t.intersectionObserver()
+    groupEnd('[screenFadeOut]')
   },
   poetryScreenFadeOut() {
-    log('[poetryScreenFadeOut]')
+    group('[poetryScreenFadeOut]')
     const t = this
     //poetry screen fade out
     let poetryScreenAction = wx.createAnimation({
@@ -1276,6 +1297,7 @@ create(store, {
           authScreen: true
         })
       }, 3000)
+    groupEnd('[poetryScreenFadeOut]')
   },
   loadFont() {
     wx.loadFontFace({
@@ -1312,7 +1334,7 @@ create(store, {
   authScreenFadeIn(hasUserLocation) {
     const t = this
     log('[authScreenFadeIn]')
-    warn(`[hasUserLocation] ${hasUserLocation}`)
+    log(`[hasUserLocation] ${hasUserLocation}`)
     let defaultScreenAction = wx.createAnimation({
       duration: 1000,
       timingFunction: 'ease-in-out',
@@ -1392,7 +1414,7 @@ create(store, {
               },
               fail: err => {
                 //req location auth again
-                warn(`check = > [wx.authorize] =>`, err)
+                log(`check = > [wx.authorize] =>`, err)
                 wx.showModal({
                   title: '是否授权以下应用权限',
                   content: '地理位置',
@@ -1412,7 +1434,7 @@ create(store, {
                         }
                       });
                     } else {
-                      warn('[scope.userLocation] fail')
+                      log('[scope.userLocation] fail')
                     }
                   }
                 });
@@ -1509,7 +1531,6 @@ create(store, {
   },
   savePoetry: lazyFunction.throttle(function () {
     // async savePoetry() {
-    log('[savePoetry]')
     const t = this
     poetry.load(
       result => {
@@ -1522,10 +1543,12 @@ create(store, {
         } else {
           poetryData = temp
         }
+        group('[savePoetry]')
         log(`[savePoetry] => poetryData =>`, poetryData)
         result.data.content = result.data.content.substring(0, result.data.content.lastIndexOf('。'))
         poetryData.unshift(result.data)
         app.saveData("poetry_storage", [...new Set(poetryData)])
+        groupEnd('[savePoetry]')
       })
   }),
   touchStart(e) {
@@ -1687,7 +1710,7 @@ create(store, {
     t.intersectionObserver()
   },
   navChange(e) {
-    warn(`[navChange] => ${e.currentTarget.dataset.cur}`)
+    log(`[navChange] => ${e.currentTarget.dataset.cur}`)
     const t = this,
       target = e.currentTarget.dataset.cur
     wx.navigateTo({
@@ -1790,7 +1813,8 @@ create(store, {
     })
   },
   eventGetImage(event) {
-    log(`[eventGetImage] => `, event)
+    group(`[eventGetImage] => `)
+    log(event)
     wx.hideLoading()
     const {
       tempFilePath,
@@ -1802,6 +1826,7 @@ create(store, {
         shareImage: tempFilePath
       })
     }
+    groupEnd(`[eventGetImage] => `)
   },
   subDailyWeather() {
     log(`[subDailyWeather] => datePicker.open()`)
@@ -1846,7 +1871,7 @@ create(store, {
           log(`[subDailyWeatherCloudFn] => OK => ${res}`)
         },
         fail: err => {
-          warn(`[subDailyWeatherCloudFn] => Fail => ${err}`)
+          log(`[subDailyWeatherCloudFn] => Fail => ${err}`)
         }
       })
     }
@@ -1869,7 +1894,7 @@ create(store, {
           log(`[unSubDailyWeatherCloudFn] => Success => ${res}`)
         },
         fail: err => {
-          warn(`[unSubDailyWeatherCloudFn] => Fail => ${err}`)
+          log(`[unSubDailyWeatherCloudFn] => Fail => ${err}`)
         }
       })
     }
@@ -1909,7 +1934,7 @@ create(store, {
     log('[official-account] =>', e)
   },
   intersectionObserver() {
-    log('[intersectionObserver]')
+    group('[intersectionObserver]')
     const t = this
     var ani = wx.createAnimation({
       duration: 700,
@@ -1921,7 +1946,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('firstObserver start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           firstObserverAni: ani.export()
         })
       }
@@ -1933,7 +1958,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('secondObserver start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           secondObserverAni: ani.export()
         })
       }
@@ -1945,7 +1970,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('thirdObserver start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           thirdObserverAni: ani.export()
         })
       }
@@ -1957,7 +1982,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('fourthObserver start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           fourthObserverAni: ani.export()
         })
       }
@@ -1969,7 +1994,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('fifthObserver start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           fifthObserverAni: ani.export()
         })
       }
@@ -1981,7 +2006,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         // log('[sixthObserver] => start')
         ani.opacity(1).step()
-        this.setData({
+        t.setData({
           sixthObserverAni: ani.export()
         })
       }
@@ -1989,6 +2014,7 @@ create(store, {
         log('[sixthObserver] => end')
       }
     })
+    groupEnd('[intersectionObserver]')
   },
   onShareAppMessage(a) {
     const t = this
@@ -2020,7 +2046,7 @@ create(store, {
           app.saveData('qrCodeBase64', base64Img)
         },
         fail: err => {
-          warn(`[getWXACode] => ${err}`)
+          log(`[getWXACode] => ${err}`)
         }
       })
     }
@@ -2043,7 +2069,7 @@ create(store, {
         })
       },
       fail: err => {
-        warn(`[writeFile] => fail => ${err}`)
+        log(`[writeFile] => fail => ${err}`)
         return (new Error('ERROR_BASE64SRC_WRITE'));
       },
     });
@@ -2101,7 +2127,19 @@ create(store, {
     app.changeStorage('temperatureUnitValue', e.detail.value.toString())
     app.changeStorage('temperatureUnit', temperatureUnit)
   },
-  //选取裁剪图片
+  updateComponnet: function () {
+    let src = this.data.src ? this.data.src : this.data.bingImage;//裁剪图片不存在时，使用默认图片，注意加载时的相对路径
+    this.setData({
+      visible: true,
+      src: src,
+      borderColor: "#0BFF00",
+      cropSizePercent: 0.7,
+      size: {
+        width: 300,
+        height: 300
+      }
+    })
+  },
   chooseCropImage(e) {
     let self = this;
     let type = e.currentTarget.dataset.type
@@ -2122,7 +2160,6 @@ create(store, {
       }
     });
   },
-  //裁剪图片回调
   cropCallback(event) {
     const
       t = this,
@@ -2151,12 +2188,9 @@ create(store, {
     app.saveData('hasCusImage', true)
   },
 
-  //选取裁剪图片成功回调
   uploadCallback(event) {
     log('[uploadCallback]', event);
   },
-
-  //关闭回调
   closeCallback(event) {
     log('[closeCallback]', event);
     this.setData({
