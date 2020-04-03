@@ -69,9 +69,9 @@
 						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
 					</view>
 					<view class="flex justify-left align-center padding-left">
-						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，您也可随时更改授权</text>
+						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改授权</text>
 					</view>
-					<view class="flex justify-center align-center margin-top-xxxl">
+					<!-- <view class="flex justify-center align-center margin-top-xxxl">
 						<view>
 							<view class="flex justify-center align-center " bindtap="autoSetLocation">
 								<view class="authFirstStepButton">自动定位</view>
@@ -82,6 +82,30 @@
 						<view>
 							<view class="flex justify-center align-center" bindtap="manualSetLocation">
 								<view class="authFirstStepButton">手动选取位置</view>
+							</view>
+						</view>
+					</view> -->
+					<view class="flex margin-top-xxl">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<!-- <view class="cu-item" bindtap="autoSetLocation"> -->
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenAutolocation.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">自动定位</view>
+									<view class="text-gray text-d flex justify-between">Automatic positioning</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="autoSetLocation"></sc-switch>
+							</view>
+							<!-- <view class="cu-item" bindtap="manualSetLocation"> -->
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenManuallocationn.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">手动选取位置</view>
+									<view class="text-gray text-d flex justify-between">Select location manually</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="{{manualSetLocation}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="manualSetLocation"></sc-switch>
 							</view>
 						</view>
 					</view>
@@ -118,12 +142,20 @@
 									<view class="text-gray text-d flex justify-between">华氏度/摄氏度</view>
 								</view>
 							</view>
-							<view class="cu-item" bindtap="showModal" data-target="distanceUnit">
+							<!-- <view class="cu-item" bindtap="onDev" data-target="distanceUnit">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
 								</view>
 								<view class="content flex-sub">
 									<view class="text-lg text-4a5568">距离单位</view>
 									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
+								</view>
+							</view> -->
+							<view class="cu-item" bindtap="showModal" data-target="language">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">语言设置</view>
+									<view class="text-gray text-d flex justify-between">中文/英文</view>
 								</view>
 							</view>
 							<view class="cu-item" bindtap="subDailyWeather">
@@ -181,12 +213,12 @@
 				<view class="cu-list menu text-left" style="width: 100%;">
 					<view class="cu-item" value="明亮" catchtap>
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="明亮" checked="{{theme.switch_themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
+							<sc-radio label="明亮" checked="{{$.theme.themeChecked_light}}" value="明亮" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item" value="黑夜" catchtap>
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="黑夜" checked="{{theme.switch_themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
+							<sc-radio label="黑夜" checked="{{$.theme.themeChecked_dark}}" value="黑夜" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 				</view>
@@ -209,12 +241,12 @@
 				<view class="cu-list menu text-left" style="width: 100%;">
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="华氏度" checked="{{temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
+							<sc-radio label="华氏度" checked="{{$.temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="摄氏度" checked="{{temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
+							<sc-radio label="摄氏度" checked="{{$.temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 				</view>
@@ -226,7 +258,45 @@
 			</view>
 		</view>
 	</view>
-	<view class="cu-modal {{modalName=='distanceUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+	<view catchtouchmove="return" class="cu-modal {{modalName=='language'?'show':''}}" bindtap="hideModal">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">系统语言</button>
+				</view>
+			</view>
+			<sc-radio-group class="block" bindchange="languageRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="en_US" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="en_GB" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="zh_CN" value="zh_CN" style="width:100%;" checked="{{$.language.languageChecked_zh_CN}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="zh_TW" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+				</view>
+			</view>
+		</view>
+	</view>
+	<!-- <view class="cu-modal {{modalName=='distanceUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
@@ -237,12 +307,12 @@
 				<view class="cu-list menu text-left" style="width: 100%;">
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="metric" checked="{{distanceUnit.distanceUnitValueM}}" value="metric" style="width:100%;"></sc-radio>
+							<sc-radio label="metric" checked="{{$.distanceUnit.distanceUnitValueM}}" value="metric" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="imperial" checked="{{distanceUnit.distanceUnitValueI}}" value="imperial" style="width:100%;"></sc-radio>
+							<sc-radio label="imperial" checked="{{$.distanceUnit.distanceUnitValueI}}" value="imperial" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 				</view>
@@ -253,7 +323,7 @@
 				</view>
 			</view>
 		</view>
-	</view>
+	</view> -->
 </block>
 
 <view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">

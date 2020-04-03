@@ -33,6 +33,10 @@ create.Component(store,{
       type:Number,
       value:0
     },
+    subbottomPadding:{
+      type:Number,
+      value:0
+    },
     cellHeight:{
       type:Number,
       value:60
@@ -60,7 +64,8 @@ create.Component(store,{
       themeValue: e.themeValue,
       switch: e.switch,
       cellHeight:e.cellHeight,
-      subheader1Padding:e.subheader1Padding
+      subheader1Padding:e.subheader1Padding,
+      subbottomPadding:e.subbottomPadding
       // switchTarget: e.switchTarget
       // checked: style[e.switchTarget]
     })

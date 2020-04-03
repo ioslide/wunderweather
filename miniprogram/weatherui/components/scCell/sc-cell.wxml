@@ -13,7 +13,7 @@
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}">
 				<slot name="subheader2"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">
+			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="padding:{{subbottomPadding}}px 0px">
 				<slot name="subbottom"></slot>
 			</view>
 			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">

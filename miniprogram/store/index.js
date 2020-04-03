@@ -89,8 +89,10 @@ export default {
     refreshfrequencyValue:$$.refreshfrequencyValue,
     themeValue: $$.themeValue,
     theme: $$.theme,
+    language:$$.language,
     languageValue:$$.languageValue,
     temperatureUnit: $$.temperatureUnit,
+    temperatureUnitValue: $$.temperatureUnitValue,
     distanceUnit:$$.distanceUnit
   },
   updateAll: true,

@@ -75,13 +75,13 @@ var a,
     "07": "⾼温",
     "08": "⼲旱",
     "09": "雷电",
-    10: "冰雹",
-    11: "霜冻",
-    12: "⼤雾",
-    13: "霾",
-    14: "道路结冰",
-    15: "森林火灾",
-    16: "雷⾬大风"
+    "10": "冰雹",
+    "11": "霜冻",
+    "12": "⼤雾",
+    "13": "霾",
+    "14": "道路结冰",
+    "15": "森林火灾",
+    "16": "雷⾬大风"
   },
   i = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
@@ -96,7 +96,7 @@ create(store, {
     mobileHeight: wx.getSystemInfoSync().windowHeight,
     lastRefreshTime: '',
     isGettingLocation: false,
-    isLanguageValueChange:false,
+    isChangeLanguage:false,
     hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
@@ -119,6 +119,7 @@ create(store, {
     bingImage: "",
     src: null,
     visible: false,
+    manualSetLocation:false,
     size: {
       width: 400,
       height: 300
@@ -149,7 +150,8 @@ create(store, {
       'startScreen',
       'indexHeadImageValue',
       'refreshfrequencyValue',
-      'languageValue'
+      'languageValue',
+      'language'
     ]
   },
   onLoad(a) {
@@ -206,13 +208,14 @@ create(store, {
     log(`[chooseLocation.getLocation()] =>`, location)
     if (location !== null) {
       t.setData({
-          'isGettingLocation': true,
-          'forecastData.city': location.city,
-          'forecastData.address': location.name,
-          'forecastData.cur_longitude': location.longitude,
-          'forecastData.cur_latitude': location.latitude
-        }),
-        t.getNowWeather(location, true, false)
+        'isGettingLocation': true,
+        'forecastData.city': location.city,
+        'forecastData.address': location.name,
+        'forecastData.cur_longitude': location.longitude,
+        'forecastData.cur_latitude': location.latitude,
+        'manualSetLocation':true
+      }),
+      t.getNowWeather(location, true, false)
       t.authScreenNext('canNavToFinalScreen')
       async function save() {
         log('[onShow] => saveData()')
@@ -222,12 +225,17 @@ create(store, {
       }
       save()
     }
+    if(location == null){
+      t.setData({
+        'manualSetLocation':false
+      })
+    }
     if (t.data.canDrawSunCalcAgain == true) {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
-    if(t.data.isLanguageValueChange == true){
-      log('[isLanguageValueChange] => true')
+    if(t.data.isChangeLanguage == true){
+      log('[isChangeLanguage] => true')
       t.getNowWeather(null, false, true)
     }
     groupEnd('[onShow]')
@@ -319,20 +327,20 @@ create(store, {
       t.setLocation()
     } else {
       t.authScreenFadeIn(false)
-      t.setData({
-        theme: {
-          themeChecked_light: true,
-          themeChecked_dark: false
-        },
-        temperatureUnit: {
-          temperatureUnitValueF: false,
-          temperatureUnitValueC: true
-        },
-        distanceUnit: {
-          distanceUnitValueM: false,
-          distanceUnitValueI: true
-        }
-      })
+      // t.setData({
+      //   theme: {
+      //     themeChecked_light: true,
+      //     themeChecked_dark: false
+      //   },
+      //   temperatureUnit: {
+      //     temperatureUnitValueF: false,
+      //     temperatureUnitValueC: true
+      //   },
+      //   distanceUnit: {
+      //     distanceUnitValueM: false,
+      //     distanceUnitValueI: true
+      //   }
+      // })
       log('[loadDataFromNet] => authScreenFadeIn()')
     }
 
@@ -428,7 +436,8 @@ create(store, {
         t.setData({
           'isGettingLocation': true,
           'forecastData.cur_latitude': res.latitude,
-          'forecastData.cur_longitude': res.longitude
+          'forecastData.cur_longitude': res.longitude,
+          'manualSetLocation':false
         })
         i.reverseGeocoder({
           location: {
@@ -463,7 +472,7 @@ create(store, {
     group('[manualSetLocation]')
     log('[manualSetLocation]')
     const t = this
-    var locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO'
+    let locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO'
     const appReferer = '奇妙天气-小程序';
     const locationCategory = '奇妙天气,XHY';
     t.setData({
@@ -545,6 +554,7 @@ create(store, {
           break
         default:
           return '#4ADC9B'
+          break
       }
     }
     let
@@ -675,10 +685,11 @@ create(store, {
       i.push({
         time: c % 24 + ".00",
         weather: e[t.skycon[n].value],
+        weatherEN: t.skycon[n].value,
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon-ani.svg",
         temp: Math.round(hourlyTemp) + '°',
-        wind: that.getWindDirect(t.wind[n].direction) + " " + that.getWindLevel(t.wind[n].speed),
+        wind: that.getWindDirect(t.wind[n].direction) + "·" + that.getWindLevel(t.wind[n].speed),
         value: t.skycon[n].value
       });
     }
@@ -693,7 +704,12 @@ create(store, {
         g = D.getMonth() + 1,
         h = D.getDate();
       g < 10 && (g = "0" + g), h < 10 && (h = "0" + h);
-      let p = g + "月" + h + '日'
+      let p = ''
+      if(that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW'){
+        p = g + "月" + h + '日'
+      }else{
+        p = g + "/" + h
+      }
 
       let chartsMargin = Math.round(d.temperature[f].min)
       //Set a horizontal line
@@ -728,6 +744,7 @@ create(store, {
       u.push({
         date: getWeek(l),
         weather: e[d.skycon[f].value],
+        weatherEN:d.skycon[f].value,
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon-ani.svg",
         tempMin: dailyTempMin,
@@ -915,7 +932,7 @@ create(store, {
     1 <= a && a <= 5 ? t = 1 : 6 <= a && a <= 11 ? t = 2 : 12 <= a && a <= 19 ? t = 3 : 20 <= a && a <= 28 ? t = 4 : 29 <= a && a <= 38 ? t = 5 : 39 <= a && a <= 49 ? t = 6 : 50 <= a && a <= 61 ? t = 7 : 62 <= a && a <= 74 ? t = 8 : 75 <= a && a <= 88 ? t = 9 : 89 <= a && a <= 102 ? t = 10 : 103 <= a && a <= 117 ? t = 11 : 118 <= a && a <= 133 ? t = 12 : 134 <= a && a <= 149 ? t = 13 : 150 <= a && a <= 166 ? t = 14 : 167 <= a && a <= 183 ? t = 15 : 184 <= a && a <= 201 ? t = 16 : 202 <= a && a <= 220 && (t = 17),
     t;
     if(self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ){
-      t = "Wind: Level " + t
+      t = "WindLevel: " + t
     }
     else if(self.store.data.languageValue == 'zh_TW'){
       t =  "風力:" + t  + "級"
@@ -989,7 +1006,7 @@ create(store, {
     en_US_en_GB = () =>{
       let t = "North";
       return 11.26 <= a && a <= 78.75 ? t = "Northeast" : 78.76 <= a && a <= 101.25 ? t = "East" : 101.26 <= a && a <= 168.75 ? t = "Southeast" : 168.76 <= a && a <= 191.25 ? t = "South" : 191.26 <= a && a <= 258.75 ? t = "Southwest" : 258.76 <= a && a <= 281.25 ? t = "West" : 281.26 <= a && a <= 348.75 && (t = "Northwest"),
-      t + " Wind";
+      "WindDirect: " + t;
     }
     const event = (result) => {
       switch (true) {
@@ -1366,9 +1383,10 @@ create(store, {
   },
   authFinalScreenFadeOut() {
     log('[authFinalScreenFadeOut]')
-    const t = this,
+    const 
+      t = this,
       mobileWidth = t.data.mobileWidth
-    if (t.data.hasChangeSetting == true) {
+    if (t.data.isChangeSetting  == true || t.data.isChangeLanguage == true) {
       t.getNowWeather(null, false, false)
     }
     t.intersectionObserver()
@@ -1598,11 +1616,18 @@ create(store, {
     const changeStoreage = (result) => {
       t.store.data.style[result] = !t.store.data.style[result]
       log(result, t.store.data.style[result])
-      // t.changeStyleStorage('style')
       app.changeStorage('style', t.store.data.style)
     }
     const event = (result) => {
       switch (true) {
+        case (result == 'manualSetLocation'):
+          log('[manualSetLocation]')
+          t.manualSetLocation()
+          break
+        case (result == 'autoSetLocation'):
+          log('[autoSetLocation]')
+          t.autoSetLocation()
+          break
         case (result == 'sunlightSwitchChange'):
           log('[sunlightSwitchChange]')
           t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
@@ -1610,6 +1635,7 @@ create(store, {
           break
         default:
           changeStoreage(result)
+          break
       }
     }
     event(e.currentTarget.dataset.cur)
@@ -1640,6 +1666,7 @@ create(store, {
           break
         default:
           setData(result)
+          break
       }
     }
     event(e.currentTarget.dataset.target)
@@ -1671,6 +1698,7 @@ create(store, {
           break
         default:
           setData(result)
+          break
       }
     }
     // event(e.currentTarget.dataset.target)
@@ -1693,6 +1721,7 @@ create(store, {
           break
         default:
           setData(result)
+          break
       }
     }
     event(e.currentTarget.dataset.target)
@@ -2075,39 +2104,52 @@ create(store, {
     });
   },
   themeRadioChange(e) {
+    log('[themeRadioChange]', e.detail.value)
     const t = this
-    t.setData({
-      modalName: null,
-      hasChangeSetting: true
-    })
-    t.store.data.themeValue = e.detail.value.toString()
-    app.changeStorage('themeValue', e.detail.value.toString())
-  },
-  distanceUnitValueRadioChange(e) {
-    const t = this
-
-    let distanceUnit = {
-      distanceUnitValueM: false,
-      distanceUnitValueI: false
+    let themeValue = e.detail.value.toString(),
+      theme = {
+        themeChecked_light: false,
+        themeChecked_dark: false
+      }
+    if(themeValue == '明亮'){
+      theme['themeChecked_light'] = true
+    }else{
+      theme['themeChecked_dark'] = true
     }
-    if (e.detail.value == 'metric') {
-      distanceUnit['distanceUnitValueM'] = true
-    } else if (e.detail.value == 'imperial') {
-      distanceUnit['distanceUnitValueI'] = true
-    }
-    // t.store.data.distanceUnitValue = e.detail.value.toString()
-    // t.store.data.distanceUnit = distanceUnit
     t.setData({
+      themeValue: themeValue,
+      theme: theme,
       modalName: null,
-      hasChangeSetting: true,
-      distanceUnit: distanceUnit
+      isChangeSetting : true
     })
-    app.changeStorage('distanceUnitValue', e.detail.value.toString())
-    app.changeStorage('distanceUnit', distanceUnit)
+    t.store.data.theme = theme
+    t.store.data.themeValue = themeValue
+    app.changeStorage('themeValue', themeValue)
+    app.changeStorage('theme', theme)
   },
+  // distanceUnitValueRadioChange(e) {
+  //   const t = this
+  //   let distanceUnit = {
+  //     distanceUnitValueM: false,
+  //     distanceUnitValueI: false
+  //   }
+  //   if (e.detail.value == 'metric') {
+  //     distanceUnit['distanceUnitValueM'] = true
+  //   } else if (e.detail.value == 'imperial') {
+  //     distanceUnit['distanceUnitValueI'] = true
+  //   }
+  //   t.store.data.distanceUnitValue = e.detail.value.toString()
+  //   t.store.data.distanceUnit = distanceUnit
+  //   t.setData({
+  //     modalName: null,
+  //     isChangeSetting : true
+  //     // distanceUnit: distanceUnit
+  //   })
+  //   app.changeStorage('distanceUnitValue', e.detail.value.toString())
+  //   app.changeStorage('distanceUnit', distanceUnit)
+  // },
   temperatureUnitValueRadioChange(e) {
     const t = this
-
     let temperatureUnit = {
       temperatureUnitValueF: false,
       temperatureUnitValueC: false
@@ -2119,13 +2161,50 @@ create(store, {
     }
     t.setData({
       modalName: null,
-      hasChangeSetting: true,
-      temperatureUnit: temperatureUnit
+      isChangeSetting : true
+      // temperatureUnit: temperatureUnit
     })
-    // t.store.data.temperatureUnitValue = e.detail.value.toString()
-    // t.store.data.temperatureUnit = temperatureUnit
+    t.store.data.temperatureUnitValue = e.detail.value.toString()
+    t.store.data.temperatureUnit = temperatureUnit
     app.changeStorage('temperatureUnitValue', e.detail.value.toString())
     app.changeStorage('temperatureUnit', temperatureUnit)
+  },
+  languageRadioChange: function (e) {
+    const t = this
+    let language = {
+        languageChecked_zh_TW: false,
+        languageChecked_zh_CN: false,
+        languageChecked_en_US: false,
+        languageChecked_en_GB: false
+      },
+      languageValue = e.detail.value.toString()
+    log('[languageValue] =>', e.detail.value.toString())
+    if (e.detail.value == 'zh_TW') {
+      language['languageChecked_zh_TW'] = true
+      log('[language] =>', 'languageChecked_zh_TW = true')
+    }
+    else if (e.detail.value == 'zh_CN') {
+      language['languageChecked_zh_CN'] = true
+      log('[language] =>', 'languageChecked_zh_CN = true')
+    }
+    else if (e.detail.value == 'en_US') {
+      language['languageChecked_en_US'] = true
+      log('[language] =>', 'languageChecked_en_US = true')
+    }
+    else if (e.detail.value == 'en_GB') {
+      language['languageChecked_en_GB'] = true
+      log('[language] =>', 'languageChecked_en_GB = true')
+    }
+    this.setData({
+      language: language,
+      languageValue: languageValue,
+      modalName: null,
+      isChangeLanguage:true
+    })
+    t.store.data.languageValue = languageValue
+    t.store.data.language = language
+    app.changeStorage('language', language)
+    app.changeStorage('languageValue', languageValue)
   },
   updateComponnet: function () {
     let src = this.data.src ? this.data.src : this.data.bingImage;//裁剪图片不存在时，使用默认图片，注意加载时的相对路径
@@ -2196,5 +2275,12 @@ create(store, {
     this.setData({
       visible: false,
     });
-  }
+  },
+  onDev: function () {
+    wx.showModal({
+      title: '没钱开发中',
+      content: '不要期待',
+      success(res) {}
+    })
+  },
 });

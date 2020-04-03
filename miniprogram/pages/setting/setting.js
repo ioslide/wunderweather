@@ -166,7 +166,7 @@ create(store, {
     pages = getCurrentPages(),
     prevPage = pages[pages.length - 2];
     prevPage.setData({
-      isLanguageValueChange: true
+      isChangeLanguage: true
     })
     t.store.data.languageValue = languageValue
     app.changeStorage('language', language)

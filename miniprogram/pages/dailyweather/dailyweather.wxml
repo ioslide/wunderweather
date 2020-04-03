@@ -1,4 +1,4 @@
-<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}"  scroll-duration="1000"  bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
@@ -7,7 +7,12 @@
 	<view class="{{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{dailyWeather}}" wx:key="index" wx:if="{{item&&index<16}}">
 		<sc-cell cellHeight="90" subheader1Padding="5" right-icon="iconfont icon-cloudqueue" themeValue="{{$.themeValue}}">
 			<text slot="subheader">{{item.tempMax}}/{{item.tempMin}}</text>
-			<text slot="subheader1">{{item.weather}} , {{item.windDirect}}</text>
+			<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'zh_TW'}}">
+				<text slot="subheader1">{{item.weather}} , {{item.windDirect}}</text>
+			</block>
+			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">
+				<text class="text-abc" slot="subheader1">{{item.weatherEN}} , {{item.windDirect}}</text>
+			</block>
 			<text slot="subbottom">{{item.monthday}} , {{item.date}}</text>
 			<view class="flex margin-sm" slot="iconimageleft">
 				<view class="flex align-center justify-center weatherIcon">

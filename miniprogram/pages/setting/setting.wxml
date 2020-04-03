@@ -7,70 +7,70 @@
 
 <view style="padding-top: {{CustomBar}}px;">
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">主题</text>
 			<text slot="subbottom">{{$.themeValue}}</text>
 		</sc-cell>
 	</view>
 
 	<!-- <view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}"  bindtap="showProModeModal" data-target="proModeModal" data-cur="pro">
-    <sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;">
+    <sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;">
       <text class= text-white">专业模式</text>
       <text class= text-default" slot="subbottom">开启</text>
     </sc-cell>
   </view> -->
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="customstyle">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">样式</text>
 			<text slot="subbottom">自定义</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customicon">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">图标</text>
 			<text slot="subbottom">默认</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customunit">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">单位</text>
 			<text slot="subbottom">距离单位/温度单位</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">数据源</text>
 			<text slot="subbottom">彩云天气/中国气象局</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="warning">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">预警</text>
 			<text slot="subbottom">天气预警，降雨预警</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="refreshfrequencyRadio">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">刷新频率</text>
 			<text slot="subbottom">{{refreshfrequencyValue}}</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="language">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">语言设置</text>
 			<text slot="subbottom">{{languageValue}}</text>
 		</sc-cell>
 	</view>
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="indexHeadImage">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">封面图</text>
 			<text slot="subbottom">{{indexHeadImageValue}}</text>
 		</sc-cell>
@@ -78,7 +78,7 @@
 
 
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="about">
-		<sc-cell cellHeight="75" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" themeValue="{{$.themeValue}}">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">关于</text>
 			<text slot="subbottom">版本1.4.10</text>
 		</sc-cell>
