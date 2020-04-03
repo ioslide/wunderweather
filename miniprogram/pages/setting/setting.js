@@ -40,9 +40,8 @@ create(store, {
   },
   indexHeadImageRadioChange:function(e){
     log('[indexHeadImageRadioChange]', e.detail.value )
-    let
-      t = this,
-      indexHeadImageValue = e.detail.value.toString(),
+    const t = this
+    let indexHeadImageValue = e.detail.value.toString(),
       indexHeadImage = {
         indexHeadImageBing:false,
         indexHeadImageNASA:false,
@@ -50,12 +49,15 @@ create(store, {
       }
     if(indexHeadImageValue == 'Bing'){
       indexHeadImage['indexHeadImageBing'] = true
+      app.saveData('hasCusImage', false)
     }
     else if(indexHeadImageValue == 'NASA'){
       indexHeadImage['indexHeadImageNASA'] = true
+      app.saveData('hasCusImage', false)
     }
     else{
       indexHeadImage['indexHeadImageCus'] = true
+      app.saveData('hasCusImage', true)
     }
     t.setData({
       indexHeadImageValue: indexHeadImageValue,
@@ -68,16 +70,16 @@ create(store, {
   },
   themeRadioChange: function (e) {
     log('[themeRadioChange]', e.detail.value)
-    let t = this,
-      themeValue = e.detail.value.toString(),
+    const t = this
+    let themeValue = e.detail.value.toString(),
       theme = {
-        switch_themeChecked_light: false,
-        switch_themeChecked_dark: false
+        themeChecked_light: false,
+        themeChecked_dark: false
       }
     if(themeValue == '明亮'){
-      theme['switch_themeChecked_light'] = true
+      theme['themeChecked_light'] = true
     }else{
-      theme['switch_themeChecked_dark'] = true
+      theme['themeChecked_dark'] = true
     }
     t.setData({
       themeValue: themeValue,
@@ -96,30 +98,29 @@ create(store, {
   },
   refreshfrequencyRadioChange:function(e){
     log('[refreshfrequencyRadioChange]', e.detail.value )
-    let
-      t = this,
-      refreshfrequencyValue = e.detail.value.toString(),
+    const t = this
+    let refreshfrequencyValue = e.detail.value.toString(),
       refreshfrequency = {
-        switch_refreshfrequencyChecked_1: false,
-        switch_refreshfrequencyChecked_5: false,
-        switch_refreshfrequencyChecked_10: false,
-        switch_refreshfrequencyChecked_30: false,
-        switch_refreshfrequencyChecked_60: false
+        refreshfrequencyChecked_1: false,
+        refreshfrequencyChecked_5: false,
+        refreshfrequencyChecked_10: false,
+        refreshfrequencyChecked_30: false,
+        refreshfrequencyChecked_60: false
       }
     if(refreshfrequencyValue == '1分钟'){
-        refreshfrequency['switch_refreshfrequencyChecked_1'] = true
+        refreshfrequency['refreshfrequencyChecked_1'] = true
     }
     else if(refreshfrequencyValue == '5分钟'){
-      refreshfrequency['switch_refreshfrequencyChecked_5'] = true
+      refreshfrequency['refreshfrequencyChecked_5'] = true
     }
     else if(refreshfrequencyValue == '10分钟'){
-      refreshfrequency['switch_refreshfrequencyChecked_10'] = true
+      refreshfrequency['refreshfrequencyChecked_10'] = true
     }
     else if(refreshfrequencyValue == '30分钟'){
-      refreshfrequency['switch_refreshfrequencyChecked_30'] = true
+      refreshfrequency['refreshfrequencyChecked_30'] = true
     }
     else{
-      refreshfrequency['switch_refreshfrequencyChecked_60'] = true
+      refreshfrequency['refreshfrequencyChecked_60'] = true
     }
     t.setData({
       refreshfrequencyValue: refreshfrequencyValue,
@@ -130,57 +131,46 @@ create(store, {
     app.changeStorage('refreshfrequencyValue', refreshfrequencyValue)
     app.changeStorage('refreshfrequency', refreshfrequency)
   },
-  // languageTap: function (e) {
-  //   var t = this,
-  //     id = e.currentTarget.id,
-  //     language = {
-  //       switch_languageChecked_ChineseTraditional: false,
-  //       switch_languageChecked_Japan: false,
-  //       switch_languageChecked_Chinese: false,
-  //       switch_languageChecked_English: false
-  //     }
-  //   log(e)
-  //   language[id] = true
-  //   app.changeStorage('language', language)
-  // },
-
   languageRadioChange: function (e) {
-    var t = this,
-      language = {
-        switch_languageChecked_ChineseTraditional: false,
-        switch_languageChecked_Japan: false,
-        switch_languageChecked_Chinese: false,
-        switch_languageChecked_English: false
+    const t = this
+    let language = {
+        languageChecked_zh_TW: false,
+        languageChecked_zh_CN: false,
+        languageChecked_en_US: false,
+        languageChecked_en_GB: false
       },
       languageValue = e.detail.value.toString()
     log('[languageValue] =>', e.detail.value.toString())
-    if (e.detail.value == 'English') {
-      language['switch_languageChecked_English'] = true
-      log('[language] =>', 'switch_languageChecked_English = true')
+    if (e.detail.value == 'zh_TW') {
+      language['languageChecked_zh_TW'] = true
+      log('[language] =>', 'languageChecked_zh_TW = true')
     }
-    if (e.detail.value == '中文简体') {
-      language['switch_languageChecked_Chinese'] = true
-      log('[language] =>', 'switch_languageChecked_Chinese = true')
+    else if (e.detail.value == 'zh_CN') {
+      language['languageChecked_zh_CN'] = true
+      log('[language] =>', 'languageChecked_zh_CN = true')
     }
-    if (e.detail.value == '日本語') {
-      language['switch_languageChecked_Japan'] = true
-      log('[language] =>', 'switch_languageChecked_Japan = true')
+    else if (e.detail.value == 'en_US') {
+      language['languageChecked_en_US'] = true
+      log('[language] =>', 'languageChecked_en_US = true')
     }
-    if (e.detail.value == '中文繁體') {
-      language['switch_languageChecked_ChineseTraditional'] = true
-      log('[language] =>', 'switch_languageChecked_ChineseTraditional = true')
+    else if (e.detail.value == 'en_GB') {
+      language['languageChecked_en_GB'] = true
+      log('[language] =>', 'languageChecked_en_GB = true')
     }
     this.setData({
       language: language,
       languageValue: languageValue,
       modalName: null
     })
-    let $$ = wx.getStorageSync('$$')
-    $$.language = language
-    $$.languageValue = languageValue
-    wx.setStorageSync('$$', $$)
-
-    // t.saveData("isRequestUserInfoAgain", 1);
+    let
+    pages = getCurrentPages(),
+    prevPage = pages[pages.length - 2];
+    prevPage.setData({
+      isLanguageValueChange: true
+    })
+    t.store.data.languageValue = languageValue
+    app.changeStorage('language', language)
+    app.changeStorage('languageValue', languageValue)
   },
   showProModeModal(e) {
     const t = this
@@ -280,12 +270,6 @@ create(store, {
       key: a,
       data: t
     });
-  },
-  onHide: function () {
-    var t = this
-    // t.store.data.refreshfrequencyValue = t.data.refreshfrequencyValue
-    // t.store.data.languageValue = t.data.languageValue
-    // t.store.data.themeValue = t.data.themeValue
   },
   onDev: function () {
     wx.showModal({

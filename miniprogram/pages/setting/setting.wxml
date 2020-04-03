@@ -97,12 +97,12 @@
 			<view class="cu-list menu text-left" style="width: 100%;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="明亮" value="明亮" checked="{{theme.switch_themeChecked_light}}" style="width:100%;"></sc-radio>
+						<sc-radio label="明亮" value="明亮" checked="{{theme.themeChecked_light}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="黑夜" value="黑夜" checked="{{theme.switch_themeChecked_dark}}" style="width:100%;"></sc-radio>
+						<sc-radio label="黑夜" value="黑夜" checked="{{theme.themeChecked_dark}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -127,27 +127,27 @@
 			<view class="cu-list menu text-left" style="width: 100%;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="1分钟" checked="{{refreshfrequency.switch_refreshfrequencyChecked_1}}" value="1分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="1分钟" checked="{{refreshfrequency.refreshfrequencyChecked_1}}" value="1分钟" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="5分钟" checked="{{refreshfrequency.switch_refreshfrequencyChecked_5}}" value="5分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="5分钟" checked="{{refreshfrequency.refreshfrequencyChecked_5}}" value="5分钟" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="10分钟" checked="{{refreshfrequency.switch_refreshfrequencyChecked_10}}" value="10分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="10分钟" checked="{{refreshfrequency.refreshfrequencyChecked_10}}" value="10分钟" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="30分钟" checked="{{refreshfrequency.switch_refreshfrequencyChecked_30}}" value="30分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="30分钟" checked="{{refreshfrequency.refreshfrequencyChecked_30}}" value="30分钟" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="60分钟" checked="{{refreshfrequency.switch_refreshfrequencyChecked_60}}" value="60分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="60分钟" checked="{{refreshfrequency.refreshfrequencyChecked_60}}" value="60分钟" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -169,24 +169,24 @@
 		</view>
 		<sc-radio-group class="block" bindchange="languageRadioChange">
 			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item" name='switch_languageChecked_English'>
+				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="English" value="English" style="width:100%;" checked="{{language.switch_languageChecked_English}}"></sc-radio>
+						<sc-radio label="en_US" value="en_US" style="width:100%;" checked="{{language.languageChecked_en_US}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="中文简体" value="中文简体" style="width:100%;" checked="{{language.switch_languageChecked_Chinese}}"></sc-radio>
+						<sc-radio label="en_GB" value="en_GB" style="width:100%;" checked="{{language.languageChecked_en_GB}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="日本語" value="日本語" style="width:100%;" checked="{{language.switch_languageChecked_Japan}}"></sc-radio>
+						<sc-radio label="zh_CN" value="zh_CN" style="width:100%;" checked="{{language.languageChecked_zh_CN}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="中文繁體" value="中文繁體" style="width:100%;" checked="{{language.switch_languageChecked_ChineseTraditional}}"></sc-radio>
+						<sc-radio label="zh_TW" value="zh_TW" style="width:100%;" checked="{{language.languageChecked_zh_TW}}"></sc-radio>
 					</label>
 				</view>
 			</view>

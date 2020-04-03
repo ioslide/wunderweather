@@ -1,6 +1,8 @@
 const app = getApp()
 // const AUTH_MODE = 'fingerPrint'
 const log = console.log.bind(console)
+const group = console.group.bind(console)
+const groupEnd = console.groupEnd.bind(console)
 const error = console.error.bind(console)
 const warn = console.warn.bind(console)
 const chooseLocation = requirePlugin('chooseLocation');
@@ -28,7 +30,7 @@ var a,
     function (a) {
       a && a.__esModule;
     },
-    (require("../../libs/config.js")), {
+    (require("../../weatherui/assets/lib/config/config.js")), {
       CLEAR_DAY: "晴",
       CLEAR_NIGHT: "晴夜",
       PARTLY_CLOUDY_DAY: "白天多云",
@@ -81,7 +83,7 @@ var a,
     15: "森林火灾",
     16: "雷⾬大风"
   },
-  i = new(require("../../libs/qqmap-wx-jssdk.js"))({
+  i = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
   }),
   r = null;
@@ -94,7 +96,7 @@ create(store, {
     mobileHeight: wx.getSystemInfoSync().windowHeight,
     lastRefreshTime: '',
     isGettingLocation: false,
-    isBackFromBing: false,
+    isLanguageValueChange:false,
     hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
@@ -115,16 +117,13 @@ create(store, {
     strSunSet: "",
     strSunRise: "",
     bingImage: "",
-
     src: null,
     visible: false,
-    size: {
-      width: 400,
-      height: 300
-    },
+    // size: {
+    //   width: 400,
+    //   height: 300
+    // },
     cropSizePercent: 0.9,
-    borderColor: '#fff',
-    result: '',
 
     forecastData: {
       nowTemp: "",
@@ -149,7 +148,8 @@ create(store, {
       'themeValue',
       'startScreen',
       'indexHeadImageValue',
-      'refreshfrequencyValue'
+      'refreshfrequencyValue',
+      'languageValue'
     ]
   },
   onLoad(a) {
@@ -223,33 +223,10 @@ create(store, {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
-    // if (t.data.isBackFromBing == true) {
-    //   log('[isBackFromBing] => true')
-    // }
-    // if (t.data.isBackFromBing == false) {
-    //   log('[isBackFromBing] => false')
-    //   if (t.store.data.themeValue == '明亮') {
-    //     log('[setBackgroundColor] => light')
-    //     wx.setBackgroundColor({
-    //       backgroundColor: '#F5F6F7',
-    //       backgroundColorTop: '#F5F6F7',
-    //       backgroundColorBottom: '#F5F6F7'
-    //     })
-    //     wx.setBackgroundTextStyle({
-    //       textStyle: 'dark'
-    //     })
-    //   } else {
-    //     log('[setBackgroundColor] => dark')
-    //     wx.setBackgroundColor({
-    //       backgroundColor: '#010101',
-    //       backgroundColorTop: '#010101',
-    //       backgroundColorBottom: '#010101'
-    //     })
-    //     wx.setBackgroundTextStyle({
-    //       textStyle: 'light'
-    //     })
-    //   }
-    // }
+    if(t.data.isLanguageValueChange == true){
+      log('[isLanguageValueChange] => true')
+      t.getNowWeather(null, false, true)
+    }
   },
   onReady() {
     warn('[onReady]')
@@ -333,8 +310,8 @@ create(store, {
       t.authScreenFadeIn(false)
       t.setData({
         theme: {
-          switch_themeChecked_light: true,
-          switch_themeChecked_dark: false
+          themeChecked_light: true,
+          themeChecked_dark: false
         },
         temperatureUnit: {
           temperatureUnitValueF: false,
@@ -482,7 +459,6 @@ create(store, {
     warn('[getNowWeather]')
     const t = this
     let e = ''
-    // p = ''
     if (isChoseLocation == true) {
       e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
     }
@@ -490,8 +466,8 @@ create(store, {
       e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
     }
     const
-      o = e + "/realtime.json",
-      s = e + "/forecast.json?lang=zh_CN&dailysteps=30&alert=true&unit=metric"
+      o = e + "/realtime.json?lang=" + t.store.data.languageValue,
+      s = e + "/forecast.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=metric"
     const requestWeatherData = () => {
       wx.request({
         url: o,
@@ -555,10 +531,10 @@ create(store, {
       s = t.temperature,
       i = t.skycon,
       r = {
-        wind: this.getWindDirect(t.wind.direction) + " " + this.getWindLevel(t.wind.speed) + "级",
-        humidity: parseInt(100 * t.humidity) + "%",
+        wind: this.getWindDirect(t.wind.direction),
+        humidity: this.getHumidity(parseInt(100 * t.humidity)),
         windSpeed: t.wind.speed,
-        getWindLevel: this.getWindLevel(t.wind.speed),
+        windLevel: this.getWindLevel(t.wind.speed),
         windDirection: this.getWindDirect(t.wind.direction)
       },
       n = {
@@ -649,7 +625,7 @@ create(store, {
     const t = this
     let temp = t.store.data.refreshfrequencyValue.replace('分钟', ''),
       refreshTime = temp * 60 * 1000
-    log('[refreshTime]',refreshTime)
+    log('[refreshTime]', refreshTime)
     setInterval(() => {
       log('[refreshWeather] => setInterval()', refreshTime)
       t.getNowWeather(null, false, false)
@@ -686,7 +662,7 @@ create(store, {
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon-ani.svg",
         temp: Math.round(hourlyTemp) + '°',
-        wind: that.getWindDirect(t.wind[n].direction) + " " + that.getWindLevel(t.wind[n].speed) + "级",
+        wind: that.getWindDirect(t.wind[n].direction) + " " + that.getWindLevel(t.wind[n].speed),
         value: t.skycon[n].value
       });
     }
@@ -722,8 +698,18 @@ create(store, {
         dailyTempMax = dailyTempMax * 1.8 + 32 + '°'
       }
 
+      const getWeek = (l) =>{
+        let tweek = ''
+        if(that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW'){
+          tweek = "星期" + "天一二三四五六".charAt(l)
+        }else if(that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB'){
+          tweek = ["Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."][l]
+        }
+        // log('[tweek]',tweek)
+        return tweek
+      }
       u.push({
-        date: "星期" + "天一二三四五六".charAt(l),
+        date: getWeek(l),
         weather: e[d.skycon[f].value],
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon-ani.svg",
@@ -749,32 +735,86 @@ create(store, {
     } else {
       swtemperature = (swtemperature * 1.8) + 32
     }
-    var m = [{
-      desc: Math.round(swtemperature) + '°',
-      name: "体感温度",
-      type: "sw-temperature"
-    }, {
-      desc: Math.floor(d.humidity[0].avg * 100) + "%",
-      name: "湿度",
-      type: "sw-humidity"
-    }, {
-      desc: Math.round(d.life_index.ultraviolet[0].index),
-      name: "紫外线指数",
-      type: "sw-ultraviolet"
-    }, {
-      desc: d.visibility[0].avg + "km",
-      name: "能见度",
-      type: "sw-visibility"
-    }, {
-      desc: d.cloudrate[0].avg,
-      name: "云量",
-      type: "sw-cloudrate"
-    }, {
-      desc: Math.round(d.pressure[0].avg) + "mb",
-      name: "气压",
-      type: "sw-pressure"
-    }]
-
+    if(that.store.data.languageValue == 'zh_CN'){
+      var m = [{
+        desc: Math.round(swtemperature) + '°',
+        name: "体感温度",
+        type: "sw-temperature"
+      }, {
+        desc: Math.floor(d.humidity[0].avg * 100) + "%",
+        name: "湿度",
+        type: "sw-humidity"
+      }, {
+        desc: Math.round(d.life_index.ultraviolet[0].index),
+        name: "紫外线指数",
+        type: "sw-ultraviolet"
+      }, {
+        desc: d.visibility[0].avg + "km",
+        name: "能见度",
+        type: "sw-visibility"
+      }, {
+        desc: d.cloudrate[0].avg,
+        name: "云量",
+        type: "sw-cloudrate"
+      }, {
+        desc: Math.round(d.pressure[0].avg) + "mb",
+        name: "气压",
+        type: "sw-pressure"
+      }]
+    }else if (that.store.data.languageValue == 'zh_TW'){
+      var m = [{
+        desc: Math.round(swtemperature) + '°',
+        name: "體感溫度",
+        type: "sw-temperature"
+      }, {
+        desc: Math.floor(d.humidity[0].avg * 100) + "%",
+        name: "濕度",
+        type: "sw-humidity"
+      }, {
+        desc: Math.round(d.life_index.ultraviolet[0].index),
+        name: "紫外線指數",
+        type: "sw-ultraviolet"
+      }, {
+        desc: d.visibility[0].avg + "km",
+        name: "能見度",
+        type: "sw-visibility"
+      }, {
+        desc: d.cloudrate[0].avg,
+        name: "雲量",
+        type: "sw-cloudrate"
+      }, {
+        desc: Math.round(d.pressure[0].avg) + "mb",
+        name: "氣壓",
+        type: "sw-pressure"
+      }]
+    }else if (that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'en_US'){
+      var m = [{
+        desc: Math.round(swtemperature) + '°',
+        name: "Feels Like",
+        type: "sw-temperature"
+      }, {
+        desc: Math.floor(d.humidity[0].avg * 100) + "%",
+        name: "Humidity",
+        type: "sw-humidity"
+      }, {
+        desc: Math.round(d.life_index.ultraviolet[0].index),
+        name: "UV index",
+        type: "sw-ultraviolet"
+      }, {
+        desc: d.visibility[0].avg + "km",
+        name: "Visibility",
+        type: "sw-visibility"
+      }, {
+        desc: d.cloudrate[0].avg,
+        name: "Cloudiness",
+        type: "sw-cloudrate"
+      }, {
+        desc: Math.round(d.pressure[0].avg) + "mb",
+        name: "Pressure",
+        type: "sw-pressure"
+      }]
+    }
+    
     // let todayWeatherQuantity = JSON.parse(JSON.stringify(i));
     that.setData({
       'forecastData.todayWeatherQuantity': JSON.parse(JSON.stringify(i)),
@@ -822,70 +862,137 @@ create(store, {
     };
   },
   getAqiDescription(a) {
-    let d = '暂无描述'
-    return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
+    const self = this,
+    zh_CN = () =>{
+      let d = '暂无描述'
+      return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
+    },
+    zh_TW = () =>{
+      let d = '暫無描述'
+      return a = 0 ? (d = "暫無描述") : a <= 50 ? (d = "令人滿意的空氣質量") : 51 <= a && a <= 100 ? (d = "可以接受的空氣質量") : 101 <= a && a <= 150 ? (d = "敏感人群可能會感到不適") : 151 <= a && a <= 200 ? (d = "一般人群應避免戶外活動") : 201 <= a && a <= 300 ? (d = "健康預警：一般人群可能會出現不適應症狀") : a > 300 && (d = "緊急情況: 健康預警"), d;
+    },
+    en_US_en_GB = () =>{
+      let d = 'No description'
+      return a = 0 ? (d = "No description") : a <= 50 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
+    }
+    const event = (result) => {
+      switch (true) {
+        case (result == 'zh_CN'):
+          return zh_CN()
+          break
+        case (result == 'zh_TW'):
+          return zh_TW()
+          break
+        case (result == 'en_US' || result == 'en_GB'):
+          return en_US_en_GB()
+          break
+        default:
+          break
+      }
+    }
+    log('[getWindSpeed]',self.store.data.languageValue)
+    return event(self.store.data.languageValue)
   },
   getWindLevel(a) {
-    let t = 0;
-    return 1 <= a && a <= 5 ? t = 1 : 6 <= a && a <= 11 ? t = 2 : 12 <= a && a <= 19 ? t = 3 : 20 <= a && a <= 28 ? t = 4 : 29 <= a && a <= 38 ? t = 5 : 39 <= a && a <= 49 ? t = 6 : 50 <= a && a <= 61 ? t = 7 : 62 <= a && a <= 74 ? t = 8 : 75 <= a && a <= 88 ? t = 9 : 89 <= a && a <= 102 ? t = 10 : 103 <= a && a <= 117 ? t = 11 : 118 <= a && a <= 133 ? t = 12 : 134 <= a && a <= 149 ? t = 13 : 150 <= a && a <= 166 ? t = 14 : 167 <= a && a <= 183 ? t = 15 : 184 <= a && a <= 201 ? t = 16 : 202 <= a && a <= 220 && (t = 17),
-      t;
+    const self = this
+    let t = 0
+    1 <= a && a <= 5 ? t = 1 : 6 <= a && a <= 11 ? t = 2 : 12 <= a && a <= 19 ? t = 3 : 20 <= a && a <= 28 ? t = 4 : 29 <= a && a <= 38 ? t = 5 : 39 <= a && a <= 49 ? t = 6 : 50 <= a && a <= 61 ? t = 7 : 62 <= a && a <= 74 ? t = 8 : 75 <= a && a <= 88 ? t = 9 : 89 <= a && a <= 102 ? t = 10 : 103 <= a && a <= 117 ? t = 11 : 118 <= a && a <= 133 ? t = 12 : 134 <= a && a <= 149 ? t = 13 : 150 <= a && a <= 166 ? t = 14 : 167 <= a && a <= 183 ? t = 15 : 184 <= a && a <= 201 ? t = 16 : 202 <= a && a <= 220 && (t = 17),
+    t;
+    if(self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ){
+      t = "Wind: Level " + t
+    }
+    else if(self.store.data.languageValue == 'zh_TW'){
+      t =  "風力:" + t  + "級"
+    }
+    else if(self.store.data.languageValue == 'zh_CN'){
+      t =  "风力:" + t  + "级"
+    }
+    return t
   },
   getWindSpeed(a) {
-    let t = "微风";
-    return a < 1 ? t = "无风" : 1 <= a <= 5 ? t = "微风" : 6 <= a <= 28 ? t = "清⻛" : 29 <= a <= 49 ? t = "强⻛" : 50 <= a <= 88 ? t = "狂⻛" : 88 <= a <= 149 ? t = "台风" : 88 <= a <= 149 ? t = "台风" : a >= 150 && (t = "超强台⻛"),
-      t;
+    const self = this,
+    zh_CN = () =>{
+      let t = "软风";
+      return a < 1 ? t = "无风" : 1 <= a <= 5 ? t = "软风" : 6 <= a <= 11 ? t = "轻风" : 12 <= a <= 19 ? t = "微风" : 20 <= a <= 28 ? t = "和风" : 29 <= a <= 38 ? t = "清风" : 39 <= a <= 49 ? t = "强风" : 50 <= a <= 61 ? t = "疾风" : 62 <= a <= 74 ? t = "大风": 75 <= a <= 88 ? t = "烈风" : 89 <= a <= 102 ? t = "狂风": 103 <= a <= 117 ? t = "暴风": 118 <= a <= 133 ? t = "台风": 134 <= a <= 149 ? t = "台风": 150 <= a <= 166 ? t = "强台风": 167 <= a <= 183 ? t = "强台风": 184 <= a <= 201 ? t = "超强台风": 202 <= a <= 220 ? t = "超强台风": a >= 221 && (t = "超强台⻛"),
+        t;
+    },
+    zh_TW = () =>{
+      let t = "軟風";
+      return a < 1 ? t = "無風" : 1 <= a <= 5 ? t = "軟風" : 6 <= a <= 11 ? t = "輕風" : 12 <= a <= 19 ? t = "微風" : 20 <= a <= 28 ? t = "和風" : 29 <= a <= 38 ? t = "清風" : 39 <= a <= 49 ? t = "強風" : 50 <= a <= 61 ? t = "疾風" : 62 <= a <= 74 ? t = "大風": 75 <= a <= 88 ? t = "烈風" : 89 <= a <= 102 ? t = "狂風": 103 <= a <= 117 ? t = "暴風": 118 <= a <= 133 ? t = "颱風": 134 <= a <= 149 ? t = "颱風": 150 <= a <= 166 ? t = "強颱風": 167 <= a <= 183 ? t = "強颱風": 184 <= a <= 201 ? t = "超強颱風": 202 <= a <= 220 ? t = "超強颱風": a >= 221 && (t = "超強颱風"),
+        t;
+    },
+    en_US_en_GB = () =>{
+      let t = "Light air";
+      return a < 1 ? t = "Calm" : 1 <= a <= 5 ? t = "Light air" : 6 <= a <= 11 ? t = "Light breeze" : 12 <= a <= 19 ? t = "Gentle breeze" : 20 <= a <= 28 ? t = "Moderate breeze" : 29 <= a <= 38 ? t = "Fresh breeze" : 39 <= a <= 49 ? t = "Strong breeze" : 50 <= a <= 61 ? t = "Near Gale" : 62 <= a <= 74 ? t = "Gale": 75 <= a <= 88 ? t = "Severe Gale" : 89 <= a <= 102 ? t = "Storm": 103 <= a <= 117 ? t = "Violent Storm": 118 <= a <= 133 ? t = "Hurricane": 134 <= a <= 149 ? t = "Hurricane": 150 <= a <= 166 ? t = "Strong hurricane": 167 <= a <= 183 ? t = "Strong hurricane": 184 <= a <= 201 ? t = "Super Hurricane": 202 <= a <= 220 ? t = "Super Hurricane": a >= 221 && (t = "Super Hurricane"),
+        t;
+    }
+    const event = (result) => {
+      switch (true) {
+        case (result == 'zh_CN'):
+          return zh_CN()
+          break
+        case (result == 'zh_TW'):
+          return zh_TW()
+          break
+        case (result == 'en_US' || result == 'en_GB'):
+          return en_US_en_GB()
+          break
+        default:
+          break
+      }
+    }
+    log('[getWindSpeed]',self.store.data.languageValue)
+    return event(self.store.data.languageValue)
+  },
+  getHumidity(a){
+    const self = this
+    if(self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ){
+      a =  "Humidity: " + a + "%"
+    }
+    else if(self.store.data.languageValue == 'zh_TW'){
+      a =  "濕度: " + a + "%"
+    }
+    else if(self.store.data.languageValue == 'zh_CN'){
+      a =  "湿度: " + a + "%"
+    }
+    log('[getHumidity] => ',a)
+    return a
   },
   getWindDirect(a) {
-    let t = "北";
-    return 11.26 <= a && a <= 78.75 ? t = "东北" : 78.76 <= a && a <= 101.25 ? t = "东" : 101.26 <= a && a <= 168.75 ? t = "东南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
+    const self = this,
+    zh_CN = () =>{
+      let t = "北";
+      return 11.26 <= a && a <= 78.75 ? t = "东北" : 78.76 <= a && a <= 101.25 ? t = "东" : 101.26 <= a && a <= 168.75 ? t = "东南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
       t + "风";
+    },
+    zh_TW = () =>{
+      let t = "北";
+      return 11.26 <= a && a <= 78.75 ? t = "東北" : 78.76 <= a && a <= 101.25 ? t = "東" : 101.26 <= a && a <= 168.75 ? t = "東南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
+      t + "風";
+    },
+    en_US_en_GB = () =>{
+      let t = "North";
+      return 11.26 <= a && a <= 78.75 ? t = "Northeast" : 78.76 <= a && a <= 101.25 ? t = "East" : 101.26 <= a && a <= 168.75 ? t = "Southeast" : 168.76 <= a && a <= 191.25 ? t = "South" : 191.26 <= a && a <= 258.75 ? t = "Southwest" : 258.76 <= a && a <= 281.25 ? t = "West" : 281.26 <= a && a <= 348.75 && (t = "Northwest"),
+      t + " Wind";
+    }
+    const event = (result) => {
+      switch (true) {
+        case (result == 'zh_CN'):
+          return zh_CN()
+          break
+        case (result == 'zh_TW'):
+          return zh_TW()
+          break
+        case (result == 'en_US' || result == 'en_GB'):
+          return en_US_en_GB()
+          break
+        default:
+          break
+      }
+    }
+    // log('[getWindDirect]',self.store.data.languageValue,event(self.store.data.languageValue))
+    return event(self.store.data.languageValue)
   },
-  // onPageScroll: lazyFunction.throttle(function (e) {
-  //   const t = this
-  //   var scrollTop = wx.getStorageSync('scrollTop')
-  //   if (e[0].scrollTop > scrollTop) {
-  //     var tx = wx.createAnimation({
-  //       duration: 700,
-  //       timingFunction: 'ease-in-out',
-  //       delay: 0,
-  //     });
-  //     tx.opacity(0).step()
-  //     t.setData({
-  //       toXHYIManima: tx.export(),
-  //       headContentSwitch: false
-  //     })
-  //   } else {
-  //     var tx = wx.createAnimation({
-  //       duration: 700,
-  //       timingFunction: 'ease-in-out',
-  //       delay: 0,
-  //     });
-  //     tx.opacity(1).step()
-  //     t.setData({
-  //       toXHYIManima: tx.export(),
-  //       headContentSwitch: false
-  //     })
-  //     if (new Date().getHours() < 10) {
-  //       var hour = "0" + new Date().getHours()
-  //     } else {
-  //       var hour = new Date().getHours()
-  //     }
-  //     if (new Date().getMinutes() < 10) {
-  //       var minut = "0" + new Date().getMinutes()
-  //     } else {
-  //       var minut = new Date().getMinutes()
-  //     }
-  //     var headContentcurTime = hour + ":" + minut
-  //     t.setData({
-  //       headContentSwitch: true,
-  //       headContentcurTime: headContentcurTime
-  //     })
-  //   }
-  //   t.saveData('scrollTop', e[0].scrollTop)
-  //   // this.setData({
-  //   //   scrollTop: e[0].scrollTop
-  //   // })
-  // }),
   getMoonPhaseList: lazyFunction.throttle(function (e) {
     // getMoonPhaseList:lazyFunction.throttle( () => {
     // async getMoonPhaseList() {
@@ -894,34 +1001,41 @@ create(store, {
     let obj = Array.from(Array(30), (v, k) => k)
     obj.map(function (value, index, arr) {
       const getMoonName = (r) => {
+          // log('[getMoonName]',r)
         let
-          e = '新月',
-          h = 'NewMoon';
-        return r <= 0.055 ? (e = '新月', h = 'NewMoon') : 0.055 < r && r <= 0.245 ? (e = '峨眉月', h = 'WaxingCrescent') : 0.245 < r && r <= 0.255 ? (e = '上弦月', h = 'FirstQuarter') : 0.255 < r && r <= 0.495 ? (e = '盈凸月', h = 'WaxingGibbous') : 0.495 < r && r <= 0.51 ? (e = '满月', h = 'FullMoon') : 0.51 < r && r <= 0.745 ? (e = '亏凸月', h = 'WaningGibbous') : 0.745 < r && r <= 0.755 ? (e = '下弦月', h = 'LastQuarter') : 0.755 < r && r <= 1 ? (e = '残月', h = 'WaningCrescent') : r > 1 && (e = '丽月', h = 'WaningCrescent'), {
-          a: e,
-          b: h
+          zh_CN = '新月',
+          zh_TW = '新月',
+          en_US_en_GB = 'New Moon';
+        return r <= 0.055 ? (zh_CN = '新月',zh_TW = '新月',en_US_en_GB = 'New Moon') : 0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月',en_US_en_GB = 'Waxing Crescent') : 0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月',en_US_en_GB = 'First Quarter') : 0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月',en_US_en_GB = 'Waxing Gibbous') : 0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月',en_US_en_GB = 'Full Moon') : 0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月',en_US_en_GB = 'Waning Gibbous') : 0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月',en_US_en_GB = 'Last Quarter') : 0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月',en_US_en_GB = 'Waning Crescent') : r > 1 && (zh_CN = '丽月', zh_TW = '丽月',en_US_en_GB = 'Li Yue'), {
+          zh_CN: zh_CN,
+          en_US_en_GB: en_US_en_GB,
+          zh_TW: zh_TW
         }
       }
       let moonListsTime = []
       moonListsTime[index] = new Date()
       moonListsTime[index].setDate(moonListsTime[index].getDate() + index)
-      let objDetail = {
-        moonTimePhase: sunCalc.getMoonIllumination(moonListsTime[index]).phase,
-        moonTimeDate: moonListsTime[index].getMonth() + 1 + "月" + moonListsTime[index].getDate() + "日",
-        moonTimePhaseCN: '',
-        moonTimePhaseEN: ''
+      let objDetailValue = {
+        moonPhaseIndex: sunCalc.getMoonIllumination(moonListsTime[index]).phase,
+        moonPhaseTime: moonListsTime[index].getMonth() + 1 + "月" + moonListsTime[index].getDate() + "日",
+        moonPhaseName_zh_CN: '',
+        moonPhaseName_en_US_en_GB: '',
+        moonPhaseName_zh_TW: '',
+        moonPhaseName_Image:''
       }
-      obj.fill(objDetail, index, index + 1)
-      let moonName = getMoonName(obj[index].moonTimePhase)
-      obj[index].moonTimePhaseCN = moonName.a
-      obj[index].moonTimePhaseEN = moonName.b
+      obj.fill(objDetailValue, index, index + 1)
+      let moonPhaseName = getMoonName(obj[index].moonPhaseIndex)
+      obj[index].moonPhaseName_zh_CN =  moonPhaseName.zh_CN
+      obj[index].moonPhaseName_en_US_en_GB =  moonPhaseName.en_US_en_GB,
+      obj[index].moonPhaseName_zh_TW =  moonPhaseName.zh_TW,
+      obj[index].moonPhaseName_Image =  moonPhaseName.en_US_en_GB.replace(' ','')
     })
-
     let reduceObj = {},
       moonPhaseLists = obj.reduce((item, next) => {
-        if (!reduceObj[next.moonTimePhaseCN]) {
+        // log('[next]',next)
+        if (!reduceObj[next.moonPhaseName_zh_CN]) {
           item.push(next);
-          reduceObj[next.moonTimePhaseCN] = true;
+          reduceObj[next.moonPhaseName_zh_CN] = true;
         }
         return item;
       }, []) || []
@@ -1092,7 +1206,7 @@ create(store, {
         t.setData({
           bingImage: bingImage
         });
-        t.saveData('bingImage', res.data.img)
+        app.saveData('bingImage', res.data.img)
       },
       fail: err => {
         warn('requestBing', err)
@@ -1903,7 +2017,7 @@ create(store, {
           // let base64Img = wx.arrayBufferToBase64(buffer).replace(/[\r\n]/g, "")
           let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
           t.formatImg(base64Img)
-          t.saveData('qrCodeBase64', base64Img)
+          app.saveData('qrCodeBase64', base64Img)
         },
         fail: err => {
           warn(`[getWXACode] => ${err}`)
@@ -1913,7 +2027,7 @@ create(store, {
   },
   formatImg(base64Img) {
     const t = this
-    let 
+    let
       fsm = wx.getFileSystemManager(),
       FILE_BASE_NAME = 'weatherLogo',
       buffer = wx.base64ToArrayBuffer(base64Img);
@@ -2019,7 +2133,7 @@ create(store, {
           filePath: p,
         }).then(res => {
           log(res)
-          t.saveData('cusImageFileID', res.fileID)
+          app.saveData('cusImageFileID', res.fileID)
         }).catch(error => {
           log(error)
         })
@@ -2034,7 +2148,7 @@ create(store, {
     let name = app.globalData.openid,
       tempFilePaths = event.detail.resultSrc
     cloudUpload(tempFilePaths, name)
-    t.saveData('hasCusImage', true)
+    app.saveData('hasCusImage', true)
   },
 
   //选取裁剪图片成功回调

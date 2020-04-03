@@ -367,7 +367,7 @@
 	</view>
 
 	<view class="flex padding-left justify-left" style="min-height:20px;">
-		<view class="text-left text-grey text-s padding-top-sm">{{forecastData.bodyFeel.wind}} , 湿度 {{forecastData.bodyFeel.humidity}}</view>
+		<view class="text-left text-grey text-s padding-top-sm">{{forecastData.bodyFeel.windLevel}} , {{forecastData.bodyFeel.humidity}}</view>
 	</view>
 
 	<view class="flex padding-left justify-left" style="min-height:20px;">
@@ -393,7 +393,11 @@
 	<block wx:if="{{$.style.detailSwitchChange == true}}">
 		<view class="cu-bar margin-top {{$.themeValue == '明亮'?'':'solid-bottom'}}" animation="{{firstObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">详情</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">详情</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">詳情</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Details</block>
+				</text>
 			</view>
 			<view class="action"></view>
 		</view>
@@ -417,7 +421,11 @@
 	<block wx:if="{{$.style.dailySevenSwitchChange == true}}">
 		<view class="cu-bar solid-bottom margin-bottom opacity-0" id='secondObserver' animation="{{secondObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">未来7天</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来7天</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來7天</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Next 7 days</block>
+				</text>
 			</view>
 			<view class="action" bindtap="navChange" data-cur="dailyweather" style="width: 50px;margin-right: 0px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
@@ -458,7 +466,11 @@
 	<block wx:if="{{$.style.aqiSwitchChange == true}}">
 		<view class="cu-bar margin-top-lg solid-bottom opacity-0" id='thirdObserver' animation="{{thirdObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">空气污染质量指数</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">空气污染质量指数</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">空氣污染質量指數</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Air Quality Index</block>
+				</text>
 			</view>
 			<view class="action"></view>
 		</view>
@@ -480,7 +492,7 @@
 							</view>
 						</view>
 						<view class="flex align-end padding-top-sm">
-							<view class="text-df {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}">
+							<view class="text-xl {{$.themeValue == '明亮'?'text-c9d7e6cc':'text-grey'}}">
 								{{forecastData.airQuality.aqiDescription}}
 							</view>
 						</view>
@@ -528,13 +540,20 @@
 				<view class="basis-sm" style="background:#AC3231;height:4px"></view>
 			</view>
 
-
-			<view class="flex padding-top-sm justify-between">
-				<view class="">
-					<text class="text-sm text-grey" decode="{{true}}">&nbsp;优</text>
+			<view class="flex padding-top-lg justify-between">
+				<view class="line-height-0 align-start">
+					<text class="text-sm text-grey" decode="{{true}}">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">优</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">優</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Good</block>
+					</text>
 				</view>
-				<view class="">
-					<text style="letter-spacing: 1px;" class="text-sm text-grey" decode="{{true}}">&nbsp;严重污染</text>
+				<view class="line-height-0 align-start">
+					<text class="text-sm text-grey letter-spacing-1" decode="{{true}}">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">严重污染</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">嚴重污染</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Hazardous</block>
+					</text>
 				</view>
 			</view>
 		</view>
@@ -543,7 +562,11 @@
 	<block wx:if="{{$.style.sunlightSwitchChange == true}}">
 		<view class="cu-bar margin-top-40 solid-bottom opacity-0" id='fourthObserver' animation="{{fourthObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}}  text-df">日照</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}}  text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">日照</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">日照</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sun</block>
+				</text>
 			</view>
 			<view class="action"></view>
 		</view>
@@ -579,7 +602,11 @@
 	<block wx:if="{{$.style.moonSwitchChange == true}}">
 		<view class="cu-bar margin-top-40 solid-bottom opacity-0" id='fifthObserver' animation="{{fifthObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">月相</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
+				</text>
 			</view>
 			<view class="action" bindtap="navChange" data-cur="moon" style="width: 50px;margin-right: 0px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
@@ -592,9 +619,13 @@
 					<view class="grid col-3 margin-bottom text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="moon" wx:if="{{item&&index<3}}" wx:for="{{moonPhaseLists}}" wx:key="index">
 							<view class="item-phase-inner">
-								<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonTimePhaseEN}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
-								<text class="t1 mt10 text-sm text-grey padding-top">{{item.moonTimePhaseCN}}</text>
-								<text class="t2 mt15 text-sm {{$.themeValue == '明亮'?'moon-text-c9d7e6cc':'moon-text-grey'}}">{{item.moonTimeDate}}</text>
+								<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonPhaseName_Image}}{{$.themeValue == '明亮'?'-light':''}}.svg!wxminiapp"></image>
+								<text class="t1 mt10 text-sm text-grey padding-top">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseName_zh_CN}}</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
+								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_en_US_en_GB}}</block>
+								</text>
+								<text class="t2 mt15 text-sm {{$.themeValue == '明亮'?'moon-text-c9d7e6cc':'moon-text-grey'}}">{{item.moonPhaseTime}}</text>
 							</view>
 						</view>
 					</view>
@@ -606,7 +637,11 @@
 	<block wx:if="{{$.style.windSwitchChange == true}}">
 		<view class="cu-bar {{$.themeValue == '明亮'?'':'solid-bottom '}} opacity-0" id='sixthObserver' animation="{{sixthObserverAni}}">
 			<view class="action">
-				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">风速</text>
+				<text class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">风速</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">風速</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Wind</block>
+				</text>
 			</view>
 			<view class="action"></view>
 		</view>
@@ -948,7 +983,7 @@
 	</view>
 </view>
 
-<sc-crop wx:if="{{visible}}" size="{{size}}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="{{borderColor}}" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
+<sc-crop wx:if="{{visible}}" size="{width: 400,height: 300}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="#ffffff" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
 
 <sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
 

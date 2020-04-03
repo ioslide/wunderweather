@@ -3898,7 +3898,18 @@ scroll-view.cu-steps .cu-item {
 .fr {
 	float: right;
 }
-
+.line-height-0{
+	line-height:0px
+}
+.line-height-5{
+	line-height:5px
+}
+.line-height-10{
+	line-height:10px
+}
+.line-height-20{
+	line-height:20px
+}
 .line-hight-30 {
 	line-height: 30px;
 }
@@ -4685,6 +4696,7 @@ scroll-view.cu-steps .cu-item {
 	width: 150px;
 	height: 150px;
 }
+
 .border-bottom-1e1e1e {
   border-bottom: 1px solid #1E1E1E
 }

@@ -8,23 +8,23 @@ const setStoreage = () =>{
     data: {},
     // page: 'pages/index/index',
     language: {
-      switch_languageChecked_ChineseTraditional: false,
-      switch_languageChecked_Japan: false,
-      switch_languageChecked_Chinese: true,
-      switch_languageChecked_English: false
+      languageChecked_zh_TW: false,
+      languageChecked_zh_CN: true,
+      languageChecked_en_US: false,
+      languageChecked_en_GB: false
     },
-    languageValue: '中文简体',
+    languageValue: 'zh_CN',
     refreshfrequency: {
-      switch_refreshfrequencyChecked_1: true,
-      switch_refreshfrequencyChecked_5: true,
-      switch_refreshfrequencyChecked_10: false,
-      switch_refreshfrequencyChecked_30: false,
-      switch_refreshfrequencyChecked_60: false
+      refreshfrequencyChecked_1: true,
+      refreshfrequencyChecked_5: true,
+      refreshfrequencyChecked_10: false,
+      refreshfrequencyChecked_30: false,
+      refreshfrequencyChecked_60: false
     },
     refreshfrequencyValue: '30分钟',
     theme: {
-      switch_themeChecked_light: true,
-      switch_themeChecked_dark: false
+      themeChecked_light: true,
+      themeChecked_dark: false
     },
     themeValue: '明亮',
     temperatureUnitValue: '摄氏度',
@@ -89,6 +89,7 @@ export default {
     refreshfrequencyValue:$$.refreshfrequencyValue,
     themeValue: $$.themeValue,
     theme: $$.theme,
+    languageValue:$$.languageValue,
     temperatureUnit: $$.temperatureUnit,
     distanceUnit:$$.distanceUnit
   },
