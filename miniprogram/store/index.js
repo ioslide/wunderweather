@@ -4,8 +4,8 @@ let c = wx.getStorageSync('hasUserLocation') || false
 
 const setStoreage = () =>{
   $$ = {
-    id: '',
-    data: {},
+    // id: '',
+    // data: {},
     // page: 'pages/index/index',
     language: {
       languageChecked_zh_TW: false,
@@ -15,10 +15,10 @@ const setStoreage = () =>{
     },
     languageValue: 'zh_CN',
     refreshfrequency: {
-      refreshfrequencyChecked_1: true,
-      refreshfrequencyChecked_5: true,
+      refreshfrequencyChecked_1: false,
+      refreshfrequencyChecked_5: false,
       refreshfrequencyChecked_10: false,
-      refreshfrequencyChecked_30: false,
+      refreshfrequencyChecked_30: true,
       refreshfrequencyChecked_60: false
     },
     refreshfrequencyValue: '30分钟',
@@ -27,15 +27,12 @@ const setStoreage = () =>{
       themeChecked_dark: false
     },
     themeValue: '明亮',
-    temperatureUnitValue: '摄氏度',
-    temperatureUnit: {
-      temperatureUnitValueF: false,
-      temperatureUnitValueC: true
+    unit:{
+      metric:true,
+      SI:false,
+      imperial:false
     },
-    distanceUnit:{
-      distanceUnitValueM:false,
-      distanceUnitValueI:true
-    },
+    unitValue:'metric',
     startScreen:'授权',
     style: {
       imageSwitchChange: true,
@@ -84,17 +81,20 @@ export default {
   data: {
     startScreen: $$.startScreen,
     style: $$.style,
+    proMode:$$.proMode,
     indexHeadImage:$$.indexHeadImage,
     indexHeadImageValue:$$.indexHeadImageValue,
+    refreshfrequency:$$.refreshfrequency,
     refreshfrequencyValue:$$.refreshfrequencyValue,
-    themeValue: $$.themeValue,
     theme: $$.theme,
+    themeValue: $$.themeValue,
     language:$$.language,
     languageValue:$$.languageValue,
     temperatureUnit: $$.temperatureUnit,
     temperatureUnitValue: $$.temperatureUnitValue,
-    distanceUnit:$$.distanceUnit
+    unit:$$.unit,
+    unitValue:$$.unitValue
   },
-  updateAll: true,
+  updateAll: false,
   debug: true
 }

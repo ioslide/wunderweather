@@ -8,36 +8,43 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    theme: {},
-    distanceUnit:{},
-    refreshfrequencyValue: '',
-    refreshfrequency: {},
-    languageValue: '',
-    language: {},
+    // theme: {},
+    // distanceUnit:{},
+    // refreshfrequencyValue: '',
+    // refreshfrequency: {},
+    // languageValue: '',
+    // language: {},
     use: [
-      'themeValue'
+      'themeValue',
+      'theme',
+      'refreshfrequency',
+      'refreshfrequencyValue',
+      'indexHeadImageValue',
+      'indexHeadImage',
+      'language',
+      'languageValue'
     ]
   },
   onLoad: function (e) {
     // wx.hideLoading()
   },
-  onShow: function (e) {
-    const t = this
-    let $$ = wx.getStorageSync('$$')
-    t.setData({
-      theme: $$.theme,
-      // temperatureUnit : $$.temperatureUnit,
-      // temperatureUnitValue:$$.temperatureUnitValue,
-      // distanceUnit : $$.distanceUnit,
-      // distanceUnitValue:$$.distanceUnitValue,
-      refreshfrequency: $$.refreshfrequency,
-      refreshfrequencyValue: $$.refreshfrequencyValue,
-      indexHeadImageValue:$$.indexHeadImageValue,
-      indexHeadImage:$$.indexHeadImage,
-      language: $$.language,
-      languageValue: $$.languageValue
-    })
-  },
+  // onShow: function (e) {
+  //   const t = this
+  //   let $$ = wx.getStorageSync('$$')
+  //   t.setData({
+  //     theme: $$.theme,
+  //     // temperatureUnit : $$.temperatureUnit,
+  //     // temperatureUnitValue:$$.temperatureUnitValue,
+  //     // distanceUnit : $$.distanceUnit,
+  //     // distanceUnitValue:$$.distanceUnitValue,
+  //     refreshfrequency: $$.refreshfrequency,
+  //     refreshfrequencyValue: $$.refreshfrequencyValue,
+  //     indexHeadImageValue:$$.indexHeadImageValue,
+  //     indexHeadImage:$$.indexHeadImage,
+  //     language: $$.language,
+  //     languageValue: $$.languageValue
+  //   })
+  // },
   indexHeadImageRadioChange:function(e){
     log('[indexHeadImageRadioChange]', e.detail.value )
     const t = this
@@ -60,11 +67,10 @@ create(store, {
       app.saveData('hasCusImage', true)
     }
     t.setData({
-      indexHeadImageValue: indexHeadImageValue,
-      indexHeadImage: indexHeadImage,
       modalName: null
     })
     t.store.data.indexHeadImageValue = indexHeadImageValue
+    t.store.data.indexHeadImage = indexHeadImage
     app.changeStorage('indexHeadImageValue', indexHeadImageValue)
     app.changeStorage('indexHeadImage', indexHeadImage)
   },
@@ -82,8 +88,8 @@ create(store, {
       theme['themeChecked_dark'] = true
     }
     t.setData({
-      themeValue: themeValue,
-      theme: theme,
+      // themeValue: themeValue,
+      // theme: theme,
       modalName: null
     })
     let
@@ -92,6 +98,7 @@ create(store, {
     prevPage.setData({
       canDrawSunCalcAgain: true
     })
+    t.store.data.theme = theme
     t.store.data.themeValue = themeValue
     app.changeStorage('themeValue', themeValue)
     app.changeStorage('theme', theme)
@@ -123,13 +130,37 @@ create(store, {
       refreshfrequency['refreshfrequencyChecked_60'] = true
     }
     t.setData({
-      refreshfrequencyValue: refreshfrequencyValue,
-      refreshfrequency: refreshfrequency,
+      // refreshfrequencyValue: refreshfrequencyValue,
+      // refreshfrequency: refreshfrequency,
       modalName: null
     })
     t.store.data.refreshfrequencyValue = refreshfrequencyValue
+    t.store.data.refreshfrequency = refreshfrequency
     app.changeStorage('refreshfrequencyValue', refreshfrequencyValue)
     app.changeStorage('refreshfrequency', refreshfrequency)
+  },
+  unitValueRadioChange(e) {
+    const t = this
+    let unit = {
+      metric:false,
+      SI:false,
+      imperial:false
+    }
+    if (e.detail.value == 'metric') {
+      unit['metric'] = true
+    } else if (e.detail.value == 'imperial') {
+      unit['imperial'] = true
+    } else if (e.detail.value == 'SI') {
+      unit['SI'] = true
+    }
+    t.store.data.unitValue = e.detail.value.toString()
+    t.store.data.unit = unit
+    t.setData({
+      modalName: null,
+      isChangeSetting : true
+    })
+    app.changeStorage('unitValue', e.detail.value.toString())
+    app.changeStorage('unit', unit)
   },
   languageRadioChange: function (e) {
     const t = this
@@ -158,8 +189,8 @@ create(store, {
       log('[language] =>', 'languageChecked_en_GB = true')
     }
     this.setData({
-      language: language,
-      languageValue: languageValue,
+      // language: language,
+      // languageValue: languageValue,
       modalName: null
     })
     let
@@ -168,6 +199,7 @@ create(store, {
     prevPage.setData({
       isChangeLanguage: true
     })
+    t.store.data.language = language
     t.store.data.languageValue = languageValue
     app.changeStorage('language', language)
     app.changeStorage('languageValue', languageValue)
@@ -237,13 +269,13 @@ create(store, {
   //   })
   // },
   showModal(e) {
-    var t = this
+    const t = this
     t.setData({
       modalName: e.currentTarget.dataset.target
     })
   },
   hideModal(e) {
-    var t = this
+    const t = this
     t.setData({
       modalName: null
     })
@@ -303,6 +335,7 @@ create(store, {
       modalName: null
     })
   },
+  
   onGetUserInfo(e) {
     console.log(e)
     wx.cloud.callFunction({

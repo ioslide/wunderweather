@@ -3084,6 +3084,18 @@ button::after {
   z-index: 98;
 }
 
+.reLocation {
+  width:35px;
+  height: 35px;
+  margin:15px;
+  position: fixed;
+  display: flex;
+  overflow: hidden;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
 /* .canvas-style {
   width: 100% !important;
   height: 900rpx !important;

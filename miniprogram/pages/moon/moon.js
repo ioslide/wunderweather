@@ -8,7 +8,10 @@ create(store, {
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom
+    Custom: app.globalData.Custom,
+    use:[
+      'languageValue'
+    ]
   },
   onLoad: function (options) {
     const i = getCurrentPages()[0].data.moonPhaseLists

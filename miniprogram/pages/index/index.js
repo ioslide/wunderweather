@@ -96,7 +96,7 @@ create(store, {
     mobileHeight: wx.getSystemInfoSync().windowHeight,
     lastRefreshTime: '',
     isGettingLocation: false,
-    isChangeLanguage:false,
+    isChangeLanguage: false,
     hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
@@ -119,7 +119,7 @@ create(store, {
     bingImage: "",
     src: null,
     visible: false,
-    manualSetLocation:false,
+    manualSetLocation: false,
     size: {
       width: 400,
       height: 300
@@ -151,7 +151,9 @@ create(store, {
       'indexHeadImageValue',
       'refreshfrequencyValue',
       'languageValue',
-      'language'
+      'language',
+      'unit',
+      'unitValue'
     ]
   },
   onLoad(a) {
@@ -208,14 +210,14 @@ create(store, {
     log(`[chooseLocation.getLocation()] =>`, location)
     if (location !== null) {
       t.setData({
-        'isGettingLocation': true,
-        'forecastData.city': location.city,
-        'forecastData.address': location.name,
-        'forecastData.cur_longitude': location.longitude,
-        'forecastData.cur_latitude': location.latitude,
-        'manualSetLocation':true
-      }),
-      t.getNowWeather(location, true, false)
+          'isGettingLocation': true,
+          'forecastData.city': location.city,
+          'forecastData.address': location.name,
+          'forecastData.cur_longitude': location.longitude,
+          'forecastData.cur_latitude': location.latitude,
+          'manualSetLocation': true
+        }),
+        t.getNowWeather(location, true, false)
       t.authScreenNext('canNavToFinalScreen')
       async function save() {
         log('[onShow] => saveData()')
@@ -225,16 +227,16 @@ create(store, {
       }
       save()
     }
-    if(location == null){
+    if (location == null) {
       t.setData({
-        'manualSetLocation':false
+        'manualSetLocation': false
       })
     }
     if (t.data.canDrawSunCalcAgain == true) {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
-    if(t.data.isChangeLanguage == true){
+    if (t.data.isChangeLanguage == true) {
       log('[isChangeLanguage] => true')
       t.getNowWeather(null, false, true)
     }
@@ -273,48 +275,44 @@ create(store, {
     log('[loadDataFromStorage]')
     const t = this
     wx.getStorage({
-      key: "nowdata",
-      success: res => {
-        t.setNowWeather(res.data);
-      }
-    }),
-    wx.getStorage({
-      key: "forecastData",
-      success: res => {
-        t.setTimelyWeather(res.data);
-      }
-    }),
-    wx.getStorage({
-      key: "citydata",
-      success: res => {
-        t.data.forecastData.city = res.data,
+        key: "nowdata",
+        success: res => {
+          t.setNowWeather(res.data);
+        }
+      }),
+      wx.getStorage({
+        key: "forecastData",
+        success: res => {
+          t.setTimelyWeather(res.data);
+        }
+      }),
+      wx.getStorage({
+        key: "citydata",
+        success: res => {
+          t.data.forecastData.city = res.data,
+            t.setData({
+              'forecastData.city': res.data,
+            });
+        }
+      }),
+      wx.getStorage({
+        key: "bingImage",
+        success: res => {
           t.setData({
-            'forecastData.city': res.data,
+            'bingImage': res.data
           });
-      }
-    }),
-    wx.getStorage({
-      key: "bingImage",
-      success: res => {
-        t.setData({
-          'bingImage': res.data
-        });
-      }
-    }),
-    wx.getStorage({
-      key: "lastRefreshTime",
-      success: res => {
-        t.setData({
-          'lastRefreshTime': res.data
-        });
-      }
-    }),
-    t.screenFadeIn()
+        }
+      }),
+      wx.getStorage({
+        key: "lastRefreshTime",
+        success: res => {
+          t.setData({
+            'lastRefreshTime': res.data
+          });
+        }
+      }),
+      t.screenFadeIn()
     groupEnd('[loadDataFromStorage]')
-  },
-  refresh() {
-    log('[refresh')
-    this.loadDataFromNet('refresh')
   },
   loadDataFromNet(msg) {
     group('[loadDataFromNet]')
@@ -322,47 +320,25 @@ create(store, {
     const t = this
     let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
     if (hasUserLocation == true) {
-      log('[loadDataFromNet] => t.setLocation()')
+      log('[loadDataFromNet] => t.setLocationType()')
       t.screenFadeIn()
-      t.setLocation()
-    } else {
-      t.authScreenFadeIn(false)
-      // t.setData({
-      //   theme: {
-      //     themeChecked_light: true,
-      //     themeChecked_dark: false
-      //   },
-      //   temperatureUnit: {
-      //     temperatureUnitValueF: false,
-      //     temperatureUnitValueC: true
-      //   },
-      //   distanceUnit: {
-      //     distanceUnitValueM: false,
-      //     distanceUnitValueI: true
-      //   }
-      // })
+      t.setLocationType()
+    } else if(hasUserLocation == false){
+      t.store.data.startScreen = '授权'
+      t.screenFadeIn()
       log('[loadDataFromNet] => authScreenFadeIn()')
-    }
-
-    if (msg == 'refresh') {
-      t.setData({
-        refresh: true
-      })
-      setTimeout(() => {
-        t.setData({
-          refresh: false
-        })
-      }, 2500);
     }
     groupEnd('[loadDataFromNet]')
   },
-  setLocation() {
-    group('[setLocation]')
+  setLocationType() {
+    group('[setLocationType]')
     const t = this
     let locationSelect = wx.getStorageSync('manualSetLocation')
+    log('setLocationType',t.data.manualSetLocation,locationSelect)
+
     const setLocationFromManual = () => {
       let cityData = wx.getStorageSync('chooseLocation')
-      log('[setLocation] => setLocationFromManual()', cityData)
+      log('setLocationFromManual()', cityData)
       t.setData({
         'isGettingLocation': true,
         'forecastData.cur_latitude': cityData.latitude,
@@ -373,12 +349,11 @@ create(store, {
       t.getNowWeather(null, false, true)
     }
     const setLocationFromAuto = () => {
-      log('[setLocation] => setLocationFromAuto()')
       wx.getLocation({
         success: res => {
-          group('[setLocation] => setLocationFromAuto()')
+          group('setLocationFromAuto()')
           log(`[getLocation] => success => `, res)
-          groupEnd('[setLocation] => setLocationFromAuto()')
+          groupEnd('setLocationFromAuto()')
           t.setData({
             'isGettingLocation': true,
             'forecastData.cur_latitude': res.latitude,
@@ -423,7 +398,7 @@ create(store, {
       }
     }
     event(locationSelect)
-    groupEnd('[setLocation]')
+    groupEnd('[setLocationType]')
   },
   autoSetLocation() {
     group('[autoSetLocation]')
@@ -437,7 +412,7 @@ create(store, {
           'isGettingLocation': true,
           'forecastData.cur_latitude': res.latitude,
           'forecastData.cur_longitude': res.longitude,
-          'manualSetLocation':false
+          'manualSetLocation': false
         })
         i.reverseGeocoder({
           location: {
@@ -496,7 +471,7 @@ create(store, {
     }
     const
       o = e + "/realtime.json?lang=" + t.store.data.languageValue,
-      s = e + "/forecast.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=metric"
+      s = e + "/forecast.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
     const requestWeatherData = () => {
       wx.request({
         url: o,
@@ -583,12 +558,12 @@ create(store, {
       date = util.getDates(7, time),
       curDetailTime = date[0].time + " " + date[0].week,
       aqiColor = setAqiColor(t.aqi),
-      nowTemp = Math.round(s)
-    if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
-      nowTemp = nowTemp + '°C'
-    } else {
-      nowTemp = nowTemp * 1.8 + 32 + '°F'
-    }
+      nowTemp = Math.round(s) + '°'
+    // if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
+    //   nowTemp = nowTemp + '°C'
+    // } else {
+    //   nowTemp = nowTemp * 1.8 + 32 + '°F'
+    // }
     o.setData({
       'forecastData.nowTemp': nowTemp,
       'forecastData.nowWeather': e[i],
@@ -677,15 +652,15 @@ create(store, {
       let c = n + r;
       let hourlyTemp = t.temperature[n].value
       // let hourlyTemp =  t.temperature[n].value
-      if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-        hourlyTemp = hourlyTemp
-      } else {
-        hourlyTemp = (hourlyTemp * 1.8) + 32
-      }
+      // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
+      //   hourlyTemp = hourlyTemp
+      // } else {
+      //   hourlyTemp = (hourlyTemp * 1.8) + 32
+      // }
       i.push({
         time: c % 24 + ".00",
         weather: e[t.skycon[n].value],
-        weatherEN: t.skycon[n].value,
+        weatherEN: t.skycon[n].value.replace(/_/g, ' '),
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon-ani.svg",
         temp: Math.round(hourlyTemp) + '°',
@@ -705,9 +680,9 @@ create(store, {
         h = D.getDate();
       g < 10 && (g = "0" + g), h < 10 && (h = "0" + h);
       let p = ''
-      if(that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW'){
+      if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
         p = g + "月" + h + '日'
-      }else{
+      } else {
         p = g + "/" + h
       }
 
@@ -719,24 +694,23 @@ create(store, {
       let chartsHeight = Math.abs(Math.round(d.temperature[f].max) - Math.round(d.temperature[f].min))
       let getTemperatureChartsData = that.getTemperatureChartsData(chartsHeight)
 
-      let dailyTempMin = Math.round(d.temperature[f].min)
-      let dailyTempMax = Math.round(d.temperature[f].max)
+      let dailyTempMin = Math.round(d.temperature[f].min) + '°'
+      let dailyTempMax = Math.round(d.temperature[f].max) + '°'
 
-      if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-        dailyTempMin = dailyTempMin + '°'
-        dailyTempMax = dailyTempMax + '°'
-      } else {
-        dailyTempMin = dailyTempMin * 1.8 + 32 + '°'
-        dailyTempMax = dailyTempMax * 1.8 + 32 + '°'
-      }
+      // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
+      //   dailyTempMin = dailyTempMin + '°'
+      //   dailyTempMax = dailyTempMax + '°'
+      // } else {
+      //   dailyTempMin = dailyTempMin * 1.8 + 32 + '°'
+      //   dailyTempMax = dailyTempMax * 1.8 + 32 + '°'
+      // }
 
-      const getWeek = (l) =>{
+      const getWeek = (l) => {
         let tweek = ''
-        if(that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW'){
+        if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
           tweek = "星期" + "天一二三四五六".charAt(l)
-        }
-        else if(that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB'){
-          tweek = ["Mon.","Tues.","Wed.","Thur.","Fri.","Sat.","Sun."][l]
+        } else if (that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB') {
+          tweek = ["Mon.", "Tues.", "Wed.", "Thur.", "Fri.", "Sat.", "Sun."][l]
         }
         // log('[tweek]',tweek)
         return tweek
@@ -744,7 +718,7 @@ create(store, {
       u.push({
         date: getWeek(l),
         weather: e[d.skycon[f].value],
-        weatherEN:d.skycon[f].value,
+        weatherEN: d.skycon[f].value.replace(/_/g, ' '),
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon-ani.svg",
         tempMin: dailyTempMin,
@@ -763,15 +737,15 @@ create(store, {
         windDirect: that.getWindDirect(d.wind[f].avg.direction)
       });
     }
-    let swtemperature = d.temperature[0].avg
-    if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-      swtemperature = swtemperature
-    } else {
-      swtemperature = (swtemperature * 1.8) + 32
-    }
-    if(that.store.data.languageValue == 'zh_CN'){
+    // let swtemperature = d.temperature[0].avg
+    // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
+    //   swtemperature = swtemperature
+    // } else {
+    //   swtemperature = (swtemperature * 1.8) + 32
+    // }
+    if (that.store.data.languageValue == 'zh_CN') {
       var m = [{
-        desc: Math.round(swtemperature) + '°',
+        desc: Math.round(d.temperature[0].avg) + '°',
         name: "体感温度",
         type: "sw-temperature"
       }, {
@@ -795,9 +769,9 @@ create(store, {
         name: "气压",
         type: "sw-pressure"
       }]
-    }else if (that.store.data.languageValue == 'zh_TW'){
+    } else if (that.store.data.languageValue == 'zh_TW') {
       var m = [{
-        desc: Math.round(swtemperature) + '°',
+        desc: Math.round(d.temperature[0].avg) + '°',
         name: "體感溫度",
         type: "sw-temperature"
       }, {
@@ -821,9 +795,9 @@ create(store, {
         name: "氣壓",
         type: "sw-pressure"
       }]
-    }else if (that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'en_US'){
+    } else if (that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'en_US') {
       var m = [{
-        desc: Math.round(swtemperature) + '°',
+        desc: Math.round(d.temperature[0].avg) + '°',
         name: "Feels Like",
         type: "sw-temperature"
       }, {
@@ -896,18 +870,18 @@ create(store, {
   },
   getAqiDescription(a) {
     const self = this,
-    zh_CN = () =>{
-      let d = '暂无描述'
-      return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
-    },
-    zh_TW = () =>{
-      let d = '暫無描述'
-      return a = 0 ? (d = "暫無描述") : a <= 50 ? (d = "令人滿意的空氣質量") : 51 <= a && a <= 100 ? (d = "可以接受的空氣質量") : 101 <= a && a <= 150 ? (d = "敏感人群可能會感到不適") : 151 <= a && a <= 200 ? (d = "一般人群應避免戶外活動") : 201 <= a && a <= 300 ? (d = "健康預警：一般人群可能會出現不適應症狀") : a > 300 && (d = "緊急情況: 健康預警"), d;
-    },
-    en_US_en_GB = () =>{
-      let d = 'No description'
-      return a = 0 ? (d = "No description") : a <= 50 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
-    }
+      zh_CN = () => {
+        let d = '暂无描述'
+        return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
+      },
+      zh_TW = () => {
+        let d = '暫無描述'
+        return a = 0 ? (d = "暫無描述") : a <= 50 ? (d = "令人滿意的空氣質量") : 51 <= a && a <= 100 ? (d = "可以接受的空氣質量") : 101 <= a && a <= 150 ? (d = "敏感人群可能會感到不適") : 151 <= a && a <= 200 ? (d = "一般人群應避免戶外活動") : 201 <= a && a <= 300 ? (d = "健康預警：一般人群可能會出現不適應症狀") : a > 300 && (d = "緊急情況: 健康預警"), d;
+      },
+      en_US_en_GB = () => {
+        let d = 'No description'
+        return a = 0 ? (d = "No description") : a <= 50 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
+      }
     const event = (result) => {
       switch (true) {
         case (result == 'zh_CN'):
@@ -923,42 +897,40 @@ create(store, {
           break
       }
     }
-    log('[getWindSpeed]',self.store.data.languageValue)
+    log('[getWindSpeed]', self.store.data.languageValue)
     return event(self.store.data.languageValue)
   },
   getWindLevel(a) {
     const self = this
     let t = 0
     1 <= a && a <= 5 ? t = 1 : 6 <= a && a <= 11 ? t = 2 : 12 <= a && a <= 19 ? t = 3 : 20 <= a && a <= 28 ? t = 4 : 29 <= a && a <= 38 ? t = 5 : 39 <= a && a <= 49 ? t = 6 : 50 <= a && a <= 61 ? t = 7 : 62 <= a && a <= 74 ? t = 8 : 75 <= a && a <= 88 ? t = 9 : 89 <= a && a <= 102 ? t = 10 : 103 <= a && a <= 117 ? t = 11 : 118 <= a && a <= 133 ? t = 12 : 134 <= a && a <= 149 ? t = 13 : 150 <= a && a <= 166 ? t = 14 : 167 <= a && a <= 183 ? t = 15 : 184 <= a && a <= 201 ? t = 16 : 202 <= a && a <= 220 && (t = 17),
-    t;
-    if(self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ){
+      t;
+    if (self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB') {
       t = "WindLevel: " + t
-    }
-    else if(self.store.data.languageValue == 'zh_TW'){
-      t =  "風力:" + t  + "級"
-    }
-    else if(self.store.data.languageValue == 'zh_CN'){
-      t =  "风力:" + t  + "级"
+    } else if (self.store.data.languageValue == 'zh_TW') {
+      t = "風力:" + t + "級"
+    } else if (self.store.data.languageValue == 'zh_CN') {
+      t = "风力:" + t + "级"
     }
     return t
   },
   getWindSpeed(a) {
     const self = this,
-    zh_CN = () =>{
-      let t = "软风";
-      return a < 1 ? t = "无风" : 1 <= a <= 5 ? t = "软风" : 6 <= a <= 11 ? t = "轻风" : 12 <= a <= 19 ? t = "微风" : 20 <= a <= 28 ? t = "和风" : 29 <= a <= 38 ? t = "清风" : 39 <= a <= 49 ? t = "强风" : 50 <= a <= 61 ? t = "疾风" : 62 <= a <= 74 ? t = "大风": 75 <= a <= 88 ? t = "烈风" : 89 <= a <= 102 ? t = "狂风": 103 <= a <= 117 ? t = "暴风": 118 <= a <= 133 ? t = "台风": 134 <= a <= 149 ? t = "台风": 150 <= a <= 166 ? t = "强台风": 167 <= a <= 183 ? t = "强台风": 184 <= a <= 201 ? t = "超强台风": 202 <= a <= 220 ? t = "超强台风": a >= 221 && (t = "超强台⻛"),
-        t;
-    },
-    zh_TW = () =>{
-      let t = "軟風";
-      return a < 1 ? t = "無風" : 1 <= a <= 5 ? t = "軟風" : 6 <= a <= 11 ? t = "輕風" : 12 <= a <= 19 ? t = "微風" : 20 <= a <= 28 ? t = "和風" : 29 <= a <= 38 ? t = "清風" : 39 <= a <= 49 ? t = "強風" : 50 <= a <= 61 ? t = "疾風" : 62 <= a <= 74 ? t = "大風": 75 <= a <= 88 ? t = "烈風" : 89 <= a <= 102 ? t = "狂風": 103 <= a <= 117 ? t = "暴風": 118 <= a <= 133 ? t = "颱風": 134 <= a <= 149 ? t = "颱風": 150 <= a <= 166 ? t = "強颱風": 167 <= a <= 183 ? t = "強颱風": 184 <= a <= 201 ? t = "超強颱風": 202 <= a <= 220 ? t = "超強颱風": a >= 221 && (t = "超強颱風"),
-        t;
-    },
-    en_US_en_GB = () =>{
-      let t = "Light air";
-      return a < 1 ? t = "Calm" : 1 <= a <= 5 ? t = "Light air" : 6 <= a <= 11 ? t = "Light breeze" : 12 <= a <= 19 ? t = "Gentle breeze" : 20 <= a <= 28 ? t = "Moderate breeze" : 29 <= a <= 38 ? t = "Fresh breeze" : 39 <= a <= 49 ? t = "Strong breeze" : 50 <= a <= 61 ? t = "Near Gale" : 62 <= a <= 74 ? t = "Gale": 75 <= a <= 88 ? t = "Severe Gale" : 89 <= a <= 102 ? t = "Storm": 103 <= a <= 117 ? t = "Violent Storm": 118 <= a <= 133 ? t = "Hurricane": 134 <= a <= 149 ? t = "Hurricane": 150 <= a <= 166 ? t = "Strong hurricane": 167 <= a <= 183 ? t = "Strong hurricane": 184 <= a <= 201 ? t = "Super Hurricane": 202 <= a <= 220 ? t = "Super Hurricane": a >= 221 && (t = "Super Hurricane"),
-        t;
-    }
+      zh_CN = () => {
+        let t = "软风";
+        return a < 1 ? t = "无风" : 1 <= a <= 5 ? t = "软风" : 6 <= a <= 11 ? t = "轻风" : 12 <= a <= 19 ? t = "微风" : 20 <= a <= 28 ? t = "和风" : 29 <= a <= 38 ? t = "清风" : 39 <= a <= 49 ? t = "强风" : 50 <= a <= 61 ? t = "疾风" : 62 <= a <= 74 ? t = "大风" : 75 <= a <= 88 ? t = "烈风" : 89 <= a <= 102 ? t = "狂风" : 103 <= a <= 117 ? t = "暴风" : 118 <= a <= 133 ? t = "台风" : 134 <= a <= 149 ? t = "台风" : 150 <= a <= 166 ? t = "强台风" : 167 <= a <= 183 ? t = "强台风" : 184 <= a <= 201 ? t = "超强台风" : 202 <= a <= 220 ? t = "超强台风" : a >= 221 && (t = "超强台⻛"),
+          t;
+      },
+      zh_TW = () => {
+        let t = "軟風";
+        return a < 1 ? t = "無風" : 1 <= a <= 5 ? t = "軟風" : 6 <= a <= 11 ? t = "輕風" : 12 <= a <= 19 ? t = "微風" : 20 <= a <= 28 ? t = "和風" : 29 <= a <= 38 ? t = "清風" : 39 <= a <= 49 ? t = "強風" : 50 <= a <= 61 ? t = "疾風" : 62 <= a <= 74 ? t = "大風" : 75 <= a <= 88 ? t = "烈風" : 89 <= a <= 102 ? t = "狂風" : 103 <= a <= 117 ? t = "暴風" : 118 <= a <= 133 ? t = "颱風" : 134 <= a <= 149 ? t = "颱風" : 150 <= a <= 166 ? t = "強颱風" : 167 <= a <= 183 ? t = "強颱風" : 184 <= a <= 201 ? t = "超強颱風" : 202 <= a <= 220 ? t = "超強颱風" : a >= 221 && (t = "超強颱風"),
+          t;
+      },
+      en_US_en_GB = () => {
+        let t = "Light air";
+        return a < 1 ? t = "Calm" : 1 <= a <= 5 ? t = "Light air" : 6 <= a <= 11 ? t = "Light breeze" : 12 <= a <= 19 ? t = "Gentle breeze" : 20 <= a <= 28 ? t = "Moderate breeze" : 29 <= a <= 38 ? t = "Fresh breeze" : 39 <= a <= 49 ? t = "Strong breeze" : 50 <= a <= 61 ? t = "Near Gale" : 62 <= a <= 74 ? t = "Gale" : 75 <= a <= 88 ? t = "Severe Gale" : 89 <= a <= 102 ? t = "Storm" : 103 <= a <= 117 ? t = "Violent Storm" : 118 <= a <= 133 ? t = "Hurricane" : 134 <= a <= 149 ? t = "Hurricane" : 150 <= a <= 166 ? t = "Strong hurricane" : 167 <= a <= 183 ? t = "Strong hurricane" : 184 <= a <= 201 ? t = "Super Hurricane" : 202 <= a <= 220 ? t = "Super Hurricane" : a >= 221 && (t = "Super Hurricane"),
+          t;
+      }
     const event = (result) => {
       switch (true) {
         case (result == 'zh_CN'):
@@ -974,40 +946,38 @@ create(store, {
           break
       }
     }
-    log('[getWindSpeed]',self.store.data.languageValue)
+    log('[getWindSpeed]', self.store.data.languageValue)
     return event(self.store.data.languageValue)
   },
-  getHumidity(a){
+  getHumidity(a) {
     const self = this
-    if(self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ){
-      a =  "Humidity: " + a + "%"
+    if (self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB') {
+      a = "Humidity: " + a + "%"
+    } else if (self.store.data.languageValue == 'zh_TW') {
+      a = "濕度: " + a + "%"
+    } else if (self.store.data.languageValue == 'zh_CN') {
+      a = "湿度: " + a + "%"
     }
-    else if(self.store.data.languageValue == 'zh_TW'){
-      a =  "濕度: " + a + "%"
-    }
-    else if(self.store.data.languageValue == 'zh_CN'){
-      a =  "湿度: " + a + "%"
-    }
-    log('[getHumidity] => ',a)
+    log('[getHumidity] => ', a)
     return a
   },
   getWindDirect(a) {
     const self = this,
-    zh_CN = () =>{
-      let t = "北";
-      return 11.26 <= a && a <= 78.75 ? t = "东北" : 78.76 <= a && a <= 101.25 ? t = "东" : 101.26 <= a && a <= 168.75 ? t = "东南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
-      t + "风";
-    },
-    zh_TW = () =>{
-      let t = "北";
-      return 11.26 <= a && a <= 78.75 ? t = "東北" : 78.76 <= a && a <= 101.25 ? t = "東" : 101.26 <= a && a <= 168.75 ? t = "東南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
-      t + "風";
-    },
-    en_US_en_GB = () =>{
-      let t = "North";
-      return 11.26 <= a && a <= 78.75 ? t = "Northeast" : 78.76 <= a && a <= 101.25 ? t = "East" : 101.26 <= a && a <= 168.75 ? t = "Southeast" : 168.76 <= a && a <= 191.25 ? t = "South" : 191.26 <= a && a <= 258.75 ? t = "Southwest" : 258.76 <= a && a <= 281.25 ? t = "West" : 281.26 <= a && a <= 348.75 && (t = "Northwest"),
-      "WindDirect: " + t;
-    }
+      zh_CN = () => {
+        let t = "北";
+        return 11.26 <= a && a <= 78.75 ? t = "东北" : 78.76 <= a && a <= 101.25 ? t = "东" : 101.26 <= a && a <= 168.75 ? t = "东南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
+          t + "风";
+      },
+      zh_TW = () => {
+        let t = "北";
+        return 11.26 <= a && a <= 78.75 ? t = "東北" : 78.76 <= a && a <= 101.25 ? t = "東" : 101.26 <= a && a <= 168.75 ? t = "東南" : 168.76 <= a && a <= 191.25 ? t = "南" : 191.26 <= a && a <= 258.75 ? t = "西南" : 258.76 <= a && a <= 281.25 ? t = "西" : 281.26 <= a && a <= 348.75 && (t = "西北"),
+          t + "風";
+      },
+      en_US_en_GB = () => {
+        let t = "North";
+        return 11.26 <= a && a <= 78.75 ? t = "Northeast" : 78.76 <= a && a <= 101.25 ? t = "East" : 101.26 <= a && a <= 168.75 ? t = "Southeast" : 168.76 <= a && a <= 191.25 ? t = "South" : 191.26 <= a && a <= 258.75 ? t = "Southwest" : 258.76 <= a && a <= 281.25 ? t = "West" : 281.26 <= a && a <= 348.75 && (t = "Northwest"),
+          "WindDirect: " + t;
+      }
     const event = (result) => {
       switch (true) {
         case (result == 'zh_CN'):
@@ -1033,12 +1003,12 @@ create(store, {
     let obj = Array.from(Array(30), (v, k) => k)
     obj.map(function (value, index, arr) {
       const getMoonName = (r) => {
-          // log('[getMoonName]',r)
+        // log('[getMoonName]',r)
         let
           zh_CN = '新月',
           zh_TW = '新月',
           en_US_en_GB = 'New Moon';
-        return r <= 0.055 ? (zh_CN = '新月',zh_TW = '新月',en_US_en_GB = 'New Moon') : 0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月',en_US_en_GB = 'Waxing Crescent') : 0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月',en_US_en_GB = 'First Quarter') : 0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月',en_US_en_GB = 'Waxing Gibbous') : 0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月',en_US_en_GB = 'Full Moon') : 0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月',en_US_en_GB = 'Waning Gibbous') : 0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月',en_US_en_GB = 'Last Quarter') : 0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月',en_US_en_GB = 'Waning Crescent') : r > 1 && (zh_CN = '丽月', zh_TW = '丽月',en_US_en_GB = 'Li Yue'), {
+        return r <= 0.055 ? (zh_CN = '新月', zh_TW = '新月', en_US_en_GB = 'New Moon') : 0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月', en_US_en_GB = 'Waxing Crescent') : 0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月', en_US_en_GB = 'First Quarter') : 0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月', en_US_en_GB = 'Waxing Gibbous') : 0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月', en_US_en_GB = 'Full Moon') : 0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月', en_US_en_GB = 'Waning Gibbous') : 0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月', en_US_en_GB = 'Last Quarter') : 0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent') : r > 1 && (zh_CN = '丽月', zh_TW = '丽月', en_US_en_GB = 'Li Yue'), {
           zh_CN: zh_CN,
           en_US_en_GB: en_US_en_GB,
           zh_TW: zh_TW
@@ -1049,18 +1019,20 @@ create(store, {
       moonListsTime[index].setDate(moonListsTime[index].getDate() + index)
       let objDetailValue = {
         moonPhaseIndex: sunCalc.getMoonIllumination(moonListsTime[index]).phase,
-        moonPhaseTime: moonListsTime[index].getMonth() + 1 + "月" + moonListsTime[index].getDate() + "日",
+        moonPhaseDate_zh_CN: moonListsTime[index].getMonth() + 1 + "月" + moonListsTime[index].getDate() + "日",
+        moonPhaseDate_zh_TW: moonListsTime[index].getMonth() + 1 + "月" + moonListsTime[index].getDate() + "日",
+        moonPhaseDate_en_US_en_GB: moonListsTime[index].getMonth() + 1 + "/" + moonListsTime[index].getDate(),
         moonPhaseName_zh_CN: '',
         moonPhaseName_en_US_en_GB: '',
         moonPhaseName_zh_TW: '',
-        moonPhaseName_Image:''
+        moonPhaseName_Image: ''
       }
       obj.fill(objDetailValue, index, index + 1)
       let moonPhaseName = getMoonName(obj[index].moonPhaseIndex)
-      obj[index].moonPhaseName_zh_CN =  moonPhaseName.zh_CN
-      obj[index].moonPhaseName_en_US_en_GB =  moonPhaseName.en_US_en_GB,
-      obj[index].moonPhaseName_zh_TW =  moonPhaseName.zh_TW,
-      obj[index].moonPhaseName_Image =  moonPhaseName.en_US_en_GB.replace(' ','')
+      obj[index].moonPhaseName_zh_CN = moonPhaseName.zh_CN
+      obj[index].moonPhaseName_en_US_en_GB = moonPhaseName.en_US_en_GB,
+        obj[index].moonPhaseName_zh_TW = moonPhaseName.zh_TW,
+        obj[index].moonPhaseName_Image = moonPhaseName.en_US_en_GB.replace(' ', '')
     })
     let reduceObj = {},
       moonPhaseLists = obj.reduce((item, next) => {
@@ -1160,71 +1132,7 @@ create(store, {
       t.getNowWeather(null, false, false);
     app.saveData('manualSetLocation', false)
   },
-  // async setBingImage() {
-  //   log('[setBingImage]')
-  //   let t = this,
-  //     bingLists = wx.getStorageSync('bingLists') || [{datesign: '1998-03-13'}],
-  //     canPrePull = wx.getStorageSync('canPrePull') || false,
-  //     isToday = app.isToday(bingLists[0].datesign)
 
-  //   const getStorageBing = () =>{
-  //     t.setData({
-  //       bingImage: bingLists[0]
-  //     })
-  //   }
-  //   const prePullBing = () =>{
-  //     let prePullData = wx.getStorageSync('prePullData')
-  //     t.setData({
-  //       bingImage: prePullData[0]
-  //     })
-  //   }
-  //   const requestBing = () =>{
-  //     wx.request({
-  //       url: 'https://www.benweng.com/api/bing/lists',
-  //       header: {
-  //         "content-type": "application/json"
-  //       },
-  //       success: res => {
-  //         log('[requestBing]',res)
-  //         let bingImage = res.data.data[0]
-  //         t.setData({
-  //           bingImage: bingImage
-  //         });
-  //         t.saveData('bingLists', res.data.data)
-  //       },
-  //       fail: err =>{
-  //         log('requestBing',err)
-  //         t.setData({
-  //           'bingImage': {
-  //             img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
-  //           }
-  //         });
-  //       }
-  //     });
-  //   }
-  //   const event = (isToday,canPrePull) => {
-  //     switch (true) {
-  //       case (isToday == true):
-  //         getStorageBing()
-  //         log('[saveBingLists] => getStorageBing()')
-  //         break
-  //       case (isToday == false && canPrePull == true):
-  //         prePullBing()
-  //         log('[saveBingLists] => prePullBing()')
-  //         break
-  //       case (isToday == false && canPrePull == false):
-  //         requestBing()
-  //         log('[saveBingLists] => requestBing()')
-  //         break
-  //       default:
-  //         log('[saveBingLists] => default-requestBing()')
-  //         requestBing()
-  //         break
-  //     }
-  //   }
-  //   event(isToday,canPrePull)
-
-  // },
   setBingImage() {
     group('[setBingImage]')
     const t = this
@@ -1255,18 +1163,61 @@ create(store, {
 
   },
   screenFadeIn() {
-    log('[screenFadeIn]')
     const t = this
+    const poetryScreenFadeIn = () => {
+      log('[poetryScreenFadeIn]')
+      let poetry_storage = wx.getStorageSync('poetry_storage') || [{
+        content: '春眠不觉晓'
+      }]
+      t.setData({
+        poetry: poetry_storage[0].content
+      })
+      //poetry fade in
+      let poetryTextAction = wx.createAnimation({
+        duration: 1300,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      poetryTextAction.opacity(1).step()
+      t.setData({
+        guideScreenTextAni: poetryTextAction.export()
+      })
+    }
+    const authScreenFadeIn = () => {
+      log('[authScreenFadeIn]')
+      let authScreenFadeIn = wx.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      authScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
+      t.setData({
+        logoScreenAni: authScreenFadeIn.export(),
+      })
+    }
+    const defaultScreenFadeIn = () => {
+      log('[defaultScreenFadeIn]')
+      let defaultScreenFadeIn = wx.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      defaultScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
+      t.setData({
+        logoScreenAni: defaultScreenFadeIn.export(),
+      })
+    }
+    log('[screenFadeIn]')
     const event = (result) => {
       switch (true) {
         case (result == '诗词'):
-          t.poetryScreenFadeIn()
+          poetryScreenFadeIn()
           break
         case (result == '授权'):
-          t.authScreenFadeIn()
+          authScreenFadeIn()
           break
         case (result == '默认'):
-          t.defaultScreenFadeIn()
+          defaultScreenFadeIn()
           break
         default:
           break
@@ -1278,14 +1229,52 @@ create(store, {
   screenFadeOut() {
     group('[screenFadeOut]')
     const t = this
+    const poetryScreenFadeOut = () => {
+      group('[poetryScreenFadeOut]')
+      //poetry screen fade out
+      let poetryScreenAction = wx.createAnimation({
+        duration: 1600,
+        timingFunction: 'ease-in-out',
+        delay: 1200,
+      });
+      poetryScreenAction.opacity(0).step()
+      t.setData({
+          defaultScreenAni: poetryScreenAction.export()
+        }),
+        setTimeout(() => {
+          t.setData({
+            headBackgroundAni: true,
+            authScreen: true
+          })
+        }, 3000)
+      groupEnd('[poetryScreenFadeOut]')
+    }
+    const defaultScreenFadeOut = () => {
+      log('[defaultScreenFadeOut]')
+      let defaultScreenAction = wx.createAnimation({
+        duration: 1600,
+        timingFunction: 'ease-in-out',
+        delay: 700,
+      });
+      defaultScreenAction.opacity(0).step()
+      t.setData({
+          defaultScreenAni: defaultScreenAction.export(),
+        }),
+        setTimeout(() => {
+          t.setData({
+            headBackgroundAni: true,
+            authScreen: true
+          })
+        }, 2200)
+    }
     log('[screenFadeOut] =>', t.store.data.startScreen)
     const event = (result) => {
       switch (true) {
         case (result == '诗词'):
-          t.poetryScreenFadeOut()
+          poetryScreenFadeOut()
           break
         case (result == '默认'):
-          t.defaultScreenFadeOut()
+          defaultScreenFadeOut()
           break
         default:
           break
@@ -1295,98 +1284,12 @@ create(store, {
     t.intersectionObserver()
     groupEnd('[screenFadeOut]')
   },
-  poetryScreenFadeOut() {
-    group('[poetryScreenFadeOut]')
-    const t = this
-    //poetry screen fade out
-    let poetryScreenAction = wx.createAnimation({
-      duration: 1600,
-      timingFunction: 'ease-in-out',
-      delay: 1200,
-    });
-    poetryScreenAction.opacity(0).step()
-    t.setData({
-        defaultScreenAni: poetryScreenAction.export()
-      }),
-      setTimeout(() => {
-        t.setData({
-          headBackgroundAni: true,
-          authScreen: true
-        })
-      }, 3000)
-    groupEnd('[poetryScreenFadeOut]')
-  },
-  loadFont() {
-    wx.loadFontFace({
-      family: 'wencangshufang',
-      source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-      success: res => {
-        log('[loadFontFace]', res)
-      },
-      complete: res => {
-
-      }
-    })
-  },
-  poetryScreenFadeIn() {
-    log('[poetryScreenFadeIn]')
-    const t = this
-    let poetry_storage = wx.getStorageSync('poetry_storage') || [{
-      content: '春眠不觉晓'
-    }]
-    t.setData({
-      poetry: poetry_storage[0].content
-    })
-    //poetry fade in
-    let poetryTextAction = wx.createAnimation({
-      duration: 1300,
-      timingFunction: 'ease-in-out',
-      delay: 0,
-    });
-    poetryTextAction.opacity(1).step()
-    t.setData({
-      guideScreenTextAni: poetryTextAction.export()
-    })
-  },
-  authScreenFadeIn(hasUserLocation) {
-    const t = this
-    log('[authScreenFadeIn]')
-    log(`[hasUserLocation] ${hasUserLocation}`)
-    let defaultScreenAction = wx.createAnimation({
-      duration: 1000,
-      timingFunction: 'ease-in-out',
-      delay: 0,
-    });
-    defaultScreenAction.opacity(1).translate3d(0, '10px', 0).step()
-    t.setData({
-      logoScreenAni: defaultScreenAction.export(),
-    })
-  },
-  defaultScreenFadeOut() {
-    log('[defaultScreenFadeOut]')
-    const t = this
-    let defaultScreenAction = wx.createAnimation({
-      duration: 1600,
-      timingFunction: 'ease-in-out',
-      delay: 700,
-    });
-    defaultScreenAction.opacity(0).step()
-    t.setData({
-        defaultScreenAni: defaultScreenAction.export(),
-      }),
-      setTimeout(() => {
-        t.setData({
-          headBackgroundAni: true,
-          authScreen: true
-        })
-      }, 2200)
-  },
-  authFinalScreenFadeOut() {
-    log('[authFinalScreenFadeOut]')
-    const 
+  onAuthFinalScreen() {
+    log('[onAuthFinalScreen]')
+    const
       t = this,
       mobileWidth = t.data.mobileWidth
-    if (t.data.isChangeSetting  == true || t.data.isChangeLanguage == true) {
+    if (t.data.isChangeSetting == true || t.data.isChangeLanguage == true) {
       t.getNowWeather(null, false, false)
     }
     t.intersectionObserver()
@@ -1419,7 +1322,7 @@ create(store, {
             transX(mobileWidth * 2)
             app.saveData('hasUserLocation', true)
             app.changeStorage('startScreen', '诗词')
-            log('[hasUserLocation] => setLocation()')
+            log('[hasUserLocation] => setLocationType()')
           }
           if (!res.authSetting['scope.userLocation']) {
             wx.authorize({
@@ -1541,12 +1444,6 @@ create(store, {
     }
     event(e.currentTarget.dataset.target)
   },
-  saveData(a, t) {
-    a && t && wx.setStorage({
-      key: a,
-      data: t
-    });
-  },
   savePoetry: lazyFunction.throttle(function () {
     // async savePoetry() {
     const t = this
@@ -1569,47 +1466,6 @@ create(store, {
         groupEnd('[savePoetry]')
       })
   }),
-  touchStart(e) {
-    log('[touchStart]')
-    // console.log(e.touches[0].pageX)
-    let
-      sx = e.touches[0].pageX,
-      sy = e.touches[0].pageY
-    this.data.touchS = [sx, sy]
-  },
-  touchMove(e) {
-    log('[touchMove]')
-    let
-      sx = e.touches[0].pageX,
-      sy = e.touches[0].pageY
-    this.data.touchE = [sx, sy]
-  },
-  touchEnd(e) {
-    log('[touchEnd]')
-    const t = this
-    let
-      start = this.data.touchS,
-      end = this.data.touchE
-    if (start[0] < end[0] - 50) {} else if (start[0] > end[0] + 50) {
-      t.setData({
-        modalName: e.currentTarget.dataset.target
-      })
-    } else {}
-  },
-  touchEndLess(e) {
-    log('[touchEndLess]')
-    const t = this
-    let start = this.data.touchS
-    let end = this.data.touchE
-    if (start[0] < end[0] - 5) {
-      // console.log('右滑')
-    } else if (start[0] > end[0] + 5) {
-      // console.log('左滑')
-      t.setData({
-        modalName: e.currentTarget.dataset.target
-      })
-    } else {}
-  },
   switchChange(e) {
     log('[switchChange]')
     const t = this
@@ -1730,13 +1586,6 @@ create(store, {
     // t.setData({
     //   modalName: null
     // })
-  },
-  hideModalR() {
-    const t = this
-    t.setData({
-      modalName: null
-    })
-    t.intersectionObserver()
   },
   navChange(e) {
     log(`[navChange] => ${e.currentTarget.dataset.cur}`)
@@ -1962,6 +1811,47 @@ create(store, {
   EventHandle(e) {
     log('[official-account] =>', e)
   },
+  touchStart(e) {
+    log('[touchStart]')
+    // console.log(e.touches[0].pageX)
+    let
+      sx = e.touches[0].pageX,
+      sy = e.touches[0].pageY
+    this.data.touchS = [sx, sy]
+  },
+  touchMove(e) {
+    log('[touchMove]')
+    let
+      sx = e.touches[0].pageX,
+      sy = e.touches[0].pageY
+    this.data.touchE = [sx, sy]
+  },
+  touchEnd(e) {
+    log('[touchEnd]')
+    const t = this
+    let
+      start = this.data.touchS,
+      end = this.data.touchE
+    if (start[0] < end[0] - 50) {} else if (start[0] > end[0] + 50) {
+      t.setData({
+        modalName: e.currentTarget.dataset.target
+      })
+    } else {}
+  },
+  touchEndLess(e) {
+    log('[touchEndLess]')
+    const t = this
+    let start = this.data.touchS
+    let end = this.data.touchE
+    if (start[0] < end[0] - 5) {
+      // console.log('右滑')
+    } else if (start[0] > end[0] + 5) {
+      // console.log('左滑')
+      t.setData({
+        modalName: e.currentTarget.dataset.target
+      })
+    } else {}
+  },
   intersectionObserver() {
     group('[intersectionObserver]')
     const t = this
@@ -2111,64 +2001,66 @@ create(store, {
         themeChecked_light: false,
         themeChecked_dark: false
       }
-    if(themeValue == '明亮'){
+    if (themeValue == '明亮') {
       theme['themeChecked_light'] = true
-    }else{
+    } else {
       theme['themeChecked_dark'] = true
     }
     t.setData({
       themeValue: themeValue,
       theme: theme,
       modalName: null,
-      isChangeSetting : true
+      isChangeSetting: true
     })
     t.store.data.theme = theme
     t.store.data.themeValue = themeValue
     app.changeStorage('themeValue', themeValue)
     app.changeStorage('theme', theme)
   },
-  // distanceUnitValueRadioChange(e) {
+  unitValueRadioChange(e) {
+    const t = this
+    let unit = {
+      metric: false,
+      SI: false,
+      imperial: false
+    }
+    if (e.detail.value == 'metric') {
+      unit['metric'] = true
+    } else if (e.detail.value == 'imperial') {
+      unit['imperial'] = true
+    } else if (e.detail.value == 'SI') {
+      unit['SI'] = true
+    }
+    t.store.data.unitValue = e.detail.value.toString()
+    t.store.data.unit = unit
+    t.setData({
+      modalName: null,
+      isChangeSetting: true
+    })
+    app.changeStorage('unitValue', e.detail.value.toString())
+    app.changeStorage('unit', unit)
+  },
+  // temperatureUnitValueRadioChange(e) {
   //   const t = this
-  //   let distanceUnit = {
-  //     distanceUnitValueM: false,
-  //     distanceUnitValueI: false
+  //   let temperatureUnit = {
+  //     temperatureUnitValueF: false,
+  //     temperatureUnitValueC: false
   //   }
-  //   if (e.detail.value == 'metric') {
-  //     distanceUnit['distanceUnitValueM'] = true
-  //   } else if (e.detail.value == 'imperial') {
-  //     distanceUnit['distanceUnitValueI'] = true
+  //   if (e.detail.value == '华氏度') {
+  //     temperatureUnit['temperatureUnitValueF'] = true
+  //   } else if (e.detail.value == '摄氏度') {
+  //     temperatureUnit['temperatureUnitValueC'] = true
   //   }
-  //   t.store.data.distanceUnitValue = e.detail.value.toString()
-  //   t.store.data.distanceUnit = distanceUnit
   //   t.setData({
   //     modalName: null,
   //     isChangeSetting : true
-  //     // distanceUnit: distanceUnit
+  //     // temperatureUnit: temperatureUnit
   //   })
-  //   app.changeStorage('distanceUnitValue', e.detail.value.toString())
-  //   app.changeStorage('distanceUnit', distanceUnit)
+  //   t.store.data.temperatureUnitValue = e.detail.value.toString()
+  //   t.store.data.temperatureUnit = temperatureUnit
+  //   app.changeStorage('temperatureUnitValue', e.detail.value.toString())
+  //   app.changeStorage('temperatureUnit', temperatureUnit)
   // },
-  temperatureUnitValueRadioChange(e) {
-    const t = this
-    let temperatureUnit = {
-      temperatureUnitValueF: false,
-      temperatureUnitValueC: false
-    }
-    if (e.detail.value == '华氏度') {
-      temperatureUnit['temperatureUnitValueF'] = true
-    } else if (e.detail.value == '摄氏度') {
-      temperatureUnit['temperatureUnitValueC'] = true
-    }
-    t.setData({
-      modalName: null,
-      isChangeSetting : true
-      // temperatureUnit: temperatureUnit
-    })
-    t.store.data.temperatureUnitValue = e.detail.value.toString()
-    t.store.data.temperatureUnit = temperatureUnit
-    app.changeStorage('temperatureUnitValue', e.detail.value.toString())
-    app.changeStorage('temperatureUnit', temperatureUnit)
-  },
   languageRadioChange: function (e) {
     const t = this
     let language = {
@@ -2182,16 +2074,13 @@ create(store, {
     if (e.detail.value == 'zh_TW') {
       language['languageChecked_zh_TW'] = true
       log('[language] =>', 'languageChecked_zh_TW = true')
-    }
-    else if (e.detail.value == 'zh_CN') {
+    } else if (e.detail.value == 'zh_CN') {
       language['languageChecked_zh_CN'] = true
       log('[language] =>', 'languageChecked_zh_CN = true')
-    }
-    else if (e.detail.value == 'en_US') {
+    } else if (e.detail.value == 'en_US') {
       language['languageChecked_en_US'] = true
       log('[language] =>', 'languageChecked_en_US = true')
-    }
-    else if (e.detail.value == 'en_GB') {
+    } else if (e.detail.value == 'en_GB') {
       language['languageChecked_en_GB'] = true
       log('[language] =>', 'languageChecked_en_GB = true')
     }
@@ -2199,7 +2088,7 @@ create(store, {
       language: language,
       languageValue: languageValue,
       modalName: null,
-      isChangeLanguage:true
+      isChangeLanguage: true
     })
     t.store.data.languageValue = languageValue
     t.store.data.language = language
@@ -2207,7 +2096,7 @@ create(store, {
     app.changeStorage('languageValue', languageValue)
   },
   updateComponnet: function () {
-    let src = this.data.src ? this.data.src : this.data.bingImage;//裁剪图片不存在时，使用默认图片，注意加载时的相对路径
+    let src = this.data.src ? this.data.src : this.data.bingImage; //裁剪图片不存在时，使用默认图片，注意加载时的相对路径
     this.setData({
       visible: true,
       src: src,
@@ -2276,11 +2165,85 @@ create(store, {
       visible: false,
     });
   },
-  onDev: function () {
+  onDev() {
     wx.showModal({
       title: '没钱开发中',
       content: '不要期待',
       success(res) {}
     })
   },
+  reLocation() {
+    const t = this
+    t.setData({
+      manualSetLocation: false,
+      refresh:true
+    })
+    wx.setStorageSync('manualSetLocation', false)
+    t.setLocationType()
+  },
+    // async setBingImage() {
+  //   log('[setBingImage]')
+  //   let t = this,
+  //     bingLists = wx.getStorageSync('bingLists') || [{datesign: '1998-03-13'}],
+  //     canPrePull = wx.getStorageSync('canPrePull') || false,
+  //     isToday = app.isToday(bingLists[0].datesign)
+
+  //   const getStorageBing = () =>{
+  //     t.setData({
+  //       bingImage: bingLists[0]
+  //     })
+  //   }
+  //   const prePullBing = () =>{
+  //     let prePullData = wx.getStorageSync('prePullData')
+  //     t.setData({
+  //       bingImage: prePullData[0]
+  //     })
+  //   }
+  //   const requestBing = () =>{
+  //     wx.request({
+  //       url: 'https://www.benweng.com/api/bing/lists',
+  //       header: {
+  //         "content-type": "application/json"
+  //       },
+  //       success: res => {
+  //         log('[requestBing]',res)
+  //         let bingImage = res.data.data[0]
+  //         t.setData({
+  //           bingImage: bingImage
+  //         });
+  //         t.saveData('bingLists', res.data.data)
+  //       },
+  //       fail: err =>{
+  //         log('requestBing',err)
+  //         t.setData({
+  //           'bingImage': {
+  //             img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
+  //           }
+  //         });
+  //       }
+  //     });
+  //   }
+  //   const event = (isToday,canPrePull) => {
+  //     switch (true) {
+  //       case (isToday == true):
+  //         getStorageBing()
+  //         log('[saveBingLists] => getStorageBing()')
+  //         break
+  //       case (isToday == false && canPrePull == true):
+  //         prePullBing()
+  //         log('[saveBingLists] => prePullBing()')
+  //         break
+  //       case (isToday == false && canPrePull == false):
+  //         requestBing()
+  //         log('[saveBingLists] => requestBing()')
+  //         break
+  //       default:
+  //         log('[saveBingLists] => default-requestBing()')
+  //         requestBing()
+  //         break
+  //     }
+  //   }
+  //   event(isToday,canPrePull)
+
+  // },
 });

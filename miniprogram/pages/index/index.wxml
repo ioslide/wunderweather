@@ -134,22 +134,22 @@
 									<view class="text-gray text-d flex justify-between">选择你最喜欢的外观</view>
 								</view>
 							</view>
-							<view class="cu-item" bindtap="showModal" data-target="temperatureUnit">
+							<!-- <view class="cu-item" bindtap="showModal" data-target="temperatureUnit">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTemperature.svg);">
 								</view>
 								<view class="content flex-sub">
 									<view class="text-lg text-4a5568">温度单位</view>
 									<view class="text-gray text-d flex justify-between">华氏度/摄氏度</view>
 								</view>
-							</view>
-							<!-- <view class="cu-item" bindtap="onDev" data-target="distanceUnit">
+							</view> -->
+							<view class="cu-item" bindtap="onDev" data-target="unit">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
 								</view>
 								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">距离单位</view>
+									<view class="text-lg text-4a5568">单位制选项</view>
 									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
 								</view>
-							</view> -->
+							</view>
 							<view class="cu-item" bindtap="showModal" data-target="language">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
 								</view>
@@ -168,7 +168,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="authScreenNextCell" bindtap="authFinalScreenFadeOut">
+					<view class="authScreenNextCell" bindtap="onAuthFinalScreen">
 						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
 					</view>
 				</view>
@@ -230,7 +230,7 @@
 			</view>
 		</view>
 	</view>
-	<view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+	<!-- <view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="ondev" catchtouchmove="return">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
@@ -257,7 +257,7 @@
 				</view>
 			</view>
 		</view>
-	</view>
+	</view> -->
 	<view catchtouchmove="return" class="cu-modal {{modalName=='language'?'show':''}}" bindtap="hideModal">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
@@ -269,22 +269,22 @@
 				<view class="cu-list menu text-left" style="width: 100%;">
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="en_US" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
+							<sc-radio label="美式英语" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="en_GB" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+							<sc-radio label="美式英语" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="zh_CN" value="zh_CN" style="width:100%;" checked="{{$.language.languageChecked_zh_CN}}"></sc-radio>
+							<sc-radio label="简体中文" value="zh_CN" style="width:100%;" checked="{{$.language.languageChecked_zh_CN}}"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="zh_TW" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
+							<sc-radio label="繁体中文" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
 						</label>
 					</view>
 				</view>
@@ -296,23 +296,28 @@
 			</view>
 		</view>
 	</view>
-	<!-- <view class="cu-modal {{modalName=='distanceUnit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
+	<view class="cu-modal {{modalName=='unit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
 					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">距离单位</button>
 				</view>
 			</view>
-			<sc-radio-group class="block" bindchange="distanceUnitValueRadioChange">
+			<sc-radio-group class="block" bindchange="unitValueRadioChange">
 				<view class="cu-list menu text-left" style="width: 100%;">
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="metric" checked="{{$.distanceUnit.distanceUnitValueM}}" value="metric" style="width:100%;"></sc-radio>
+							<sc-radio label="metric" checked="{{$.unit.metric}}" value="metric" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 					<view class="cu-item">
 						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="imperial" checked="{{$.distanceUnit.distanceUnitValueI}}" value="imperial" style="width:100%;"></sc-radio>
+							<sc-radio label="imperial" checked="{{$.unit.imperial}}" value="imperial" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="SI" checked="{{$.unit.SI}}" value="SI" style="width:100%;"></sc-radio>
 						</label>
 					</view>
 				</view>
@@ -323,7 +328,7 @@
 				</view>
 			</view>
 		</view>
-	</view> -->
+	</view>
 </block>
 
 <view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
@@ -399,7 +404,7 @@
 				</block>
 				<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
 					<view class="networkType">
-						<view class="networkType-button" bindtap="refresh">
+						<view class="networkType-button">
 							<image class="{{refresh == true ? 'opacityFade':''}}" style="height:30px;width:30px;margin-left:15px;" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weather/refresh.svg"></image>
 						</view>
 						<view class="text-left text-white padding-left-sm padding-top-xms">离线模式</view>
@@ -413,12 +418,11 @@
 	<view class="flex padding-left-sm justify-left" style="min-height:60px;padding-top:10px;padding-bottom:0;width:100%">
 		<view class="flex-sub">
 			<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == '明亮'?'nowTemp-light':'nowTemp-dark'}}">
-				<!-- {{$.temperatureUnit.temperatureUnitValueC == true ? forecastData.nowTemp +'°C':forecastData.nowTemp*1.8+32+'°F' }} -->
 				{{forecastData.nowTemp}}
 			</view>
 		</view>
-		<view class="flex-twice flex padding-top padding-left flex-wrap " style="font-family: 'Lato', sans-serif;">
-			<view class="flex align-end text-grey basis-xxxs padding-bottom" style="padding-left:5px;font-weight:200">
+		<view class="flex-twice flex padding-top flex-treble" style="font-family: 'Lato', sans-serif;">
+			<view class="flex align-end text-grey font-weight-200 basis-xxxs padding-bottom">
 				<view class="text-xl">
 					{{forecastData.dailyWeather[0].tempMin}}/{{forecastData.dailyWeather[0].tempMax}}
 				</view>
@@ -695,7 +699,11 @@
 								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
 								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_en_US_en_GB}}</block>
 								</text>
-								<text class="t2 mt15 text-sm {{$.themeValue == '明亮'?'moon-text-c9d7e6cc':'moon-text-grey'}}">{{item.moonPhaseTime}}</text>
+								<text class="t2 mt15 text-sm {{$.themeValue == '明亮'?'moon-text-c9d7e6cc':'moon-text-grey'}}">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseDate_zh_CN}}</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseDate_zh_TW}}</block>
+								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseDate_en_US_en_GB}}</block>
+								</text>
 							</view>
 						</view>
 					</view>
@@ -788,6 +796,9 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
+<view class="reLocation {{refresh == true ? 'opacityFade':''}}" bindtap="reLocation">
+	<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
+</view>
 <view class="drawerR-modal drawer-modal justify-end {{modalName=='DrawerModalR'?'show':''}}" bindtap="hideModal" data-target="DrawerModalR" catchtouchmove="preventTouchMove">
 
 
