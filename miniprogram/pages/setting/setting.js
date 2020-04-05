@@ -156,8 +156,13 @@ create(store, {
     t.store.data.unitValue = e.detail.value.toString()
     t.store.data.unit = unit
     t.setData({
-      modalName: null,
-      isChangeSetting : true
+      modalName: null
+    })
+    let
+    pages = getCurrentPages(),
+    prevPage = pages[pages.length - 2];
+    prevPage.setData({
+      isChangeSetting: true
     })
     app.changeStorage('unitValue', e.detail.value.toString())
     app.changeStorage('unit', unit)
@@ -197,7 +202,7 @@ create(store, {
     pages = getCurrentPages(),
     prevPage = pages[pages.length - 2];
     prevPage.setData({
-      isChangeLanguage: true
+      isChangeSetting: true
     })
     t.store.data.language = language
     t.store.data.languageValue = languageValue

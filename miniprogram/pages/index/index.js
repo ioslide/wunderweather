@@ -96,7 +96,7 @@ create(store, {
     mobileHeight: wx.getSystemInfoSync().windowHeight,
     lastRefreshTime: '',
     isGettingLocation: false,
-    isChangeLanguage: false,
+    isChangeSetting: false,
     hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
@@ -236,8 +236,8 @@ create(store, {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
-    if (t.data.isChangeLanguage == true) {
-      log('[isChangeLanguage] => true')
+    if (t.data.isChangeSetting == true) {
+      log('[isChangeSetting] => true')
       t.getNowWeather(null, false, true)
     }
     groupEnd('[onShow]')
@@ -1289,7 +1289,7 @@ create(store, {
     const
       t = this,
       mobileWidth = t.data.mobileWidth
-    if (t.data.isChangeSetting == true || t.data.isChangeLanguage == true) {
+    if (t.data.isChangeSetting == true) {
       t.getNowWeather(null, false, false)
     }
     t.intersectionObserver()
@@ -2088,7 +2088,7 @@ create(store, {
       language: language,
       languageValue: languageValue,
       modalName: null,
-      isChangeLanguage: true
+      isChangeSetting: true
     })
     t.store.data.languageValue = languageValue
     t.store.data.language = language

@@ -6,13 +6,20 @@ const groupEnd = console.groupEnd.bind(console)
 const xhy = require('weatherui/sc-ui')
 
 App({
+  isReady: !1,
+  isError: !1,
   globalData: {
     StatusBar: "",
     CustomBar: "",
+    barHeight: "",
+    navigationHeight: "",
     Custom: "",
-    clientId: "c3d88ee29b2337915fd0",
+    windowWidth: "",
+    systemInfo: "",
+    menuInfo: "",
+    zxClientId: "c3d88ee29b2337915fd0",
     language: 'zh_CN',
-    openid:''
+    openid: ''
   },
   onShow(options) {
     // wx.BaaS.reportTemplateMsgAnalytics(options)
@@ -21,7 +28,7 @@ App({
     })
   },
   onPageNotFound: function () {
-      log('onPageNotFound')
+    log('onPageNotFound')
   },
   onLaunch() {
     group('[onLaunch]')
@@ -80,40 +87,63 @@ App({
   wxLogin() {
     wx.BaaS = requirePlugin('sdkPlugin')
     wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    let clientID = 'c3d88ee29b2337915fd0'
-    wx.BaaS.init(clientID)
-    wx.BaaS.auth.loginWithWechat(null, { 
-      createUser:true
+    let zxClientID = 'c3d88ee29b2337915fd0'
+    wx.BaaS.init(zxClientID)
+    wx.BaaS.auth.loginWithWechat(null, {
+      createUser: true
       // withUnionID:true
     }).then(user => {
-      log('[wxLogin]',user)
+      log('[wxLogin]', user)
       this.globalData.openid = user.openid
     }, err => {
       log(err)
     })
   },
   getSystemInfo() {
+    const t = this
     wx.getSystemInfo({
-      success: res => {
-        log(`[getSystemInfo]`, res)
-        this.globalData.language = res.language;
-        this.globalData.StatusBar = res.statusBarHeight;
-        let capsule = wx.getMenuButtonBoundingClientRect();
-        if (capsule) {
-          this.globalData.Custom = capsule;
-          this.globalData.CustomBar = capsule.bottom + capsule.top - res.statusBarHeight;
-        } else {
-          this.globalData.CustomBar = res.statusBarHeight + 50;
-        }
-        log('[globalData] => ', this.globalData)
+      success: function (e) {
+          let menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+          (0 == menuButtonInfo.buttom && 0 == menuButtonInfo.height && 0 == menuButtonInfo.left && 0 == menuButtonInfo.right && 0 == menuButtonInfo.top && 0 == menuButtonInfo.width || void 0 === menuButtonInfo.buttom && void 0 === menuButtonInfo.height && void 0 === menuButtonInfo.left && void 0 === menuButtonInfo.right && void 0 === menuButtonInfo.top && void 0 === menuButtonInfo.width) && (menuButtonInfo = {
+              bottom: 58,
+              height: 32,
+              left: 278,
+              right: 365,
+              top: 26,
+              width: 87
+          })
+          var o = RegExp("^.*iPhone X.*$");
+          e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1, 
+          t.globalData.language = e.language;
+          t.globalData.StatusBar = e.statusBarHeight;
+          t.globalData.barHeight = e.statusBarHeight,
+          t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3, 
+          t.globalData.windowWidth = e.windowWidth,
+          t.globalData.systemInfo = e, 
+          t.globalData.menuInfo = menuButtonInfo
+          if (menuButtonInfo) {
+            t.globalData.Custom = menuButtonInfo;
+            t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
+          } else {
+            t.globalData.CustomBar = e.statusBarHeight + 50;
+          }
+          log(t.globalData)
+      },
+      fail: function (e) {
+          t.isError = !0, wx.showModal({
+              title: "错误",
+              content: "获取系统信息出错",
+              showCancel: !1
+          });
       }
-    })
+  });
   },
   initCloud() {
     wx.cloud.init({
-      env: 'subweather-5hkjz',
-      traceUser: true,
-    });
+      env: "subweather-5hkjz"
+    }), wx.cloud ? wx.cloud.init({
+      traceUser: !0
+    }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
     log('[initCloud]')
   },
   updateManager() {
@@ -129,7 +159,7 @@ App({
           if (res.confirm) {
             wx.clearStorage({
               complete: (res) => {
-                log('call applyUpdate && restart',res)
+                log('call applyUpdate && restart', res)
                 updateManager.applyUpdate()
               },
             })
