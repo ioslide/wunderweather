@@ -18,7 +18,7 @@
 			</text>
 			<text slot="subbottom">{{item.moonPhaseName_en_US_en_GB}}</text>
 			<view slot="iconimageright">
-				<view class="flex align-center justify-center margin-sm">
+				<view class="flex align-center justify-center margin-10">
 					<image class="flex align-center justify-center moonIconCircle" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonPhaseName_Image}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 				</view>
 			</view>

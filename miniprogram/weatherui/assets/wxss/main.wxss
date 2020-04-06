@@ -3572,7 +3572,7 @@ scroll-view.cu-steps .cu-item {
 	margin: 5px;
 }
 
-.margin-10px {
+.margin-10 {
 	margin: 10px;
 }
 
@@ -3580,10 +3580,10 @@ scroll-view.cu-steps .cu-item {
 	margin: 15px;
 }
 
-.margin-lg-20 {
+.margin-20 {
 	margin: 20px;
 }
-.margin-xl-25 {
+.margin-25 {
 	margin: 25px;
 }
 .margin-top-0 {
