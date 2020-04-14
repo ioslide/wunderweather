@@ -16,7 +16,7 @@ const poetry = require('../../utils/poetry.js')
 // import calcSunUtil from '../../utils/calcnew.js'
 import create from '../../utils/create'
 import store from '../../store/index'
-import lazyFunction from "../../utils/lazyFunction"
+// import lazyFunction from "../../utils/lazyFunction"
 var a,
   t = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (a) {
     return typeof a;
@@ -158,42 +158,41 @@ create(store, {
     ]
   },
   onLoad(a) {
-    group('[onLoad]')
     log('[onLoad]')
     const t = this
     const handler = function (evt) {
       log('[' + evt + ']' + '=>', evt)
     }
     store.onChange(handler)
-    wx.getNetworkType({
-      success: res => {
-        const networkType = res.networkType
-        log(`[networkType] => ${networkType}`)
-        if (networkType == 'none' || networkType == '2g') {
-          wx.showToast({
-            title: '请检查你的网络连接',
-            duration: 1500,
-            icon: 'none',
-            mask: true,
-          })
-          log('[onLoad] => loadDataFromStorage()')
-          t.loadDataFromStorage()
-          t.setData({
-            networkType: networkType
-          })
-        } else {
-          log('[onLoad] => loadDataFromNet()')
-          t.loadDataFromNet()
-        }
-        // if (networkType == 'wifi' || networkType == '4g' || networkType == '5g' || networkType == '3g') {
 
-        // }
+    async function asyncGetNetworkType(){
+      await wx.getNetworkType({
+        success: res => {
+          return res.networkType
+        }
+      })
+    }
+    asyncGetNetworkType().then( networkType =>{
+      log(`[networkType] => ${networkType}`)
+      if (networkType == 'none' || networkType == '2g') {
+        wx.showToast({
+          title: '请检查你的网络连接',
+          duration: 1500,
+          icon: 'none',
+          mask: true,
+        })
+        log('[onLoad] => loadDataFromStorage()')
+        t.loadDataFromStorage()
+        t.setData({
+          networkType: networkType
+        })
+      }else {
+        log('[onLoad] => loadDataFromNet()')
+        t.loadDataFromNet()
       }
     })
-    groupEnd('[onLoad]')
   },
   onShow() {
-    log('[onShow]')
     const t = this
     const location = chooseLocation.getLocation();
     let hasCusImage = wx.getStorageSync('hasCusImage') || false
@@ -237,19 +236,18 @@ create(store, {
     }
   },
   onReady() {
-    group('[onReady]')
     log('[onReady]')
     const t = this
+    t.getBingImage()
     t.getMoonPhaseList()
-    t.setBingImage()
-    t.savePoetry()
-    t.data.datePicker = scui.DatePicker("#datepicker");
-    t.refreshWeather()
-    t.onGetWXACode()
-    groupEnd('[onReady]')
+    // t.getMoonPhaseList()
+    // t.getBingImage()
+    // t.savePoetry()
+    // t.data.datePicker = scui.DatePicker("#datepicker");
+    // t.refreshWeather()
+    // t.onGetWXACode()
   },
   loadDataFromStorage() {
-    group('[loadDataFromStorage]')
     log('[loadDataFromStorage]')
     const t = this
     wx.getStorage({
@@ -290,29 +288,43 @@ create(store, {
         }
       }),
       t.screenFadeIn()
-    groupEnd('[loadDataFromStorage]')
   },
   loadDataFromNet() {
-    group('[loadDataFromNet]')
-    log('[loadDataFromNet]')
     const t = this
-    wx.getSetting({
-      success (res) {
-        if (res.authSetting['scope.userLocation']) {
-          log('[getSetting]',res)
-          log('[loadDataFromNet] => [getSetting] => t.chooseGetLocationType()')
-          t.screenFadeIn()
-          t.chooseGetLocationType()
-        }
-        if (!res.authSetting['scope.userLocation']) {
-          log('[getSetting]',res)
-          t.store.data.startScreen = 'auth'
-          t.screenFadeIn()
-          log('[loadDataFromNet]  => [getSetting] => authScreenFadeIn()')
-        }
-      }
-    })
-    groupEnd('[loadDataFromNet]')
+    log('[loadDataFromNet]',t.store.data.startScreen == 'auth')
+    if(t.store.data.startScreen == 'auth'){
+      t.screenFadeIn()
+      log('[loadDataFromNet] => t.screenFadeIn()')
+    }else{
+      log('[loadDataFromNet] => t.chooseGetLocationType()')
+      t.screenFadeIn()
+      //根据预先选取的方法获取经纬度
+      t.chooseGetLocationType()
+    }
+
+    // let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
+    // if(hasUserLocation == true){
+
+    // }else{
+
+    // }
+
+    // wx.getSetting({
+    //   success(res) {
+    //     log(res.authSetting)
+    //     if (res.authSetting['scope.userLocation']) {
+    //       log('[getSetting]',res)
+    //       log('[loadDataFromNet] => [getSetting] => t.chooseGetLocationType()')
+    //       t.screenFadeIn()
+    //       t.chooseGetLocationType()
+    //     }
+    //     if (!res.authSetting['scope.userLocation']) {
+    //       log('[getSetting]',res)
+    //       t.screenFadeIn()
+    //       log('[loadDataFromNet]  => [getSetting] => t.screenFadeIn()')
+    //     }
+    //   }
+    // })
   },
   chooseGetLocationType() {
     log('[chooseGetLocationType]')
@@ -342,6 +354,7 @@ create(store, {
           break
       }
     }
+    //根据获取经纬度的类型请求数据
     event(wx.getStorageSync('setLocationMethod'))
   },
   autoGetLocation(canNavToFinalScreen) {
@@ -351,7 +364,7 @@ create(store, {
     }
     wx.getLocation({
       success: res => {
-        log(`[autoGetLocation] => `, res,canNavToFinalScreen)
+        log(`[autoGetLocation] =>`, res,canNavToFinalScreen)
         t.setData({
           'canBlurRoot': true,
           'forecastData.cur_latitude': res.latitude,
@@ -399,39 +412,50 @@ create(store, {
     app.saveData('setLocationMethod','manual')
   },
   getNowWeather(choseLocationData, fadeout) {
+    console.time("getNowWeather")
     const t = this
-    log('[getNowWeather]',t.data.forecastData)
-    let e = ''
-    if (t.data.setLocationMethod == 'auto') {
-      log(t.data.forecastData.cur_longitude,t.data.forecastData.cur_latitude)
-      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
-    }else if(t.data.setLocationMethod == 'manual'){
-      log(e,choseLocationData)
-      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
-    }
-    const s = e + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
-    wx.request({
-      url: s,
-      success: a => {
-        let e = a.data.result;
-        t.setNowWeather(e.realtime)
-        t.setTimelyWeather(e)
-        app.saveData("forecastData", e)
-        t.setData({
-          'refreshChart': !0,
-          'canBlurRoot': false
-        })
-      },
-      complete: () => {
-        a && a();
+    // if (fadeout == true) {
+    //  t.screenFadeOut()
+    // }
+    const reqNowWeather = () =>{
+      log('[getNowWeather]',t.data.forecastData)
+      let e = ''
+      if (t.data.setLocationMethod == 'auto' || t.data.setLocationMethod == 'historyCity') {
+        log(t.data.forecastData.cur_longitude,t.data.forecastData.cur_latitude)
+        e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
+      }else if(t.data.setLocationMethod == 'manual'){
+        log(e,choseLocationData)
+        e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
       }
-    })
-    if (fadeout == true) {
-     t.screenFadeOut()
+      const s = e + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
+      wx.request({
+        url: s,
+        success: a => {
+          let e = a.data.result;
+          t.setNowWeather(e.realtime)
+          t.setTimelyWeather(e)
+          app.saveData("forecastData", e)
+          t.setData({
+            'refreshChart': !0,
+            'canBlurRoot': false
+          })
+        },
+        complete: () => {
+          a && a();
+        }
+      })
     }
+    async function asyncGetNowWeather() {
+        await reqNowWeather()
+    }
+    asyncGetNowWeather().then( result => {
+      if (fadeout == true) {
+        t.screenFadeOut()
+       }
+    })
+    console.timeEnd("getNowWeather");
   },
   setNowWeather(t) {
-    group('[setNowWeather]')
     log(`[setNowWeather] = >`, t)
     const o = this
     const setAqiColor = (result) => {
@@ -533,7 +557,6 @@ create(store, {
       })
       o.drawSunCalc(o.data.forecastData.cur_latitude, o.data.forecastData.cur_longitude)
     });
-    groupEnd('[setNowWeather]')
     app.saveData("lastRefreshTime", date[0].time)
   },
   refreshWeather() {
@@ -547,7 +570,6 @@ create(store, {
     }, refreshTime);
   },
   setTimelyWeather(a) {
-    group('[setTimelyWeather]')
     const that = this;
 
     // log('[setTimelyWeather] => [minutely]', a.minutely)
@@ -744,7 +766,6 @@ create(store, {
         'forecastData.alarmInfo': val
       })
     })
-    groupEnd('[setTimelyWeather]')
 
   },
   getAqiData(a) {
@@ -942,7 +963,7 @@ create(store, {
     log(`[moonPhaseLists] =>`, moonPhaseLists)
   },
   drawSunCalc(a, b) {
-    group('[drawSunCalc]')
+    log('[drawSunCalc]')
     var
       t = this,
       sunriseTime = '',
@@ -1005,7 +1026,6 @@ create(store, {
       strSunSet: sunsetTime,
       strSunRise: sunriseTime
     })
-    groupEnd('[drawSunCalc]')
   },
   setHistoryCityLocation(e) {
     log('[setHistoryCityLocation]')
@@ -1020,13 +1040,13 @@ create(store, {
       'forecastData.city': n.bean.city,
       'forecastData.address': n.bean.address,
       'modalName': null,
-      'setLocationMethod':'manual'
+      'setLocationMethod':'historyCity'
     }),
     t.getNowWeather(null, false)
-    app.saveData('setLocationMethod', 'manual')
+    app.saveData('setLocationMethod', 'historyCity')
   },
-  setBingImage() {
-    group('[setBingImage]')
+  getBingImage() {
+    log('[getBingImage]')
     const t = this
     wx.request({
       // url: 'https://www.benweng.com/api/bing/lists',
@@ -1051,12 +1071,10 @@ create(store, {
         });
       }
     });
-    groupEnd('[setBingImage]')
-
   },
   screenFadeIn() {
-    log('[screenFadeIn]')
     const t = this
+    log('[screenFadeIn]',t.store.data.startScreen)
     const poetryScreenFadeIn = () => {
       log('[poetryScreenFadeIn]')
       let poetry_storage = wx.getStorageSync('poetry_storage') || [{
@@ -1168,8 +1186,18 @@ create(store, {
           break
       }
     }
-    event(t.store.data.startScreen)
-    t.intersectionObserver()
+    async function asyncScreenFadeOut(){
+      await event(t.store.data.startScreen)
+      // await t.getMoonPhaseList()
+      // await t.getBingImage()
+      await t.savePoetry()
+      await t.refreshWeather()
+      await t.onGetWXACode()
+      await t.intersectionObserver()
+    }
+    t.data.datePicker = scui.DatePicker("#datepicker");
+
+    asyncScreenFadeOut()
   },
   onAuthFinalScreen() {
     log('[onAuthFinalScreen]')
@@ -1209,7 +1237,7 @@ create(store, {
             transX(mobileWidth * 2)
             app.saveData('hasUserLocation', true)
             app.changeStorage('startScreen', 'poetry')
-            log('[hasUserLocation] => chooseGetLocationType()')
+            log('[hasUserLocation]')
           }
           if (!res.authSetting['scope.userLocation']) {
             wx.authorize({
@@ -1331,8 +1359,9 @@ create(store, {
     }
     event(e.currentTarget.dataset.target)
   },
-  savePoetry: lazyFunction.throttle(function () {
+  savePoetry() {
     // async savePoetry() {
+      log('[savePoetry]')
     const t = this
     poetry.load(
       result => {
@@ -1345,14 +1374,13 @@ create(store, {
         } else {
           poetryData = temp
         }
-        group('[savePoetry]')
+
         log(`[savePoetry] => poetryData =>`, poetryData)
         result.data.content = result.data.content.substring(0, result.data.content.lastIndexOf('。'))
         poetryData.unshift(result.data)
         app.saveData("poetry_storage", [...new Set(poetryData)])
-        groupEnd('[savePoetry]')
       })
-  }),
+  },
   switchChange(e) {
     log('[switchChange]')
     const t = this
@@ -1364,15 +1392,15 @@ create(store, {
     const event = (result) => {
       switch (true) {
         case (result == 'manualGetLocation'):
-          log('[manualGetLocation]')
+          log('[switchChange] => manualGetLocation')
           t.manualGetLocation()
           break
         case (result == 'autoGetLocation'):
-          log('[autoGetLocation]')
+          log('[switchChange] => autoGetLocation')
           t.autoGetLocation(true)
           break
         case (result == 'sunlightSwitchChange'):
-          log('[sunlightSwitchChange]')
+          log('[switchChange] => sunlightSwitchChange')
           t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
           changeStoreage(result)
           break
@@ -1451,7 +1479,6 @@ create(store, {
     log('[hideModal]')
     const t = this
     const setData = (modalName) => {
-      log('[hidemodal] =>', modalName)
       t.setData({
         modalName: null
       })
@@ -1579,7 +1606,7 @@ create(store, {
     })
   },
   eventGetImage(event) {
-    group(`[eventGetImage] => `)
+    log(`[eventGetImage] => `)
     log(event)
     wx.hideLoading()
     const {
@@ -1592,7 +1619,6 @@ create(store, {
         shareImage: tempFilePath
       })
     }
-    groupEnd(`[eventGetImage] => `)
   },
   subDailyWeather() {
     log(`[subDailyWeather] => datePicker.open()`)
@@ -1741,7 +1767,7 @@ create(store, {
     } else {}
   },
   intersectionObserver() {
-    group('[intersectionObserver]')
+    log('[intersectionObserver]')
     const t = this
     var ani = wx.createAnimation({
       duration: 700,
@@ -1833,7 +1859,6 @@ create(store, {
         log('[sixthObserver] => end')
       }
     })
-    groupEnd('[intersectionObserver]')
   },
   onShareAppMessage(a) {
     const t = this
@@ -2030,33 +2055,35 @@ create(store, {
     });
   },
   cropCallback(event) {
-    const
-      t = this,
-      cloudUpload = (p, n) => {
-        const t = this
-        wx.cloud.uploadFile({
-          cloudPath: 'cusImage/' + n,
-          filePath: p,
-        }).then(res => {
-          log(res)
-          app.saveData('cusImageFileID', res.fileID)
-        }).catch(error => {
-          log(error)
-        })
-      }
-
+    const t = this
     log('[cropCallback]', event);
-    this.setData({
-      visible: false,
-      cusImage: event.detail.resultSrc,
-      hasCusImage: true
-    });
-    let name = app.globalData.openid,
-      tempFilePaths = event.detail.resultSrc
-    cloudUpload(tempFilePaths, name)
-    app.saveData('hasCusImage', true)
-  },
+    const cloudUpload = (p, n) => {
+      wx.cloud.uploadFile({
+        cloudPath: 'cusImage/' + n,
+        filePath: p,
+      }).then(res => {
+        log(res)
+        return res.fileID
+      }).catch(error => {
+        log(error)
+      })
+    }
+    async function asyncUpload (){
+      return await cloudUpload(event.detail.resultSrc, app.globalData.openid)
+    }
+    asyncUpload().then( v =>{
+      t.setData({
+        visible: false,
+        cusImage: event.detail.resultSrc,
+        hasCusImage: true
+      })
+      wx.setStorageSync('hasCusImage', true)
+      wx.setStorageSync('cusImageFileID', v)
 
+      // app.saveData('hasCusImage', true)
+      // app.saveData('cusImageFileID', v)
+    })
+  },
   uploadCallback(event) {
     log('[uploadCallback]', event);
   },
@@ -2073,7 +2100,7 @@ create(store, {
       success(res) {}
     })
   },
-  reLocation() { 
+  refreshLocation() { 
     const t = this 
     t.setData({ 
       setLocationMethod: 'auto', 
@@ -2082,8 +2109,8 @@ create(store, {
     wx.setStorageSync('setLocationMethod', 'auto') 
     t.setLocationType() 
   }
-  // async setBingImage() {
-  //   log('[setBingImage]')
+  // async getBingImage() {
+  //   log('[getBingImage]')
   //   let t = this,
   //     bingLists = wx.getStorageSync('bingLists') || [{datesign: '1998-03-13'}],
   //     canPrePull = wx.getStorageSync('canPrePull') || false,

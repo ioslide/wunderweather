@@ -5,13 +5,13 @@ const computedBehavior = require('miniprogram-computed')
 import lazyFunction from "../../../utils/lazyFunction"
 // import _ from "../../../utils/lodash"
 
-// let chart = null
+let chart = null
 
 function onInitChart(F2, config) {
+  chart = new F2.Chart(config);
   var pages = getCurrentPages();
   var currPage = pages[pages.length - 1]
   var hourly = currPage.data.forecastData.hourly
-  log('[onInitChart hourly]', hourly)
   for (var newData = [], s = hourly, d = 0; d < 48; d++) {
     var u = {
       time: s[d].precipitation.datetime,
@@ -19,10 +19,8 @@ function onInitChart(F2, config) {
     };
     newData.push(u);
   }
-  log(newData)
+  log('[onInitChart hourly]', newData)
   let data = newData
-
-  const chart = new F2.Chart(config);
   chart.source(data, {
     time: {
       type: 'timeCat',
@@ -31,7 +29,7 @@ function onInitChart(F2, config) {
     value: {
       tickCount: 2,
       min: 0,
-      range: [ 0, 1 ]
+      range: [0, 1]
     }
   });
   chart.axis('time', false)
@@ -52,22 +50,22 @@ function onInitChart(F2, config) {
   chart.tooltip({
     showCrosshairs: true,
     showItemMarker: false,
-    alwaysShow: false, 
-    triggerOn: [ 'touchstart', 'touchmove' ],
+    alwaysShow: false,
+    triggerOn: ['touchstart', 'touchmove'],
     triggerOff: 'touchend',
     background: {
       radius: 2,
       fill: '#4AA2FC',
-      padding: [ 3, 5 ]
+      padding: [3, 5]
     },
     showCrosshairs: true, // 是否显示辅助线，点图、路径图、线图、面积图默认展示
     crosshairsStyle: {
       stroke: 'rgba(71,231,255,1)',
       lineWidth: 1
-    }, 
+    },
     tooltipMarkerStyle: {
       fill: '#4AA2FC',
-      fillOpacity: 0.7
+      fillOpacity: 0.2
     },
     onShow: function onShow(ev) {
       const items = ev.items;
@@ -87,7 +85,6 @@ function onInitChart(F2, config) {
   chart.render();
   return chart;
 }
-
 Component({
   behaviors: [computedBehavior],
   properties: {
@@ -97,53 +94,36 @@ Component({
     }
   },
   data: {
-    opts:{
+    opts: {
       lazyLoad: true
     },
-    onInit:null,
-    config:{
-      appendPadding:[15,15,15,15],
-      padding:[30,'auto',20,'auto'],
-      height:200
+    onInit: null,
+    config: {
+      appendPadding: [15, 15, 15, 15],
+      padding: [30, 'auto', 20, 'auto'],
+      width: app.globalData.windowWidth,
+      height: 200
     },
     themeValue: app.globalData.themeValue
   },
   lifetimes: {
-    attached: function () {
-    },
-    ready:function(){
-      // const t = this
-      // t.setData({
-      //   opts: {
-      //     onInit: onInitChart
-      //   }
-      // });
-    }
+    attached: function () {},
+    ready: function () {}
   },
   pageLifetimes: {
-    show: function () {
-      // !this.data.refreshChart
-      // this.setData({
-      //   opts: {
-      //     onInit: onInitChart
-      //   }
-      // });
-    },
+    show: function () {},
     hide: function () {}
   },
   watch: {
     refreshChart: lazyFunction.throttle(function (e) {
-    // refreshChart: function () {
       const t = this
-      log('refreshChart',t.data.refreshChart)
       t.data.refreshChart && t.setData({
         opts: {
           onInit: onInitChart
         },
-        onInitChart:onInitChart,
         refreshChart: !1
       });
-      log('refreshChart',t.data.refreshChart)
+      log('[rain refreshChart]', t.data.refreshChart)
       t.rainChartComponent = t.selectComponent('#rainChart');
       t.rainChartComponent.init(onInitChart);
     })

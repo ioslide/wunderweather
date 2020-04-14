@@ -3084,7 +3084,7 @@ button::after {
   z-index: 98;
 }
 
-.reLocation {
+.refreshLocation {
   width:35px;
   height: 35px;
   margin:15px;
@@ -3095,7 +3095,13 @@ button::after {
   bottom: 0;
   z-index: 1000;
 }
-
+.barRightIcon{
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+  max-width: 100%;
+}
 /* .canvas-style {
   width: 100% !important;
   height: 900rpx !important;

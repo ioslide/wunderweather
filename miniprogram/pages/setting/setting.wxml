@@ -95,7 +95,7 @@
 		</view>
 		<sc-radio-group class="block" bindchange="themeRadioChange">
 			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item">auto
+				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="自动" value="自动" checked="{{$.theme.themeChecked_auto}}" style="width:100%;"></sc-radio>
 					</label>

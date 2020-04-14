@@ -18305,10 +18305,10 @@
 	   * 组件的属性列表
 	   */
 	  properties: {
-	    onInit: {
-	      type: 'Function',
-	      value: () => {}
-	    },
+	    // onInit: {
+	    //   type: 'Function',
+	    //   value: () => {}
+	    // },
 			opts: {
 				type: Object
 			},
@@ -18351,14 +18351,14 @@
 						const context = node.getContext('2d');
 						const pixelRatio = wx.getSystemInfoSync().pixelRatio;
 						// 高清设置
-						node.width = width * pixelRatio;
+						node.width = this.data.config.width * pixelRatio;
 						node.height = this.data.config.height * pixelRatio;
 						console.log('[canvas init]',res[0],pixelRatio)
 						const padding = this.data.config.padding
 						const appendPadding = this.data.config.appendPadding
 						const config = {canvas, context, width, height, pixelRatio ,padding, appendPadding};
 						console.log('[canvas config]',config)
-						const chart = this.data.onInit(lib, config);
+						const chart = this.data.opts.onInit(lib, config);
 						if (chart) {
 							this.chart = chart;
 							this.canvasEl = chart.get('el');
@@ -18366,7 +18366,6 @@
 					});
 			},
 	    touchStart(e) {
-				console.log('[wx-f2] touchStart')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;
@@ -18374,7 +18373,6 @@
 	      canvasEl.dispatchEvent('touchstart', wrapEvent(e));
 	    },
 	    touchMove(e) {
-				console.log('[wx-f2] touchMove')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;
@@ -18382,7 +18380,6 @@
 	      canvasEl.dispatchEvent('touchmove', wrapEvent(e));
 	    },
 	    touchEnd(e) {
-				console.log('[wx-f2] touchEnd')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;

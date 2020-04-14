@@ -466,11 +466,12 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Next 7 days</block>
 				</text>
 			</view>
-			<view class="action margin-right-0" bindtap="navChange" data-cur="daily" style="width: 50px;height: 30px;">
+			<view class="barRightIcon margin-right-0" bindtap="navChange" data-cur="daily" style="width: 50px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
 		<view class="flex opacity-0" animation="{{secondObserverAni}}" style="min-height:200px">
+			<!-- <temperature-canvas class="dailyChart" refreshChart="{{refreshChart}}" isChangeChartData="{{isChangeChartData}}"></temperature-canvas> -->
 			<temperature-canvas class="dailyChart" refreshChart="{{refreshChart}}"></temperature-canvas>
 		</view>
 		<view class="flex margin-bottom-15 margin-left-5 opacity-0 {{$.themeValue == '明亮'?'text-grey':'text-white'}} " bindtap="navChange" data-cur="daily" animation="{{secondObserverAni}}">
@@ -496,12 +497,13 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Rain</block>
 				</text>
 			</view>
-			<!-- <view class="action margin-right-0" bindtap="navChange" data-cur="dailyCanvas" style="width: 50px;height: 30px;"> -->
-			<view class="action margin-right-0" style="width: 50px;height: 30px;">
+			<!-- <view class="barRightIcon margin-right-0" bindtap="navChange" data-cur="dailyCanvas" style="width: 50px;height: 30px;"> -->
+			<view class="barRightIcon margin-right-0" style="width: 50px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
 		<view class="flex opacity-0" animation="{{rainObserverAni}}" style="min-height:200px">
+			<!-- <rain-canvas class="rainChart" refreshChart="{{refreshChart}}" isChangeChartData="{{isChangeChartData}}"></rain-canvas> -->
 			<rain-canvas class="rainChart" refreshChart="{{refreshChart}}"></rain-canvas>
 		</view>
 	</block>
@@ -651,7 +653,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
 				</text>
 			</view>
-			<view class="action margin-right-0" bindtap="navChange" data-cur="moon" style="width: 50px;height: 30px;">
+			<view class="barRightIcon margin-right-0" bindtap="navChange" data-cur="moon" style="width: 50px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == '明亮' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
@@ -765,7 +767,7 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class="reLocation {{setLocationMethod == 'manual' ? 'opacityFade':'none'}}" bindtap="reLocation">
+<view class="reLocation {{setLocationMethod == 'manual' ? 'opacityFade':'none'}}" bindtap="refreshLocation">
 	<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
 </view>
 

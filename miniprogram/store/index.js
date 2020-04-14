@@ -33,7 +33,7 @@ const setStoreage = () =>{
       imperial:false
     },
     unitValue:'metric',
-    startScreen:'auth',
+    startScreen: 'auth',
     style: {
       imageSwitchChange: true,
       weatherAniSwitchChange: true,

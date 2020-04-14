@@ -20,7 +20,6 @@ Component({
     },
     methods: {
         calc: function() {
-            console.log('calc')
             var a = this;
             t.getSystemInfo().then(function(t) {
                 var n = wx.getMenuButtonBoundingClientRect(), 
@@ -44,7 +43,7 @@ Component({
                     });
                 },
                 fail: function(a) {
-                    console.log(a), t.setData({
+                    t.setData({
                         display: !0
                     });
                 }

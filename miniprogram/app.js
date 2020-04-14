@@ -1,9 +1,9 @@
 const log = console.log.bind(console)
 const warn = console.warn.bind(console)
-const group = console.group.bind(console)
-const groupEnd = console.groupEnd.bind(console)
+// const group = console.group.bind(console)
+// const groupEnd = console.groupEnd.bind(console)
 
-const computedBehavior = require('miniprogram-computed')
+// const computedBehavior = require('miniprogram-computed')
 const xhy = require('weatherui/sc-ui')
 
 App({
@@ -24,40 +24,40 @@ App({
     language: 'zh_CN',
     openid: ''
   },
-  behaviors: [computedBehavior],
-  watch: function (method) {
-    var obj = this.globalData;
-    Object.defineProperty(obj, "data", { //这里的 data 对应 上面 globalData 中的 data
-      configurable: true,
-      enumerable: true,
-      set: function (value) {
-        method(value);
-      },
-      get: function () { //获取全局变量值，直接返回全部
-        return this.globalData;
-      }
-    })
-  },
-  onShow(options) {
+  // behaviors: [computedBehavior],
+  // watch: function (method) {
+  //   var obj = this.globalData;
+  //   Object.defineProperty(obj, "data", { //这里的 data 对应 上面 globalData 中的 data
+  //     configurable: true,
+  //     enumerable: true,
+  //     set: function (value) {
+  //       method(value);
+  //     },
+  //     get: function () { //获取全局变量值，直接返回全部
+  //       return this.globalData;
+  //     }
+  //   })
+  // },
+  onShow() {
     // wx.BaaS.reportTemplateMsgAnalytics(options)
-    wx.onMemoryWarning(function () {
-      warn('[onMemoryWarningReceive]')
-    })
   },
   onPageNotFound: function () {
     log('onPageNotFound')
   },
   onLaunch() {
-    group('[onLaunch]')
-    this.checkVersion()
-    this.updateManager()
-    this.wxLogin()
-    this.getSystemInfo()
-    this.loadFontFace()
-    this.initCloud()
-    // this.dataPrePull()
+    const t = this
+    wx.onMemoryWarning(function () {
+      warn('[onMemoryWarningReceive]')
+    })
+    log('[onLaunch]')
     log(xhy)
-    groupEnd('[onLaunch]')
+    t.checkVersion()
+    t.updateManager()
+    //t.wxLogin()
+    t.initCloud()
+    t.getSystemInfo()
+    t.loadFontFace()
+    //t.dataPrePull()
   },
   loadFontFace() {
     wx.loadFontFace({
@@ -191,7 +191,28 @@ App({
   },
   checkVersion() {
     const version = wx.getSystemInfoSync().SDKVersion
-    if (this.compareVersion(version, '2.8.1') >= 0) {
+    const compareVersion = (v1, v2) => {
+      v1 = v1.split('.')
+      v2 = v2.split('.')
+      const len = Math.max(v1.length, v2.length)
+      while (v1.length < len) {
+        v1.push('0')
+      }
+      while (v2.length < len) {
+        v2.push('0')
+      }
+      for (let i = 0; i < len; i++) {
+        const num1 = parseInt(v1[i])
+        const num2 = parseInt(v2[i])
+        if (num1 > num2) {
+          return 1
+        } else if (num1 < num2) {
+          return -1
+        }
+      }
+      return 0
+    }
+    if (compareVersion(version, '2.8.1') >= 0) {
       wx.openBluetoothAdapter()
       log('[curVersion] => OK  => 2.8.1')
     } else {
@@ -200,27 +221,6 @@ App({
         content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试'
       })
     }
-  },
-  compareVersion(v1, v2) {
-    v1 = v1.split('.')
-    v2 = v2.split('.')
-    const len = Math.max(v1.length, v2.length)
-    while (v1.length < len) {
-      v1.push('0')
-    }
-    while (v2.length < len) {
-      v2.push('0')
-    }
-    for (let i = 0; i < len; i++) {
-      const num1 = parseInt(v1[i])
-      const num2 = parseInt(v2[i])
-      if (num1 > num2) {
-        return 1
-      } else if (num1 < num2) {
-        return -1
-      }
-    }
-    return 0
   },
   changeStorage(i, t) {
     log([i], t)
