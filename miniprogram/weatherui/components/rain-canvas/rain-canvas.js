@@ -53,14 +53,21 @@ function onInitChart(F2, config) {
     showCrosshairs: true,
     showItemMarker: false,
     alwaysShow: false, 
+    triggerOn: [ 'touchstart', 'touchmove' ],
+    triggerOff: 'touchend',
     background: {
       radius: 2,
-      fill: '#1890FF',
+      fill: '#4AA2FC',
       padding: [ 3, 5 ]
     },
+    showCrosshairs: true, // 是否显示辅助线，点图、路径图、线图、面积图默认展示
+    crosshairsStyle: {
+      stroke: 'rgba(71,231,255,1)',
+      lineWidth: 1
+    }, 
     tooltipMarkerStyle: {
-      fill: '#1890FF',
-      fillOpacity: 0.1
+      fill: '#4AA2FC',
+      fillOpacity: 0.7
     },
     onShow: function onShow(ev) {
       const items = ev.items;

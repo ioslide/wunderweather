@@ -7,8 +7,8 @@
 	</sc-capsule>
 </view>
 
-<view class="{{$.themeValue == '明亮'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="width:{{$.startScreen == '授权' ? mobileWidth*4 : mobileWidth}}px " catchtouchmove="true">
-	<block wx:if="{{$.startScreen == '授权'}}">
+<view class="{{$.themeValue == '明亮'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="width:{{$.startScreen == 'auth' ? mobileWidth*4 : mobileWidth}}px " catchtouchmove="true">
+	<block wx:if="{{$.startScreen == 'auth'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view>
@@ -69,25 +69,25 @@
 						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
 					</view>
 					<view class="flex justify-left align-center padding-left-15">
-						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改授权</text>
+						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改auth</text>
 					</view>
 					<!-- <view class="flex justify-center align-center margin-top-75">
 						<view>
-							<view class="flex justify-center align-center " bindtap="autoSetLocation">
+							<view class="flex justify-center align-center " bindtap="autoGetLocation">
 								<view class="authFirstStepButton">自动定位</view>
 							</view>
 						</view>
 					</view>
 					<view class="flex justify-center align-center margin-top-25">
 						<view>
-							<view class="flex justify-center align-center" bindtap="manualSetLocation">
+							<view class="flex justify-center align-center" bindtap="manualGetLocation">
 								<view class="authFirstStepButton">手动选取位置</view>
 							</view>
 						</view>
 					</view> -->
 					<view class="flex margin-top-50">
 						<view class="cu-list menu-avatar" style="width:100%">
-							<!-- <view class="cu-item" bindtap="autoSetLocation"> -->
+							<!-- <view class="cu-item" bindtap="autoGetLocation"> -->
 							<view class="cu-item">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenAutolocation.svg);">
 								</view>
@@ -95,9 +95,8 @@
 									<view class="text-lg text-4a5568">自动定位</view>
 									<view class="text-gray text-d flex justify-between">Automatic positioning</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="autoSetLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="autoGetLocation"></sc-switch>
 							</view>
-							<!-- <view class="cu-item" bindtap="manualSetLocation"> -->
 							<view class="cu-item">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenManuallocationn.svg);">
 								</view>
@@ -105,7 +104,7 @@
 									<view class="text-lg text-4a5568">手动选取位置</view>
 									<view class="text-gray text-d flex justify-between">Select location manually</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="{{manualSetLocation}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="manualSetLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="{{setLocationMethod == 'manual' ? true : false}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="manualGetLocation"></sc-switch>
 							</view>
 						</view>
 					</view>
@@ -134,15 +133,8 @@
 									<view class="text-gray text-d flex justify-between">选择你最喜欢的外观</view>
 								</view>
 							</view>
-							<!-- <view class="cu-item" bindtap="showModal" data-target="temperatureUnit">
-								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTemperature.svg);">
-								</view>
-								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">温度单位</view>
-									<view class="text-gray text-d flex justify-between">华氏度/摄氏度</view>
-								</view>
-							</view> -->
-							<view class="cu-item" bindtap="onDev" data-target="unit">
+							<!-- https://weather.ioslide.com/weather/authScreenTemperature.svg); -->
+							<view class="cu-item" bindtap="showModal" data-target="unit">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -175,14 +167,14 @@
 			</view>
 		</view>
 	</block>
-	<block wx:if="{{$.startScreen == '诗词'}}">
+	<block wx:if="{{$.startScreen == 'poetry'}}">
 		<view class="flex justify-center align-center" style="height: 100%;">
 			<view class="flex">
 				<text animation="{{guideScreenTextAni}}" style="opacity:0" class="{{$.themeValue == '明亮'?'text-grey':'text-white'}} poetry font-family-wencangshufang">{{poetry}}</text>
 			</view>
 		</view>
 	</block>
-	<block wx:if="{{$.startScreen == '默认'}}">
+	<block wx:if="{{$.startScreen == 'default'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{mobileWidth}}px;" animation="{{logoScreenAni}}">
 				<view>
@@ -201,7 +193,7 @@
 	</block>
 </view>
 
-<block wx:if="{{$.startScreen == '授权'}}">
+<block wx:if="{{$.startScreen == 'auth'}}">
 	<view class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
@@ -230,34 +222,6 @@
 			</view>
 		</view>
 	</view>
-	<!-- <view class="cu-modal {{modalName=='temperatureUnit'?'show':''}}" bindtap="ondev" catchtouchmove="return">
-		<view class="cu-dialog" catchtap>
-			<view class="cu-bar justify-start" style="background: #2D2D2D;">
-				<view class="action">
-					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">温度单位</button>
-				</view>
-			</view>
-			<sc-radio-group class="block" bindchange="temperatureUnitValueRadioChange">
-				<view class="cu-list menu text-left" style="width: 100%;">
-					<view class="cu-item">
-						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="华氏度" checked="{{$.temperatureUnit.temperatureUnitValueF}}" value="华氏度" style="width:100%;"></sc-radio>
-						</label>
-					</view>
-					<view class="cu-item">
-						<label class="flex justify-left align-center flex-sub">
-							<sc-radio label="摄氏度" checked="{{$.temperatureUnit.temperatureUnitValueC}}" value="摄氏度" style="width:100%;"></sc-radio>
-						</label>
-					</view>
-				</view>
-			</sc-radio-group>
-			<view class="cu-bar justify-end" style="background: #2D2D2D;">
-				<view class="action">
-					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
-				</view>
-			</view>
-		</view>
-	</view> -->
 	<view catchtouchmove="return" class="cu-modal {{modalName=='language'?'show':''}}" bindtap="hideModal">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
@@ -333,7 +297,7 @@
 
 <sc-star></sc-star>
 
-<view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  isGettingLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
+<view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
 	<view class="flex padding-15 justify-center padding-bottom-0" style="padding-top: {{CustomBar}}px;">
 	</view>
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
@@ -437,7 +401,7 @@
 	</view>
 
 	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
-		<view class="text-left text-xxl {{$.themeValue == '明亮'?'text-4a5568':'text-white'}}" bindtap="manualSetLocation" plain="true">
+		<view class="text-left text-xxl {{$.themeValue == '明亮'?'text-4a5568':'text-white'}}" bindtap="manualGetLocation" plain="true">
 			{{forecastData.address}}·{{forecastData.nowWeather}}
 		</view>
 	</view>
@@ -449,7 +413,6 @@
 	<view class="flex padding-left-15" style="min-height:20px;">
 		<view class="text-left text-grey text-s padding-top-10">{{forecastData.hourlyKeypoint}}</view>
 	</view>
-
 
 	<block wx:if="{{$.style.dailyhourSwitchChange == true}}">
 		<view class="margin-top-25" bindtap="navChange" data-cur="hourly" style="min-height:180px;">
@@ -819,15 +782,15 @@
 
 	<view class="cu-dialog-drawerR basis-sm {{$.themeValue == '明亮'?'cu-dialog-drawerR-bg-light':'cu-dialog-drawerR-bg-dark'}}" catchtap style="">
 		<view class="flex padding-5 justify-center align-center" style="height: 20%;">
-			<view style="width:50%" bindtap="autoSetLocation">
+			<view style="width:50%" bindtap="autoGetLocation">
 				<view class="flex padding-5 justify-center align-center">
 					<block wx:if="{{$.themeValue == '黑夜'}}">
-						<view class="flex padding-5 justify-center align-center {{$.startScreen == '诗词'?'item-bg-active':'item-bg-grey'}}">
+						<view class="flex padding-5 justify-center align-center {{$.startScreen == 'poetry'?'item-bg-active':'item-bg-grey'}}">
 							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 						</view>
 					</block>
 					<block wx:if="{{$.themeValue == '明亮'}}">
-						<view class="flex padding-5 justify-center align-center soft-button {{$.startScreen == '诗词'?' soft-button-pushed':''}}">
+						<view class="flex padding-5 justify-center align-center soft-button {{$.startScreen == 'poetry'?' soft-button-pushed':''}}">
 							<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/poetry{{$.themeValue == '明亮'?'-light':''}}.svg"></image>
 						</view>
 					</block>
@@ -989,7 +952,7 @@
 				<view class="action border-custom-modalL" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
 					<button class="modalL-cu-bar-left" bindtap="navChange" data-cur="setting"></button>
 					<text class="cuIcon-moreandroid"></text>
-					<button class="modalL-cu-bar-right" bindtap="manualSetLocation"></button>
+					<button class="modalL-cu-bar-right" bindtap="manualGetLocation"></button>
 					<text class="cuIcon-add text-xl" style="font-size: 44rpx;"></text>
 				</view>
 			</view>

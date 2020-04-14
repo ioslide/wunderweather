@@ -18329,7 +18329,7 @@
 				console.warn('组件需绑定 opts 变量，例：<ff-canvas id="mychart-dom-bar" canvas-id="mychart-bar" opts="{{ opts }}"></ff-canvas>');
 				return;
 			}
-			console.log(this.data.opts.lazyLoad)
+			console.log('[canvas lazyLoad]',this.data.opts.lazyLoad)
 			if (!this.data.opts.lazyLoad) {
 				this.init();
 			}
@@ -18366,6 +18366,7 @@
 					});
 			},
 	    touchStart(e) {
+				console.log('[wx-f2] touchStart')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;
@@ -18373,6 +18374,7 @@
 	      canvasEl.dispatchEvent('touchstart', wrapEvent(e));
 	    },
 	    touchMove(e) {
+				console.log('[wx-f2] touchMove')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;
@@ -18380,6 +18382,7 @@
 	      canvasEl.dispatchEvent('touchmove', wrapEvent(e));
 	    },
 	    touchEnd(e) {
+				console.log('[wx-f2] touchEnd')
 	      const canvasEl = this.canvasEl;
 	      if (!canvasEl) {
 	        return;
