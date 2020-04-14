@@ -236,7 +236,6 @@ create(store, {
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
     }
   },
-
   onReady() {
     group('[onReady]')
     log('[onReady]')
@@ -245,8 +244,8 @@ create(store, {
     t.setBingImage()
     t.savePoetry()
     t.data.datePicker = scui.DatePicker("#datepicker");
-    // t.onGetWXACode()
     t.refreshWeather()
+    t.onGetWXACode()
     groupEnd('[onReady]')
   },
   loadDataFromStorage() {
@@ -1547,7 +1546,7 @@ create(store, {
             color: '#383549',
             textAlign: 'center',
             top: 220,
-            left: 140,
+            left: 146,
             width: 200,
             MaxLineNumber: 2,
             breakWord: true,
@@ -2074,7 +2073,15 @@ create(store, {
       success(res) {}
     })
   },
-
+  reLocation() { 
+    const t = this 
+    t.setData({ 
+      setLocationMethod: 'auto', 
+      refreshLocation: true 
+    }) 
+    wx.setStorageSync('setLocationMethod', 'auto') 
+    t.setLocationType() 
+  }
   // async setBingImage() {
   //   log('[setBingImage]')
   //   let t = this,

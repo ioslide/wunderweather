@@ -765,9 +765,10 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class="reLocation {{refreshLocation == true ? 'opacityFade':'none'}}" bindtap="reLocation">
+<view class="reLocation {{setLocationMethod == 'manual' ? 'opacityFade':'none'}}" bindtap="reLocation">
 	<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
 </view>
+
 <view class="drawerR-modal drawer-modal justify-end {{modalName=='DrawerModalR'?'show':''}}" bindtap="hideModal" data-target="DrawerModalR" catchtouchmove="preventTouchMove">
 
 
