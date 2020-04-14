@@ -426,7 +426,7 @@
 		<view class="flex-twice flex padding-top-15 flex-treble" style="font-family: 'Lato', sans-serif;">
 			<view class="flex align-end text-grey font-weight-200 basis-xxxs padding-bottom-15">
 				<view class="text-xl">
-					{{forecastData.dailyWeather[0].min}}/{{forecastData.dailyWeather[0].max}}
+					{{forecastData.daily[0].min}}/{{forecastData.daily[0].max}}
 				</view>
 			</view>
 		</view>
@@ -512,7 +512,7 @@
 		</view>
 		<view class="flex margin-bottom-15 margin-left-5 opacity-0 {{$.themeValue == '明亮'?'text-grey':'text-white'}} " bindtap="navChange" data-cur="daily" animation="{{secondObserverAni}}">
 			<view class="grid col-7 margin-bottom-15 text-center" style="width:100%">
-				<view class="daily-item flex" wx:for="{{forecastData.dailyWeather}}" wx:key="index" wx:if="{{item&&index<7}}">
+				<view class="daily-item flex" wx:for="{{forecastData.daily}}" wx:key="index" wx:if="{{item&&index<7}}">
 					<view class="flex align-end">
 						<view class="flex-sub text-center">
 							<image class="square-30 margin-top-10 margin-bottom-10 text-sm" src="{{item.iconPath}}{{$.themeValue == '明亮'?'-light':''}}.svg"></image>

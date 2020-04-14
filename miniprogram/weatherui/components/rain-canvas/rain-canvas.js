@@ -80,6 +80,7 @@ function onInitChart(F2, config) {
   chart.render();
   return chart;
 }
+
 Component({
   behaviors: [computedBehavior],
   properties: {

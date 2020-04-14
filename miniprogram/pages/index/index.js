@@ -217,7 +217,7 @@ create(store, {
           'forecastData.cur_latitude': location.latitude,
           'manualSetLocation': true
         }),
-        t.getNowWeather(location, true, false)
+      t.getNowWeather(location, true, false)
       t.authScreenNext('canNavToFinalScreen')
       async function save() {
         log('[onShow] => saveData()')
@@ -478,11 +478,13 @@ create(store, {
   },
   getNowWeather(choseLocationData, isChoseLocation, fadeout) {
     group('[getNowWeather]')
-    log('[getNowWeather]')
+    log('[getNowWeather]',choseLocationData)
     const t = this
     let e = ''
     if (isChoseLocation == false) {
       e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
+    }else if(isChoseLocation == true){
+      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
     }
     const s = e + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
     const requestWeatherData = () => {
