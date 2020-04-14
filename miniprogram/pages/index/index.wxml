@@ -369,9 +369,9 @@
 					</view>
 				</block>
 				<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
-					<view class="networkType">
+					<view class="networkType" bindtap="refreshLocation">
 						<view class="networkType-button">
-							<image class="{{refreshLocation == true ? 'opacityFade':''}} square-30 margin-left-15" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weather/refresh.svg"></image>
+							<image class="{{refreshLocation == true ? 'opacityFade':'none'}} square-30 margin-left-15" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weather/refresh.svg"></image>
 						</view>
 						<view class="text-left text-white padding-left-10 padding-top-7">离线模式</view>
 						<view class="text-left text-white padding-left-10 padding-top-5">上次更新时间:{{lastTime}}</view>
@@ -767,7 +767,7 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class="reLocation {{setLocationMethod == 'manual' ? 'opacityFade':'none'}}" bindtap="refreshLocation">
+<view class="refreshLocation {{refreshLocation == true ? 'opacityFade': ''}}" bindtap="refreshLocation">
 	<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
 </view>
 

@@ -97,7 +97,7 @@ create(store, {
     canBlurRoot: false,
     isChangeSetting: false,
     // isManualSetLocation: false,
-    setLocationMethod:'auto',
+    setLocationMethod: wx.getStorageSync('setLocationMethod') || 'auto',
     hasCusImage: false,
     networkType: '4g',
     imageBase64: '',
@@ -219,17 +219,17 @@ create(store, {
       }),
       t.getNowWeather(location, false)
       t.authScreenNext('canNavToFinalScreen')
-      app.saveData('citydata', location.name)
+      app.saveData('citydata', location)
       app.saveData('manualLocationCityData', location)
       app.saveData('setLocationMethod', 'manual')
     }
-    if (location == null) {
-      log('[onShow] => location == null')
-      t.setData({
-        'setLocationMethod': 'auto'
-      })
-      app.saveData('setLocationMethod', 'auto')
-    }
+    // if (location == null) {
+    //   log('[onShow] => location == null')
+    //   t.setData({
+    //     'setLocationMethod': 'auto'
+    //   })
+    //   app.saveData('setLocationMethod', 'auto')
+    // }
     if (t.data.canDrawSunCalcAgain == true) {
       log('[canDrawSunCalcAgain] => true')
       t.drawSunCalc(t.data.forecastData.cur_latitude, t.data.forecastData.cur_longitude)
@@ -265,9 +265,9 @@ create(store, {
       wx.getStorage({
         key: "citydata",
         success: res => {
-          t.data.forecastData.city = res.data,
+          t.data.forecastData.city = res.data.city,
             t.setData({
-              'forecastData.city': res.data,
+              'forecastData.city': res.data.city,
             });
         }
       }),
@@ -329,7 +329,7 @@ create(store, {
   chooseGetLocationType() {
     log('[chooseGetLocationType]')
     const t = this
-    log('[chooseGetLocationType] => setLocationMethod =>', t.data.setLocationMethod)
+    log('[setLocationMethod] =>', t.data.setLocationMethod)
     const manualGetLocation = () => {
       let cityData = wx.getStorageSync('manualLocationCityData')
       log('manualGetLocation()', cityData)
@@ -350,12 +350,28 @@ create(store, {
         case (result == 'auto'):
           t.autoGetLocation()
           break
+        case (result == 'historyCity'):
+          t.getHistoryCityLocation()
+          break
         default:
           break
       }
     }
     //根据获取经纬度的类型请求数据
-    event(wx.getStorageSync('setLocationMethod'))
+    event(t.data.setLocationMethod)
+  },
+  getHistoryCityLocation(){
+    const t = this
+    let historyCityData = wx.getStorageSync('historyCityList')
+    t.setData({
+      'canBlurRoot': true,
+      'forecastData.cur_latitude': historyCityData[0].cur_latitude,
+      'forecastData.cur_longitude': historyCityData[0].cur_longitude,
+      'forecastData.city': historyCityData[0].city,
+      'forecastData.address': historyCityData[0].address,
+      'setLocationMethod': 'historyCity',
+    })
+    t.getNowWeather(null, true)
   },
   autoGetLocation(canNavToFinalScreen) {
     const t = this
@@ -371,6 +387,7 @@ create(store, {
           'forecastData.cur_longitude': res.longitude,
           'setLocationMethod': 'auto'
         })
+        app.saveData('setLocationMethod','auto')
         i.reverseGeocoder({
           location: {
             latitude: res.latitude,
@@ -395,7 +412,6 @@ create(store, {
         log(`[getLocation] => fail => ${err}`)
       }
     });
-    app.saveData('setLocationMethod', 'auto')
   },
   manualGetLocation() {
     log('[manualGetLocation]')
@@ -418,15 +434,15 @@ create(store, {
     //  t.screenFadeOut()
     // }
     const reqNowWeather = () =>{
-      log('[getNowWeather]',t.data.forecastData)
-      let e = ''
-      if (t.data.setLocationMethod == 'auto' || t.data.setLocationMethod == 'historyCity') {
-        log(t.data.forecastData.cur_longitude,t.data.forecastData.cur_latitude)
-        e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
-      }else if(t.data.setLocationMethod == 'manual'){
-        log(e,choseLocationData)
-        e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
-      }
+      log('[getNowWeather]',t.data.forecastData.cur_longitude,t.data.forecastData.cur_latitude,t.data.setLocationMethod)
+      let e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
+      // if (t.data.setLocationMethod == 'auto' || t.data.setLocationMethod == 'historyCity') {
+      //   log(t.data.forecastData.cur_longitude,t.data.forecastData.cur_latitude)
+      //   e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
+      // }else if(t.data.setLocationMethod == 'manual'){
+      //   log(e,choseLocationData)
+      //   e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
+      // }
       const s = e + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
       wx.request({
         url: s,
@@ -1028,11 +1044,10 @@ create(store, {
     })
   },
   setHistoryCityLocation(e) {
-    log('[setHistoryCityLocation]')
-    let
-      n = e.currentTarget.dataset,
-      t = this
-    log(n)
+    let n = e.currentTarget.dataset
+    const t = this
+    log('[setHistoryCityLocation]',n.bean)
+    app.saveData('citydata', n.bean)
     t.setData({
       'canBlurRoot': true,
       'forecastData.cur_latitude': n.bean.cur_latitude,
@@ -2107,7 +2122,7 @@ create(store, {
       refreshLocation: true 
     }) 
     wx.setStorageSync('setLocationMethod', 'auto') 
-    t.setLocationType() 
+    t.chooseGetLocationType() 
   }
   // async getBingImage() {
   //   log('[getBingImage]')
