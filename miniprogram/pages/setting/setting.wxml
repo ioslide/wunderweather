@@ -65,7 +65,7 @@
 	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="language">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">语言设置</text>
-			<text slot="subbottom">{{$.languageValue}}</text>
+			<text slot="subbottom">中文/英文</text>
 		</sc-cell>
 	</view>
 
@@ -95,6 +95,11 @@
 		</view>
 		<sc-radio-group class="block" bindchange="themeRadioChange">
 			<view class="cu-list menu text-left" style="width: 100%;">
+				<view class="cu-item">auto
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="自动" value="自动" checked="{{$.theme.themeChecked_auto}}" style="width:100%;"></sc-radio>
+					</label>
+				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="明亮" value="明亮" checked="{{$.theme.themeChecked_light}}" style="width:100%;"></sc-radio>

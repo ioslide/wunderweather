@@ -1,17 +1,18 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/bingimagelist/bingimagelist",
-    "pages/dailyweather/dailyweather",
-    "pages/hourweather/hourweather",
+    "pages/bing/bing",
+    "pages/daily/daily",
+    "pages/hourly/hourly",
     "pages/moon/moon",
+    "pages/nasa/nasa",
+    "pages/dailyCanvas/dailyCanvas",
     "pages/promode/promode",
     "pages/setting/setting",
     "pages/setting/pro/pro",
     "pages/setting/customstyle/customstyle",
     "pages/setting/customicon/customicon",
-    "pages/setting/about/about",
-    "pages/nasaimagelist/nasaimagelist"
+    "pages/setting/about/about"
   ],
   "window": {
     "navigationStyle": "custom",

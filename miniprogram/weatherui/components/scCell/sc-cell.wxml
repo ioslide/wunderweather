@@ -3,20 +3,20 @@
 		<i class="iconfont left-icon"></i>
 		<slot name="iconimageleft"></slot>
 		<view class="sc-cell-left-container">
-			<view class="sc-cell-header text-lg {{themeValue == '明亮'?'text-grey':'text-white'}}">
+			<view class="sc-cell-header text-lg {{$.themeValue == '明亮'?'text-grey':'text-white'}}">
 				<slot></slot>
 				<slot name="subheader"></slot>
 			</view>
-			<view class="sc-cell-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="padding: {{subheader1Padding}}px 0px">
+			<view class="sc-cell-header {{$.themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}" style="padding: {{subheader1Padding}}px 0px">
 				<slot name="subheader1"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}">
+			<view class="sc-cell-sub-header {{$.themeValue == '明亮'?'detailHeadText-light':'detailHeadText-dark'}}">
 				<slot name="subheader2"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="padding:{{subbottomPadding}}px 0px">
+			<view class="sc-cell-sub-header {{$.themeValue == '明亮'?'detailText-light':'detailText-light'}}" style="padding:{{subbottomPadding}}px 0px">
 				<slot name="subbottom"></slot>
 			</view>
-			<view class="sc-cell-sub-header {{themeValue == '明亮'?'detailText-light':'detailText-light'}}">
+			<view class="sc-cell-sub-header {{$.themeValue == '明亮'?'detailText-light':'detailText-light'}}">
 				<slot name="subbottom1"></slot>
 			</view>
 		</view>
@@ -29,7 +29,7 @@
 		<i class="iconfont right-icon"></i>
 		<slot name="action"></slot>
 		<!-- <block wx:if="{{switch}}">
-			<sc-switch class="sc-switch" name="switch" checked="{{checked}}" bind:change="_switchChange" themeValue="{{themeValue}}" data-cur="{{switchTarget}}"></sc-switch>
+			<sc-switch class="sc-switch" name="switch" checked="{{checked}}" bind:change="_switchChange" $.themeValue="{{$.themeValue}}" data-cur="{{switchTarget}}"></sc-switch>
 		</block> -->
 	</view>
 	<view wx:for="{{rippleList}}" wx:key="rippleId" id="{{item.rippleId}}" style="width:{{item.width}}px;height:{{item.height}}px;left:{{item.left}}px;top:{{item.top}}px" class="sc-ripple {{item.startAnimate ? item.holdAnimate ? 'sc-ripple-animation-slow-hold' :'sc-ripple-animation-slow' : ''}}" bind:animationend="{{item.holdAnimate ? null : '_rippleAnimationEnd'}}"></view>

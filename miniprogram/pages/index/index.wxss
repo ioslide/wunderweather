@@ -3209,3 +3209,11 @@ button::after {
   align-items: center;
   position: absolute;
 }
+.dailyChart{
+  width: 100%;
+  height: 260px;
+}
+.rainChart{
+  width: 100%;
+  height: 200px;
+}

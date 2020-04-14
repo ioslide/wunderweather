@@ -1,0 +1,8 @@
+.dailyChart{
+  width: 100%;
+  height: 260px;
+}
+.-dailyChart{
+  width: 100%;
+  height: 260px;
+}

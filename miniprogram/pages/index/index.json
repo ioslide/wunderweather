@@ -9,7 +9,9 @@
     "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker",
     "sc-crop":"/weatherui/components/sc-crop/sc-crop",
     "sc-switch":"/weatherui/components/scSwitch/sc-switch",
-    "sc-star":"/weatherui/components/scStar/sc-star"
+    "sc-star":"/weatherui/components/scStar/sc-star",
+    "temperature-canvas":"/weatherui/components/temperature-canvas/temperature-canvas",
+    "rain-canvas":"/weatherui/components/rain-canvas/rain-canvas"
   },
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true

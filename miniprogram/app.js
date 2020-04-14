@@ -3,23 +3,40 @@ const warn = console.warn.bind(console)
 const group = console.group.bind(console)
 const groupEnd = console.groupEnd.bind(console)
 
+const computedBehavior = require('miniprogram-computed')
 const xhy = require('weatherui/sc-ui')
 
 App({
   isReady: !1,
   isError: !1,
   globalData: {
+    forecastData: {},
     StatusBar: "",
     CustomBar: "",
     barHeight: "",
     navigationHeight: "",
     Custom: "",
+    pixelRatio: "",
     windowWidth: "",
     systemInfo: "",
     menuInfo: "",
     zxClientId: "c3d88ee29b2337915fd0",
     language: 'zh_CN',
     openid: ''
+  },
+  behaviors: [computedBehavior],
+  watch: function (method) {
+    var obj = this.globalData;
+    Object.defineProperty(obj, "data", { //这里的 data 对应 上面 globalData 中的 data
+      configurable: true,
+      enumerable: true,
+      set: function (value) {
+        method(value);
+      },
+      get: function () { //获取全局变量值，直接返回全部
+        return this.globalData;
+      }
+    })
   },
   onShow(options) {
     // wx.BaaS.reportTemplateMsgAnalytics(options)
@@ -103,40 +120,41 @@ App({
     const t = this
     wx.getSystemInfo({
       success: function (e) {
-          let menuButtonInfo = wx.getMenuButtonBoundingClientRect();
-          (0 == menuButtonInfo.buttom && 0 == menuButtonInfo.height && 0 == menuButtonInfo.left && 0 == menuButtonInfo.right && 0 == menuButtonInfo.top && 0 == menuButtonInfo.width || void 0 === menuButtonInfo.buttom && void 0 === menuButtonInfo.height && void 0 === menuButtonInfo.left && void 0 === menuButtonInfo.right && void 0 === menuButtonInfo.top && void 0 === menuButtonInfo.width) && (menuButtonInfo = {
-              bottom: 58,
-              height: 32,
-              left: 278,
-              right: 365,
-              top: 26,
-              width: 87
-          })
-          var o = RegExp("^.*iPhone X.*$");
-          e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1, 
+        let menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+        (0 == menuButtonInfo.buttom && 0 == menuButtonInfo.height && 0 == menuButtonInfo.left && 0 == menuButtonInfo.right && 0 == menuButtonInfo.top && 0 == menuButtonInfo.width || void 0 === menuButtonInfo.buttom && void 0 === menuButtonInfo.height && void 0 === menuButtonInfo.left && void 0 === menuButtonInfo.right && void 0 === menuButtonInfo.top && void 0 === menuButtonInfo.width) && (menuButtonInfo = {
+          bottom: 58,
+          height: 32,
+          left: 278,
+          right: 365,
+          top: 26,
+          width: 87
+        })
+        var o = RegExp("^.*iPhone X.*$");
+        e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
           t.globalData.language = e.language;
-          t.globalData.StatusBar = e.statusBarHeight;
-          t.globalData.barHeight = e.statusBarHeight,
-          t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3, 
+        t.globalData.StatusBar = e.statusBarHeight;
+        t.globalData.barHeight = e.statusBarHeight,
+          t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
           t.globalData.windowWidth = e.windowWidth,
-          t.globalData.systemInfo = e, 
-          t.globalData.menuInfo = menuButtonInfo
-          if (menuButtonInfo) {
-            t.globalData.Custom = menuButtonInfo;
-            t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
-          } else {
-            t.globalData.CustomBar = e.statusBarHeight + 50;
-          }
-          log(t.globalData)
+          t.globalData.systemInfo = e,
+          t.globalData.pixelRatio = e.pixelRatio
+        t.globalData.menuInfo = menuButtonInfo
+        if (menuButtonInfo) {
+          t.globalData.Custom = menuButtonInfo;
+          t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
+        } else {
+          t.globalData.CustomBar = e.statusBarHeight + 50;
+        }
+        log(t.globalData)
       },
       fail: function (e) {
-          t.isError = !0, wx.showModal({
-              title: "错误",
-              content: "获取系统信息出错",
-              showCancel: !1
-          });
+        t.isError = !0, wx.showModal({
+          title: "错误",
+          content: "获取系统信息出错",
+          showCancel: !1
+        });
       }
-  });
+    });
   },
   initCloud() {
     wx.cloud.init({

@@ -7,14 +7,14 @@ import store from '../../../store/index'
 
 // Component({
 create.Component(store,{
-  use: ['style'],
   options: {
     multipleSlots: !0
   },
   data:{
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom
+    Custom: app.globalData.Custom,
+    use: ['themeValue']
   },
   behaviors: [scRippleBehaviors],
   properties: {

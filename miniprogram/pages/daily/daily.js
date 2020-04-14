@@ -9,16 +9,16 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    dailyWeather:[],
+    daily:[],
     use: [
       'themeValue'
     ]
   },
   onLoad: function (options) {
-    const i = getCurrentPages()[0].data.forecastData.dailyWeather
+    const i = getCurrentPages()[0].data.forecastData.daily
     // console.log(i)
     this.setData({
-      dailyWeather: i
+      daily: i
     })
   },
   onShow: function () {

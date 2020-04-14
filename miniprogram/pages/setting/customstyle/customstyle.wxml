@@ -32,7 +32,7 @@
 			</sc-cell>
 		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0"  style="width:100%;">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
 				<text >未来24小时</text>
 				<view slot="action">
 					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailyhourSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailyhourSwitchChange"></sc-switch>
@@ -47,14 +47,14 @@
 				</view>
 			</sc-cell>
 		</label>
-		<!-- <label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
-      <sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
-        <text >降水几率</text>
-								<view slot="action">
-					<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="imageSwitchChange"></sc-switch>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:85%;">
+				<text >降水强度</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.rainSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="rainSwitchChange"></sc-switch>
 				</view>
-      </sc-cell>
-    </label> -->
+			</sc-cell>
+		</label>
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}} ">
 			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
 				<text >空气质量指数</text>

@@ -78,10 +78,11 @@ create(store, {
     log('[themeRadioChange]', e.detail.value)
     const t = this
     let themeValue = e.detail.value.toString(),
-      theme = {
-        themeChecked_light: false,
-        themeChecked_dark: false
-      }
+    theme =  {
+      themeChecked_auto: false,
+      themeChecked_light: false,
+      themeChecked_dark: false
+    }
     if(themeValue == '明亮'){
       theme['themeChecked_light'] = true
     }else{

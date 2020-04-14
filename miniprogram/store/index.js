@@ -1,7 +1,6 @@
 
 let $$ = {}
 let c = wx.getStorageSync('hasUserLocation') || false
-
 const setStoreage = () =>{
   $$ = {
     // id: '',
@@ -23,6 +22,7 @@ const setStoreage = () =>{
     },
     refreshfrequencyValue: '30分钟',
     theme: {
+      themeChecked_auto: false,
       themeChecked_light: true,
       themeChecked_dark: false
     },
@@ -40,6 +40,7 @@ const setStoreage = () =>{
       detailSwitchChange: true,
       dailyhourSwitchChange: true,
       dailySevenSwitchChange: true,
+      rainSwitchChange: true,
       aqiSwitchChange: true,
       sunlightSwitchChange: true,
       moonSwitchChange: true,
@@ -95,6 +96,6 @@ export default {
     unit:$$.unit,
     unitValue:$$.unitValue
   },
-  updateAll: false,
+  updateAll: true,
   debug: true
 }

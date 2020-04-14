@@ -11,15 +11,12 @@ const util = require('../../utils/util.js')
 const sunCalc = require('../../utils/sunCalc.js')
 const poetry = require('../../utils/poetry.js')
 
-
 // import base64src from '../../utils/base64src.js'
 // import vrequest from '../../utils/v-request.js'
 // import calcSunUtil from '../../utils/calcnew.js'
 import create from '../../utils/create'
 import store from '../../store/index'
-// import style from '../../store/style'
 import lazyFunction from "../../utils/lazyFunction"
-
 var a,
   t = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (a) {
     return typeof a;
@@ -86,7 +83,7 @@ var a,
   i = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
   }),
-  r = null;
+  r = null
 create(store, {
   data: {
     StatusBar: app.globalData.StatusBar,
@@ -95,6 +92,8 @@ create(store, {
     mobileWidth: wx.getSystemInfoSync().windowWidth,
     mobileHeight: wx.getSystemInfoSync().windowHeight,
     lastRefreshTime: '',
+    refreshChart:!1,
+    refreshLocation:!0,
     isGettingLocation: false,
     isChangeSetting: false,
     hasCusImage: false,
@@ -132,13 +131,14 @@ create(store, {
       hourlyKeypoint: "",
       minutelyKeypoint: "",
       // nowWeatherBackground: "",
-      hourlyWeather: [],
-      todayWeatherQuantity: [],
+      minutely:null,
+      hourly: null,
+      daily: null,
+      // todayWeatherQuantity: [],
       city: "",
       address: "",
       cur_latitude: "",
       cur_longitude: "",
-      dailyWeather: [],
       serviceData: [],
       bodyFeel: {},
       airQuality: {},
@@ -242,6 +242,7 @@ create(store, {
     }
     groupEnd('[onShow]')
   },
+
   onReady() {
     group('[onReady]')
     log('[onReady]')
@@ -318,12 +319,29 @@ create(store, {
     group('[loadDataFromNet]')
     log('[loadDataFromNet]')
     const t = this
+
+    // wx.openSetting({
+    //   success: res => {
+    //     log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
+    //     if (res.authSetting['scope.userLocation'] == true) {
+    //       log('[loadDataFromNet] => t.setLocationType()')
+    //       t.screenFadeIn()
+    //       t.setLocationType()
+    //       log('[scope.userLocation] success')
+    //     }else if(res.authSetting['scope.userLocation'] == false) {
+    //       t.store.data.startScreen = '授权'
+    //       t.screenFadeIn()
+    //       log('[loadDataFromNet] => authScreenFadeIn()')
+    //     }
+    //   }
+    // });
+
     let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
     if (hasUserLocation == true) {
       log('[loadDataFromNet] => t.setLocationType()')
       t.screenFadeIn()
       t.setLocationType()
-    } else if(hasUserLocation == false){
+    } else if (hasUserLocation == false) {
       t.store.data.startScreen = '授权'
       t.screenFadeIn()
       log('[loadDataFromNet] => authScreenFadeIn()')
@@ -334,7 +352,7 @@ create(store, {
     group('[setLocationType]')
     const t = this
     let locationSelect = wx.getStorageSync('manualSetLocation')
-    log('setLocationType',t.data.manualSetLocation,locationSelect)
+    log('setLocationType', t.data.manualSetLocation, locationSelect)
 
     const setLocationFromManual = () => {
       let cityData = wx.getStorageSync('chooseLocation')
@@ -463,30 +481,21 @@ create(store, {
     log('[getNowWeather]')
     const t = this
     let e = ''
-    if (isChoseLocation == true) {
-      e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + choseLocationData.longitude + "," + choseLocationData.latitude
-    }
     if (isChoseLocation == false) {
       e = "https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/" + t.data.forecastData.cur_longitude + "," + t.data.forecastData.cur_latitude
     }
-    const
-      o = e + "/realtime.json?lang=" + t.store.data.languageValue,
-      s = e + "/forecast.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
+    const s = e + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
     const requestWeatherData = () => {
-      wx.request({
-        url: o,
-        success: a => {
-          let e = a.data.result.realtime;
-          t.setNowWeather(e)
-          app.saveData("nowdata", e);
-        }
-      })
       wx.request({
         url: s,
         success: a => {
           let e = a.data.result;
+          t.setNowWeather(e.realtime)
           t.setTimelyWeather(e)
-          app.saveData("forecastData", e);
+          app.saveData("forecastData", e)
+          t.setData({
+            'refreshChart': !0
+          })
         },
         complete: () => {
           a && a();
@@ -558,19 +567,12 @@ create(store, {
       date = util.getDates(7, time),
       curDetailTime = date[0].time + " " + date[0].week,
       aqiColor = setAqiColor(t.aqi),
-      nowTemp = Math.round(s) + '°'
-    // if (o.store.data.temperatureUnit.temperatureUnitValueC == true) {
-    //   nowTemp = nowTemp + '°C'
-    // } else {
-    //   nowTemp = nowTemp * 1.8 + 32 + '°F'
-    // }
+      nowTemp = ~~(s) + '°'
     o.setData({
       'forecastData.nowTemp': nowTemp,
       'forecastData.nowWeather': e[i],
-      // 'forecastData.nowWeatherBackground': "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
       'forecastData.bodyFeel': r,
       'forecastData.airQuality': n,
-      'forecastData.skycon': t.skycon,
       'aqiColor': aqiColor,
       'curDetailTime': curDetailTime
     });
@@ -583,7 +585,6 @@ create(store, {
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon.svg",
         whitePath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon-white.svg",
         backgroundBg: "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
-        // backgroundBg: o.data.bingImagebingImage.img_url,
         nowTemp: nowTemp,
         skycon: t.skycon,
         nowWeather: e[i],
@@ -620,7 +621,6 @@ create(store, {
     });
     groupEnd('[setNowWeather]')
     app.saveData("lastRefreshTime", date[0].time)
-
   },
   refreshWeather() {
     const t = this
@@ -632,45 +632,36 @@ create(store, {
       t.getNowWeather(null, false, false)
     }, refreshTime);
   },
-  getTemperatureChartsData(a) {
-    let
-      e = 1
-    return a <= 5 ? (e = a * 23) : 5 < a && a <= 10 ? (
-      e = a * 14) : 10 < a && a <= 15 ? (e = a * 9) : 15 < a && a <= 20 ? (
-      e = a * 7) : 20 < a && a <= 30 ? (e = a * 5) : 20 < a && a <= 30 ? (
-      e = a * 3) : a > 30 && (
-      e = a * 1), {
-      chartsHeight: e
-    }
-  },
   setTimelyWeather(a) {
-    const that = this;
     group('[setTimelyWeather]')
-    log('[setTimelyWeather]')
-    log('[setTimelyWeather] => [hourlyWeather]', a.hourly)
-    for (var t = a.hourly, i = [], r = new Date().getHours(), n = 0; n < 48; n++) {
+    const that = this;
+
+    log('[setTimelyWeather] => [minutely]', a.minutely)
+    // that.setData({
+    //   'forecastData.minutely':{
+    //     precipitation:a.minutely.precipitation,
+    //     precipitation_2h:a.minutely.precipitation_2h,
+    //     probability:a.minutely.probability
+    //   }
+    // })
+    log('[setTimelyWeather] => [hourly]', a.hourly)
+    for (var t = a.hourly, hourlyData = [], r = new Date().getHours(), n = 0; n < 48; n++) {
       let c = n + r;
-      let hourlyTemp = t.temperature[n].value
-      // let hourlyTemp =  t.temperature[n].value
-      // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-      //   hourlyTemp = hourlyTemp
-      // } else {
-      //   hourlyTemp = (hourlyTemp * 1.8) + 32
-      // }
-      i.push({
+      hourlyData.push({
         time: c % 24 + ".00",
         weather: e[t.skycon[n].value],
         weatherEN: t.skycon[n].value.replace(/_/g, ' '),
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon-ani.svg",
-        temp: Math.round(hourlyTemp) + '°',
+        temp: ~~( t.temperature[n].value) + '°',
         wind: that.getWindDirect(t.wind[n].direction) + "·" + that.getWindLevel(t.wind[n].speed),
-        value: t.skycon[n].value
+        value: t.skycon[n].value,
+        precipitation:t.precipitation[n]
       });
     }
 
-    log('[setTimelyWeather] => [dailyWeather]', a.daily)
-    for (var d = a.daily, u = [], f = 0; f < 16; f++) {
+    log('[setTimelyWeather] => [daily]', a.daily)
+    for (var d = a.daily, dailyData = [], f = 0; f < 16; f++) {
       let l = new Date().getDay() + f;
       l %= 7;
       let D = new Date();
@@ -686,24 +677,12 @@ create(store, {
         p = g + "/" + h
       }
 
-      let chartsMargin = Math.round(d.temperature[f].min)
+      let chartsMargin = ~~(d.temperature[f].min)
       //Set a horizontal line
       if (chartsMargin < 0) {
-        chartsMargin = Math.round(d.temperature[f].min) + 20
+        chartsMargin = ~~(d.temperature[f].min) + 20
       }
-      let chartsHeight = Math.abs(Math.round(d.temperature[f].max) - Math.round(d.temperature[f].min))
-      let getTemperatureChartsData = that.getTemperatureChartsData(chartsHeight)
 
-      let dailyTempMin = Math.round(d.temperature[f].min) + '°'
-      let dailyTempMax = Math.round(d.temperature[f].max) + '°'
-
-      // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-      //   dailyTempMin = dailyTempMin + '°'
-      //   dailyTempMax = dailyTempMax + '°'
-      // } else {
-      //   dailyTempMin = dailyTempMin * 1.8 + 32 + '°'
-      //   dailyTempMax = dailyTempMax * 1.8 + 32 + '°'
-      // }
 
       const getWeek = (l) => {
         let tweek = ''
@@ -715,16 +694,14 @@ create(store, {
         // log('[tweek]',tweek)
         return tweek
       }
-      u.push({
+      dailyData.push({
         date: getWeek(l),
         weather: e[d.skycon[f].value],
         weatherEN: d.skycon[f].value.replace(/_/g, ' '),
         iconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon",
         aniIconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon-ani.svg",
-        tempMin: dailyTempMin,
-        tempMax: dailyTempMax,
-        temperatureChartsHeight: getTemperatureChartsData.chartsHeight,
-        temperatureChartsMargin: chartsMargin,
+        min: ~~(d.temperature[f].min),
+        max: ~~(d.temperature[f].max),
         monthday: p,
         id: d.skycon[f].value,
         aqi: d.air_quality.aqi[f].avg.chn,
@@ -737,15 +714,10 @@ create(store, {
         windDirect: that.getWindDirect(d.wind[f].avg.direction)
       });
     }
-    // let swtemperature = d.temperature[0].avg
-    // if (that.store.data.temperatureUnit.temperatureUnitValueC == true) {
-    //   swtemperature = swtemperature
-    // } else {
-    //   swtemperature = (swtemperature * 1.8) + 32
-    // }
+
     if (that.store.data.languageValue == 'zh_CN') {
-      var m = [{
-        desc: Math.round(d.temperature[0].avg) + '°',
+      var serviceData = [{
+        desc: ~~(d.temperature[0].avg) + '°',
         name: "体感温度",
         type: "sw-temperature"
       }, {
@@ -753,7 +725,7 @@ create(store, {
         name: "湿度",
         type: "sw-humidity"
       }, {
-        desc: Math.round(d.life_index.ultraviolet[0].index),
+        desc: ~~(d.life_index.ultraviolet[0].index),
         name: "紫外线指数",
         type: "sw-ultraviolet"
       }, {
@@ -765,13 +737,13 @@ create(store, {
         name: "云量",
         type: "sw-cloudrate"
       }, {
-        desc: Math.round(d.pressure[0].avg) + "mb",
+        desc: ~~(d.pressure[0].avg) + "mb",
         name: "气压",
         type: "sw-pressure"
       }]
     } else if (that.store.data.languageValue == 'zh_TW') {
-      var m = [{
-        desc: Math.round(d.temperature[0].avg) + '°',
+      var serviceDatam = [{
+        desc: ~~(d.temperature[0].avg) + '°',
         name: "體感溫度",
         type: "sw-temperature"
       }, {
@@ -779,7 +751,7 @@ create(store, {
         name: "濕度",
         type: "sw-humidity"
       }, {
-        desc: Math.round(d.life_index.ultraviolet[0].index),
+        desc: ~~(d.life_index.ultraviolet[0].index),
         name: "紫外線指數",
         type: "sw-ultraviolet"
       }, {
@@ -791,13 +763,13 @@ create(store, {
         name: "雲量",
         type: "sw-cloudrate"
       }, {
-        desc: Math.round(d.pressure[0].avg) + "mb",
+        desc: ~~(d.pressure[0].avg) + "mb",
         name: "氣壓",
         type: "sw-pressure"
       }]
     } else if (that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'en_US') {
-      var m = [{
-        desc: Math.round(d.temperature[0].avg) + '°',
+      var serviceData = [{
+        desc: ~~(d.temperature[0].avg) + '°',
         name: "Feels Like",
         type: "sw-temperature"
       }, {
@@ -805,7 +777,7 @@ create(store, {
         name: "Humidity",
         type: "sw-humidity"
       }, {
-        desc: Math.round(d.life_index.ultraviolet[0].index),
+        desc: ~~(d.life_index.ultraviolet[0].index),
         name: "UV index",
         type: "sw-ultraviolet"
       }, {
@@ -817,19 +789,27 @@ create(store, {
         name: "Cloudiness",
         type: "sw-cloudrate"
       }, {
-        desc: Math.round(d.pressure[0].avg) + "mb",
+        desc: ~~(d.pressure[0].avg) + "mb",
         name: "Pressure",
         type: "sw-pressure"
       }]
     }
+
     that.setData({
-      'forecastData.todayWeatherQuantity': JSON.parse(JSON.stringify(i)),
-      'forecastData.dailyWeather': u,
-      'forecastData.hourlyWeather': i,
+      'forecastData.daily': dailyData,
+      'forecastData.hourly': hourlyData,
       'forecastData.minutelyKeypoint': a.minutely.description,
       'forecastData.hourlyKeypoint': a.hourly.description,
-      'forecastData.serviceData': m,
+      'forecastData.serviceData': serviceData,
+      'forecastData.minutely':{
+        precipitation:a.minutely.precipitation,
+        precipitation_2h:a.minutely.precipitation_2h,
+        probability:a.minutely.probability
+      }
     });
+    // app.globalData.daily = u
+    // log('[globalData.daily]', dailyData)
+
     async function alertContent() {
       if (a.alert.content == []) {
         for (var y = a.alert.content, v = [], w = 0; w < y.length; w++) {
@@ -1860,10 +1840,9 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 500,
     });
-    // ani.opacity(1).step()
     wx.createIntersectionObserver().relativeToViewport().observe('#firstObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
-        // log('firstObserver start')
+        log('[firstObserver] => start')
         ani.opacity(1).step()
         t.setData({
           firstObserverAni: ani.export()
@@ -1875,7 +1854,7 @@ create(store, {
     })
     wx.createIntersectionObserver().relativeToViewport().observe('#secondObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
-        // log('secondObserver start')
+        log('[secondObserver] => start')
         ani.opacity(1).step()
         t.setData({
           secondObserverAni: ani.export()
@@ -1887,14 +1866,27 @@ create(store, {
     })
     wx.createIntersectionObserver().relativeToViewport().observe('#thirdObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
-        // log('thirdObserver start')
+        log('[thirdObserver] => start')
         ani.opacity(1).step()
         t.setData({
           thirdObserverAni: ani.export()
         })
+
       }
       if (res.boundingClientRect.top < 0) {
         log('[thirdObserver] => end')
+      }
+    })
+    wx.createIntersectionObserver().relativeToViewport().observe('#rainObserver', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        log('[rainObserver] => start')
+        ani.opacity(1).step()
+        t.setData({
+          rainObserverAni: ani.export()
+        })
+      }
+      if (res.boundingClientRect.top < 0) {
+        log('[rainObserver] => end')
       }
     })
     wx.createIntersectionObserver().relativeToViewport().observe('#fourthObserver', (res) => {
@@ -1998,6 +1990,7 @@ create(store, {
     const t = this
     let themeValue = e.detail.value.toString(),
       theme = {
+        themeChecked_auto: false,
         themeChecked_light: false,
         themeChecked_dark: false
       }
@@ -2176,12 +2169,13 @@ create(store, {
     const t = this
     t.setData({
       manualSetLocation: false,
-      refresh:true
+      refreshLocation: true
     })
     wx.setStorageSync('manualSetLocation', false)
     t.setLocationType()
   },
-    // async setBingImage() {
+
+  // async setBingImage() {
   //   log('[setBingImage]')
   //   let t = this,
   //     bingLists = wx.getStorageSync('bingLists') || [{datesign: '1998-03-13'}],

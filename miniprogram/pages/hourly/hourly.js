@@ -9,16 +9,16 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    hourlyWeather:[],
+    hourly:[],
     use: [
       'themeValue'
     ]
   },
   onLoad: function (options) {
-    const i = getCurrentPages()[0].data.forecastData.hourlyWeather
+    const i = getCurrentPages()[0].data.forecastData.hourly
     console.log('gethourlyWeather ready')
     this.setData({
-      hourlyWeather: i
+      hourly: i
     })
   },
   backPage: function () {

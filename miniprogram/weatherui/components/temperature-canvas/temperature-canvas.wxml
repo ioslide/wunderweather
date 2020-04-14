@@ -1,0 +1,3 @@
+<view class="-dailyChart">
+	<f2 canvas-id="dailyChart" class="dailyChart" id="dailyChart" opts="{{opts}}" onInit="{{onInitChart}}" config="{{config}}"/>
+</view>
