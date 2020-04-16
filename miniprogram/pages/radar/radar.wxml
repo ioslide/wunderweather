@@ -2,5 +2,5 @@
 		<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 	</page-meta>
 
-	<web-view style="max-height:300px!important;" src="https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=104.6796,31.46751,3000"></web-view>
+	<web-view style="max-height:300px!important;" src="{{radarSrc}}"></web-view>
 

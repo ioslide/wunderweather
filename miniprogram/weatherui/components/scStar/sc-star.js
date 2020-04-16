@@ -6,13 +6,22 @@ var t = function(t) {
 }(require("../../../utils/wxapi.js"))
 const n = getApp();
 
-Component({
-    props: {},
+import create from '../../../utils/create'
+import store from '../../../store/index'
+
+create.Component(store,{
+    props: {
+        
+    },
     data: {
         windowWidth: n.globalData.windowWidth,
         navigationHeight: n.globalData.navigationHeight,
         menuInfo: n.globalData.menuInfo,
-        display: !1
+        display: !1,
+        use:[
+            'themeValue',
+            'languageValue'
+        ]
     },
     attached: function() {
         this.calc(), 

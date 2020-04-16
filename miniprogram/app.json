@@ -36,7 +36,9 @@
     }
   },
   "navigateToMiniProgramAppIdList": [
-    "wx4ffcd811b31b23ac"
+    "wx4ffcd811b31b23ac",
+    "wx7b4bbc2d9c538e84",
+    "wx673e7d2fe4e6a413"
   ],
   "usingComponents": {
     "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule"

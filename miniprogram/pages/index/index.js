@@ -683,8 +683,8 @@ create(store, {
       let data = {
         address: o.data.forecastData.address,
         city: o.data.forecastData.city,
-        iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon.svg",
-        whitePath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon + "-icon-white.svg",
+        iconPath: config.default.cosApiHost + "/weather/icon/0/" + t.skycon + "-icon.svg",
+        whitePath: config.default.cosApiHost + "/weather/icon/0/" + t.skycon + "-icon-white.svg",
         backgroundBg: "https://source.unsplash.com/450x450/?" + e[i] + "," + "nature" + "," + o.data.forecastData.city,
         nowTemp: nowTemp,
         skycon: t.skycon,
@@ -751,7 +751,7 @@ create(store, {
         time: c % 24 + ".00",
         weather: e[t.skycon[n].value],
         weatherEN: t.skycon[n].value.replace(/_/g, ' '),
-        iconPath: "https://weather.ioslide.com/weather/icon/0/" + t.skycon[n].value + "-icon",
+        iconPath: config.default.cosApiHost + "/weather/icon/0/" + t.skycon[n].value + "-icon",
         temp: ~~( t.temperature[n].value) + '°',
         wind: that.getWindDirect(t.wind[n].direction) + "·" + that.getWindLevel(t.wind[n].speed),
         value: t.skycon[n].value,
@@ -797,7 +797,7 @@ create(store, {
         date: getWeek(l),
         weather: e[d.skycon[f].value],
         weatherEN: d.skycon[f].value.replace(/_/g, ' '),
-        iconPath: "https://weather.ioslide.com/weather/icon/0/" + d.skycon[f].value + "-icon",
+        iconPath: config.default.cosApiHost + "/weather/icon/0/" + d.skycon[f].value + "-icon",
         min: ~~(d.temperature[f].min),
         max: ~~(d.temperature[f].max),
         monthday: p,
@@ -1511,6 +1511,28 @@ create(store, {
       url: '../' + cur + '/' + cur
     });
   },
+  navRadar() {
+    // appid:'wx673e7d2fe4e6a413',  //订阅号
+    // appid:'wx7b4bbc2d9c538e84', //服务号
+    log('[navRadar]',app.globalData.appid)
+    const t = this
+    if(app.globalData.appid == 'wx7b4bbc2d9c538e84'){
+        log('[navigateTo]')
+      wx.navigateTo({
+        url: '../radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
+      })
+    }else if(app.globalData.appid == 'wx673e7d2fe4e6a413'){
+        log('[navigateToMiniProgram]')
+      wx.navigateToMiniProgram({
+        appId: 'wx7b4bbc2d9c538e84',
+        path: 'pages/radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude,
+        success(res) {
+          log('[navigateToMiniProgram]',res)
+        }
+      })
+    }
+
+  },
   navSetting() {
     wx.navigateTo({
       url: '../setting/setting'
@@ -2093,9 +2115,21 @@ create(store, {
     });
   },
   onDev() {
+    const t = this
+    let title = '',content = ''
+    if(t.store.data.languageValue == 'zh_TW'){
+      title = '沒錢開發中'
+      content = '不要期待'
+    }else if(t.store.data.languageValue == 'zh_CN'){
+      title = '没钱开发中'
+      content = '不要期待'
+    }else{
+      title = "No money"
+      content = 'Do not expect'
+    }
     wx.showModal({
-      title: '没钱开发中',
-      content: '不要期待',
+      title: title,
+      content: content,
       success(res) {}
     })
   },

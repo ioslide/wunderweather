@@ -25,7 +25,7 @@ create(store, {
       'languageValue'
     ]
   },
-  onLoad: function (e) {
+  onLoad(e) {
     // wx.hideLoading()
   },
   // onShow: function (e) {
@@ -74,7 +74,7 @@ create(store, {
     app.changeStorage('indexHeadImageValue', indexHeadImageValue)
     app.changeStorage('indexHeadImage', indexHeadImage)
   },
-  themeRadioChange: function (e) {
+  themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this
     const modalName = () =>{
@@ -187,7 +187,7 @@ create(store, {
     }
     change()
   },
-  languageRadioChange: function (e) {
+  languageRadioChange(e) {
     const t = this
     const modalName = () =>{
       t.setData({
@@ -313,7 +313,7 @@ create(store, {
       modalName: null
     })
   },
-  backPage: function () {
+  backPage() {
     wx.navigateBack({
       delta: 1
     });
@@ -323,23 +323,35 @@ create(store, {
       url: e.currentTarget.dataset.cur + '/' + e.currentTarget.dataset.cur
     });
   },
-  onShareAppMessage: function (a) {
+  onShareAppMessage(a) {
     return {
       title: '奇妙天气',
       imageUrl: 'https://weather.ioslide.com/shareimg.png',
       path: "/pages/index/index"
     };
   },
-  saveData: function (a, t) {
+  saveData(a, t) {
     a && t && wx.setStorage({
       key: a,
       data: t
     });
   },
-  onDev: function () {
+  onDev() {
+    const t = this
+    let title = '',content = ''
+    if(t.store.data.languageValue == 'zh_TW'){
+      title = '沒錢開發中'
+      content = '不要期待'
+    }else if(t.store.data.languageValue == 'zh_CN'){
+      title = '没钱开发中'
+      content = '不要期待'
+    }else{
+      title = "No money"
+      content = 'Do not expect'
+    }
     wx.showModal({
-      title: '没钱开发中',
-      content: '不要期待',
+      title: title,
+      content: content,
       success(res) {}
     })
   },

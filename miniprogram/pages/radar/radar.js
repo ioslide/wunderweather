@@ -10,7 +10,13 @@ create(store, {
     ]
   },
   onLoad: function (options) {
-
+    log(options)
+    const t = this
+    let radarSrc = 'https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=' + options.longitude + ',' + options.latitude + ',3000'
+    log('[radarSrc]',radarSrc)
+    t.setData({
+      radarSrc : radarSrc
+    })
   },
   onReady: function () {
 
