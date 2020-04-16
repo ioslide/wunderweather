@@ -4,7 +4,6 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "@antv/f2-canvas": "^1.0.5",
     "@antv/wx-f2": "^2.1.0",
     "miniprogram-api-promise": "^1.0.4",
     "miniprogram-computed": "^2.1.1"

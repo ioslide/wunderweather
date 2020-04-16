@@ -1,4 +1,4 @@
-<page-meta background-color="{{$.themeValue == '明亮'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == '明亮'?'background:#F5F6F7':'background:#010101'}}">
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
@@ -6,81 +6,142 @@
 
 
 <view style="padding-top: {{CustomBar}}px;">
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">主题</text>
-			<text slot="subbottom">{{$.themeValue}}</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+			</text>
+			<text class="text-Abc" slot="subbottom">{{$.themeValue}}</text>
 		</sc-cell>
 	</view>
 
-	<!-- <view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}"  bindtap="showProModeModal" data-target="proModeModal" data-cur="pro">
+	<!-- <view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}"  bindtap="showProModeModal" data-target="proModeModal" data-cur="pro">
     <sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;">
       <text class= text-white">专业模式</text>
       <text class= text-default" slot="subbottom">开启</text>
     </sc-cell>
   </view> -->
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="customstyle">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="customstyle">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">样式</text>
-			<text slot="subbottom">自定义</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">样式</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">樣式</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Features</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页样式</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁樣式</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Style set</block>
+			</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customicon">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="customicon">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">图标</text>
-			<text slot="subbottom">默认</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">图标</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">圖標</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Icon Set</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">默认</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">默認</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Default</block>
+			</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="unit">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="unit">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">单位制</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+			</text>
 			<text class="text-Abc" slot="subbottom">{{$.unitValue}}</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">数据源</text>
-			<text slot="subbottom">彩云天气/中国气象局</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Data source</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">彩云天气/中国气象局</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">彩雲天氣/中國氣象局</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Caiyun Weather / WeatherBit</block>
+			</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="warning">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="warning">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">预警</text>
-			<text slot="subbottom">天气预警，降雨预警</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">预警</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">預警</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Notification</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气预警，出行预警</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">天氣預警，出行預警</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Daily notification,on-going notification</block>
+			</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="refreshfrequencyRadio">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="refreshfrequencyRadio">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">刷新频率</text>
-			<text slot="subbottom">{{$.refreshfrequencyValue}}</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">刷新频率</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">刷新頻率</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Update Frequency</block>
+			</text>
+			<text slot="subbottom">{{$.refreshfrequencyValue}} <block wx:if="{{$.languageValue == 'zh_CN'}}">分钟</block><block wx:if="{{$.languageValue == 'zh_TW'}}">分鐘</block><block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">minutes</block>
+			</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="language">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="language">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">语言设置</text>
-			<text slot="subbottom">中文/英文</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+			</text>
+			<text slot="subbottom">{{$.languageValue}}</text>
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="indexHeadImage">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="indexHeadImage">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">封面图</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页封面</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁封面</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Index Image</block>
+			</text>
 			<text slot="subbottom">{{$.indexHeadImageValue}}</text>
 		</sc-cell>
 	</view>
 
 
-	<view class="flex {{$.themeValue == '明亮'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="about">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="about">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
-			<text slot="subheader1">关于</text>
-			<text slot="subbottom">版本1.4.10</text>
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">关于</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">關於</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">About</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">版本</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">版本</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Version </block>1.4.10
+			</text>
 		</sc-cell>
 	</view>
 </view>
@@ -95,19 +156,19 @@
 		</view>
 		<sc-radio-group class="block" bindchange="themeRadioChange">
 			<view class="cu-list menu text-left" style="width: 100%;">
-				<view class="cu-item">
+				<!-- <view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="自动" value="自动" checked="{{$.theme.themeChecked_auto}}" style="width:100%;"></sc-radio>
 					</label>
-				</view>
+				</view> -->
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="明亮" value="明亮" checked="{{$.theme.themeChecked_light}}" style="width:100%;"></sc-radio>
+						<sc-radio label="light" value="light" checked="{{$.theme.themeChecked_light}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="黑夜" value="黑夜" checked="{{$.theme.themeChecked_dark}}" style="width:100%;"></sc-radio>
+						<sc-radio label="dark" value="dark" checked="{{$.theme.themeChecked_dark}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -132,27 +193,27 @@
 			<view class="cu-list menu text-left" style="width: 100%;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="1分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_1}}" value="1分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="1分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_1}}" value="1" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="5分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_5}}" value="5分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="5分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_5}}" value="5" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="10分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_10}}" value="10分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="10分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_10}}" value="10" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="30分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_30}}" value="30分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="30分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_30}}" value="30" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="60分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_60}}" value="60分钟" style="width:100%;"></sc-radio>
+						<sc-radio label="60分钟" checked="{{$.refreshfrequency.refreshfrequencyChecked_60}}" value="60" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -176,12 +237,12 @@
 			<view class="cu-list menu text-left" style="width: 100%;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="美式英语" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
+						<sc-radio label="American English" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="英式英语" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+						<sc-radio label="British English" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
@@ -191,7 +252,7 @@
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="繁体中文" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
+						<sc-radio label="繁體中文" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -223,11 +284,11 @@
 						<sc-radio label="自定义" value="自定义" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageCus}}"></sc-radio>
 					</label>
 				</view>
-				<view class="cu-item">
+				<!-- <view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="NASA" value="NASA" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageNASA}}"></sc-radio>
 					</label>
-				</view>
+				</view> -->
 			</view>
 		</sc-radio-group>
 		<view class="cu-bar justify-end" style="background: #2D2D2D;">

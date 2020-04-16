@@ -28,7 +28,7 @@ create(store, {
   },
   onShow:function(){
     const t = this
-    if (t.store.data.themeValue == '明亮') {
+    if (t.store.data.themeValue == 'light') {
       log('[setBackgroundColor] => light')
       // t.setData({
       //   pageBg: 'background:#F5F6F7'

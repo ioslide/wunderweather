@@ -77,32 +77,43 @@ create(store, {
   themeRadioChange: function (e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this
-    let themeValue = e.detail.value.toString(),
-    theme =  {
-      themeChecked_auto: false,
-      themeChecked_light: false,
-      themeChecked_dark: false
+    const modalName = () =>{
+      t.setData({
+        modalName: null
+      })
     }
-    if(themeValue == '明亮'){
-      theme['themeChecked_light'] = true
-    }else{
-      theme['themeChecked_dark'] = true
+    const storeChange = () =>{
+      let themeValue = e.detail.value.toString(),
+      theme =  {
+        themeChecked_auto: false,
+        themeChecked_light: false,
+        themeChecked_dark: false
+      }
+      if(themeValue == 'light'){
+        theme['themeChecked_light'] = true
+      }else{
+        theme['themeChecked_dark'] = true
+      }
+      t.store.data.theme = theme
+      t.store.data.themeValue = themeValue
+      app.changeStorage('themeValue', themeValue)
+      app.changeStorage('theme', theme)
     }
-    t.setData({
-      // themeValue: themeValue,
-      // theme: theme,
-      modalName: null
-    })
-    let
+    const drawSunCalc = () =>{
+      let
       pages = getCurrentPages(),
       prevPage = pages[pages.length - 2];
-    prevPage.setData({
-      canDrawSunCalcAgain: true
-    })
-    t.store.data.theme = theme
-    t.store.data.themeValue = themeValue
-    app.changeStorage('themeValue', themeValue)
-    app.changeStorage('theme', theme)
+      prevPage.drawSunCalc()
+    // prevPage.setData({
+    //   canDrawSunCalcAgain: true
+    // })
+    }
+    async function change(){
+      await modalName()
+      await storeChange()
+      await drawSunCalc()
+    }
+    change()
   },
   refreshfrequencyRadioChange:function(e){
     log('[refreshfrequencyRadioChange]', e.detail.value )
@@ -115,24 +126,22 @@ create(store, {
         refreshfrequencyChecked_30: false,
         refreshfrequencyChecked_60: false
       }
-    if(refreshfrequencyValue == '1分钟'){
+    if(refreshfrequencyValue == '1'){
         refreshfrequency['refreshfrequencyChecked_1'] = true
     }
-    else if(refreshfrequencyValue == '5分钟'){
+    else if(refreshfrequencyValue == '5'){
       refreshfrequency['refreshfrequencyChecked_5'] = true
     }
-    else if(refreshfrequencyValue == '10分钟'){
+    else if(refreshfrequencyValue == '10'){
       refreshfrequency['refreshfrequencyChecked_10'] = true
     }
-    else if(refreshfrequencyValue == '30分钟'){
+    else if(refreshfrequencyValue == '30'){
       refreshfrequency['refreshfrequencyChecked_30'] = true
     }
     else{
       refreshfrequency['refreshfrequencyChecked_60'] = true
     }
     t.setData({
-      // refreshfrequencyValue: refreshfrequencyValue,
-      // refreshfrequency: refreshfrequency,
       modalName: null
     })
     t.store.data.refreshfrequencyValue = refreshfrequencyValue
@@ -142,35 +151,51 @@ create(store, {
   },
   unitValueRadioChange(e) {
     const t = this
-    let unit = {
-      metric:false,
-      SI:false,
-      imperial:false
+    const modalName = () =>{
+      t.setData({
+        modalName: null
+      })
     }
-    if (e.detail.value == 'metric') {
-      unit['metric'] = true
-    } else if (e.detail.value == 'imperial') {
-      unit['imperial'] = true
-    } else if (e.detail.value == 'SI') {
-      unit['SI'] = true
+    const storeChange = () =>{
+      let unit = {
+        metric:false,
+        SI:false,
+        imperial:false
+      }
+      if (e.detail.value == 'metric') {
+        unit['metric'] = true
+      } else if (e.detail.value == 'imperial') {
+        unit['imperial'] = true
+      } else if (e.detail.value == 'SI') {
+        unit['SI'] = true
+      }
+      t.store.data.unitValue = e.detail.value.toString()
+      t.store.data.unit = unit
+      app.changeStorage('unitValue', e.detail.value.toString())
+      app.changeStorage('unit', unit)
     }
-    t.store.data.unitValue = e.detail.value.toString()
-    t.store.data.unit = unit
-    t.setData({
-      modalName: null
-    })
-    let
-    pages = getCurrentPages(),
-    prevPage = pages[pages.length - 2];
-    prevPage.setData({
-      isChangeSetting: true
-    })
-    app.changeStorage('unitValue', e.detail.value.toString())
-    app.changeStorage('unit', unit)
+    const getNowWeather = () =>{
+      let
+      pages = getCurrentPages(),
+      prevPage = pages[pages.length - 2];
+      prevPage.getNowWeather(null, false)
+    }
+    async function change(){
+      await modalName()
+      await getNowWeather()
+      await storeChange()
+    }
+    change()
   },
   languageRadioChange: function (e) {
     const t = this
-    let language = {
+    const modalName = () =>{
+      t.setData({
+        modalName: null
+      })
+    }
+    const storeChange = () =>{
+      let language = {
         languageChecked_zh_TW: false,
         languageChecked_zh_CN: false,
         languageChecked_en_US: false,
@@ -194,21 +219,23 @@ create(store, {
       language['languageChecked_en_GB'] = true
       log('[language] =>', 'languageChecked_en_GB = true')
     }
-    this.setData({
-      // language: language,
-      // languageValue: languageValue,
-      modalName: null
-    })
-    let
-    pages = getCurrentPages(),
-    prevPage = pages[pages.length - 2];
-    prevPage.setData({
-      isChangeSetting: true
-    })
     t.store.data.language = language
     t.store.data.languageValue = languageValue
     app.changeStorage('language', language)
     app.changeStorage('languageValue', languageValue)
+    }
+    const getNowWeather = () =>{
+      let
+      pages = getCurrentPages(),
+      prevPage = pages[pages.length - 2];
+      prevPage.getNowWeather(null, false)
+    }
+    async function change (){
+      await modalName()
+      await storeChange()
+      await getNowWeather()
+    }
+    change()
   },
   showProModeModal(e) {
     const t = this

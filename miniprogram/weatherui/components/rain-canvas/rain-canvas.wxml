@@ -1,3 +1,3 @@
 <view class="-rainChart">
-	<f2 canvas-id="rainChart" class="rainChart" id="rainChart" opts="{{opts}}" config="{{config}}" />
+	<f2 canvas-id="rainChart" id="rainChart" opts="{{opts}}" config="{{config}}" class="rainChart"/>
 </view>

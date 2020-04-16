@@ -18301,9 +18301,6 @@
 	}
 
 	Component({
-	  /**
-	   * 组件的属性列表
-	   */
 	  properties: {
 	    // onInit: {
 	    //   type: 'Function',
@@ -18316,12 +18313,8 @@
 				type: Object
 			}
 	  },
-
-	  /**
-	   * 组件的初始数据
-	   */
 	  data: {
-
+			
 	  },
 
 	  ready() {
@@ -18329,17 +18322,14 @@
 				console.warn('组件需绑定 opts 变量，例：<ff-canvas id="mychart-dom-bar" canvas-id="mychart-bar" opts="{{ opts }}"></ff-canvas>');
 				return;
 			}
-			console.log('[canvas lazyLoad]',this.data.opts.lazyLoad)
+			console.log('[canvas lazyLoad]',this.data.opts)
 			if (!this.data.opts.lazyLoad) {
 				this.init();
 			}
 	  },
-
-	  /**
-	   * 组件的方法列表
-	   */
 	  methods: {
-			init(){
+			init(onInitChart){
+				console.log('[onInitChart]',onInitChart)
 				const query = wx.createSelectorQuery().in(this);
 				query.select('.f2-canvas')
 					.fields({
@@ -18349,16 +18339,13 @@
 					.exec(res => {
 						const { node, width, height } = res[0];
 						const context = node.getContext('2d');
+						let config = this.data.config
+						config['context'] = context
+						console.log('[wx-f2 config]',this.data.config)
 						const pixelRatio = wx.getSystemInfoSync().pixelRatio;
-						// 高清设置
-						node.width = this.data.config.width * pixelRatio;
-						node.height = this.data.config.height * pixelRatio;
-						console.log('[canvas init]',res[0],pixelRatio)
-						const padding = this.data.config.padding
-						const appendPadding = this.data.config.appendPadding
-						const config = {canvas, context, width, height, pixelRatio ,padding, appendPadding};
-						console.log('[canvas config]',config)
-						const chart = this.data.opts.onInit(lib, config);
+						node.width = res[0].width * pixelRatio;
+						node.height = res[0].height * pixelRatio;
+						const chart = onInitChart(lib,config);
 						if (chart) {
 							this.chart = chart;
 							this.canvasEl = chart.get('el');

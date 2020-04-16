@@ -4,13 +4,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = {
-  caiyunApiHost: "https://api.caiyunapp.com/",
-  caiyunApiVersion: "v2.5/",
-  caiyunApiToken: "yJgJQ31wdVX4RDrE/",
-  // F4i9DpgD0R1DIcPP
-  qqMapToken: "AVPBZ-T2ERX-CAK4M-77647-JJQHQ-VKFD4",
-  // 47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP
-  storageVersion: "trial1",
+  weatherApiHost: "https://api.caiyunapp.com",
+  weatherApiVersion: "v2.5",
+  weatherApiToken: "F4i9DpgD0R1DIcPP",
+  bingApiHost:"https://www.benweng.com",
+  // yJgJQ31wdVX4RDrE
+  // cloudEnv:"subweather-5hkjz" //订阅号
+  //appid:wx673e7d2fe4e6a413,  //订阅号
+  // let locationKey = 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO' //订阅号
+  cloudEnv:"wunderweather-nwepb", //服务号
+  appid:'wx7b4bbc2d9c538e84', //服务号
+  locationKey : 'BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D', //服务号
   name: "XHY",
   description: "",
   date: "",

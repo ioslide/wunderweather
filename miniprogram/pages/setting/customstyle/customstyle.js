@@ -11,7 +11,8 @@ create(store, {
     Custom: app.globalData.Custom,
     use: [
       'style',
-      'themeValue'
+      'themeValue',
+      'languageValue'
     ]
   },
   backPage: function () {

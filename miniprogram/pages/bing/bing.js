@@ -3,6 +3,7 @@ const log = console.log.bind(console)
 const error = console.error.bind(console)
 import create from '../../utils/create'
 import store from '../../store/index'
+const config = require('../../weatherui/config/config.js')
 
 var t = void 0,
   i = (getApp(), void 0),
@@ -39,7 +40,7 @@ create(store, {
     const loadBingListFromeNet = () => {
         log('[loadBingListFromeNet')
       wx.request({
-        url: 'https://www.benweng.com/api/bing/lists',
+        url: config.default.bingApiHost + '/api/bing/lists',
         header: {
           "content-type": "application/json"
         },
@@ -74,33 +75,6 @@ create(store, {
   },
   onShow() {
     const t = this
-    if (t.store.data.themeValue == '明亮') {
-      log('[setBackgroundColor] => light')
-      t.setData({
-        pageBg: 'background:#F5F6F7'
-      })
-      wx.setBackgroundColor({
-        backgroundColor: '#F5F6F7',
-        backgroundColorTop: '#F5F6F7',
-        backgroundColorBottom: '#F5F6F7'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'dark'
-      })
-    } else {
-      log('[setBackgroundColor] => dark')
-      t.setData({
-        pageBg: 'background:#010101'
-      })
-      wx.setBackgroundColor({
-        backgroundColor: '#010101',
-        backgroundColorTop: '#010101',
-        backgroundColorBottom: '#010101'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'light'
-      })
-    }
   },
   BackPage: function () {
     // let

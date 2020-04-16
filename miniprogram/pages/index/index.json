@@ -11,7 +11,8 @@
     "sc-switch":"/weatherui/components/scSwitch/sc-switch",
     "sc-star":"/weatherui/components/scStar/sc-star",
     "temperature-canvas":"/weatherui/components/temperature-canvas/temperature-canvas",
-    "rain-canvas":"/weatherui/components/rain-canvas/rain-canvas"
+    "rain-canvas":"/weatherui/components/rain-canvas/rain-canvas",
+    "radar":"/weatherui/components/radar/radar"
   },
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true

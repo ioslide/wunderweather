@@ -23,33 +23,6 @@ create(store, {
   },
   onShow: function () {
     const t = this
-    if (t.store.data.themeValue == '明亮') {
-      log('[setBackgroundColor] => light')
-      // t.setData({
-      //   pageBg: 'background:#F5F6F7'
-      // })
-      wx.setBackgroundColor({
-        backgroundColor: '#F5F6F7',
-        backgroundColorTop: '#F5F6F7',
-        backgroundColorBottom: '#F5F6F7'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'dark'
-      })
-    } else {
-      log('[setBackgroundColor] => dark')
-      // t.setData({
-      //   pageBg: 'background:#010101'
-      // })
-      wx.setBackgroundColor({
-        backgroundColor: '#010101',
-        backgroundColorTop: '#010101',
-        backgroundColorBottom: '#010101'
-      })
-      wx.setBackgroundTextStyle({
-        textStyle: 'light'
-      })
-    }
   },
   BackPage: function () {
     wx.navigateBack({

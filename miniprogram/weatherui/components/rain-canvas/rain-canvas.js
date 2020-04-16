@@ -1,27 +1,25 @@
 const log = console.log.bind(console)
 const app = getApp()
-// const F2 = require('@antv/wx-f2');
 const computedBehavior = require('miniprogram-computed')
 import lazyFunction from "../../../utils/lazyFunction"
 // import _ from "../../../utils/lodash"
 
 let chart = null
-
+var chartData = []
 function onInitChart(F2, config) {
   chart = new F2.Chart(config);
   var pages = getCurrentPages();
   var currPage = pages[pages.length - 1]
   var hourly = currPage.data.forecastData.hourly
-  for (var newData = [], s = hourly, d = 0; d < 48; d++) {
+  for (var s = hourly, d = 0; d < 48; d++) {
     var u = {
       time: s[d].precipitation.datetime,
       value: s[d].precipitation.value,
     };
-    newData.push(u);
+    chartData.push(u);
   }
-  log('[onInitChart hourly]', newData)
-  let data = newData
-  chart.source(data, {
+  log('[onInitChart hourly]', chartData)
+  chart.source(chartData, {
     time: {
       type: 'timeCat',
       tickCount: 5
@@ -33,20 +31,6 @@ function onInitChart(F2, config) {
     }
   });
   chart.axis('time', false)
-  // chart.axis('time', {
-  //   label: function label(text, index, total) {
-  //     const textCfg = {};
-  //     if (index === 0) {
-  //       textCfg.textAlign = 'left';
-  //     } else if (index === total - 1) {
-  //       textCfg.textAlign = 'right';
-  //     }
-  //     return textCfg;
-  //   }
-  // });
-  // chart.tooltip({
-  //   showCrosshairs: true
-  // });
   chart.tooltip({
     showCrosshairs: true,
     showItemMarker: false,
@@ -70,8 +54,8 @@ function onInitChart(F2, config) {
     onShow: function onShow(ev) {
       const items = ev.items;
       items[0].name = null;
-      // log(items[0].origin)
-      items[0].value = '降水强度' + items[0].origin.value
+      log(items[0].origin)
+      items[0].value = items[0].origin.time +'/ 降水强度:'
     }
   });
   chart.area()
@@ -80,7 +64,7 @@ function onInitChart(F2, config) {
     .shape('smooth');
   chart.line()
     .position('time*value')
-    .color('l(90) 0:#1890FF 1:#f7f7f7')
+    .color('l(90) 0:#1890FF 1:#8dd9f7')
     .shape('smooth');
   chart.render();
   return chart;
@@ -88,23 +72,29 @@ function onInitChart(F2, config) {
 Component({
   behaviors: [computedBehavior],
   properties: {
+    initChart: {
+      type: Boolean,
+      value: !1
+    },
     refreshChart: {
       type: Boolean,
       value: !1
+    },
+    themeValue: {
+      type: String
     }
   },
   data: {
     opts: {
       lazyLoad: true
     },
-    onInit: null,
     config: {
       appendPadding: [15, 15, 15, 15],
       padding: [30, 'auto', 20, 'auto'],
+      pixelRatio : app.globalData.pixelRatio,
       width: app.globalData.windowWidth,
       height: 200
-    },
-    themeValue: app.globalData.themeValue
+    }
   },
   lifetimes: {
     attached: function () {},
@@ -115,20 +105,22 @@ Component({
     hide: function () {}
   },
   watch: {
-    refreshChart: lazyFunction.throttle(function (e) {
+    initChart: lazyFunction.throttle(function (e) {
       const t = this
-      t.data.refreshChart && t.setData({
-        opts: {
-          onInit: onInitChart
-        },
-        refreshChart: !1
+      t.data.initChart && t.setData({
+        initChart: !1
       });
-      log('[rain refreshChart]', t.data.refreshChart)
+      log('[rain initChart]', t.data.initChart)
       t.rainChartComponent = t.selectComponent('#rainChart');
       t.rainChartComponent.init(onInitChart);
-    })
+    }),
+    refreshChart() {
+      log('[rain refreshChart]',chartData)
+      chart.changeData(chartData)
+    }
   },
   methods: {
-
+    // https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=101.34,36.56,2042
+    // https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=104.6796,31.46751,3000
   }
 })

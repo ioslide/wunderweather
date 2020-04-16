@@ -6,6 +6,7 @@ const setStoreage = () =>{
     // id: '',
     // data: {},
     // page: 'pages/index/index',
+    getLocationMethod:'auto',
     language: {
       languageChecked_zh_TW: false,
       languageChecked_zh_CN: true,
@@ -20,13 +21,13 @@ const setStoreage = () =>{
       refreshfrequencyChecked_30: true,
       refreshfrequencyChecked_60: false
     },
-    refreshfrequencyValue: '30分钟',
+    refreshfrequencyValue: '30',
     theme: {
       themeChecked_auto: false,
       themeChecked_light: true,
       themeChecked_dark: false
     },
-    themeValue: '明亮',
+    themeValue: 'light',
     unit:{
       metric:true,
       SI:false,
@@ -38,14 +39,14 @@ const setStoreage = () =>{
       imageSwitchChange: true,
       weatherAniSwitchChange: true,
       detailSwitchChange: true,
-      dailyhourSwitchChange: true,
+      dailyHourSwitchChange: true,
       dailySevenSwitchChange: true,
       rainSwitchChange: true,
       aqiSwitchChange: true,
       sunlightSwitchChange: true,
       moonSwitchChange: true,
       windSwitchChange: true,
-      radarSwitchChange: true,
+      radarrSwitchChange: true,
       KeepScreenOnSwitchChange: true
     },
     proMode: false,
@@ -80,6 +81,7 @@ event(c)
 
 export default {
   data: {
+    getLocationMethod:$$.getLocationMethod,
     startScreen: $$.startScreen,
     style: $$.style,
     proMode:$$.proMode,

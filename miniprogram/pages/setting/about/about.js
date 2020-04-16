@@ -7,7 +7,8 @@ create(store, {
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
     use:[
-      'themeValue'
+      'themeValue',
+      'languageValue'
     ]
   },
   handleContact(e) {

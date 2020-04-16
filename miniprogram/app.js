@@ -4,7 +4,8 @@ const warn = console.warn.bind(console)
 // const groupEnd = console.groupEnd.bind(console)
 
 // const computedBehavior = require('miniprogram-computed')
-const xhy = require('weatherui/sc-ui')
+// const xhy = require('weatherui/sc-ui')
+const config = require('weatherui/config/config.js')
 
 App({
   isReady: !1,
@@ -50,7 +51,7 @@ App({
       warn('[onMemoryWarningReceive]')
     })
     log('[onLaunch]')
-    log(xhy)
+    // log(xhy)
     t.checkVersion()
     t.updateManager()
     //t.wxLogin()
@@ -101,21 +102,21 @@ App({
       }
     })
   },
-  wxLogin() {
-    wx.BaaS = requirePlugin('sdkPlugin')
-    wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    let zxClientID = 'c3d88ee29b2337915fd0'
-    wx.BaaS.init(zxClientID)
-    wx.BaaS.auth.loginWithWechat(null, {
-      createUser: true
-      // withUnionID:true
-    }).then(user => {
-      log('[wxLogin]', user)
-      this.globalData.openid = user.openid
-    }, err => {
-      log(err)
-    })
-  },
+  // wxLogin() {
+  //   wx.BaaS = requirePlugin('sdkPlugin')
+  //   wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
+  //   let zxClientID = 'c3d88ee29b2337915fd0'
+  //   wx.BaaS.init(zxClientID)
+  //   wx.BaaS.auth.loginWithWechat(null, {
+  //     createUser: true
+  //     // withUnionID:true
+  //   }).then(user => {
+  //     log('[wxLogin]', user)
+  //     this.globalData.openid = user.openid
+  //   }, err => {
+  //     log(err)
+  //   })
+  // },
   getSystemInfo() {
     const t = this
     wx.getSystemInfo({
@@ -158,7 +159,7 @@ App({
   },
   initCloud() {
     wx.cloud.init({
-      env: "subweather-5hkjz"
+      env: config.default.cloudEnv
     }), wx.cloud ? wx.cloud.init({
       traceUser: !0
     }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");

@@ -612,7 +612,7 @@ button::after {
   left: 0;
   z-index: 9999;
   outline: 0;
-  background: rgb(43, 43, 43);
+  background-color: #2b2b2b;
 }
 
 .authScreen-light {
@@ -623,7 +623,7 @@ button::after {
   left: 0;
   z-index: 9999;
   outline: 0;
-  background: #F5F6F7;
+  background-color: #F5F6F7;
 }
 
 .authFirstStepButton {
@@ -642,7 +642,7 @@ button::after {
   height: 100%;
   position: absolute;
   top: 0;
-  background: #f5f6f7
+  /* background: #f5f6f7 */
 }
 
 .authScreenNextCell {
@@ -3035,7 +3035,7 @@ button::after {
   }
 }
 
-@keyframes opacityFade {
+@keyframes refreshLocationAni {
   0% {
     opacity: 0.3
   }
@@ -3052,11 +3052,30 @@ button::after {
     opacity: 1
   }
 }
-
-.opacityFade {
-  animation: opacityFade 2.4s ease-in-out;
+@keyframes refreshLocationAni-0 {
+  0% {
+    opacity: 0.3
+  }
+  25% {
+    opacity: 1
+  }
+  50% {
+    opacity: 0.3
+  }
+  75% {
+    opacity: 0.9
+  }
+  100% {
+    opacity: 0
+  }
 }
-
+.refreshLocationAni {
+  animation: refreshLocationAni 2.4s ease-in-out;
+}
+.refreshLocationAni-0{
+  opacity: 0;
+  animation: refreshLocationAni-0 2s ease-in-out;
+}
 .navSlide {
   height: 100%;
   width: 6% !important;
@@ -3084,7 +3103,7 @@ button::after {
   z-index: 98;
 }
 
-.refreshLocation {
+.refreshLocationIcon {
   width:35px;
   height: 35px;
   margin:15px;
@@ -3136,7 +3155,7 @@ button::after {
   color: #8799a3
 }
 
-.soft-button {
+.soft-button-light {
   border-radius: 20px;
   border: none;
   background: #f5f5f5;
@@ -3151,14 +3170,23 @@ button::after {
   -ms-border-radius: 20px;
   -o-border-radius: 20px;
 }
-
+.soft-button-dark {
+  border-radius: 20px;
+  border: none;
+  background: #4B4B4B;
+  padding: 12px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
 .soft-button-pushed-only {
   animation: fadeIn 0.3s linear;
   box-shadow: inset 9px 9px 9px 0 rgba(206, 206, 206, 0.3),
     inset -9px -9px 9px 0 rgba(255, 255, 255, 0.6);
 }
 
-.soft-button-pushed {
+.soft-button-pushed,soft-button-light:active,soft-button-light:hover {
   /* animation: fade-in 0.1s linear; */
   box-shadow: inset 9px 9px 9px 0 rgba(206, 206, 206, 0.3),
     inset -9px -9px 9px 0 rgba(255, 255, 255, 0.6),

@@ -1,8 +1,8 @@
 <view class="sc-class sc-switch {{checked ? 'sc-switch-checked': ''}} {{disabled ? 'sc-switch-disabled': ''}}" capture-bind:tap="{{!disabled ? '_changeSwitch': ''}}">
 	<view class="sc-switch-container">
-		<view class="{{themeValue == '明亮'?'sc-switch-bar-light':'sc-switch-bar'}}">
+		<view class="{{themeValue == 'light'?'sc-switch-bar-light':'sc-switch-bar'}}">
 			<view class="sc-switch-ripple {{ checked ? ripple ? 'sc-switch-ripple-right-animate' : 'sc-switch-right-animate' : ripple ? 'sc-switch-ripple-left-animate' : 'sc-switch-left-animate'}}" bind:animationend="_animationend"></view>
 		</view>
-		<view class="{{themeValue == '明亮'?'sc-switch-bar-icon-light':'sc-switch-bar-icon'}}"></view>
+		<view class="{{themeValue == 'light'?'sc-switch-bar-icon-light':'sc-switch-bar-icon'}}"></view>
 	</view>
 </view>

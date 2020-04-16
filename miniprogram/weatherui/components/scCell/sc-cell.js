@@ -23,7 +23,7 @@ create.Component(store,{
     },
     themeValue: {
       type: String,
-      value: "明亮"
+      value: "light"
     },
     switch: {
       type: Boolean,
