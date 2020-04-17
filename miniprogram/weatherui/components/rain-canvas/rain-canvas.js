@@ -5,9 +5,9 @@ import lazyFunction from "../../../utils/lazyFunction"
 // import _ from "../../../utils/lodash"
 
 let chart = null
-var chartData = []
-function onInitChart(F2, config) {
-  chart = new F2.Chart(config);
+
+function getChartData(){
+  var chartData = []
   var pages = getCurrentPages();
   var currPage = pages[pages.length - 1]
   var hourly = currPage.data.forecastData.hourly
@@ -18,6 +18,12 @@ function onInitChart(F2, config) {
     };
     chartData.push(u);
   }
+  return chartData  
+}
+
+function onInitChart(F2, config) {
+  chart = new F2.Chart(config);
+  let chartData = getChartData()
   log('[onInitChart hourly]', chartData)
   chart.source(chartData, {
     time: {
@@ -115,12 +121,11 @@ Component({
       t.rainChartComponent.init(onInitChart);
     }),
     refreshChart() {
+      let chartData = getChartData()
       log('[rain refreshChart]',chartData)
       chart.changeData(chartData)
     }
   },
   methods: {
-    // https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=101.34,36.56,2042
-    // https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=104.6796,31.46751,3000
   }
 })

@@ -5,12 +5,11 @@ const computedBehavior = require('miniprogram-computed')
 import lazyFunction from "../../../utils/lazyFunction"
 
 let chart = null
-var chartData = []
-function onInitChart(F2,config) {
+function getChartData(){
+  var chartData = []
   var pages = getCurrentPages();
   var currPage = pages[pages.length - 1]
   var dailyWeather = currPage.data.forecastData.daily
-  log('[onInitChart dailyWeather]', dailyWeather)
   for (var s = dailyWeather, d = 1; d < 8; d++) {
     var u = {
       x: s[d].date,
@@ -18,27 +17,32 @@ function onInitChart(F2,config) {
     };
     chartData.push(u);
   }
+  let range = {
+      max : Math.max.apply(Math, dailyWeather.map(function (o) {
+      return o.max
+     })),
+      min:Math.min.apply(Math, dailyWeather.map(function (o) {
+        return o.min
+      }))
+  }
+  log('[onInitChart dailyWeather]', chartData,range)
+  return {chartData,range}
+}
+
+function onInitChart(F2,config) {
+  let chartData = getChartData().chartData
+  let range = getChartData().range
   chart = new F2.Chart(config);
   chart.axis("y", !1)
   chart.axis("x", !1)
   chart.tooltip(false);
-  log(Math.max.apply(Math, dailyWeather.map(function (o) {
-    return o.max
-  })))
-  log(Math.min.apply(Math, dailyWeather.map(function (o) {
-    return o.min
-  })))
   const defs = {
     x: {
       // tickCount: 7
     },
     y: {
-      min: Math.min.apply(Math, dailyWeather.map(function (o) {
-        return o.min
-      })),
-      max: Math.max.apply(Math, dailyWeather.map(function (o) {
-        return o.max
-      }))
+      min: range.min,
+      max: range.max
     }
   };
   chart.source(chartData, defs);
@@ -131,6 +135,7 @@ Component({
       t.dailyChartComponent.init(onInitChart);
     }),
     refreshChart() {
+      let chartData = getChartData()
       log('[temperature refreshChart]',chartData)
       chart.changeData(chartData)
     }

@@ -530,7 +530,7 @@ create(store, {
             log('[canRefreshChart] => ', canRefreshChart)
             if (canRefreshChart == true) {
               t.setData({
-                'refreshChart': !0
+                'refreshChart': !t.data.refreshChart
               })
             }
             if (canRefreshChart == false) {
@@ -541,8 +541,8 @@ create(store, {
           }
           async function waitToCheck(weatherData, canScreenFadeOut, canRefreshChart) {
             await t.setTimelyWeather(weatherData)
-            await initChartOrRefresh(canRefreshChart)
             await app.saveData("forecastData", weatherData)
+            await initChartOrRefresh(canRefreshChart)
           }
           waitToCheck(weatherData, canScreenFadeOut, canRefreshChart)
         },
@@ -619,7 +619,7 @@ create(store, {
           latitude: that.data.forecastData.latitude,
           longitude: that.data.forecastData.longitude
         }
-        log(`[setNowWeather] => `, data)
+        log(`[getNowCityData] => `, data)
         return data
       }
       const reduceHistoryCityData = (realtime) => {
@@ -914,7 +914,7 @@ create(store, {
         let d = 'No description'
         return a = 0 ? (d = "No description") : a <= 50 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
       }
-      log('[getWindSpeed]', self.store.data.languageValue)
+      log('[getWindSpeed]')
       return self.store.data.languageValue == 'zh_CN' ? zh_CN() : self.store.data.languageValue == 'zh_TW' ? zh_TW() : self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ? en_US_en_GB() : warn('[getAqiDescription]')
   },
   getWindLevel(a) {
