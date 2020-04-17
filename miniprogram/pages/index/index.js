@@ -392,7 +392,7 @@ create(store, {
         }, 1600)
     }
     const event = (screenFadeOutType) => {
-      screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth'? defaultScreenFadeOut() : screenFadeOutType == 'default' ? authScreenFadeOut() : warn('[startScreen]')
+      screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth'? authScreenFadeOut() : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
     }
     async function asyncScreenFadeOut() {
       await event(t.store.data.startScreen)
