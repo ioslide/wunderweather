@@ -962,7 +962,7 @@
 									<!-- </text> -->
 								</view>
 								<view class="flex align-end temp">
-									{{item.realtime.nowTemp}}°
+									{{item.nowTemp}}°
 								</view>
 							</view>
 							<view class="flex-sub">
