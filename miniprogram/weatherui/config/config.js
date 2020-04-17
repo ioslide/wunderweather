@@ -17,6 +17,8 @@ exports.default = {
   // appid:'wx7b4bbc2d9c538e84', //服务号
   // locationKey : 'BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D', //服务号
   // subTemplateId:'4qBy3Pm6pqvOCP_RgX8MOhxYMwO36_YyxCkduHnsAbg', // 服务号
+  gitHost:'https://github.com/ioslide/wunderweather.git',
+  // gitHost:'https://git.weixin.qq.com/ioslide/weather.git',
   name: "XHY",
   description: "",
   date: "",
