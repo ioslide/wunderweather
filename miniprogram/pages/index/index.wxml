@@ -80,7 +80,7 @@
 					</view>
 					<view class="flex justify-center align-center margin-top-25">
 						<view>
-							<view class="flex justify-center align-center" bindtap="manualGetLocation">
+							<view class="flex justify-center align-center" bindtap="manualGetNewLocation">
 								<view class="authFirstStepButton">手动选取位置</view>
 							</view>
 						</view>
@@ -104,7 +104,7 @@
 									<view class="text-lg text-4a5568">手动选取位置</view>
 									<view class="text-gray text-d flex justify-between">Select location manually</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="manualGetLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="manualGetNewLocation"></sc-switch>
 							</view>
 						</view>
 					</view>
@@ -309,25 +309,25 @@
 				<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
 					<view class="square-100" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="bing">
 						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
-							<block wx:if="{{forecastData.nowWeather == '雨'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '雪'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '晴天'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '晴夜'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '风'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '阴' ||forecastData.nowWeather == '多云'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '雾霾沙尘'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
 
 							</block>
 						</block>
@@ -346,25 +346,25 @@
 				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
 					<view class="square-100" style="background-image: url('{{nasaImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="nasa">
 						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
-							<block wx:if="{{forecastData.nowWeather == '雨'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '雪'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '晴天'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '晴夜'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '风'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '阴' ||forecastData.nowWeather == '多云'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
 
 							</block>
-							<block wx:if="{{forecastData.nowWeather == '雾霾沙尘'}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
 
 							</block>
 						</block>
@@ -386,7 +386,7 @@
 	<view class="flex padding-left-10 justify-left padding-bottom-0 padding-top-10" style="min-height:60px;width:100%">
 		<view class="flex-sub">
 			<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == 'light'?'nowTemp-light':'nowTemp-dark'}}">
-				{{forecastData.nowTemp}}
+				{{forecastData.realtime.nowTemp}}°
 			</view>
 		</view>
 		<view class="flex-twice flex padding-top-15 flex-treble" style="font-family: 'Lato', sans-serif;">
@@ -403,20 +403,20 @@
 	</view>
 
 	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
-		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}" bindtap="manualGetLocation" plain="true">
-			{{forecastData.address}}·{{forecastData.nowWeather}}
+		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
+			{{forecastData.address}}·{{forecastData.realtime.realtime.skyconCN}}
 		</view>
 	</view>
 
 	<view class="flex padding-left-15" style="min-height:20px;">
-		<view class="text-left text-grey text-s padding-top-10">{{forecastData.bodyFeel.windLevel}} , {{forecastData.bodyFeel.humidity}}</view>
+		<view class="text-left text-grey text-s padding-top-10">{{forecastData.realtime.wind.windLevel}} , {{forecastData.realtime.humidity}}</view>
 	</view>
 
 	<view class="flex padding-left-15" style="min-height:20px;">
 		<view class="text-left text-grey text-s padding-top-10">{{forecastData.hourlyKeypoint}}</view>
 	</view>
 
-	<block wx:if="{{$.style.dailyHourSwitchChange == true}}">
+	<block wx:if="{{$.style.hourlySwitchChange == true}}">
 		<view class="margin-top-25" bindtap="navChange" data-cur="hourly" style="min-height:180px;">
 			<scroll-view scroll-with-animation="true" scroll-x="true" scroll-y="false">
 				<view class="forecast-list margin-lr-15">
@@ -459,7 +459,7 @@
 		</view>
 	</block>
 
-	<block wx:if="{{$.style.dailySevenSwitchChange == true}}">
+	<block wx:if="{{$.style.dailySwitchChange == true}}">
 		<view class="cu-bar solid-bottom opacity-0" id='temperatureObserver' animation="{{temperatureObserverAni}}">
 			<view class="action">
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
@@ -523,8 +523,8 @@
 		<view class="flex padding-lr-15 opacity-0 padding-top-30" style="min-height:140px" animation="{{thirdObserverAni}}">
 			<view class="flex justify-start">
 				<view class="flex align-center">
-					<view class="text-left text-xxsl" style="font-weight:100;color:{{aqiColor}};font-family: 'Lato', sans-serif;">
-						{{forecastData.airQuality.aqi}}
+					<view class="text-left text-xxsl" style="font-weight:100;color:{{forecastData.realtime.aqiColor}};font-family: 'Lato', sans-serif;">
+						{{forecastData.realtime.airQuality.aqi}}
 					</view>
 				</view>
 			</view>
@@ -533,12 +533,12 @@
 					<view class="flex flex-direction">
 						<view class="flex align-center">
 							<view class="text-xl {{$.themeValue == 'light'?'text-grey':'text-white'}} ">
-								{{forecastData.airQuality.aqiName}}
+								{{forecastData.realtime.airQuality.aqiName}}
 							</view>
 						</view>
 						<view class="flex align-center">
 							<view class="text-xl margin-top-5 {{$.themeValue == 'light'?'text-c9d7e6cc':'text-grey'}}">
-								{{forecastData.airQuality.aqiDescription}}
+								{{forecastData.realtime.airQuality.aqiDescription}}
 							</view>
 						</view>
 					</view>
@@ -569,7 +569,7 @@
 			</view>
 
 			<view class="flex flex-wrap">
-				<view class="flex justify-end" style="flex-basis: {{(forecastData.airQuality.aqi-8)*100/500}}%;">
+				<view class="flex justify-end" style="flex-basis: {{(forecastData.realtime.airQuality.aqi-8)*100/500}}%;">
 					<view>
 						<view class="polute-line" decode="{{true}}"></view>
 					</view>
@@ -770,10 +770,10 @@
 		<view class="flex justify-center align-center padding-15 opacity-0" animation="{{sixthObserverAni}}">
 			<view class="flex-between">
 				<view class="flex justify-center align-center text-grey text-xxxl" style="font-family: 'Lato', sans-serif;font-weight:100">
-					{{forecastData.bodyFeel.windSpeed}}km/h
+					{{forecastData.realtime.wind.windSpeed}}km/h
 				</view>
 				<view class="flex justify-center align-center text-grey padding-top-15" style="font-family: 'Lato', sans-serif;">
-					{{forecastData.bodyFeel.windDirection}} </view>
+					{{forecastData.realtime.wind.windDirection}} </view>
 			</view>
 		</view>
 	</block>
@@ -945,7 +945,7 @@
 				<view class="action border-custom-modalL" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
 					<button class="modalL-cu-bar-left" bindtap="navChange" data-cur="setting"></button>
 					<text class="cuIcon-moreandroid"></text>
-					<button class="modalL-cu-bar-right" bindtap="manualGetLocation"></button>
+					<button class="modalL-cu-bar-right" bindtap="manualGetNewLocation"></button>
 					<text class="cuIcon-add text-xl" style="font-size: 44rpx;"></text>
 				</view>
 			</view>
@@ -962,7 +962,7 @@
 									<!-- </text> -->
 								</view>
 								<view class="flex align-end temp">
-									{{item.nowTemp}}
+									{{item.realtime.nowTemp}}°
 								</view>
 							</view>
 							<view class="flex-sub">
@@ -974,17 +974,17 @@
 							</view>
 						</view>
 					</view>
-					<block wx:if="{{item.nowWeather ==allWeather.CLEAR_DAY}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_DAY}}">
 					</block>
-					<block wx:if="{{item.nowWeather ==allWeather.PARTLY_CLOUDY_DAY}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.PARTLY_CLOUDY_DAY}}">
 					</block>
-					<block wx:if="{{item.nowWeather ==allWeather.RAIN}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.RAIN}}">
 					</block>
-					<block wx:if="{{item.nowWeather ==allWeather.SNOW}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.SNOW}}">
 					</block>
-					<block wx:if="{{item.nowWeather ==allWeather.THUNDERRAIN}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.THUNDERRAIN}}">
 					</block>
-					<block wx:if="{{item.nowWeather ==allWeather.CLEAR_NIGHT}}">
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_NIGHT}}">
 					</block>
 
 				</view>

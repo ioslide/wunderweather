@@ -51,7 +51,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">The next 24 hours</block>
 				</text>
 				<view slot="action">
-					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailyHourSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailyHourSwitchChange"></sc-switch>
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.hourlySwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="hourlySwitchChange"></sc-switch>
 				</view>
 			</sc-cell>
 		</label>
@@ -63,7 +63,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Next 7 days</block>
 				</text>
 				<view slot="action">
-					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySevenSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySevenSwitchChange"></sc-switch>
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySwitchChange"></sc-switch>
 				</view>
 			</sc-cell>
 		</label>

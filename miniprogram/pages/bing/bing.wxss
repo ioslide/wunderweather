@@ -145,6 +145,8 @@ page {
 
 .bingImage {
     max-height: 215px;
+    height:215px;
+    width:100%
 }
 
 .settings {

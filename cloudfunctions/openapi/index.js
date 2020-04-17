@@ -79,17 +79,6 @@ async function deleteSubscribeMessage(event) {
 async function saveSubscribeMessage(event) {
   const db = cloud.database();
   const {OPENID} = cloud.getWXContext();
-  // // 防止重复存储
-  // let message = await db
-  //   .collection('sub_daily_weather_user')
-  //   .where({
-  //     touser: OPENID
-  //   })
-  //   .get();
-
-  // if (message.data.length) {
-  //   return message;
-  // }
 
   // 在云开发数据库中存储用户订阅的信息
   const result = await db.collection('sub_daily_weather_user').add({

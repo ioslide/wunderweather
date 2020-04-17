@@ -22,9 +22,15 @@ function onInitChart(F2,config) {
   chart.axis("y", !1)
   chart.axis("x", !1)
   chart.tooltip(false);
+  log(Math.max.apply(Math, dailyWeather.map(function (o) {
+    return o.max
+  })))
+  log(Math.min.apply(Math, dailyWeather.map(function (o) {
+    return o.min
+  })))
   const defs = {
     x: {
-      tickCount: 7
+      // tickCount: 7
     },
     y: {
       min: Math.min.apply(Math, dailyWeather.map(function (o) {
@@ -96,10 +102,10 @@ Component({
     },
     config:{
       appendPadding:[0,0,0,0],
-      padding:[28,3,28,3],
+      padding:[30,3,30,3],
       pixelRatio : app.globalData.pixelRatio,
       width: app.globalData.windowWidth,
-      height: 260,
+      height: 260
     },
     themeValue:app.globalData.themeValue
   },

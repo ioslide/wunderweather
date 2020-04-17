@@ -18329,7 +18329,7 @@
 	  },
 	  methods: {
 			init(onInitChart){
-				console.log('[onInitChart]',onInitChart)
+				console.log('[onInitChart]')
 				const query = wx.createSelectorQuery().in(this);
 				query.select('.f2-canvas')
 					.fields({
