@@ -25,27 +25,28 @@ function getChartData(){
         return o.min
       }))
   }
-  log('[onInitChart dailyWeather]', chartData,range)
+  // log('[getChartData dailyWeather]', chartData,range)
   return {chartData,range}
 }
 
 function onInitChart(F2,config) {
   let chartData = getChartData().chartData
   let range = getChartData().range
+  log('[onInitChart]', getChartData())
   chart = new F2.Chart(config);
-  chart.axis("y", !1)
-  chart.axis("x", !1)
-  chart.tooltip(false);
-  const defs = {
+  return chart.clear(), chart.legend(!1),
+  chart.axis("y", !1),
+  chart.axis("x", !1),
+  chart.tooltip(false),
+  chart.source(chartData, {
     x: {
-      // tickCount: 7
+      tickCount: 7
     },
     y: {
       min: range.min,
       max: range.max
     }
-  };
-  chart.source(chartData, defs);
+  }),
   chartData.map(function (obj) {
     chart.guide().text({
       top: true,
@@ -71,7 +72,7 @@ function onInitChart(F2,config) {
       },
       offsetY: -10
     });
-  });
+  }),
   chart.interval().position('x*y')
     .animate({
       appear: {
@@ -82,8 +83,9 @@ function onInitChart(F2,config) {
     .style({
       radius: [4, 4, 4, 4]
     })
-    .color('l(90) 0:#d5effc 1:#bcc8d4');
-  chart.render();
+    .color('l(90) 0:#d5effc 1:#bcc8d4'),
+    chart.render(),
+    chart;
 }
 Component({
   behaviors: [computedBehavior],
@@ -106,10 +108,10 @@ Component({
     },
     config:{
       appendPadding:[0,0,0,0],
-      padding:[30,3,30,3],
+      padding:[0,0,25,0],
       pixelRatio : app.globalData.pixelRatio,
       width: app.globalData.windowWidth,
-      height: 260
+      height: 200
     },
     themeValue:app.globalData.themeValue
   },
@@ -130,14 +132,16 @@ Component({
       t.data.initChart && t.setData({
         initChart: !1
       });
-      log('[temperature initChart]',t.data.initChart)
+      log('[temperature initChart]', t.data.initChart)
       t.dailyChartComponent = t.selectComponent('#dailyChart');
       t.dailyChartComponent.init(onInitChart);
     }),
     refreshChart() {
+      const t = this
       let chartData = getChartData()
       log('[temperature refreshChart]',chartData)
-      chart.changeData(chartData)
+      t.dailyChartComponent = t.selectComponent('#dailyChart');
+      t.dailyChartComponent.init(onInitChart);
     }
   },
   methods: {

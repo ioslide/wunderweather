@@ -18,13 +18,15 @@ function getChartData(){
     };
     chartData.push(u);
   }
+  // log('[getChartData rainWeather]',chartData)
   return chartData  
 }
 
 function onInitChart(F2, config) {
-  chart = new F2.Chart(config);
   let chartData = getChartData()
-  log('[onInitChart hourly]', chartData)
+  log('[onInitChart]', chartData)
+  chart = new F2.Chart(config);
+  return chart.clear(), chart.legend(!1),
   chart.source(chartData, {
     time: {
       type: 'timeCat',
@@ -35,8 +37,8 @@ function onInitChart(F2, config) {
       min: 0,
       range: [0, 1]
     }
-  });
-  chart.axis('time', false)
+  }),
+  chart.axis('time', false),
   chart.tooltip({
     showCrosshairs: true,
     showItemMarker: false,
@@ -63,17 +65,17 @@ function onInitChart(F2, config) {
       log(items[0].origin)
       items[0].value = items[0].origin.time +'/ 降水强度:'
     }
-  });
+  }),
   chart.area()
     .position('time*value')
     .color('l(90) 0:#1890FF 1:#f7f7f7')
-    .shape('smooth');
+    .shape('smooth'),
   chart.line()
     .position('time*value')
     .color('l(90) 0:#1890FF 1:#8dd9f7')
-    .shape('smooth');
-  chart.render();
-  return chart;
+    .shape('smooth'),
+  chart.render(),
+  chart;
 }
 Component({
   behaviors: [computedBehavior],
@@ -121,9 +123,11 @@ Component({
       t.rainChartComponent.init(onInitChart);
     }),
     refreshChart() {
+      const t = this
       let chartData = getChartData()
       log('[rain refreshChart]',chartData)
-      chart.changeData(chartData)
+      t.rainChartComponent = t.selectComponent('#rainChart');
+      t.rainChartComponent.init(onInitChart);
     }
   },
   methods: {

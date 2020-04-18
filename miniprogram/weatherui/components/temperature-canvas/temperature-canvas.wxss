@@ -1,6 +1,6 @@
 .dailyChart{
   width: 100%;
-  height: 260px;
+  height: 200px;
 }
 .dailyChart{
   width: 100%;

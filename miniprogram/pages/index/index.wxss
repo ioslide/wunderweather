@@ -3054,16 +3054,16 @@ button::after {
 }
 @keyframes refreshLocationAni-0 {
   0% {
-    opacity: 0.3
-  }
-  25% {
     opacity: 1
   }
-  50% {
+  25% {
     opacity: 0.3
   }
+  50% {
+    opacity: 1
+  }
   75% {
-    opacity: 0.9
+    opacity: 0.3
   }
   100% {
     opacity: 0

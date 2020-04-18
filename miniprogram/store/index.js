@@ -46,7 +46,7 @@ const setStoreage = () =>{
       sunlightSwitchChange: true,
       moonSwitchChange: true,
       windSwitchChange: true,
-      radarrSwitchChange: true,
+      radarSwitchChange: true,
       KeepScreenOnSwitchChange: true
     },
     proMode: false,

@@ -21,27 +21,9 @@ App({
     pixelRatio: "",
     windowWidth: "",
     systemInfo: "",
-    menuInfo: "",
-    zxClientId: "c3d88ee29b2337915fd0",
-    language: 'zh_CN',
     openid: ''
   },
-  // behaviors: [computedBehavior],
-  // watch: function (method) {
-  //   var obj = this.globalData;
-  //   Object.defineProperty(obj, "data", { //这里的 data 对应 上面 globalData 中的 data
-  //     configurable: true,
-  //     enumerable: true,
-  //     set: function (value) {
-  //       method(value);
-  //     },
-  //     get: function () { //获取全局变量值，直接返回全部
-  //       return this.globalData;
-  //     }
-  //   })
-  // },
   onShow() {
-    // wx.BaaS.reportTemplateMsgAnalytics(options)
   },
   onPageNotFound: function () {
     log('onPageNotFound')
@@ -53,9 +35,8 @@ App({
     })
     log('[onLaunch]')
     // log(xhy)
-    t.checkVersion()
     t.updateManager()
-    //t.wxLogin()
+    t.initWxBass()
     t.initCloud()
     t.getSystemInfo()
     t.loadFontFace()
@@ -103,21 +84,12 @@ App({
       }
     })
   },
-  // wxLogin() {
-  //   wx.BaaS = requirePlugin('sdkPlugin')
-  //   wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-  //   let zxClientID = 'c3d88ee29b2337915fd0'
-  //   wx.BaaS.init(zxClientID)
-  //   wx.BaaS.auth.loginWithWechat(null, {
-  //     createUser: true
-  //     // withUnionID:true
-  //   }).then(user => {
-  //     log('[wxLogin]', user)
-  //     this.globalData.openid = user.openid
-  //   }, err => {
-  //     log(err)
-  //   })
-  // },
+  initWxBass() {
+    wx.BaaS = requirePlugin('sdkPlugin')
+    wx.BaaS.wxExtend(wx.login, wx.getUserInfo,wx.requestPayment)
+    wx.BaaS.init(config.default.wxBassId)
+    wx.BaaS.auth.loginWithWechat() // 静默登录
+  },
   getSystemInfo() {
     const t = this
     wx.getSystemInfo({
@@ -133,21 +105,20 @@ App({
         })
         var o = RegExp("^.*iPhone X.*$");
         e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
-          t.globalData.language = e.language;
         t.globalData.StatusBar = e.statusBarHeight;
         t.globalData.barHeight = e.statusBarHeight,
-          t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
-          t.globalData.windowWidth = e.windowWidth,
-          t.globalData.systemInfo = e,
-          t.globalData.pixelRatio = e.pixelRatio
-        t.globalData.menuInfo = menuButtonInfo
+        t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
+        t.globalData.windowWidth = e.windowWidth,
+        t.globalData.systemInfo = e,
+        t.globalData.pixelRatio = e.pixelRatio
         if (menuButtonInfo) {
           t.globalData.Custom = menuButtonInfo;
           t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
         } else {
           t.globalData.CustomBar = e.statusBarHeight + 50;
         }
-        log(t.globalData)
+        t.checkVersion(e.SDKVersion)
+        log('[globalData]',t.globalData)
       },
       fail: function (e) {
         t.isError = !0, wx.showModal({
@@ -161,7 +132,8 @@ App({
   initCloud() {
     wx.cloud.init({
       env: config.default.cloudEnv
-    }), wx.cloud ? wx.cloud.init({
+    }), 
+    wx.cloud ? wx.cloud.init({
       traceUser: !0
     }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
     log('[initCloud]')
@@ -188,11 +160,10 @@ App({
       })
     })
     updateManager.onUpdateFailed(function () {
-      log('new vision download fail')
+      log('New vision download fail')
     })
   },
-  checkVersion() {
-    const version = wx.getSystemInfoSync().SDKVersion
+  checkVersion(version) {
     const compareVersion = (v1, v2) => {
       v1 = v1.split('.')
       v2 = v2.split('.')
@@ -216,7 +187,7 @@ App({
     }
     if (compareVersion(version, '2.8.1') >= 0) {
       wx.openBluetoothAdapter()
-      log('[curVersion] => OK  => 2.8.1')
+      log('[curVersion] => ',version)
     } else {
       wx.showModal({
         title: '提示',

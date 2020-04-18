@@ -69,7 +69,7 @@
 						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
 					</view>
 					<view class="flex justify-left align-center padding-left-15">
-						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改auth</text>
+						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改授权</text>
 					</view>
 					<!-- <view class="flex justify-center align-center margin-top-75">
 						<view>
@@ -118,10 +118,18 @@
 			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
 				<view style="margin-top:{{StatusBar*4}}px;width:100%">
 					<view class="flex justify-left padding-15 align-center">
-						<text class="text-4a5568 text-xxxl font-weight-300">最后</text>
+						<text class="text-4a5568 text-xxxl font-weight-300">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">最后</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">最後</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">At last</block>
+						</text>
 					</view>
 					<view class="flex justify-left align-center padding-left-15">
-						<text class="text-4a5568 text-lg letter-spacing-1">还有一些设置你需要核对</text>
+						<text class="text-4a5568 text-lg letter-spacing-1">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">还有一些设置你需要核对</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">還有一些設置你需要核對</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Some settings need to check</block>
+						</text>
 					</view>
 					<view class="flex margin-top-50">
 						<view class="cu-list menu-avatar" style="width:100%">
@@ -129,8 +137,16 @@
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTheme.svg);">
 								</view>
 								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">主题</view>
-									<view class="text-gray text-d flex justify-between">选择你最喜欢的外观</view>
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">选择你最喜欢的外观</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">選擇你最喜歡的外觀</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Choose your favorite theme</block>
+									</view>
 								</view>
 							</view>
 							<!-- https://weather.ioslide.com/weather/authScreenTemperature.svg); -->
@@ -138,7 +154,11 @@
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
 								</view>
 								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">单位制选项</view>
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+									</view>
 									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
 								</view>
 							</view>
@@ -146,16 +166,32 @@
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
 								</view>
 								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">语言设置</view>
-									<view class="text-gray text-d flex justify-between">中文/英文</view>
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Chinese / English</block>
+									</view>
 								</view>
 							</view>
 							<view class="cu-item" bindtap="subDailyWeather">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
 								</view>
 								<view class="content flex-sub">
-									<view class="text-lg text-4a5568">订阅设置</view>
-									<view class="text-gray text-d flex justify-between">订阅即将出行的日期，并勾选持续订阅</view>
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscription settings</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅即将出行的日期，并勾选持续订阅</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱即將出行的日期，並勾選持續訂閱</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscribe to weather for upcoming travel dates</block>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -198,7 +234,11 @@
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">主题</button>
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+					</button>
 				</view>
 			</view>
 			<sc-radio-group class="block" bindchange="themeRadioChange">
@@ -217,7 +257,11 @@
 			</sc-radio-group>
 			<view class="cu-bar justify-end" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -226,7 +270,11 @@
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">系统语言</button>
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+					</button>
 				</view>
 			</view>
 			<sc-radio-group class="block" bindchange="languageRadioChange">
@@ -255,7 +303,11 @@
 			</sc-radio-group>
 			<view class="cu-bar justify-end" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -264,7 +316,11 @@
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">距离单位</button>
+					<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+					</button>
 				</view>
 			</view>
 			<sc-radio-group class="block" bindchange="unitValueRadioChange">
@@ -288,7 +344,11 @@
 			</sc-radio-group>
 			<view class="cu-bar justify-end" style="background: #2D2D2D;">
 				<view class="action">
-					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">取消</button>
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
 				</view>
 			</view>
 		</view>
@@ -298,9 +358,8 @@
 
 <sc-star themeValue="{{$.themeValue}}"></sc-star>
 
-<view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
-
-	<view class="flex padding-15 justify-center padding-bottom-0" style="padding-top: {{CustomBar}}px;">
+<view class="root {{modalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  canBlurRoot == true || refreshLocation == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
+	<view id="top" class="flex padding-15 justify-center padding-bottom-0" style="padding-top: {{CustomBar}}px;">
 	</view>
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-5 justify-left margin-5" style="min-height:280px">
@@ -333,7 +392,7 @@
 						</block>
 					</view>
 				</block>
-				<block wx:if="{{$.indexHeadImageValue == '自定义'}}">
+				<block wx:if="{{$.indexHeadImageValue == 'customize'}}">
 					<!-- <view class="flex square-100"> -->
 					<view class="flex square-100 align-center justify-center">
 						<image class="square-100" style="background-size: cover;" mode="aspectFill" src="{{cusImage}}"></image>
@@ -404,7 +463,7 @@
 
 	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
 		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
-			{{forecastData.address}}·{{forecastData.realtime.realtime.skyconCN}}
+			{{forecastData.address}}·{{forecastData.realtime.skyconCN}}
 		</view>
 	</view>
 
@@ -472,8 +531,10 @@
 				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
-		<view class="flex opacity-0" animation="{{temperatureObserverAni}}" style="min-height:200px">
-			<temperature-canvas initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:260px" />
+		<view class="flex opacity-0" animation="{{temperatureObserverAni}}">
+			<view class="flex justify-center align-center" style="min-height:260px">
+				<temperature-canvas class="margin-tb-15" initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" />
+			</view>
 		</view>
 		<view class="flex margin-bottom-15 margin-left-5 opacity-0 {{$.themeValue == 'light'?'text-grey':'text-white'}} " bindtap="navChange" data-cur="daily" animation="{{temperatureObserverAni}}">
 			<view class="grid col-7 margin-bottom-15 text-center" style="width:100%">

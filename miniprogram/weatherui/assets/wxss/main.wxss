@@ -3732,12 +3732,12 @@ scroll-view.cu-steps .cu-item {
 	margin-bottom: 5px;
 }
 
-.margin-tb-10px {
+.margin-tb-10 {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
-.margin-tb {
+.margin-tb-15 {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
@@ -3751,7 +3751,10 @@ scroll-view.cu-steps .cu-item {
 	margin-top: 25px;
 	margin-bottom: 25px;
 }
-
+.margin-tb-30 {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
 .padding-0 {
 	padding: 0;
 }

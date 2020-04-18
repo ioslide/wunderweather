@@ -46,7 +46,6 @@ Component({
       })
     },
     onCapTap: function (e) {
-      console.log(e)
       let modalName = e.currentTarget.dataset.target
       this.triggerEvent('showModalListener', modalName)
     }

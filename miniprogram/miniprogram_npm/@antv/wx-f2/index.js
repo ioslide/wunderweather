@@ -18329,28 +18329,40 @@
 	  },
 	  methods: {
 			init(onInitChart){
-				console.log('[onInitChart]')
-				const query = wx.createSelectorQuery().in(this);
-				query.select('.f2-canvas')
-					.fields({
-						node: true,
-						size: true
-					})
-					.exec(res => {
-						const { node, width, height } = res[0];
-						const context = node.getContext('2d');
-						let config = this.data.config
-						config['context'] = context
-						console.log('[wx-f2 config]',this.data.config)
-						const pixelRatio = wx.getSystemInfoSync().pixelRatio;
-						node.width = res[0].width * pixelRatio;
-						node.height = res[0].height * pixelRatio;
-						const chart = onInitChart(lib,config);
-						if (chart) {
-							this.chart = chart;
-							this.canvasEl = chart.get('el');
-						}
-					});
+				const e = this
+				var version = wx.version.version.split(".").map(function(t) {
+					return parseInt(t, 10);
+				});
+				if (version[0] > 1 || 1 === version[0] && version[1] > 9 || 1 === version[0] && 9 === version[1] && version[2] >= 91) {
+					console.log('[init]',this)
+					const query = wx.createSelectorQuery().in(this);
+					query.select('.f2-canvas')
+						.fields({
+							dataset: true,
+							node: true,
+							size: true,
+							context: true
+						})
+						.exec(res => {
+							const { node, width, height } = res[0];
+							const context = node.getContext('2d');
+							let config = this.data.config
+							config['context'] = context
+							const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+							node.width = config.width * pixelRatio;
+							node.height = config.height * pixelRatio;
+							const chart = onInitChart(lib,config);
+							console.log('[wx-f2 res]',res[0])
+							console.log('[wx-f2 node]',node.width,node.height)
+							console.log('[wx-f2 config]',config)
+							console.log('[wx-f2 chart]',chart)
+							if (chart) {
+								console.log('this.chart')
+								this.chart = chart;
+								this.canvasEl = chart.get('el');
+							}
+						});
+				}else console.error("微信基础库版本过低，需大于1.9.91");
 			},
 	    touchStart(e) {
 	      const canvasEl = this.canvasEl;
