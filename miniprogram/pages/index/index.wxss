@@ -2891,7 +2891,6 @@ button::after {
   top: 15px;
   height: 30px;
   width: 50px;
-  border-left: 1px solid #ffffff8c;
   left: 210px;
 }
 
@@ -3066,10 +3065,11 @@ button::after {
     opacity: 0.3
   }
   100% {
-    opacity: 0
+    opacity: 1
   }
 }
 .refreshLocationAni {
+  opacity:1;
   animation: refreshLocationAni 2.4s ease-in-out;
 }
 .refreshLocationAni-0{

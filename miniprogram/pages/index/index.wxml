@@ -429,13 +429,13 @@
 						</block>
 					</view>
 				</block>
-				<block wx:if="{{networkType == 'none' || networkType == 'unknown'}}">
+				<block wx:if="{{networkType == 'none' || networkType == 'unknown' || networkType == undefined}}">
 					<view class="networkType" bindtap="refreshLocation">
 						<view class="networkType-button">
-							<image class="{{refreshLocation == true ? 'refreshLocationAni':'none'}} square-30 margin-left-15" mode="aspectFit" src="../../materialui/lib/scui/dist/assets/images/weather/refresh.svg"></image>
+							<image class="{{refreshLocation == true ? 'refreshLocationAni':''}} square-30 margin-left-15" mode="aspectFit" src="../../weatherui/assets/images/weather/refresh.svg"></image>
 						</view>
-						<view class="text-left text-white padding-left-10 padding-top-7">离线模式</view>
-						<view class="text-left text-white padding-left-10 padding-top-5">上次更新时间:{{lastTime}}</view>
+						<view class="text-df text-left text-white padding-left-10 padding-top-7">离线模式</view>
+						<view class="text-df text-left text-white padding-left-10 padding-top-5">上次更新时间:{{lastRefreshTime}}</view>
 					</view>
 				</block>
 			</view>

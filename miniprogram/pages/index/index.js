@@ -100,7 +100,7 @@ create(store, {
     isChangeSetting: false,
     // isManualSetLocation: false,
     hasCusImage: false,
-    networkType: '4g',
+    networkType: 'none',
     imageBase64: '',
     qrImageURL: '',
     painting: {},
@@ -167,8 +167,8 @@ create(store, {
       })
     }
     asyncGetNetworkType().then(networkType => {
-      log(`[networkType] => ${networkType}`)
-      if (networkType == 'none' || networkType == '2g') {
+      log(`[networkType] =>`,networkType)
+      if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
         wx.showToast({
           title: '请检查你的网络连接',
           duration: 1500,
@@ -180,7 +180,10 @@ create(store, {
         t.setData({
           networkType: networkType
         })
-      } else {
+      }else {
+        t.setData({
+          networkType: 'none'
+        })
         log('[onLoad] => loadDataFromNet()')
         t.loadDataFromNet()
       }
@@ -227,30 +230,27 @@ create(store, {
     const t = this
     t.getBingImage()
     t.data.datePicker = scui.DatePicker("#datepicker");
-
-    // t.getMoonPhaseList()
-    // t.getBingImage()
-    // t.savePoetry()
-    // t.data.datePicker = scui.DatePicker("#datepicker");
-    // t.refreshWeather()
-    // t.onGetWXACode()
   },
   loadDataFromStorage() {
     log('[loadDataFromStorage]')
     const t = this
-    wx.getStorage({
-        key: "forecastData",
-        success: res => {
-          t.setTimelyWeather(res.data);
-          // t.setNowWeather(res.data.realtime);
-        }
+    const getHisWeather = () =>{
+      wx.getStorage({
+          key: "forecastData",
+          success: res => {
+            t.setTimelyWeather(res.data);
+          }
       }),
       wx.getStorage({
         key: "historyCityList",
         success: res => {
-          log(res.data[0].city)
+          log('[historyCityList]',res.data)
           t.setData({
-            'forecastData.city': res.data[0].city
+            'forecastData.city': res.data[1].city,
+            'forecastData.address': res.data[1].address,
+            'forecastData.latitude': res.data[1].latitude,
+            'forecastData.longitude': res.data[1].longitude,
+            'forecastData.nowTemp': res.data[1].nowTemp
           });
         }
       }),
@@ -261,11 +261,19 @@ create(store, {
             'lastRefreshTime': res.data
           });
         }
-      }),
-      t.setData({
-        'bingImage': '../../weatherui/assets/images/headbackground.jpg'
       })
-    t.screenFadeIn()
+    }
+    async function asyncGetHisWeather() {
+      await t.screenFadeIn()
+      await getHisWeather()
+      await t.drawSunCalc(t.data.forecastData.latitude, t.data.forecastData.longitude)
+      await t.screenFadeOut()
+      await t.setData({
+        'canBlurRoot': false
+      })
+      await t.scrollToTop()
+    }
+    asyncGetHisWeather()
   },
   loadDataFromNet() {
     const t = this
@@ -552,15 +560,36 @@ create(store, {
         }
       })
     }
-    const screenFadeOut = () => {
-      if (canScreenFadeOut == true) {
-        t.screenFadeOut()
-      }
+    const getHisWeather = () =>{
+      wx.getStorage({
+        key: "forecastData",
+        success: res => {
+          t.setTimelyWeather(res.data);
+          // t.setNowWeather(res.data.realtime);
+        }
+      }),
+      wx.getStorage({
+        key: "historyCityList",
+        success: res => {
+          log(res.data[0].city)
+          t.setData({
+            'forecastData.city': res.data[0].city
+          });
+        }
+      }),
+      wx.getStorage({
+        key: "lastRefreshTime",
+        success: res => {
+          t.setData({
+            'lastRefreshTime': res.data
+          });
+        }
+      })
     }
     async function asyncGetNowWeather() {
       await reqNowWeather()
       await t.drawSunCalc(t.data.forecastData.latitude, t.data.forecastData.longitude)
-      await screenFadeOut()
+      await t.screenFadeOut()
       await t.setData({
         'canBlurRoot': false
       })
@@ -579,6 +608,7 @@ create(store, {
     }, refreshTime);
   },
   setTimelyWeather(a) {
+    log('[setTimelyWeather]')
     const that = this;
     const realtime = (realtime) => {
       log(`[setTimelyWeather] => [realtime]`, realtime)
@@ -1111,10 +1141,8 @@ create(store, {
       fail: err => {
         log('requestBing', err)
         t.setData({
-          'bingImage': {
-            img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
-          }
-        });
+          'bingImage': '../../weatherui/assets/images/headbackground.jpg'
+        })
       }
     });
   },
@@ -1952,69 +1980,4 @@ create(store, {
         });
     });
   }
-  // async getBingImage() {
-  //   log('[getBingImage]')
-  //   let t = this,
-  //     bingLists = wx.getStorageSync('bingLists') || [{datesign: '1998-03-13'}],
-  //     canPrePull = wx.getStorageSync('canPrePull') || false,
-  //     isToday = app.isToday(bingLists[0].datesign)
-
-  //   const getStorageBing = () =>{
-  //     t.setData({
-  //       bingImage: bingLists[0]
-  //     })
-  //   }
-  //   const prePullBing = () =>{
-  //     let prePullData = wx.getStorageSync('prePullData')
-  //     t.setData({
-  //       bingImage: prePullData[0]
-  //     })
-  //   }
-  //   const requestBing = () =>{
-  //     wx.request({
-  //       url: 'https://www.benweng.com/api/bing/lists',
-  //       header: {
-  //         "content-type": "application/json"
-  //       },
-  //       success: res => {
-  //         log('[requestBing]',res)
-  //         let bingImage = res.data.data[0]
-  //         t.setData({
-  //           bingImage: bingImage
-  //         });
-  //         t.saveData('bingLists', res.data.data)
-  //       },
-  //       fail: err =>{
-  //         log('requestBing',err)
-  //         t.setData({
-  //           'bingImage': {
-  //             img_url: '../../materialui/lib/scui/dist/assets/images/headbackground.jpg'
-  //           }
-  //         });
-  //       }
-  //     });
-  //   }
-  //   const event = (isToday,canPrePull) => {
-  //     switch (true) {
-  //       case (isToday == true):
-  //         getStorageBing()
-  //         log('[saveBingLists] => getStorageBing()')
-  //         break
-  //       case (isToday == false && canPrePull == true):
-  //         prePullBing()
-  //         log('[saveBingLists] => prePullBing()')
-  //         break
-  //       case (isToday == false && canPrePull == false):
-  //         requestBing()
-  //         log('[saveBingLists] => requestBing()')
-  //         break
-  //       default:
-  //         log('[saveBingLists] => default-requestBing()')
-  //         requestBing()
-  //         break
-  //     }
-  //   }
-  //   event(isToday,canPrePull)
-
-  // },
 });
