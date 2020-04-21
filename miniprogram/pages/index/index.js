@@ -159,33 +159,29 @@ create(store, {
     }
     store.onChange(handler)
 
-    async function asyncGetNetworkType() {
-      await wx.getNetworkType({
-        success: res => {
-          return res.networkType
+    wx.getNetworkType({
+      success: res => {
+        log(`[networkType] =>`, res.networkType)
+        let networkType = res.networkType
+        if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
+          wx.showToast({
+            title: '请检查你的网络连接',
+            duration: 1500,
+            icon: 'none',
+            mask: true,
+          })
+          log('[onLoad] => loadDataFromStorage()')
+          t.loadDataFromStorage()
+            t.setData({
+              networkType: networkType
+            })
+        } else {
+          t.setData({
+            networkType: networkType
+          })
+          log('[onLoad] => loadDataFromNet()')
+          t.loadDataFromNet()
         }
-      })
-    }
-    asyncGetNetworkType().then(networkType => {
-      log(`[networkType] =>`,networkType)
-      if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
-        wx.showToast({
-          title: '请检查你的网络连接',
-          duration: 1500,
-          icon: 'none',
-          mask: true,
-        })
-        log('[onLoad] => loadDataFromStorage()')
-        t.loadDataFromStorage()
-        t.setData({
-          networkType: networkType
-        })
-      }else {
-        t.setData({
-          networkType: 'none'
-        })
-        log('[onLoad] => loadDataFromNet()')
-        t.loadDataFromNet()
       }
     })
   },
@@ -234,34 +230,34 @@ create(store, {
   loadDataFromStorage() {
     log('[loadDataFromStorage]')
     const t = this
-    const getHisWeather = () =>{
+    const getHisWeather = () => {
       wx.getStorage({
           key: "forecastData",
           success: res => {
             t.setTimelyWeather(res.data);
           }
-      }),
-      wx.getStorage({
-        key: "historyCityList",
-        success: res => {
-          log('[historyCityList]',res.data)
-          t.setData({
-            'forecastData.city': res.data[1].city,
-            'forecastData.address': res.data[1].address,
-            'forecastData.latitude': res.data[1].latitude,
-            'forecastData.longitude': res.data[1].longitude,
-            'forecastData.nowTemp': res.data[1].nowTemp
-          });
-        }
-      }),
-      wx.getStorage({
-        key: "lastRefreshTime",
-        success: res => {
-          t.setData({
-            'lastRefreshTime': res.data
-          });
-        }
-      })
+        }),
+        wx.getStorage({
+          key: "historyCityList",
+          success: res => {
+            log('[historyCityList]', res.data)
+            t.setData({
+              'forecastData.city': res.data[1].city,
+              'forecastData.address': res.data[1].address,
+              'forecastData.latitude': res.data[1].latitude,
+              'forecastData.longitude': res.data[1].longitude,
+              'forecastData.nowTemp': res.data[1].nowTemp
+            });
+          }
+        }),
+        wx.getStorage({
+          key: "lastRefreshTime",
+          success: res => {
+            t.setData({
+              'lastRefreshTime': res.data
+            });
+          }
+        })
     }
     async function asyncGetHisWeather() {
       await t.screenFadeIn()
@@ -560,31 +556,31 @@ create(store, {
         }
       })
     }
-    const getHisWeather = () =>{
+    const getHisWeather = () => {
       wx.getStorage({
-        key: "forecastData",
-        success: res => {
-          t.setTimelyWeather(res.data);
-          // t.setNowWeather(res.data.realtime);
-        }
-      }),
-      wx.getStorage({
-        key: "historyCityList",
-        success: res => {
-          log(res.data[0].city)
-          t.setData({
-            'forecastData.city': res.data[0].city
-          });
-        }
-      }),
-      wx.getStorage({
-        key: "lastRefreshTime",
-        success: res => {
-          t.setData({
-            'lastRefreshTime': res.data
-          });
-        }
-      })
+          key: "forecastData",
+          success: res => {
+            t.setTimelyWeather(res.data);
+            // t.setNowWeather(res.data.realtime);
+          }
+        }),
+        wx.getStorage({
+          key: "historyCityList",
+          success: res => {
+            log(res.data[0].city)
+            t.setData({
+              'forecastData.city': res.data[0].city
+            });
+          }
+        }),
+        wx.getStorage({
+          key: "lastRefreshTime",
+          success: res => {
+            t.setData({
+              'lastRefreshTime': res.data
+            });
+          }
+        })
     }
     async function asyncGetNowWeather() {
       await reqNowWeather()
@@ -1483,6 +1479,8 @@ create(store, {
       let cloudData = {
         action: 'saveSubscribeMessage',
         page: 'pages/index/index',
+        unit:t.store.data.unitValue,
+        language:t.store.data.languageValue,
         latitude: t.data.forecastData.latitude,
         city: t.data.forecastData.city,
         startTime: startTime,
@@ -1899,27 +1897,22 @@ create(store, {
         cloudPath: 'cusImage/' + n,
         filePath: p,
       }).then(res => {
-        log(res)
-        return res.fileID
+        log('[uploadFile]',res)
+        t.setData({
+          visible: false,
+          cusImage: event.detail.resultSrc,
+          hasCusImage: true,
+          modalName:null
+        })
+        wx.setStorageSync('hasCusImage', true)
+        wx.setStorageSync('cusImageFileID', res.fileID)
+        console.log(res.fileID) 
       }).catch(error => {
         log(error)
       })
     }
-    async function asyncUpload() {
-      return await cloudUpload(event.detail.resultSrc, app.globalData.openid)
-    }
-    asyncUpload().then(v => {
-      t.setData({
-        visible: false,
-        cusImage: event.detail.resultSrc,
-        hasCusImage: true
-      })
-      wx.setStorageSync('hasCusImage', true)
-      wx.setStorageSync('cusImageFileID', v)
-
-      // app.saveData('hasCusImage', true)
-      // app.saveData('cusImageFileID', v)
-    })
+    let fileName = util.formatDateClear(new Date()).concat(app.globalData.openid)
+    cloudUpload(event.detail.resultSrc, fileName)
   },
   uploadCallback(event) {
     log('[uploadCallback]', event);
@@ -1956,7 +1949,7 @@ create(store, {
       refreshLocation: true
     })
     //自动获取系统定位的location,请求数据
-    async function event(){
+    async function event() {
       await t.autoGetLocation()
       await setTimeout(() => {
         t.setData({
