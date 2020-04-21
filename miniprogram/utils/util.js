@@ -4,7 +4,13 @@ const formatDate = date => {
   const month = date.getMonth() + 1
   const day = date.getDate()
   return [year, month, day].map(formatNumber).join('-')
+}
 
+const formatDateClear = date => {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return [year, month, day].map(formatNumber).join('')
 }
 var t = "".concat("/data/%E7%A6%8F%E5%88%A9/100/");
 
@@ -62,6 +68,7 @@ module.exports = {
   BASE_URL: "",
   GET_MEIZHI_URL: t,
   formatDate: formatDate,
+  formatDateClear:formatDateClear,
   getDates: getDates,
   formatHourTime: formatHourTime,
   formatMonthDay: formatMonthDay
