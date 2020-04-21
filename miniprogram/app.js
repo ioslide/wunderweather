@@ -12,7 +12,7 @@ App({
   isError: !1,
   globalData: {
     // forecastData: {},
-    appid:wx.getAccountInfoSync().miniProgram.appId,
+    appid: wx.getAccountInfoSync().miniProgram.appId,
     StatusBar: "",
     CustomBar: "",
     barHeight: "",
@@ -23,23 +23,23 @@ App({
     systemInfo: "",
     openid: ''
   },
-  onShow() {
-  },
+  onShow() {},
   onPageNotFound: function () {
     log('onPageNotFound')
   },
   onLaunch() {
+    log('[onLaunch]')
     const t = this
     wx.onMemoryWarning(function () {
       warn('[onMemoryWarningReceive]')
     })
-    log('[onLaunch]')
+    t.initCloud()
     // log(xhy)
     t.updateManager()
     t.initWxBass()
-    t.initCloud()
     t.getSystemInfo()
     t.loadFontFace()
+    t.getWxContext()
     //t.dataPrePull()
   },
   loadFontFace() {
@@ -86,7 +86,7 @@ App({
   },
   initWxBass() {
     wx.BaaS = requirePlugin('sdkPlugin')
-    wx.BaaS.wxExtend(wx.login, wx.getUserInfo,wx.requestPayment)
+    wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
     wx.BaaS.init(config.default.wxBassId)
     wx.BaaS.auth.loginWithWechat() // 静默登录
   },
@@ -105,12 +105,12 @@ App({
         })
         var o = RegExp("^.*iPhone X.*$");
         e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
-        t.globalData.StatusBar = e.statusBarHeight;
+          t.globalData.StatusBar = e.statusBarHeight;
         t.globalData.barHeight = e.statusBarHeight,
-        t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
-        t.globalData.windowWidth = e.windowWidth,
-        t.globalData.systemInfo = e,
-        t.globalData.pixelRatio = e.pixelRatio
+          t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
+          t.globalData.windowWidth = e.windowWidth,
+          t.globalData.systemInfo = e,
+          t.globalData.pixelRatio = e.pixelRatio
         if (menuButtonInfo) {
           t.globalData.Custom = menuButtonInfo;
           t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
@@ -118,7 +118,7 @@ App({
           t.globalData.CustomBar = e.statusBarHeight + 50;
         }
         t.checkVersion(e.SDKVersion)
-        log('[globalData]',t.globalData)
+        log('[globalData]', t.globalData)
       },
       fail: function (e) {
         t.isError = !0, wx.showModal({
@@ -129,13 +129,44 @@ App({
       }
     });
   },
+  getWxContext() {
+    const t = this
+    let hasWxContext = wx.getStorageSync('hasWxContext') || false
+    if(hasWxContext == true){
+      let wxContext = wx.getStorageSync('wxContext')
+      t.globalData.openid = wxContext.openid
+    }else{
+      wx.cloud.callFunction({
+        name: "openapi",
+        data: {
+          action: 'getContext',
+        },
+      }).then(function (res) {
+        console.log(res.result)
+        t.globalData.openid = res.result.openid
+        wx.setStorage({
+          data: res.result,
+          key: 'wxContext',
+        })
+        wx.setStorage({
+          data: true,
+          key: 'hasWxContext',
+        })
+      }).catch(console.error), wx.login({
+        success: function (e) {
+          console.log("login ", e);
+        }
+      })
+    }
+
+  },
   initCloud() {
     wx.cloud.init({
-      env: config.default.cloudEnv
-    }), 
-    wx.cloud ? wx.cloud.init({
-      traceUser: !0
-    }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
+        env: config.default.cloudEnv
+      }),
+      wx.cloud ? wx.cloud.init({
+        traceUser: !0
+      }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
     log('[initCloud]')
   },
   updateManager() {
@@ -187,7 +218,7 @@ App({
     }
     if (compareVersion(version, '2.8.1') >= 0) {
       wx.openBluetoothAdapter()
-      log('[curVersion] => ',version)
+      log('[curVersion] => ', version)
     } else {
       wx.showModal({
         title: '提示',
