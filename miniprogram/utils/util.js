@@ -5,7 +5,18 @@ const formatDate = date => {
   const day = date.getDate()
   return [year, month, day].map(formatNumber).join('-')
 }
-
+const YearMonthDayCN = (times) =>{
+  var dateTime= new Date(times);
+  var year=dateTime.getFullYear();
+  var month=dateTime.getMonth() + 1;
+  var day=dateTime.getDate();
+  month < 10 ? month='0'+month : month; 
+  hours < 10 ? hours='0'+hours : hours; 
+  minutes < 10 ? minutes='0'+minutes : minutes; 
+  second < 10 ? second='0'+second : second; 
+  let dateStr = year + '年' + month + '月' + day + '日'
+  return dateStr;
+}
 const formatDateClear = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -18,7 +29,7 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
-function getDates(days, todate) {
+const getDates = (days, todate) => {
   var dateArry = [];
   for (var i = 0; i < days; i++) {
     var dateObj = dateLater(todate, i);
@@ -26,7 +37,7 @@ function getDates(days, todate) {
   }
   return dateArry;
 }
-function formatHourTime(date) {
+const formatHourTime = (date) =>{
   var hour = date.getHours()
   var minute = date.getMinutes()
   var t
@@ -45,13 +56,13 @@ function formatHourTime(date) {
   }
   return t
 }
-function formatMonthDay(date) {
+const formatMonthDay =(date)  =>{
   var day = date.getDate()
   var month = new Date().toDateString().split(" ")[1]
   var md = month +" "+ day
   return  md
 }
-function dateLater(dates, later) {
+const dateLater = (dates, later) =>{
   let dateObj = {};
   let show_day = new Array('周日', '周一', '周二', '周三', '周四', '周五', '周六');
   let date = new Date(dates);
@@ -65,11 +76,10 @@ function dateLater(dates, later) {
   return dateObj;
 }
 module.exports = {
-  BASE_URL: "",
-  GET_MEIZHI_URL: t,
   formatDate: formatDate,
   formatDateClear:formatDateClear,
   getDates: getDates,
+  YearMonthDayCN:YearMonthDayCN,
   formatHourTime: formatHourTime,
   formatMonthDay: formatMonthDay
 }
