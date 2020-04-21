@@ -2,7 +2,9 @@
 const cloud = require('wx-server-sdk');
 const fetchit = require('node-fetch');
 
-cloud.init()
+cloud.init({
+  env: 'wunderweather-nwepb'
+})
 
 // 云函数入口函数
 exports.main = async (event, context) => {

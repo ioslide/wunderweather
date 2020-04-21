@@ -1,7 +1,9 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init()
+cloud.init({
+  env: 'wunderweather-nwepb'
+})
 
 exports.main = async (event, context) => {
   console.log(event)
@@ -17,6 +19,9 @@ exports.main = async (event, context) => {
     }
     case 'saveSubscribeMessage': {
       return saveSubscribeMessage(event)
+    }
+    case 'getContext': {
+      return getContext(event)
     }
     case 'deleteSubscribeMessage': {
       return deleteSubscribeMessage(event)
@@ -74,6 +79,16 @@ async function deleteSubscribeMessage(event) {
     })
     .remove();
   return result;
+}
+
+async function getContext(event) {
+  const wxContext = cloud.getWXContext()
+  return {
+    openid: wxContext.OPENID,
+    appid: wxContext.APPID,
+    unionid: wxContext.UNIONID,
+    env: wxContext.ENV,
+  }
 }
 
 async function saveSubscribeMessage(event) {

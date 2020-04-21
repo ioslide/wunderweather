@@ -1,5 +1,7 @@
 const cloud = require('wx-server-sdk')
-cloud.init()
+cloud.init({
+  env: 'wunderweather-nwepb'
+})
 exports.main = async (event, context) => {
   try {
     const result = await cloud.openapi.wxacode.get({
