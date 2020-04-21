@@ -19,7 +19,7 @@ exports.main = async (event, context) => {
       uri: "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + APPID + "&secret=" + APPSECRET,
     });
     res = JSON.parse(res)
-    let resUpdate = await db.collection('accessToken').doc('ACCESS_TOKEN').update({
+    let resUpdate = await coll_token.doc('ACCESS_TOKEN').update({
       data: {
         token: res.access_token
       },
