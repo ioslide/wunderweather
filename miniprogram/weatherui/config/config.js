@@ -22,7 +22,5 @@ exports.default = {
   gitHost:'https://github.com/ioslide/wunderweather.git',
   // gitHost:'https://git.weixin.qq.com/ioslide/weather.git',
   name: "XHY",
-  description: "",
-  date: "",
-  auth: ""
+  description: ""
 };

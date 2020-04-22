@@ -14,18 +14,6 @@
   position: relative;
 }
 
-.sunIcon {
-  width: 22px;
-  height: 22px;
-  vertical-align: middle;
-  display: inline-block;
-  /* background-size: 166.375px; */
-  bottom: -7px;
-  position: absolute;
-  left: -8px;
-  z-index: 1;
-}
-
 .sunShadowBox {
   width: 100%;
   height: 100%;
@@ -42,9 +30,9 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   position: absolute;
-  overflow: hidden;
+  /* overflow: hidden; */
   display: inline-block;
-  background: linear-gradient(to bottom, rgba(168, 143, 93, 0.262) 40%, rgba(175, 149, 97, 0.262) 100%);
+  background: radial-gradient(circle at 0% -70%, rgb(232, 235, 238) 0%, rgb(224, 229, 233) 85%);
   z-index:3;
   left: 0;
   bottom: 0;
