@@ -21,10 +21,11 @@
   }
 }
 
-page{
+page {
   overflow: visible;
-  background:#F5F6F7
+  background: #F5F6F7
 }
+
 .dark-page {
   animation: fade-in 0.6s ease-in;
   background: #010101;
@@ -1277,7 +1278,7 @@ button::after {
 
 .moon-swiper {
   width: 100%;
-  margin:50px 0 20px 0;
+  margin: 50px 0 20px 0;
 }
 
 .item-inner-dark {
@@ -2818,7 +2819,9 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  left: 9px;
+  left: 6px;
+  bottom: -4px;
+  z-index: 6;
 }
 
 .sunriseDot-dark {
@@ -2827,13 +2830,11 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  left: 9px;
+  left: 6px;
+  bottom: -4px;
+  z-index: 6;
 }
 
-.canvasArc {
-  width: 212px;
-  height: 106px;
-}
 
 .sunsetDot-light {
   background: #C1C6CC;
@@ -2841,7 +2842,9 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  right: 9px;
+  right: 6px;
+  bottom: -4px;
+  z-index: 6;
 }
 
 .sunsetDot-dark {
@@ -2850,7 +2853,9 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  right: 9px;
+  right: 6px;
+  bottom: -4px;
+  z-index: 6;
 }
 
 
@@ -3051,31 +3056,39 @@ button::after {
     opacity: 1
   }
 }
+
 @keyframes refreshLocationAni-0 {
   0% {
     opacity: 1
   }
+
   25% {
     opacity: 0.3
   }
+
   50% {
     opacity: 1
   }
+
   75% {
     opacity: 0.3
   }
+
   100% {
     opacity: 1
   }
 }
+
 .refreshLocationAni {
-  opacity:1;
+  opacity: 1;
   animation: refreshLocationAni 2.4s ease-in-out;
 }
-.refreshLocationAni-0{
+
+.refreshLocationAni-0 {
   opacity: 0;
   animation: refreshLocationAni-0 2s ease-in-out;
 }
+
 .navSlide {
   height: 100%;
   width: 6% !important;
@@ -3104,9 +3117,9 @@ button::after {
 }
 
 .refreshLocationIcon {
-  width:35px;
+  width: 35px;
   height: 35px;
-  margin:15px;
+  margin: 15px;
   position: fixed;
   display: flex;
   overflow: hidden;
@@ -3114,13 +3127,15 @@ button::after {
   bottom: 0;
   z-index: 1000;
 }
-.barRightIcon{
+
+.barRightIcon {
   display: flex;
   align-items: center;
   height: 100%;
   justify-content: center;
   max-width: 100%;
 }
+
 /* .canvas-style {
   width: 100% !important;
   height: 900rpx !important;
@@ -3170,6 +3185,7 @@ button::after {
   -ms-border-radius: 20px;
   -o-border-radius: 20px;
 }
+
 .soft-button-dark {
   border-radius: 20px;
   border: none;
@@ -3180,13 +3196,16 @@ button::after {
   -ms-border-radius: 20px;
   -o-border-radius: 20px;
 }
+
 .soft-button-pushed-only {
   animation: fadeIn 0.3s linear;
   box-shadow: inset 9px 9px 9px 0 rgba(206, 206, 206, 0.3),
     inset -9px -9px 9px 0 rgba(255, 255, 255, 0.6);
 }
 
-.soft-button-pushed,soft-button-light:active,soft-button-light:hover {
+.soft-button-pushed,
+soft-button-light:active,
+soft-button-light:hover {
   /* animation: fade-in 0.1s linear; */
   box-shadow: inset 9px 9px 9px 0 rgba(206, 206, 206, 0.3),
     inset -9px -9px 9px 0 rgba(255, 255, 255, 0.6),
@@ -3243,11 +3262,13 @@ button::after {
   align-items: center;
   position: absolute;
 }
-.dailyChart{
+
+.dailyChart {
   width: 100%;
   height: 260px;
 }
-.rainChart{
+
+.rainChart {
   width: 100%;
   height: 200px;
 }
