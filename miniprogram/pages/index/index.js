@@ -95,27 +95,25 @@ create(store, {
     lastRefreshTime: '',
     initChart: !1,
     refreshChart: !1,
+    refreshSunset: false,
     refreshLocation: false,
     canBlurRoot: false,
     isChangeSetting: false,
-    // isManualSetLocation: false,
     hasCusImage: false,
     networkType: 'none',
     imageBase64: '',
     qrImageURL: '',
+    updateSunsetTime: null,
+    sunrise: "06:00",
+    sunset: "19:34",
     painting: {},
     shareImage: '',
     touchS: [0, 0],
     touchE: [0, 0],
-    // headContentcurTime: '',
-    // headContentSwitch: false,
-    // canDrawSunCalcAgain: false,
     curDetailTime: '',
     moonPhaseLists: [],
     historyCityList: [],
     authScreen: false,
-    strSunSet: "",
-    strSunRise: "",
     bingImage: "",
     src: null,
     visible: false,
@@ -172,9 +170,9 @@ create(store, {
           })
           log('[onLoad] => loadDataFromStorage()')
           t.loadDataFromStorage()
-            t.setData({
-              networkType: networkType
-            })
+          t.setData({
+            networkType: networkType
+          })
         } else {
           t.setData({
             networkType: networkType
@@ -262,7 +260,6 @@ create(store, {
     async function asyncGetHisWeather() {
       await t.screenFadeIn()
       await getHisWeather()
-      await t.drawSunCalc(t.data.forecastData.latitude, t.data.forecastData.longitude)
       await t.screenFadeOut()
       await t.setData({
         'canBlurRoot': false
@@ -584,7 +581,6 @@ create(store, {
     }
     async function asyncGetNowWeather() {
       await reqNowWeather()
-      await t.drawSunCalc(t.data.forecastData.latitude, t.data.forecastData.longitude)
       await t.screenFadeOut()
       await t.setData({
         'canBlurRoot': false
@@ -811,8 +807,14 @@ create(store, {
         if (chartsMargin < 0) {
           chartsMargin = ~~(d.temperature[f].min) + 20
         }
-
-
+        if (f == 0) {
+          that.setData({
+            'updateSunsetTime': d.astro[f].date,
+            'sunrise': d.astro[f].sunrise.time,
+            'sunset': d.astro[f].sunset.time,
+            'refreshSunset': true
+          })
+        }
         const getWeek = (l) => {
           let tweek = ''
           if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
@@ -834,9 +836,9 @@ create(store, {
           id: d.skycon[f].value,
           aqi: d.air_quality.aqi[f].avg.chn,
           astro: {
-            date: d.astro[f].date.substring(0, 10),
-            sunrise: d.astro[f].sunrise,
-            sunset: d.astro[f].sunset
+            date: d.astro[f].date,
+            sunrise: d.astro[f].sunrise.time,
+            sunset: d.astro[f].sunset.time
           },
           windLevel: that.getWindLevel(d.wind[f].avg.speed),
           windDirect: that.getWindDirect(d.wind[f].avg.direction)
@@ -1056,68 +1058,6 @@ create(store, {
     })
     log(`[moonPhaseLists] =>`, moonPhaseLists)
   },
-  drawSunCalc(a, b) {
-    const t = this
-    let sunriseTime = '',
-      sunsetTime = ''
-
-    let sun = sunCalc.getTimes(new Date(), t.data.forecastData.latitude, t.data.forecastData.longitude)
-    if (sun.sunrise.getMinutes() < 10) {
-      sunriseTime = sun.sunrise.getHours() + ":0" + sun.sunrise.getMinutes()
-    } else {
-      sunriseTime = sun.sunrise.getHours() + ":" + sun.sunrise.getMinutes()
-    }
-    if (sun.sunset.getMinutes() < 10) {
-      sunsetTime = sun.sunset.getHours() + ":0" + sun.sunset.getMinutes()
-    } else {
-      sunsetTime = sun.sunset.getHours() + ":" + sun.sunset.getMinutes()
-    }
-    const drawSun = (a, b) => {
-      // Draw Half C
-      let cxt_arc = wx.createCanvasContext('canvasArc');
-      // log(cxt_arc)
-      cxt_arc.clearRect(0, 0, 212, 106)
-      cxt_arc.setLineWidth(1.3);
-      cxt_arc.setStrokeStyle(a);
-      cxt_arc.setLineCap('round')
-      cxt_arc.setLineDash([3, 3, 3]);
-      cxt_arc.beginPath();
-      cxt_arc.arc(106, 106, 100, 0, -Math.PI * 1, true);
-      cxt_arc.stroke();
-      cxt_arc.setLineWidth(1.3);
-      cxt_arc.setStrokeStyle(b);
-      cxt_arc.setLineCap('round')
-      cxt_arc.beginPath();
-      //Draw Now Time C
-      let
-        curTime = sun.sunset.getHours() - new Date().getHours(),
-        allTime = sun.sunset.getHours() - sun.sunrise.getHours(),
-        cirTime = parseFloat((curTime / allTime).toFixed(1))
-
-      cxt_arc.arc(106, 106, 100, 0, Math.PI * (2 - cirTime), true);
-      cxt_arc.stroke();
-      cxt_arc.draw();
-      log(`[drawSunCalc]=>${a} ${b} `)
-    }
-    var setStrokeStyleColorSunRise = '',
-      setStrokeStyleColorFullDay = ''
-    if (t.store.data.themeValue == 'dark') {
-      setStrokeStyleColorSunRise = 'rgb(255,201,84)'
-      setStrokeStyleColorFullDay = 'rgb(92,92,92)'
-      drawSun(setStrokeStyleColorSunRise, setStrokeStyleColorFullDay)
-    }
-    if (t.store.data.themeValue == 'light') {
-      setStrokeStyleColorSunRise = 'rgb(193, 198, 204)'
-      setStrokeStyleColorFullDay = 'rgb(224, 229, 233)'
-      drawSun(setStrokeStyleColorSunRise, setStrokeStyleColorFullDay)
-    }
-    t.setData({
-      strSunSet: sunsetTime,
-      strSunRise: sunriseTime
-    })
-
-  },
-
   getBingImage() {
     log('[getBingImage]')
     const t = this
@@ -1479,8 +1419,8 @@ create(store, {
       let cloudData = {
         action: 'saveSubscribeMessage',
         page: 'pages/index/index',
-        unit:t.store.data.unitValue,
-        language:t.store.data.languageValue,
+        unit: t.store.data.unitValue,
+        language: t.store.data.languageValue,
         latitude: t.data.forecastData.latitude,
         city: t.data.forecastData.city,
         startTime: startTime,
@@ -1897,16 +1837,16 @@ create(store, {
         cloudPath: 'cusImage/' + n,
         filePath: p,
       }).then(res => {
-        log('[uploadFile]',res)
+        log('[uploadFile]', res)
         t.setData({
           visible: false,
           cusImage: event.detail.resultSrc,
           hasCusImage: true,
-          modalName:null
+          modalName: null
         })
         wx.setStorageSync('hasCusImage', true)
         wx.setStorageSync('cusImageFileID', res.fileID)
-        console.log(res.fileID) 
+        console.log(res.fileID)
       }).catch(error => {
         log(error)
       })
