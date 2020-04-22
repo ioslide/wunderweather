@@ -43,15 +43,15 @@ const formatHourTime = (date) =>{
   var t
   if (minute < 10) {
     if(hour<12){
-      t = hour + ":0" + minute +" AM"
+      t = hour + ":0" + minute
     }else{
-      t = hour + ":0" + minute + " PM"
+      t = hour + ":0" + minute
     }
   } else {
     if (hour < 12) {
-      t = hour + ":" + minute + " AM"
+      t = hour + ":" + minute
     } else {
-      t = hour + ":" + minute + " PM"
+      t = hour + ":" + minute
     }
   }
   return t
