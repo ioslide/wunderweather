@@ -1,0 +1,142 @@
+
+.sunSetBox {
+  width: 190px;
+  /* margin-top: 34px; */
+}
+.sunSetBg {
+  width: 190px;
+  height: 95px;
+  margin: 0 auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  position: relative;
+}
+
+.sunIcon {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+  display: inline-block;
+  /* background-size: 166.375px; */
+  bottom: -7px;
+  position: absolute;
+  left: -8px;
+  z-index: 1;
+}
+
+.sunShadowBox {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.lightSunRiseShadow {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed rgb(193, 198, 204);
+  border-radius: 0 0 50% 50%/0 0 100% 100% ;
+  border-top: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+  display: inline-block;
+  background: linear-gradient(to bottom, rgba(168, 143, 93, 0.262) 40%, rgba(175, 149, 97, 0.262) 100%);
+  z-index:3;
+  left: 0;
+  bottom: 0;
+}
+.darkSunRiseShadow {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed rgb(255,201,84);
+  border-radius: 0 0 50% 50%/0 0 100% 100% ;
+  border-top: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+  display: inline-block;
+  background: linear-gradient(to bottom, rgba(168, 143, 93, 0.262) 40%, rgba(175, 149, 97, 0.262) 100%);
+  z-index:3;
+  left: 0;
+  bottom: 0;
+}
+.lightSunShadow {
+  width: 100%;
+  height: 200%;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 1px dashed rgb(224, 229, 233);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index:2
+}
+.darkSunShadow {
+  width: 100%;
+  height: 200%;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 1px dashed rgb(92,92,92);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index:2
+}
+.lightFullDayBorder{
+  border: 1px dashed rgb(224, 229, 233);
+}
+.lightSunriseBorder{
+  border: 1px dashed rgb(193, 198, 204);
+}
+.darkSunriseBorder{
+  border: 1px dashed rgb(255,201,84);
+}
+.darkFullDayBorder{
+  border: 1px dashed rgb(92,92,92);
+}
+.sunRise {
+  float: left;
+}
+.sunRise:before {
+  margin-left: -8px;
+}
+
+.sunSet {
+  float: right;
+}
+
+.sunSet:before {
+  margin-left: 1px;
+}
+
+.sunSetTime {
+  padding-top: 4px;
+  /* border-top: 1px solid #787878; */
+}
+
+.sunRise,
+.sunSet {
+  position: relative;
+  display: block;
+}
+
+.sunRise:before,
+.sunSet:before {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background-color: #f7b85f;
+  border-radius: 50%;
+  left: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  top: -5px;
+}
