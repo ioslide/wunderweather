@@ -12,7 +12,8 @@
     "sc-star":"/weatherui/components/scStar/sc-star",
     "temperature-canvas":"/weatherui/components/temperature-canvas/temperature-canvas",
     "rain-canvas":"/weatherui/components/rain-canvas/rain-canvas",
-    "radar":"/weatherui/components/radar/radar"
+    "radar":"/weatherui/components/radar/radar",
+    "sunSet":"/weatherui/components/sunSet/sunSet"
   },
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true
