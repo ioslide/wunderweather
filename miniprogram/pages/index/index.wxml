@@ -699,13 +699,9 @@
 			<view class="flex-sub flex align-end justify-end">
 				<view class="{{$.themeValue == 'light'?'sunriseDot-light':'sunriseDot-dark'}}"></view>
 			</view>
-
-			<view class="flex-twice flex justify-center padding-bottom-10">
-				<canvas class="canvasArc" canvas-id="canvasArc">
-				</canvas>
-				<!-- <view class="suntime"></view> -->
+			<view class="flex-twice flex justify-center">
+				<sunSet refreshSunset="{{refreshSunset}}" sunset="{{sunset}}" sunrise="{{sunrise}}"></sunSet>
 			</view>
-
 			<view class="flex-sub flex align-end justify-start">
 				<view class="{{$.themeValue == 'light'?'sunsetDot-light':'sunsetDot-dark'}}"></view>
 			</view>
@@ -713,12 +709,12 @@
 
 		<view class="flex flex-wrap padding-15 justify-center opacity-0 margin-top-15 {{$.themeValue == 'light'?'text-grey':'sun-text-fc9f62'}}" animation="{{fourthObserverAni}}">
 			<view class="basis-xs flex align-start justify-end">
-				{{strSunRise}}
+				{{sunrise}}
 			</view>
 			<view class="basis-df flex justify-center">
 			</view>
 			<view class="basis-xs flex align-start justify-start">
-				{{strSunSet}}
+				{{sunset}}
 			</view>
 		</view>
 	</block>
