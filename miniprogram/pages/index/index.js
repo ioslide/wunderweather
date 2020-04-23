@@ -18,44 +18,34 @@ log('[config]', config)
 import create from '../../utils/create'
 import store from '../../store/index'
 // import lazyFunction from "../../utils/lazyFunction"
-var a,
-  t = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (a) {
-    return typeof a;
-  } : function (a) {
-    return a && "function" == typeof Symbol && a.constructor === Symbol && a !== Symbol.prototype ? "symbol" : typeof a;
+var weatherSkycon = {
+    CLEAR_DAY: "晴",
+    CLEAR_NIGHT: "晴夜",
+    PARTLY_CLOUDY_DAY: "白天多云",
+    PARTLY_CLOUDY_NIGHT: "夜间多云",
+    CLOUDY: "阴",
+    RAIN: "雨",
+    WIND: "风",
+    SNOW: "雪",
+    HAZE: "雾霾沙尘",
+    LIGHT_HAZE: "轻度雾霾",
+    MODERATE_HAZE: "中度雾霾",
+    HEAVY_HAZE: "重度雾霾",
+    LIGHT_RAIN: "小雨",
+    MODERATE_RAIN: "中雨",
+    HEAVY_RAIN: "大雨",
+    STORM_RAIN: "暴雨",
+    FOG: "雾",
+    LIGHT_SNOW: "小雪",
+    MODERATE_SNOW: "中雪",
+    HEAVY_SNOW: "大雪",
+    STORM_SNOW: "暴雪",
+    DUST: "浮尘",
+    SAND: "沙尘",
+    THUNDER_SHOWER: "雷阵雨",
+    HAIL: "冰雹",
+    SLEET: "雨夹雪"
   },
-  weatherSkycon = ("function" == typeof Symbol && t(Symbol.iterator),
-    function (a) {
-      a && a.__esModule;
-    }, {
-      CLEAR_DAY: "晴",
-      CLEAR_NIGHT: "晴夜",
-      PARTLY_CLOUDY_DAY: "白天多云",
-      PARTLY_CLOUDY_NIGHT: "夜间多云",
-      CLOUDY: "阴",
-      RAIN: "雨",
-      WIND: "风",
-      SNOW: "雪",
-      HAZE: "雾霾沙尘",
-      LIGHT_HAZE: "轻度雾霾",
-      MODERATE_HAZE: "中度雾霾",
-      HEAVY_HAZE: "重度雾霾",
-      LIGHT_RAIN: "小雨",
-      MODERATE_RAIN: "中雨",
-      HEAVY_RAIN: "大雨",
-      STORM_RAIN: "暴雨",
-      FOG: "雾",
-      LIGHT_SNOW: "小雪",
-      MODERATE_SNOW: "中雪",
-      HEAVY_SNOW: "大雪",
-      STORM_SNOW: "暴雪",
-      DUST: "浮尘",
-      SAND: "沙尘",
-      THUNDER_SHOWER: "雷阵雨",
-      HAIL: "冰雹",
-      SLEET: "雨夹雪"
-    }
-  ),
   WeatherWarningLevel = {
     "01": "蓝色",
     "02": "⻩色",
@@ -82,21 +72,21 @@ var a,
   },
   qqMap = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
-  }),
-  r = null
+  })
 create(store, {
   data: {
     datePicker: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    windowWidth: wx.getSystemInfoSync().windowWidth,
-    windowHeight: wx.getSystemInfoSync().windowHeight,
+    windowWidth: app.globalData.windowWidth,
+    windowHeight: app.globalData.windowHeight,
     lastRefreshTime: '',
     initChart: !1,
     refreshChart: !1,
     refreshSunset: false,
     refreshLocation: false,
+    refreshRadar: false,
     canBlurRoot: false,
     isChangeSetting: false,
     hasCusImage: false,
@@ -126,6 +116,15 @@ create(store, {
     forecastData: {
       hourlyKeypoint: "",
       // minutelyKeypoint: "",
+      rainRadar: {
+        coverImage: "",
+        forecastImages: {},
+        images: {}
+      },
+      aqiRadar: {
+        coverImage: "",
+        images: {}
+      },
       minutely: {},
       hourly: {},
       daily: {},
@@ -522,7 +521,10 @@ create(store, {
     })
     const reqNowWeather = () => {
       log('[getNowWeather]', t.data.forecastData.longitude, t.data.forecastData.latitude, '[getLocationMethod]', t.store.data.getLocationMethod)
-      let apiHost = config.default.weatherApiHost + "/" + config.default.weatherApiVersion + "/" + config.default.weatherApiToken + "/" + t.data.forecastData.longitude + "," + t.data.forecastData.latitude + "/weather.json?lang=" + t.store.data.languageValue + "&dailysteps=30&alert=true&unit=" + t.store.data.unitValue
+      let apiHost = config.default.weatherApiHost + "/" + config.default.weatherApiVersion + "/" + config.default.weatherApiToken + "/" + t.data.forecastData.longitude + "," + t.data.forecastData.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
+
+      // https://api.caiyunapp.com/v2.5/96Ly7wgKGq6FhllM/104.732251,31.446094/weather.jsonp?lang=en_US&hourlysteps=120&random=0.6537621058739214&callback=jQuery111306579643389228496_1587605664395&_=1587605664411
+
       log('[getNowWeather] => apiHost', apiHost)
       wx.request({
         url: apiHost,
@@ -549,38 +551,14 @@ create(store, {
           waitToCheck(weatherData, canScreenFadeOut, canRefreshChart)
         },
         complete: () => {
-          a && a();
+          // a && a();
         }
       })
     }
-    const getHisWeather = () => {
-      wx.getStorage({
-          key: "forecastData",
-          success: res => {
-            t.setTimelyWeather(res.data);
-            // t.setNowWeather(res.data.realtime);
-          }
-        }),
-        wx.getStorage({
-          key: "historyCityList",
-          success: res => {
-            log(res.data[0].city)
-            t.setData({
-              'forecastData.city': res.data[0].city
-            });
-          }
-        }),
-        wx.getStorage({
-          key: "lastRefreshTime",
-          success: res => {
-            t.setData({
-              'lastRefreshTime': res.data
-            });
-          }
-        })
-    }
+
     async function asyncGetNowWeather() {
       await reqNowWeather()
+      await t.reqRadar()
       await t.screenFadeOut()
       await t.setData({
         'canBlurRoot': false
@@ -1548,6 +1526,89 @@ create(store, {
       })
     } else {}
   },
+  reqRadar() {
+    const t = this
+    const reqRainRadar = () => {
+      let rainRadarApiHost = config.default.weatherApiHost + "/" + config.default.radarApiVersion + "/radar/fine_images?lat=" + t.data.forecastData.latitude + "&lon=" + t.data.forecastData.longitude + "&level=1&token=" + config.default.radarApiToken
+      log('[reqRainRadar] => rainRadarApiHost', rainRadarApiHost)
+      wx.request({
+        url: rainRadarApiHost,
+        success: (result) => {
+          log('[rainRadar result]', result)
+          let rainRadarImg = result.data.images[result.data.images.length - 1][0]
+          let source = result.data.images[result.data.images.length - 1]
+          let rainRadarPosition = source[2]
+
+          const reduceRainRadarImages = () =>{
+            let rainRadarImageData = []
+            let rainRadarImages = result.data.images
+            for (var m = rainRadarImages,i = 0; i < rainRadarImages.length; i++) {
+              var u = {
+                image: m[i][0]
+              };
+              rainRadarImageData.push(u);
+            }
+            return rainRadarImageData
+          }
+          const reduceRainRadarForecastImages = () =>{
+            var rainRadarforecastImagesData = []
+            var rainRadarforecastImages = result.data.forecast_images
+            for (var n = rainRadarforecastImages,j = 0; j < rainRadarforecastImages.length; j++) {
+              var v = {
+                image: n[j][0]
+              };
+              rainRadarforecastImagesData.push(v);
+            }
+            return rainRadarforecastImagesData
+          }
+          const reduceRainRadarData = async () =>{
+            let rainRadarforecastImagesData = await reduceRainRadarForecastImages()
+            let rainRadarImageData = await reduceRainRadarImages()
+            console.log(rainRadarImageData,rainRadarforecastImagesData)
+            return {rainRadarImageData,rainRadarforecastImagesData}
+          }
+          reduceRainRadarData().then( res =>{
+            t.setData({
+              'forecastData.rainRadar.latitude': (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
+              'forecastData.rainRadar.longitude': (rainRadarPosition[1] + rainRadarPosition[3]) / 2,
+              'forecastData.rainRadar.coverImage': rainRadarImg,
+              'forecastData.rainRadar.images': res.rainRadarImageData,
+              'forecastData.rainRadar.forecastImages': res.rainRadarforecastImagesData
+            })
+          })
+        },
+        fail: (res) => {},
+        complete: () => {
+
+        }
+      })
+    }
+    const reqAqiRadar = () => {
+      let aqiRadarApiHost = config.default.weatherApiHost + "/" + config.default.radarApiVersion + "/aqi/images?token=" + config.default.radarApiToken + "&lon=" + t.data.forecastData.longitude + "&lat=" + t.data.forecastData.latitude
+      log('[reqAqiRadar] => aqiRadarApiHost', aqiRadarApiHost)
+      wx.request({
+        url: aqiRadarApiHost,
+        success: (result) => {
+          log('[reqAqiRadar result]', result)
+          let aqiRadarImg = result.data.images[result.data.images.length - 1][0]
+          log('aqiRadarImg', aqiRadarImg)
+          t.setData({
+            'forecastData.aqiRadar.coverImage': aqiRadarImg,
+            'forecastData.aqiRadar.images': result.data.images
+          })
+        },
+        fail: (res) => {},
+        complete: () => {
+
+        }
+      })
+    }
+    const reqRadar = async () => {
+      await reqRainRadar()
+      await reqAqiRadar()
+    }
+    reqRadar()
+  },
   intersectionObserver() {
     log('[intersectionObserver]')
     const t = this
@@ -1647,6 +1708,7 @@ create(store, {
         t.setData({
           sixthObserverAni: ani.export()
         })
+        wx.createIntersectionObserver().disconnect()
       }
       if (res.boundingClientRect.top < 0) {
         // log('[sixthObserver] => end')
@@ -1914,3 +1976,33 @@ create(store, {
     });
   }
 });
+
+// var s = this;
+// e.request(t.WEATHER.replace("#LOCATION#", a), {}, "GET", !0).then(function(e) {
+//     if ("ok" === e.status) {
+//         if (0 == e.result.alert.content.length) e.result.alert.message = "暂无预警信息"; else {
+//             e.result.alert.message = e.result.alert.content[e.result.alert.content.length - 1].description;
+//             var t = e.result.alert.message;
+//             (t.search("高温黄色预警") > -1 || t.search("高温橙色预警") > -1) && (e.result.alert.message = "天气闷热，注意防暑");
+//         }
+//         var a = 2, n = e.result.forecast_keypoint;
+//         if (n.search("伞") > -1 || n.search("正在下") > -1 || n.search("开始下") > -1 || n.search("雨渐小") > -1 || n.search("细雨") > -1 || n.search("正下着") > -1 || n.search("会下一小会儿") > -1 || n.search("会下一阵") > -1) a = 1; else if (n.search("不会有雨") > -1 || n.search("不会有雪") > -1 || n.search("不会下雨") > -1) a = 2; else for (var r = 0; r < 3; r++) if ("RAIN" == (u = e.result.hourly.skycon[r].value) || "SNOW" == u) {
+//             a = 1;
+//             break;
+//         }
+//         var o = n.replace(/[^0-9]/gi, " ").trim().split(/\s+/);
+//         1 == o.length && n.search("正在下") > -1 && parseInt(o[0]) > 5 && (a = 2);
+//         var i = Math.trunc(e.result.hourly.temperature[0].value), c = e.result.hourly.skycon[0].value, u = "duoyun";
+//         "CLOUDY" == c ? (c = "多云", u = "yintian") : c.search("PARTLY_CLOUDY") > -1 ? (c = "云", 
+//         u = "duoyun") : "RAIN" == c ? (c = "有雨", u = "xiaoyu") : "CLEAR_DAY" == c || "CLEAR_NIGHT" == c ? (c = "晴", 
+//         u = "qing") : "WIND" == c ? (c = "风", u = "shachenbao") : "SNOW" == c && (c = "雪", 
+//         u = "xiaoxue"), s.setData({
+//             weather: e.result,
+//             willRain: a,
+//             temperature: i,
+//             skycon_desc: c,
+//             skycon: u,
+//             klass: ""
+//         });
+//     }
+// });
