@@ -1,0 +1,7 @@
+   <view style="width:{{windowWidth}}px">
+   	<map id="map" latitude="{{latitude-0.118}}" longitude="{{longitude-0.05}}" scale="6.7" style="width: 100%; height: 675rpx;">
+   		<cover-view style="width: 100%; height: 675rpx;">
+   			<cover-image src="{{radar.coverImage}}" style="cover-img"></cover-image>
+   		</cover-view>
+   	</map>
+   </view>
