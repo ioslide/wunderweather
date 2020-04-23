@@ -34,8 +34,7 @@ function onInitChart(F2, config) {
     },
     value: {
       tickCount: 2,
-      min: 0,
-      range: [0, 1]
+      min: 0
     }
   }),
   chart.axis('time', false),
