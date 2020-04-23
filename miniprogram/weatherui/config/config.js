@@ -6,7 +6,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
   weatherApiHost: "https://api.caiyunapp.com",
   weatherApiVersion: "v2.5",
-  weatherApiToken: "F4i9DpgD0R1DIcPP", // yJgJQ31wdVX4RDrE
+  weatherApiToken: "F4i9DpgD0R1DIcPP", // yJgJQ31wdVX4RDrE  //Y2FpeXVuX25vdGlmeQ  //96Ly7wgKGq6FhllM
+  radarApiToken:"Y2FpeXVuIGFuZHJpb2QgYXBp",
+  radarApiVersion: "v1",
+  // https://api.caiyunapp.com/v1/radar/fine_images?lat=31.473364419367254&lon=104.68616446943008&level=1&token=Y2FpeXVuIGFuZHJpb2QgYXBp
   bingApiHost:"https://www.benweng.com",
   cosApiHost:"https://weather.ioslide.com",
   // cloudEnv:"subweather-5hkjz",//订阅号
