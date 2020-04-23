@@ -8,12 +8,6 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
-    // theme: {},
-    // distanceUnit:{},
-    // refreshfrequencyValue: '',
-    // refreshfrequency: {},
-    // languageValue: '',
-    // language: {},
     use: [
       'themeValue',
       'theme',
@@ -26,25 +20,7 @@ create(store, {
     ]
   },
   onLoad(e) {
-    // wx.hideLoading()
   },
-  // onShow: function (e) {
-  //   const t = this
-  //   let $$ = wx.getStorageSync('$$')
-  //   t.setData({
-  //     theme: $$.theme,
-  //     // temperatureUnit : $$.temperatureUnit,
-  //     // temperatureUnitValue:$$.temperatureUnitValue,
-  //     // distanceUnit : $$.distanceUnit,
-  //     // distanceUnitValue:$$.distanceUnitValue,
-  //     refreshfrequency: $$.refreshfrequency,
-  //     refreshfrequencyValue: $$.refreshfrequencyValue,
-  //     indexHeadImageValue:$$.indexHeadImageValue,
-  //     indexHeadImage:$$.indexHeadImage,
-  //     language: $$.language,
-  //     languageValue: $$.languageValue
-  //   })
-  // },
   indexHeadImageRadioChange:function(e){
     log('[indexHeadImageRadioChange]', e.detail.value )
     const t = this
@@ -99,19 +75,9 @@ create(store, {
       app.changeStorage('themeValue', themeValue)
       app.changeStorage('theme', theme)
     }
-    const drawSunCalc = () =>{
-      let
-      pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
-      prevPage.drawSunCalc()
-    // prevPage.setData({
-    //   canDrawSunCalcAgain: true
-    // })
-    }
     async function change(){
       await modalName()
       await storeChange()
-      await drawSunCalc()
     }
     change()
   },
