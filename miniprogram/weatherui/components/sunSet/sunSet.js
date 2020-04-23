@@ -40,16 +40,21 @@ create.Component(store,{
   watch: {
     refreshSunset() {
       const that = this
-      log('[refreshSunset]',this.properties.sunrise,this.properties.sunset)
       let
         updateTime = util.formatHourTime(new Date()),
         // updateTime = '10:55',
         curTime = Number(updateTime.slice(0, 2)) - Number(this.properties.sunrise.slice(0, 2)) ,
         allTime = Number(this.properties.sunset.slice(0, 2)) - Number(this.properties.sunrise.slice(0, 2)),
         rotateAangle = parseFloat((curTime / allTime) * 180)
-      that.setData({
-        rotateAangle:rotateAangle
-      })
+        log('[refreshSunset]',updateTime,this.properties.sunrise,this.properties.sunset)
+        log('[rotateAangle]',rotateAangle,curTime,allTime)
+        rotateAangle >= 180 ? that.setData({
+          rotateAangle: 180
+        }) : that.setData({
+          rotateAangle:rotateAangle
+        })
+        //TODO
+        // https://iknow-pic.cdn.bcebos.com/6f061d950a7b020866f6f65d6bd9f2d3572cc84b?x-bce-process=image/resize,m_lfit,w_600,h_800,limit_1 日出日落3D
     }
   },
   methods: {

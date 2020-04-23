@@ -1,7 +1,14 @@
 
 .sunSetBox {
-  width: 190px;
-  /* margin-top: 34px; */
+  width: 210px;
+  overflow: hidden;
+  height: 115px;
+  position: relative;
+  display: flex;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  
 }
 .sunSetBg {
   width: 190px;
@@ -11,7 +18,8 @@
   box-sizing: border-box;
   background-repeat: no-repeat;
   background-position: 50%;
-  position: relative;
+  position: absolute;
+  display: flex;  
 }
 
 .sunShadowBox {
@@ -29,24 +37,25 @@
   border-top: none;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  position: absolute;
+  /* position: absolute; */
   /* overflow: hidden; */
   display: inline-block;
   background: radial-gradient(circle at 0% -70%, rgb(232, 235, 238) 0%, rgb(224, 229, 233) 85%);
   z-index:3;
   left: 0;
-  bottom: 0;
+  top: 0;
 }
 .darkSunRiseShadow {
-  width: 100%;
-  height: 100%;
+  width: 190px;
+  height: 95px;
   border: 1px dashed rgb(255,201,84);
   border-radius: 0 0 50% 50%/0 0 100% 100% ;
   border-top: none;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  position: absolute;
-  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  /* overflow: hidden; */
   display: inline-block;
   background: linear-gradient(to bottom, rgba(168, 143, 93, 0.262) 40%, rgba(175, 149, 97, 0.262) 100%);
   z-index:3;

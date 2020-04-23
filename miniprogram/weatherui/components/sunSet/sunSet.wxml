@@ -4,9 +4,9 @@
 			<view class="{{$.themeValue == 'light'?'lightSunShadow':'darkSunShadow'}}">
 				<!-- <view class="sunMove" style="margin-left: {{sunIconBgLef}}px;"></view> -->
 			</view>
-			<view class="{{$.themeValue == 'light'?'lightSunRiseShadow':'darkSunRiseShadow'}}" style="transform: translateY(100%) rotate({{rotateAangle}}deg);transform-origin: 50% 0%;">
-					<image src="{{$.themeValue == 'light'?'https://weather.ioslide.com/weather/sunRistSet-light.svg':'https://weather.ioslide.com/weather/sunRistSet-dark.svg'}}" style="position: absolute;width: 22px;height: 22px;top: -10px;z-index: 6;left: -10px;"></image>
-			</view>
 		</view>
+	</view>
+	<view class="{{$.themeValue == 'light'?'lightSunRiseShadow':'darkSunRiseShadow'}}" style="transform: translateY(100%) rotate({{rotateAangle}}deg);transform-origin: 50% 0%;">
+		<image src="{{$.themeValue == 'light'?'https://weather.ioslide.com/weather/sunRistSet-light.svg':'https://weather.ioslide.com/weather/sunRistSet-dark.svg'}}" style="position: absolute;width: 22px;height: 22px;top: -10px;z-index: 6;left: -10px;"></image>
 	</view>
 </view>
