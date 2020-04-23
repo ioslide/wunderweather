@@ -38,23 +38,13 @@ const getDates = (days, todate) => {
   return dateArry;
 }
 const formatHourTime = (date) =>{
-  var hour = date.getHours()
-  var minute = date.getMinutes()
-  var t
-  if (minute < 10) {
-    if(hour<12){
-      t = hour + ":0" + minute
-    }else{
-      t = hour + ":0" + minute
-    }
-  } else {
-    if (hour < 12) {
-      t = hour + ":" + minute
-    } else {
-      t = hour + ":" + minute
-    }
-  }
-  return t
+  var dateTime= new Date(date);
+  var hours = dateTime.getHours()
+  var minutes = date.getMinutes()
+  hours < 10 ? hours='0'+hours : hours; 
+  minutes < 10 ? minutes='0'+minutes : minutes; 
+  let dateStr = hours + ':' + minutes
+  return dateStr;
 }
 const formatMonthDay =(date)  =>{
   var day = date.getDate()
