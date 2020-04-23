@@ -18349,13 +18349,11 @@
 								width,
 								height
 							} = res[0];
-							console.log('f2canvas res',node,width,height)
+							console.log('[f2canvas res]',node,width,height)
 							const context = node.getContext('2d');
-
 							const dpr = wx.getSystemInfoSync().pixelRatio
 							node.width = width * dpr
 							node.height = height * dpr
-							// context.scale(dpr, dpr)
 							let config = this.data.config
 							config['context'] = context
 							const chart = onInitChart(lib,config);
@@ -18364,7 +18362,6 @@
 							console.log('[wx-f2 config]',config)
 							console.log('[wx-f2 chart]',chart)
 							if (chart) {
-								console.log('this.chart')
 								this.chart = chart;
 								this.canvasEl = chart.get('el');
 							}
