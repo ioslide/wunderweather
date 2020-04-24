@@ -2819,7 +2819,7 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  left: 6px;
+  left: 15px;
   bottom: -4px;
   z-index: 6;
 }
@@ -2841,7 +2841,7 @@ button::after {
   height: 8px;
   position: relative;
   border-radius: 50%;
-  right: 6px;
+  right: 15px;
   bottom: -4px;
   z-index: 6;
 }
