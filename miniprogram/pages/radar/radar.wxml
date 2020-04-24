@@ -2,5 +2,5 @@
 		<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 	</page-meta>
 
-	<web-view style="max-height:300px!important;" src="{{radarSrc}}"></web-view>
+	<web-view src="{{radarSrc}}"></web-view>
 
