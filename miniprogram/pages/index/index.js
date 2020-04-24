@@ -155,32 +155,9 @@ create(store, {
       log('[' + evt + ']' + '=>', evt)
     }
     store.onChange(handler)
+    t.loadDataFromNet()
 
-    wx.getNetworkType({
-      success: res => {
-        log(`[networkType] =>`, res.networkType)
-        let networkType = res.networkType
-        if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
-          wx.showToast({
-            title: '请检查你的网络连接',
-            duration: 1500,
-            icon: 'none',
-            mask: true,
-          })
-          log('[onLoad] => loadDataFromStorage()')
-          t.loadDataFromStorage()
-          t.setData({
-            networkType: networkType
-          })
-        } else {
-          t.setData({
-            networkType: networkType
-          })
-          log('[onLoad] => loadDataFromNet()')
-          t.loadDataFromNet()
-        }
-      }
-    })
+
   },
   onShow() {
     const t = this
@@ -197,6 +174,10 @@ create(store, {
       }
     }
     log(`[chooseLocation.getLocation()] =>`, location)
+    if(location == null){
+      app.changeStorage('getLocationMethod', 'auto')
+      t.store.data.getLocationMethod = 'auto'
+    }
     if (location !== null) {
       t.setData({
         'forecastData.city': location.city,
@@ -205,12 +186,11 @@ create(store, {
         'forecastData.latitude': location.latitude
       })
       //auth状态手动获取经纬度后先不请求数据
-      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') : t.store.data.startScreen == 'poetry' ? (t.getNowWeather(false, true), t.setData({
+      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') : t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
         'modalName': null
-      })) : t.store.data.startScreen == 'default' ? (t.getNowWeather(false, true), t.setData({
+      })) : t.store.data.startScreen == 'default' ? (t.getNowWeather(true), t.setData({
         'modalName': null
       })) : ''
-
       log('[manualLocationData]', location)
       app.saveData('manualLocationData', location)
       //make sure location value != null
@@ -221,17 +201,17 @@ create(store, {
   onReady() {
     log('[onReady]')
     const t = this
-    t.getBingImage()
-    t.data.datePicker = scui.DatePicker("#datepicker");
+    t.checkNetWorkType()
+    t.data.datePicker = scui.DatePicker("#datepicker")
   },
   loadDataFromStorage() {
     log('[loadDataFromStorage]')
     const t = this
-    const getHisWeather = () => {
-      wx.getStorage({
+    const getHistoryCityData = () => {
+        wx.getStorage({
           key: "forecastData",
           success: res => {
-            t.setTimelyWeather(res.data);
+            t.setAllWeather(res.data);
           }
         }),
         wx.getStorage({
@@ -256,27 +236,29 @@ create(store, {
           }
         })
     }
-    async function asyncGetHisWeather() {
+    (async () => {
+      t.setData({
+        'canBlurRoot': true
+      })
       await t.screenFadeIn()
-      await getHisWeather()
+      await getHistoryCityData()
       await t.screenFadeOut()
       await t.setData({
         'canBlurRoot': false
       })
       await t.scrollToTop()
-    }
-    asyncGetHisWeather()
+    })()
   },
   loadDataFromNet() {
     const t = this
     log('[loadDataFromNet]', t.store.data.startScreen)
     if (t.store.data.startScreen == 'auth') {
-      t.screenFadeIn()
       log('[loadDataFromNet] => t.screenFadeIn()')
+      t.screenFadeIn()
     } else {
       log('[loadDataFromNet] => t.chooseGetLocationType()')
-      t.screenFadeIn()
-      //根据预先选取的方法获取经纬度，执行正常流程
+      t.screenFadeIn(),
+        //根据预先选取的方法获取经纬度，执行正常流程
       t.chooseGetLocationType()
     }
   },
@@ -387,109 +369,141 @@ create(store, {
         }, 1600)
     }
 
-    const event = (screenFadeOutType) => {
+    const screenFadeOut = (screenFadeOutType) => {
       screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
         t.store.data.startScreen = 'poetry'
       }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
       //t.store.data.startScreen = 'poetry' To prevent startScreen = auth  !=> getNowWeather()
     }
-    async function asyncScreenFadeOut() {
-      await event(t.store.data.startScreen)
-      await t.intersectionObserver()
-      await t.getMoonPhaseList()
-      await t.onGetWXACode()
+    (async () => {
+      await t.getBingImage()
+      await screenFadeOut(t.store.data.startScreen)
+      t.intersectionObserver()
+      // await t.getMoonPhaseList()
       // await t.getBingImage()
-      await t.savePoetry()
-      await t.refreshWeather()
-    }
-    asyncScreenFadeOut()
+      t.refreshWeather()
+      t.onGetWXACode()
+      t.savePoetry()
+    })()
+  },
+  checkNetWorkType() {
+    const t = this
+    wx.getNetworkType({
+      success: res => {
+        log(`[networkType] =>`, res.networkType)
+        var networkType = res.networkType
+        t.setData({
+          networkType: networkType
+        })
+        if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
+          wx.showToast({
+            title: '请检查你的网络连接',
+            duration: 1500,
+            icon: 'none',
+            mask: true,
+          })
+          log('[onLoad] => loadDataFromStorage()')
+          t.loadDataFromStorage()
+        }
+      }
+    })
   },
   chooseGetLocationType() {
     const t = this
     log('[chooseGetLocationType] =>', t.store.data.getLocationMethod)
-
-    const manualGetLocation = () => {
-      async function awaitGetNowWeather(d) {
-        log('[manualGetLocation]', d)
-        await t.setData({
-          'forecastData.latitude': d.latitude,
-          'forecastData.longitude': d.longitude,
-          'forecastData.city': d.city,
-          'forecastData.address': d.name
-        })
-        await t.getNowWeather(true, false)
-      }
-      awaitGetNowWeather(t.data.manualLocationData)
-    }
-    //According to location type => getNowWeather()
-    t.store.data.getLocationMethod == 'manual' ? manualGetLocation() : t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() : t.store.data.getLocationMethod == 'historyCity' ? t.getHistoryCityLocation() : warn('[getLocationMethod]')
+    t.store.data.getLocationMethod == 'manual' ? t.manualGetLocation() : t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() : t.store.data.getLocationMethod == 'historyCity' ? t.historyGetLocation() : warn('[getLocationMethod]')
   },
-  getHistoryCityLocation() {
+  manualGetLocation() {
     const t = this
-    let historyCityData = wx.getStorageSync('historyCityList')
-    async function awaitGetNowWeather(historyCityData) {
+    log('[manualGetLocation]', t.data.manualLocationData)
+    const changeStorage = () =>{
+      app.changeStorage('getLocationMethod', 'manual')
+      t.store.data.getLocationMethod = 'manual'
+    }
+    (async () => {
+      await t.setData({
+        'forecastData.latitude': t.data.manualLocationData.latitude,
+        'forecastData.longitude': t.data.manualLocationData.longitude,
+        'forecastData.city': t.data.manualLocationData.city,
+        'forecastData.address': t.data.manualLocationData.name
+      })
+      await t.getNowWeather(false)
+      await changeStorage()
+    })()
+  },
+  historyGetLocation() {
+    const t = this
+    var historyCityData = wx.getStorageSync('historyCityList')
+    const changeStorage = () =>{
+      app.changeStorage('getLocationMethod', 'historyCity')
+      t.store.data.getLocationMethod = 'historyCity'
+    }
+    (async () => {
       await t.setData({
         'forecastData.latitude': historyCityData[0].latitude,
         'forecastData.longitude': historyCityData[0].longitude,
         'forecastData.city': historyCityData[0].city,
         'forecastData.address': historyCityData[0].address
       })
-      await t.getNowWeather(true, false)
-    }
-    awaitGetNowWeather(historyCityData)
-    t.store.data.getLocationMethod = 'historyCity'
-    app.changeStorage('getLocationMethod', 'historyCity')
+      await t.getNowWeather(false)
+      await changeStorage()
+    })()
   },
-  autoGetLocation(canNavToFinalScreen) {
+  autoGetLocation() {
     const t = this
-    log('[autoGetLocation] => [canNavToFinalScreen] =>', canNavToFinalScreen)
-    if (canNavToFinalScreen == true) {
-      t.authScreenNext('canNavToFinalScreen')
+    log('[autoGetLocation]')
+    const changeStorage = () => {
+      t.store.data.getLocationMethod = 'auto'
+      app.changeStorage('getLocationMethod', 'auto')
     }
-    wx.getLocation({
-      success: res => {
-        log(`[autoGetLocation] =>`, res)
-        t.setData({
-          'forecastData.latitude': res.latitude,
-          'forecastData.longitude': res.longitude
-        })
-        t.store.data.getLocationMethod = 'auto'
-        app.changeStorage('getLocationMethod', 'auto')
-        qqMap.reverseGeocoder({
-          location: {
-            latitude: res.latitude,
-            longitude: res.longitude
-          },
+    if(t.store.data.startScreen == 'auth'){
+      log('[autoGetLocation] => [canNavToFinalScreen] ')
+      t.authScreenNext('canNavToFinalScreen'), changeStorage()
+    }
+    if(t.store.data.startScreen !== 'auth'){
+      (async () => {
+        await wx.getLocation({
           success: res => {
-            log(`[reverseGeocoder]`, res)
-            let e = res.result.address_component;
+            log(`[autoGetLocation] =>`, res)
             t.setData({
-              'forecastData.city': e.district,
-              'forecastData.address': e.street
+              'forecastData.latitude': res.latitude,
+              'forecastData.longitude': res.longitude
             })
-            if (canNavToFinalScreen == true) {
-              // t.getNowWeather(false,false)
-            } else {
-              t.getNowWeather(true, false)
-            }
+            qqMap.reverseGeocoder({
+              location: {
+                latitude: res.latitude,
+                longitude: res.longitude
+              },
+              success: res => {
+                log(`[reverseGeocoder]`, res)
+                let e = res.result.address_component;
+                t.setData({
+                  'forecastData.city': e.district,
+                  'forecastData.address': e.street
+                })
+                t.getNowWeather(false)
+              },
+              fail: err => {
+                log(`[reverseGeocoder] = > ${err}`)
+              }
+            });
           },
           fail: err => {
-            log(`[reverseGeocoder] = > ${err}`)
+            log(`[getLocation] => fail => ${err}`)
           }
         });
-      },
-      fail: err => {
-        log(`[getLocation] => fail => ${err}`)
-      }
-    });
+        await changeStorage()
+      })()
+    }
   },
   manualGetNewLocation() {
     log('[manualGetNewLocation]')
     const t = this
     let locationKey = config.default.locationKey
-
     const appReferer = '奇妙天气-小程序';
     const locationCategory = '奇妙天气,XHY';
+    app.changeStorage('getLocationMethod', 'manual')
+    t.store.data.getLocationMethod = 'manual'
     wx.navigateTo({
       url: 'plugin://chooseLocation/index?key=' + locationKey + '&referer=' + appReferer + '&category=' + locationCategory
     });
@@ -498,39 +512,35 @@ create(store, {
     let n = e.currentTarget.dataset
     const t = this
     log('[setHistoryCityLocation]', n.bean)
-    let historyCityData = n.bean
-    async function awaitToGetNowWeather(historyCityData) {
-      await t.setData({
-        'forecastData.latitude': historyCityData.latitude,
-        'forecastData.longitude': historyCityData.longitude,
-        'forecastData.city': historyCityData.city,
-        'forecastData.address': historyCityData.address,
-        'modalName': null
-      })
-      await t.getNowWeather(false, true)
-    }
-    awaitToGetNowWeather(historyCityData)
-    app.changeStorage('getLocationMethod', 'historyCity')
-    t.store.data.getLocationMethod = 'historyCity'
-  },
-  getNowWeather(canScreenFadeOut, canRefreshChart) {
-    const t = this
-    log('[getNowWeather] => canScreenFadeOut', canScreenFadeOut)
+    var historyCityData = n.bean
     t.setData({
-      'canBlurRoot': true
+      'forecastData.latitude': historyCityData.latitude,
+      'forecastData.longitude': historyCityData.longitude,
+      'forecastData.city': historyCityData.city,
+      'forecastData.address': historyCityData.address,
+      'modalName': null
     })
+    const changeStorage = () => {
+      app.changeStorage('getLocationMethod', 'historyCity')
+      t.store.data.getLocationMethod = 'historyCity'
+    }
+    (async () => {
+      await t.getNowWeather(true)
+      await changeStorage()
+    })()
+  },
+  getNowWeather(canRefreshChart) {
+    const t = this
+    log('[getNowWeather] => canScreenFadeOut')
     const reqNowWeather = () => {
-      log('[getNowWeather]', t.data.forecastData.longitude, t.data.forecastData.latitude, '[getLocationMethod]', t.store.data.getLocationMethod)
+      log('[getNowWeather]', t.data.forecastData.longitude, t.data.forecastData.latitude)
       let apiHost = config.default.weatherApiHost + "/" + config.default.weatherApiVersion + "/" + config.default.weatherApiToken + "/" + t.data.forecastData.longitude + "," + t.data.forecastData.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
-
-      // https://api.caiyunapp.com/v2.5/96Ly7wgKGq6FhllM/104.732251,31.446094/weather.jsonp?lang=en_US&hourlysteps=120&random=0.6537621058739214&callback=jQuery111306579643389228496_1587605664395&_=1587605664411
-
       log('[getNowWeather] => apiHost', apiHost)
       wx.request({
         url: apiHost,
         success: a => {
           let weatherData = a.data.result;
-          const initChartOrRefresh = (canRefreshChart) => {
+          const checkRefreshChart= (canRefreshChart) => {
             log('[canRefreshChart] => ', canRefreshChart)
             if (canRefreshChart == true) {
               t.setData({
@@ -539,49 +549,51 @@ create(store, {
             }
             if (canRefreshChart == false) {
               t.setData({
-                'initChart': !0
+                'initChart': !t.data.initChart
               })
             }
           }
-          async function waitToCheck(weatherData, canScreenFadeOut, canRefreshChart) {
-            await t.setTimelyWeather(weatherData)
-            await initChartOrRefresh(canRefreshChart)
-            await app.saveData("forecastData", weatherData)
+          const waitToCheck = async (weatherData, canRefreshChart) => {
+            await t.setAllWeather(weatherData)
+            await checkRefreshChart(canRefreshChart)
+            app.saveData("forecastData", weatherData)
           }
-          waitToCheck(weatherData, canScreenFadeOut, canRefreshChart)
-        },
-        complete: () => {
-          // a && a();
+          waitToCheck(weatherData, canRefreshChart)
         }
       })
     }
-
-    async function asyncGetNowWeather() {
-      await reqNowWeather()
-      await t.reqRadar()
-      await t.screenFadeOut()
-      await t.setData({
-        'canBlurRoot': false
-      })
-      await t.scrollToTop()
-    }
-    asyncGetNowWeather()
+    (async () => {
+      try{
+        await t.setData({
+          'canBlurRoot': true
+        })
+        await reqNowWeather()
+        await t.reqRadar()
+        await t.screenFadeOut()
+        await t.scrollToTop()
+        await t.setData({
+          'canBlurRoot': false
+        })
+      }
+      catch{
+        error('asyncGetNowWeather')
+      }
+    })()
   },
-
   refreshWeather() {
     const t = this
     let refreshTime = t.store.data.refreshfrequencyValue * 60 * 1000
     log('[refreshTime]', refreshTime)
     setInterval(() => {
       log('[refreshWeather] => setInterval()', refreshTime)
-      t.getNowWeather(false, true)
+      t.getNowWeather(true)
     }, refreshTime);
   },
-  setTimelyWeather(a) {
-    log('[setTimelyWeather]')
+  setAllWeather(a) {
+    log('[setAllWeather]')
     const that = this;
     const realtime = (realtime) => {
-      log(`[setTimelyWeather] => [realtime]`, realtime)
+      log(`[setAllWeather] => [realtime]`, realtime)
       let realtimeTemperature = realtime.temperature,
         realtimeSkycon = realtime.skycon,
         realtimeWind = {
@@ -653,7 +665,7 @@ create(store, {
       }
     }
     const minutely = () => {
-      log('[setTimelyWeather] => [minutely]', a.minutely)
+      log('[setAllWeather] => [minutely]', a.minutely)
       that.setData({
         'forecastData.minutely': {
           precipitation: a.minutely.precipitation,
@@ -663,7 +675,7 @@ create(store, {
       })
     }
     const hourly = (hourlyData) => {
-      log('[setTimelyWeather] => [hourly]', hourlyData)
+      log('[setAllWeather] => [hourly]', hourlyData)
       for (var t = hourlyData, hourlyReduce = [], r = new Date().getHours(), n = 0; n < 48; n++) {
         let c = n + r;
         hourlyReduce.push({
@@ -763,7 +775,7 @@ create(store, {
       return serviceData
     }
     const daily = (dailyData) => {
-      log('[setTimelyWeather] => [daily]', dailyData)
+      log('[setAllWeather] => [daily]', dailyData)
       for (var d = dailyData, dailyReduce = [], f = 0; f < 16; f++) {
         let l = new Date().getDay() + f;
         l %= 7;
@@ -842,9 +854,9 @@ create(store, {
       }
     }
     const setCurTime = () => {
-      let time = util.formatDate(new Date()),
-        date = util.getDates(7, time),
-        curDetailTime = date[0].time + " " + date[0].week
+      let time = util.formatDate(new Date())
+      let date = util.getDates(7, time)
+      let curDetailTime = date[0].time + " " + date[0].week
       app.saveData("lastRefreshTime", curDetailTime)
       return curDetailTime
     }
@@ -855,7 +867,7 @@ create(store, {
       const dailyData = await daily(forecastData.daily)
       const serviceData = await service(forecastData.daily)
       const alertContentData = await alertContent(forecastData.alert.content)
-      const curTime = await setCurTime()
+      const curTime = setCurTime()
       return {
         realtimeData,
         hourlyData,
@@ -983,18 +995,15 @@ create(store, {
     return self.store.data.languageValue == 'zh_CN' ? zh_CN() : self.store.data.languageValue == 'zh_TW' ? zh_TW() : self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ? en_US_en_GB() : warn('[getWindDirect]')
   },
   getMoonPhaseList() {
-    // getMoonPhaseList:lazyFunction.throttle( () => {
-    // async getMoonPhaseList() {
     log('[getMoonPhaseList]')
     const t = this
     let obj = Array.from(Array(30), (v, k) => k)
     obj.map(function (value, index, arr) {
       const getMoonName = (r) => {
         // log('[getMoonName]',r)
-        let
-          zh_CN = '新月',
-          zh_TW = '新月',
-          en_US_en_GB = 'New Moon';
+        let zh_CN = '新月'
+        let zh_TW = '新月'
+        let en_US_en_GB = 'New Moon'
         return r <= 0.055 ? (zh_CN = '新月', zh_TW = '新月', en_US_en_GB = 'New Moon') : 0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月', en_US_en_GB = 'Waxing Crescent') : 0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月', en_US_en_GB = 'First Quarter') : 0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月', en_US_en_GB = 'Waxing Gibbous') : 0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月', en_US_en_GB = 'Full Moon') : 0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月', en_US_en_GB = 'Waning Gibbous') : 0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月', en_US_en_GB = 'Last Quarter') : 0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent') : r > 1 && (zh_CN = '丽月', zh_TW = '丽月', en_US_en_GB = 'Li Yue'), {
           zh_CN: zh_CN,
           en_US_en_GB: en_US_en_GB,
@@ -1021,15 +1030,15 @@ create(store, {
         obj[index].moonPhaseName_zh_TW = moonPhaseName.zh_TW,
         obj[index].moonPhaseName_Image = moonPhaseName.en_US_en_GB.replace(' ', '')
     })
-    let reduceObj = {},
-      moonPhaseLists = obj.reduce((item, next) => {
-        // log('[next]',next)
-        if (!reduceObj[next.moonPhaseName_zh_CN]) {
-          item.push(next);
-          reduceObj[next.moonPhaseName_zh_CN] = true;
-        }
-        return item;
-      }, []) || []
+    let reduceObj = {}
+    let moonPhaseLists = obj.reduce((item, next) => {
+      // log('[next]',next)
+      if (!reduceObj[next.moonPhaseName_zh_CN]) {
+        item.push(next);
+        reduceObj[next.moonPhaseName_zh_CN] = true;
+      }
+      return item;
+    }, []) || []
 
     t.setData({
       moonPhaseLists: moonPhaseLists
@@ -1063,21 +1072,10 @@ create(store, {
   onAuthFinalScreen() {
     log('[onAuthFinalScreen]')
     const t = this
-    t.getNowWeather(true, false)
-
-    // const getNowWeather = () => {
-    //   // if (t.data.isChangeSetting == true) {
-    //   t.getNowWeather(true, false) //(canScreenFadeOut,canRefreshChart)
-    //   // }
-    // }
-    // async function onScreenFadeOut() {
-    //   await getNowWeather()
-    //   // await t.screenFadeOut()
-    // }
-    // onScreenFadeOut()
+    t.getNowWeather(false)
   },
   authScreenNext(e) {
-    log('[authScreenNext]')
+    log('[authScreenNext]',e)
     const t = this
     var windowWidth = t.data.windowWidth
     const checkLocationAuth = () => {
@@ -1095,7 +1093,7 @@ create(store, {
             wx.authorize({
               scope: 'scope.userLocation',
               success: res => {
-                log('check => [wx.authorize] =>', res)
+                log('[scope.userLocation] =>', res)
                 transX(windowWidth * 2)
                 app.saveData('hasUserLocation', true)
                 app.changeStorage('startScreen', 'poetry')
@@ -1153,9 +1151,7 @@ create(store, {
   },
   authScreenBack(e) {
     log('[authScreenBack]')
-    const
-      t = this,
-      windowWidth = t.data.windowWidth
+    const t = this
     const transX = (steps) => {
       const t = this
       let authFirstStep = wx.createAnimation({
@@ -1168,8 +1164,7 @@ create(store, {
         defaultScreenAni: authFirstStep.export(),
       })
     }
-
-    e.currentTarget.dataset.target == 'authFirstStep' ? (transX(windowWidth), log('[backAuthFirstStep]')) : e.currentTarget.dataset.target == 'authSecondStep' ? (transX(windowWidth), log('[backAuthSecondStep]')) : e.currentTarget.dataset.target == 'authThirdStep' ? (transX(windowWidth * 2), log('[backAuthThirdStep]')) : e.currentTarget.dataset.target == 'authFourthStep' ? (transX(windowWidth * 2), log('[backAuthFourthStep]')) : warn('[backStep]')
+    e.currentTarget.dataset.target == 'authFirstStep' ? (transX(t.data.windowWidth), log('[backAuthFirstStep]')) : e.currentTarget.dataset.target == 'authSecondStep' ? (transX(t.data.windowWidth), log('[backAuthSecondStep]')) : e.currentTarget.dataset.target == 'authThirdStep' ? (transX(t.data.windowWidth * 2), log('[backAuthThirdStep]')) : e.currentTarget.dataset.target == 'authFourthStep' ? (transX(t.data.windowWidth * 2), log('[backAuthFourthStep]')) : warn('[backStep]')
   },
   savePoetry() {
     // async savePoetry() {
@@ -1200,7 +1195,7 @@ create(store, {
       log(result, t.store.data.style[result])
       app.changeStorage('style', t.store.data.style)
     }
-    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation(true)) : changeStoreage(e.currentTarget.dataset.target)
+    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : changeStoreage(e.currentTarget.dataset.target)
   },
   showModal(e) {
     log('[showModal]', e)
@@ -1245,22 +1240,10 @@ create(store, {
     // appid:'wx7b4bbc2d9c538e84', //服务号
     log('[navRadar]', app.globalData.appid)
     const t = this
-    if (app.globalData.appid == 'wx7b4bbc2d9c538e84') {
-      log('[navigateTo]')
-      wx.navigateTo({
-        url: '../radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
-      })
-    } else if (app.globalData.appid == 'wx673e7d2fe4e6a413') {
-      log('[navigateToMiniProgram]')
-      wx.navigateToMiniProgram({
-        appId: 'wx7b4bbc2d9c538e84',
-        path: 'pages/radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude,
-        success(res) {
-          log('[navigateToMiniProgram]', res)
-        }
-      })
-    }
-
+    log('[navigateTo]')
+    wx.navigateTo({
+      url: '../radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
+    })
   },
   navSetting() {
     wx.navigateTo({
@@ -1273,83 +1256,86 @@ create(store, {
     });
   },
   onPullDownRefresh() {
-    log(`[onPullDownRefresh]`)
     const t = this
-
-    let time = util.formatDate(new Date()),
-      date = util.getDates(7, time)
-    app.saveData("lastRefreshTime", date[0].time)
-    async function onPull() {
-      await t.setData({
-        'canBlurRoot': true
-      })
-      await t.getNowWeather(false, true) //(canScreenFadeOut,canRefreshChart)
-      await wx.stopPullDownRefresh();
-      await t.setData({
-        'canBlurRoot': false
-      })
+    log(`[onPullDownRefresh]`,t.store.data.startScreen)
+    if(t.store.data.startScreen !== 'auth'){
+      let time = util.formatDate(new Date())
+      let date = util.getDates(7, time)
+      app.saveData("lastRefreshTime", date[0].time)
+      (async () => {
+        await t.setData({
+          'canBlurRoot': true
+        })
+        await t.getNowWeather(true) //(canScreenFadeOut,canRefreshChart)
+        await wx.stopPullDownRefresh();
+        await t.setData({
+          'canBlurRoot': false
+        })
+      })()
     }
-    onPull()
   },
   onReachBottom() {
     log(`[onReachBottom]`)
   },
   eventDraw() {
     log(`[eventDraw]`)
-    wx.showLoading({
-      title: 'Loading',
-      mask: true
-    })
-    setTimeout(function () {
-      wx.hideLoading()
-    }, 2000)
     const t = this
-    t.setData({
-      painting: {
-        width: 300,
-        height: 350,
-        clear: true,
-        views: [{
-            type: 'image',
-            url: t.data.bingImage,
-            top: 0,
-            left: 0,
-            width: 300,
-            height: 210
-          },
-          {
-            type: 'rect',
-            background: '#ffffff',
-            top: 210,
-            left: 0,
-            width: 300,
-            height: 140
-          },
-          {
-            type: 'text',
-            content: t.data.forecastData.hourlyKeypoint,
-            fontSize: 14,
-            lineHeight: 21,
-            color: '#383549',
-            textAlign: 'center',
-            top: 220,
-            left: 146,
-            width: 200,
-            MaxLineNumber: 2,
-            breakWord: true,
-            bolder: true
-          },
-          {
-            type: 'image',
-            url: t.data.qrImageURL, //二维码
-            top: 270,
-            left: 120,
-            width: 65,
-            height: 65
-          }
-        ]
-      }
-    })
+    const draw = async () => {
+      await wx.showLoading({
+        title: 'Loading',
+        mask: true
+      })
+      await t.setData({
+        painting: {
+          width: 300,
+          height: 350,
+          clear: true,
+          views: [{
+              type: 'image',
+              url: t.data.bingImage,
+              top: 0,
+              left: 0,
+              width: 300,
+              height: 210
+            },
+            {
+              type: 'rect',
+              background: '#ffffff',
+              top: 210,
+              left: 0,
+              width: 300,
+              height: 140
+            },
+            {
+              type: 'text',
+              content: t.data.forecastData.hourlyKeypoint,
+              fontSize: 14,
+              lineHeight: 21,
+              color: '#383549',
+              textAlign: 'center',
+              top: 220,
+              left: 146,
+              width: 200,
+              MaxLineNumber: 2,
+              breakWord: true,
+              bolder: true
+            },
+            {
+              type: 'image',
+              url: t.data.qrImageURL, //二维码
+              top: 270,
+              left: 120,
+              width: 65,
+              height: 65
+            }
+          ]
+        }
+      })
+      await setTimeout(function () {
+        wx.hideLoading()
+      }, 2000)
+    }
+    draw()
   },
   eventSave() {
     log(`[eventSave]`)
@@ -1366,6 +1352,8 @@ create(store, {
     })
   },
   eventGetImage(event) {
+    const t = this
+    if(t.store.startScreen == 'auth') return false
     log(`[eventGetImage] => `, event)
     wx.hideLoading()
     const {
@@ -1379,20 +1367,14 @@ create(store, {
       })
     }
   },
-  subDailyWeather() {
-    log(`[subDailyWeather] => datePicker.open()`)
-    this.data.datePicker.open();
-  },
   datePickerSubmit(e) {
-    var
-      submitValue = e.detail.value,
-      time = util.formatDate(submitValue),
-      date = util.getDates(7, time),
-      startTime = date[0].time
+    let submitValue = e.detail.value
+    let time = util.formatDate(submitValue)
+    let date = util.getDates(7, time)
+    let startTime = date[0].time
     log('[submitStartTime] =>', startTime)
-
-    const t = this,
-      templateId = config.default.subTemplateId
+    const t = this
+    const templateId = config.default.subTemplateId
     const subDailyWeatherCloudFn = () => {
       let cloudData = {
         action: 'saveSubscribeMessage',
@@ -1465,7 +1447,6 @@ create(store, {
         }
       },
     });
-
   },
   openDatePicker() {
     this.data.datePicker.open();
@@ -1487,25 +1468,21 @@ create(store, {
   },
   touchStart(e) {
     log('[touchStart]')
-    // console.log(e.touches[0].pageX)
-    let
-      sx = e.touches[0].pageX,
-      sy = e.touches[0].pageY
+    let sx = e.touches[0].pageX
+    let sy = e.touches[0].pageY
     this.data.touchS = [sx, sy]
   },
   touchMove(e) {
     log('[touchMove]')
-    let
-      sx = e.touches[0].pageX,
-      sy = e.touches[0].pageY
+    let sx = e.touches[0].pageX
+    let sy = e.touches[0].pageY
     this.data.touchE = [sx, sy]
   },
   touchEnd(e) {
     log('[touchEnd]')
     const t = this
-    let
-      start = this.data.touchS,
-      end = this.data.touchE
+    let start = this.data.touchS
+    let end = this.data.touchE
     if (start[0] < end[0] - 50) {} else if (start[0] > end[0] + 50) {
       t.setData({
         modalName: e.currentTarget.dataset.target
@@ -1518,9 +1495,9 @@ create(store, {
     let start = this.data.touchS
     let end = this.data.touchE
     if (start[0] < end[0] - 5) {
-      // console.log('右滑')
+      //右滑
     } else if (start[0] > end[0] + 5) {
-      // console.log('左滑')
+      //左滑
       t.setData({
         modalName: e.currentTarget.dataset.target
       })
@@ -1539,10 +1516,10 @@ create(store, {
           let source = result.data.images[result.data.images.length - 1]
           let rainRadarPosition = source[2]
 
-          const reduceRainRadarImages = () =>{
+          const reduceRainRadarImages = () => {
             let rainRadarImageData = []
             let rainRadarImages = result.data.images
-            for (var m = rainRadarImages,i = 0; i < rainRadarImages.length; i++) {
+            for (var m = rainRadarImages, i = 0; i < rainRadarImages.length; i++) {
               var u = {
                 image: m[i][0]
               };
@@ -1550,10 +1527,10 @@ create(store, {
             }
             return rainRadarImageData
           }
-          const reduceRainRadarForecastImages = () =>{
+          const reduceRainRadarForecastImages = () => {
             var rainRadarforecastImagesData = []
             var rainRadarforecastImages = result.data.forecast_images
-            for (var n = rainRadarforecastImages,j = 0; j < rainRadarforecastImages.length; j++) {
+            for (var n = rainRadarforecastImages, j = 0; j < rainRadarforecastImages.length; j++) {
               var v = {
                 image: n[j][0]
               };
@@ -1561,13 +1538,15 @@ create(store, {
             }
             return rainRadarforecastImagesData
           }
-          const reduceRainRadarData = async () =>{
+          const reduceRainRadarData = async () => {
             let rainRadarforecastImagesData = await reduceRainRadarForecastImages()
             let rainRadarImageData = await reduceRainRadarImages()
-            console.log(rainRadarImageData,rainRadarforecastImagesData)
-            return {rainRadarImageData,rainRadarforecastImagesData}
+            return {
+              rainRadarImageData,
+              rainRadarforecastImagesData
+            }
           }
-          reduceRainRadarData().then( res =>{
+          reduceRainRadarData().then(res => {
             t.setData({
               'forecastData.rainRadar.latitude': (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
               'forecastData.rainRadar.longitude': (rainRadarPosition[1] + rainRadarPosition[3]) / 2,
@@ -1679,11 +1658,14 @@ create(store, {
     })
     wx.createIntersectionObserver().relativeToViewport().observe('#fourthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
-        log('fourthObserver start')
         ani.opacity(1).step()
-        t.setData({
-          fourthObserverAni: ani.export()
-        })
+        const event = async () => {
+          await t.getMoonPhaseList()
+          await t.setData({
+            fourthObserverAni: ani.export()
+          })
+        }
+        event()
       }
       if (res.boundingClientRect.top < 0) {
         // log('[fourthObserver] => end')
@@ -1752,10 +1734,9 @@ create(store, {
   },
   formatImg(base64Img) {
     const t = this
-    let
-      fsm = wx.getFileSystemManager(),
-      FILE_BASE_NAME = 'weatherLogo',
-      buffer = wx.base64ToArrayBuffer(base64Img);
+    let fsm = wx.getFileSystemManager()
+    let FILE_BASE_NAME = 'weatherLogo'
+    let buffer = wx.base64ToArrayBuffer(base64Img);
     const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
     fsm.writeFile({
       filePath,
@@ -1776,90 +1757,117 @@ create(store, {
   themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this
-    let themeValue = e.detail.value.toString(),
-      theme = {
+    const setData = () => {
+      let themeValue = e.detail.value.toString()
+      let theme = {
         themeChecked_auto: false,
         themeChecked_light: false,
         themeChecked_dark: false
       }
-    if (themeValue == 'light') {
-      theme['themeChecked_light'] = true
-    } else {
-      theme['themeChecked_dark'] = true
+      if (themeValue == 'light') {
+        theme['themeChecked_light'] = true
+      } else {
+        theme['themeChecked_dark'] = true
+      }
+      t.setData({
+        themeValue: themeValue,
+        theme: theme,
+        modalName: null,
+        isChangeSetting: true
+      })
     }
-    t.setData({
-      themeValue: themeValue,
-      theme: theme,
-      modalName: null,
-      isChangeSetting: true
-    })
-    log('[isChangeSetting]', true)
-    t.store.data.theme = theme
-    t.store.data.themeValue = themeValue
-    app.changeStorage('themeValue', themeValue)
-    app.changeStorage('theme', theme)
+    const changeStorage = () => {
+      log('[isChangeSetting]', true)
+      t.store.data.theme = theme
+      t.store.data.themeValue = themeValue
+      app.changeStorage('themeValue', themeValue)
+      app.changeStorage('theme', theme)
+    }
+    const event = async () => {
+      await setData()
+      await changeStorage()
+    }
+    event()
   },
   unitValueRadioChange(e) {
     const t = this
-    let unit = {
-      metric: false,
-      SI: false,
-      imperial: false
+    const setData = () => {
+      let unit = {
+        metric: false,
+        SI: false,
+        imperial: false
+      }
+      if (e.detail.value == 'metric') {
+        unit['metric'] = true
+      } else if (e.detail.value == 'imperial') {
+        unit['imperial'] = true
+      } else if (e.detail.value == 'SI') {
+        unit['SI'] = true
+      }
+      t.setData({
+        modalName: null,
+        isChangeSetting: true
+      })
     }
-    if (e.detail.value == 'metric') {
-      unit['metric'] = true
-    } else if (e.detail.value == 'imperial') {
-      unit['imperial'] = true
-    } else if (e.detail.value == 'SI') {
-      unit['SI'] = true
+    const changeStorage = () => {
+      log('[isChangeSetting]', true)
+      t.store.data.unitValue = e.detail.value.toString()
+      t.store.data.unit = unit
+      app.changeStorage('unitValue', e.detail.value.toString())
+      app.changeStorage('unit', unit)
     }
-    t.setData({
-      modalName: null,
-      isChangeSetting: true
-    })
-    log('[isChangeSetting]', true)
-    t.store.data.unitValue = e.detail.value.toString()
-    t.store.data.unit = unit
-    app.changeStorage('unitValue', e.detail.value.toString())
-    app.changeStorage('unit', unit)
+    const event = async () => {
+      await setData()
+      await changeStorage()
+    }
+    event()
   },
   languageRadioChange: function (e) {
     const t = this
-    let language = {
+    const setData = () => {
+      let language = {
         languageChecked_zh_TW: false,
         languageChecked_zh_CN: false,
         languageChecked_en_US: false,
         languageChecked_en_GB: false
-      },
-      languageValue = e.detail.value.toString()
-    log('[languageValue] =>', e.detail.value.toString())
-    if (e.detail.value == 'zh_TW') {
-      language['languageChecked_zh_TW'] = true
-      log('[language] =>', 'languageChecked_zh_TW = true')
-    } else if (e.detail.value == 'zh_CN') {
-      language['languageChecked_zh_CN'] = true
-      log('[language] =>', 'languageChecked_zh_CN = true')
-    } else if (e.detail.value == 'en_US') {
-      language['languageChecked_en_US'] = true
-      log('[language] =>', 'languageChecked_en_US = true')
-    } else if (e.detail.value == 'en_GB') {
-      language['languageChecked_en_GB'] = true
-      log('[language] =>', 'languageChecked_en_GB = true')
+      }
+      let languageValue = e.detail.value.toString()
+      log('[languageValue] =>', e.detail.value.toString())
+      if (e.detail.value == 'zh_TW') {
+        language['languageChecked_zh_TW'] = true
+        log('[language] =>', 'languageChecked_zh_TW = true')
+      } else if (e.detail.value == 'zh_CN') {
+        language['languageChecked_zh_CN'] = true
+        log('[language] =>', 'languageChecked_zh_CN = true')
+      } else if (e.detail.value == 'en_US') {
+        language['languageChecked_en_US'] = true
+        log('[language] =>', 'languageChecked_en_US = true')
+      } else if (e.detail.value == 'en_GB') {
+        language['languageChecked_en_GB'] = true
+        log('[language] =>', 'languageChecked_en_GB = true')
+      }
+      this.setData({
+        language: language,
+        languageValue: languageValue,
+        modalName: null,
+        isChangeSetting: true
+      })
+      log('[isChangeSetting]', true)
     }
-    this.setData({
-      language: language,
-      languageValue: languageValue,
-      modalName: null,
-      isChangeSetting: true
-    })
-    log('[isChangeSetting]', true)
-    t.store.data.languageValue = languageValue
-    t.store.data.language = language
-    app.changeStorage('language', language)
-    app.changeStorage('languageValue', languageValue)
+    const changeStorage = () => {
+      t.store.data.languageValue = languageValue
+      t.store.data.language = language
+      app.changeStorage('language', language)
+      app.changeStorage('languageValue', languageValue)
+    }
+    const event = async () => {
+      await setData()
+      await changeStorage()
+    }
+    event()
   },
   updateComponnet: function () {
-    let src = this.data.src ? this.data.src : this.data.bingImage; //裁剪图片不存在时，使用default图片，注意加载时的相对路径
+    var src = this.data.src ? this.data.src : this.data.bingImage; //裁剪图片不存在时，使用default图片，注意加载时的相对路径
     this.setData({
       visible: true,
       src: src,
@@ -1906,8 +1914,8 @@ create(store, {
           hasCusImage: true,
           modalName: null
         })
-        wx.setStorageSync('hasCusImage', true)
-        wx.setStorageSync('cusImageFileID', res.fileID)
+        app.saveData('hasCusImage', true)
+        app.saveData('cusImageFileID', res.fileID)
         console.log(res.fileID)
       }).catch(error => {
         log(error)
@@ -1927,8 +1935,8 @@ create(store, {
   },
   onDev() {
     const t = this
-    let title = '',
-      content = ''
+    let title = ''
+    let content = ''
     if (t.store.data.languageValue == 'zh_TW') {
       title = '沒錢開發中'
       content = '不要期待'
@@ -1941,8 +1949,7 @@ create(store, {
     }
     wx.showModal({
       title: title,
-      content: content,
-      success(res) {}
+      content: content
     })
   },
   refreshLocation() {
@@ -1957,10 +1964,10 @@ create(store, {
         t.setData({
           refreshLocation: false
         })
-        app.changeStorage('getLocationMethod', 'auto')
-        t.store.data.getLocationMethod = 'auto'
       }, 2400);
+      await app.changeStorage('getLocationMethod', 'auto')
     }
+    // t.store.data.getLocationMethod = 'auto'
     event()
   },
   scrollToTop() {
