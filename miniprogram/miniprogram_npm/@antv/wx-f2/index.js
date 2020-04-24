@@ -18322,7 +18322,6 @@
 				console.warn('组件需绑定 opts 变量，例：<ff-canvas id="mychart-dom-bar" canvas-id="mychart-bar" opts="{{ opts }}"></ff-canvas>');
 				return;
 			}
-			console.log('[canvas lazyLoad]',this.data.opts)
 			if (!this.data.opts.lazyLoad) {
 				this.init();
 			}
@@ -18360,9 +18359,9 @@
 							console.log('[wx-f2 res]',res[0])
 							console.log('[wx-f2 node]',node.width,node.height)
 							console.log('[wx-f2 config]',config)
-							console.log('[wx-f2 chart]',chart)
 							if (chart) {
 								this.chart = chart;
+								console.log('[wx-f2 chart]',chart)
 								this.canvasEl = chart.get('el');
 							}
 						});
