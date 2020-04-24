@@ -178,7 +178,7 @@
 									</view>
 								</view>
 							</view>
-							<view class="cu-item" bindtap="subDailyWeather">
+							<view class="cu-item" bindtap="openDatePicker">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -355,6 +355,7 @@
 	</view>
 </block>
 
+<!-- <error bind:event="error" buttonText="{{error.buttonText}}" icon="icon-fail" title="{{error.title}}" wx:if="{{pageError||appError}}"></error> -->
 
 <sc-star themeValue="{{$.themeValue}}"></sc-star>
 
@@ -710,7 +711,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
 				</text>
 			</view>
-			<view class="barRightIcon margin-right-0" style="width: 50px;height: 30px;">
+			<view class="barRightIcon margin-right-0" bindtap="navRadar" style="width: 50px;height: 30px;">
 				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
 			</view>
 		</view>
@@ -721,7 +722,7 @@
 				longitude="{{forecastData.rainRadar.longitude}}" 
 				scale="7" 
 				subkey="BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D"
-				layer-style	="2"
+				layer-style	="{{$.themeValue == 'light'?'3':'2'}}"
 				enable-zoom	="false"
 				enable-scroll	="false"
 				enable-rotate	="false"
@@ -1078,7 +1079,7 @@
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">分享朋友</view>
 				</view>
-				<view style="width:33.33%" bindtap="subDailyWeather">
+				<view style="width:33.33%" bindtap="openDatePicker">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/subWeather.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">订阅天气</view>
 				</view>
