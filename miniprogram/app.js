@@ -11,7 +11,6 @@ App({
   isReady: !1,
   isError: !1,
   globalData: {
-    // forecastData: {},
     appid: wx.getAccountInfoSync().miniProgram.appId,
     StatusBar: "",
     CustomBar: "",

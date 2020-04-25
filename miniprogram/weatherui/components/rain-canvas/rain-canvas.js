@@ -24,7 +24,7 @@ function getChartData(){
 
 function onInitChart(F2, config) {
   let chartData = getChartData()
-  log('[onInitChart]', chartData)
+  // log('[onInitChart]', chartData)
   chart = new F2.Chart(config);
   return chart.clear(), chart.legend(!1),
   chart.source(chartData, {

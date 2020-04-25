@@ -18333,7 +18333,6 @@
 					return parseInt(t, 10);
 				});
 				if (version[0] > 1 || 1 === version[0] && version[1] > 9 || 1 === version[0] && 9 === version[1] && version[2] >= 91) {
-					console.log('[init]',this)
 					const query = wx.createSelectorQuery().in(this);
 					query.select('.f2-canvas')
 						.fields({
@@ -18348,13 +18347,14 @@
 								width,
 								height
 							} = res[0];
-							console.log('[f2canvas res]',node,width,height)
 							const context = node.getContext('2d');
 							const dpr = wx.getSystemInfoSync().pixelRatio
 							node.width = width * dpr
 							node.height = height * dpr
 							let config = this.data.config
 							config['context'] = context
+							config['height'] = height
+							config['width'] = width
 							const chart = onInitChart(lib,config);
 							console.log('[wx-f2 res]',res[0])
 							console.log('[wx-f2 node]',node.width,node.height)

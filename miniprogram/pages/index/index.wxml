@@ -104,7 +104,7 @@
 									<view class="text-lg text-4a5568">手动选取位置</view>
 									<view class="text-gray text-d flex justify-between">Select location manually</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="manualGetNewLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="manualGetNewLocation"></sc-switch>
 							</view>
 						</view>
 					</view>

@@ -46,7 +46,7 @@ create.Component(store,{
         curTime = Number(updateTime.slice(0, 2)) - Number(this.properties.sunrise.slice(0, 2)) ,
         allTime = Number(this.properties.sunset.slice(0, 2)) - Number(this.properties.sunrise.slice(0, 2)),
         rotateAangle = parseFloat((curTime / allTime) * 180)
-        log('[refreshSunset]',updateTime,this.properties.sunrise,this.properties.sunset)
+        // log('[refreshSunset]',updateTime,this.properties.sunrise,this.properties.sunset)
         log('[rotateAangle]',rotateAangle,curTime,allTime)
         rotateAangle >= 180 ? that.setData({
           rotateAangle: 180
