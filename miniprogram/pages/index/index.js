@@ -173,12 +173,13 @@ create(store, {
         log('hasCusImage,cusImage')
       }
     }
-    log(`[chooseLocation.getLocation()] =>`, location)
     if(location == null){
+      log(`[chooseLocation.getLocation()] =>`, location)
       app.changeStorage('getLocationMethod', 'auto')
-      t.store.data.getLocationMethod = 'auto'
+      // t.store.data.getLocationMethod = 'auto'
     }
     if (location !== null) {
+      log(`[chooseLocation.getLocation()] =>`, location)
       t.setData({
         'forecastData.city': location.city,
         'forecastData.address': location.name,
@@ -186,9 +187,11 @@ create(store, {
         'forecastData.latitude': location.latitude
       })
       //auth状态手动获取经纬度后先不请求数据
-      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') : t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
+      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
+      t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
         'modalName': null
-      })) : t.store.data.startScreen == 'default' ? (t.getNowWeather(true), t.setData({
+      })) : 
+      t.store.data.startScreen == 'default' ? (t.getNowWeather(true), t.setData({
         'modalName': null
       })) : ''
       log('[manualLocationData]', location)
@@ -199,7 +202,6 @@ create(store, {
     }
   },
   onReady() {
-    log('[onReady]')
     const t = this
     t.checkNetWorkType()
     t.data.datePicker = scui.DatePicker("#datepicker")
@@ -411,14 +413,17 @@ create(store, {
   chooseGetLocationType() {
     const t = this
     log('[chooseGetLocationType] =>', t.store.data.getLocationMethod)
-    t.store.data.getLocationMethod == 'manual' ? t.manualGetLocation() : t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() : t.store.data.getLocationMethod == 'historyCity' ? t.historyGetLocation() : warn('[getLocationMethod]')
+    t.store.data.getLocationMethod == 'manual' ? t.manualGetLocation() : 
+    t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() : 
+    t.store.data.getLocationMethod == 'historyCity' ? t.historyGetLocation() : 
+    warn('[getLocationMethod]')
   },
   manualGetLocation() {
     const t = this
     log('[manualGetLocation]', t.data.manualLocationData)
     const changeStorage = () =>{
       app.changeStorage('getLocationMethod', 'manual')
-      t.store.data.getLocationMethod = 'manual'
+      // t.store.data.getLocationMethod = 'manual'
     }
     (async () => {
       await t.setData({
@@ -436,7 +441,7 @@ create(store, {
     var historyCityData = wx.getStorageSync('historyCityList')
     const changeStorage = () =>{
       app.changeStorage('getLocationMethod', 'historyCity')
-      t.store.data.getLocationMethod = 'historyCity'
+      // t.store.data.getLocationMethod = 'historyCity'
     }
     (async () => {
       await t.setData({
@@ -453,7 +458,8 @@ create(store, {
     const t = this
     log('[autoGetLocation]')
     const changeStorage = () => {
-      t.store.data.getLocationMethod = 'auto'
+    console.log("changeStorage -> changeStorage")
+      // t.store.data.getLocationMethod = 'auto'
       app.changeStorage('getLocationMethod', 'auto')
     }
     if(t.store.data.startScreen == 'auth'){
@@ -629,7 +635,6 @@ create(store, {
           latitude: that.data.forecastData.latitude,
           longitude: that.data.forecastData.longitude
         }
-        log(`[getNowCityData] => `, data)
         return data
       }
       const reduceHistoryCityData = (realtime) => {
@@ -1168,7 +1173,6 @@ create(store, {
   },
   savePoetry() {
     // async savePoetry() {
-    log('[savePoetry]')
     const t = this
     poetry.load(
       result => {
@@ -1190,12 +1194,9 @@ create(store, {
   switchChange(e) {
     log('[switchChange]')
     const t = this
-    const changeStoreage = (result) => {
-      t.store.data.style[result] = !t.store.data.style[result]
-      log(result, t.store.data.style[result])
-      app.changeStorage('style', t.store.data.style)
-    }
-    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : changeStoreage(e.currentTarget.dataset.target)
+    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : 
+    e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : 
+    error("switchChange")
   },
   showModal(e) {
     log('[showModal]', e)
@@ -1569,7 +1570,6 @@ create(store, {
         success: (result) => {
           log('[reqAqiRadar result]', result)
           let aqiRadarImg = result.data.images[result.data.images.length - 1][0]
-          log('aqiRadarImg', aqiRadarImg)
           t.setData({
             'forecastData.aqiRadar.coverImage': aqiRadarImg,
             'forecastData.aqiRadar.images': result.data.images
@@ -1655,7 +1655,8 @@ create(store, {
         // log('[radarObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#fourthObserver', (res) => {
+    var fourthObserver = wx.createIntersectionObserver()
+    fourthObserver.relativeToViewport().observe('#fourthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         ani.opacity(1).step()
         const event = async () => {
@@ -1672,7 +1673,8 @@ create(store, {
     })
     wx.createIntersectionObserver().relativeToViewport().observe('#fifthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
-        log('fifthObserver start')
+        log('[fifthObserver] => start')
+        fourthObserver.disconnect()
         ani.opacity(1).step()
         t.setData({
           fifthObserverAni: ani.export()
@@ -1952,21 +1954,22 @@ create(store, {
     })
   },
   refreshLocation() {
+    console.log('[refreshLocation]')
     const t = this
-    t.setData({
-      refreshLocation: true
-    })
+
     //自动获取系统定位的location,请求数据
     async function event() {
+      await t.setData({
+        refreshLocation: true
+      })
       await t.autoGetLocation()
       await setTimeout(() => {
         t.setData({
           refreshLocation: false
         })
       }, 2400);
-      await app.changeStorage('getLocationMethod', 'auto')
+      app.changeStorage('getLocationMethod', 'auto')
     }
-    // t.store.data.getLocationMethod = 'auto'
     event()
   },
   scrollToTop() {
