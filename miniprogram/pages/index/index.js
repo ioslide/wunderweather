@@ -1353,7 +1353,6 @@ create(store, {
   },
   eventGetImage(event) {
     const t = this
-    if(t.store.startScreen == 'auth') return false
     log(`[eventGetImage] => `, event)
     wx.hideLoading()
     const {
@@ -1583,8 +1582,8 @@ create(store, {
       })
     }
     const reqRadar = async () => {
-      await reqRainRadar()
-      await reqAqiRadar()
+        await reqRainRadar()
+        await reqAqiRadar()
     }
     reqRadar()
   },

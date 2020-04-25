@@ -18,7 +18,11 @@
   ],
   "window": {
     "navigationStyle": "custom",
-    "onReachBottomDistance": 100
+    "onReachBottomDistance": 100,
+    "networkTimeout": {
+      "request": 10000,
+      "downloadFile": 10000
+    }
   },
   "permission": {
     "scope.userLocation": {
