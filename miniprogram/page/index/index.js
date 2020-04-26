@@ -711,33 +711,31 @@ create(store, {
     }
     const service = (dailyData) => {
       let d = dailyData
-      if (that.store.data.languageValue == 'zh_CN') {
-        var serviceData = [{
-          desc: ~~(d.temperature[0].avg) + '°',
-          name: that.store.data.languageValue == 'zh_CN' ? "体感温度" : that.store.data.languageValue == 'zh_TW' ? "體感溫度" : "Feels Like",
-          type: "sw-temperature"
-        }, {
-          desc: ~~(d.humidity[0].avg * 100) + "%",
-          name: that.store.data.languageValue == 'zh_CN' ? "湿度" : that.store.data.languageValue == 'zh_TW' ? "濕度" : "Humidity",
-          type: "sw-humidity"
-        }, {
-          desc: ~~(d.life_index.ultraviolet[0].index),
-          name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数" : "UV index",
-          type: "sw-ultraviolet"
-        }, {
-          desc: d.visibility[0].avg + "km",
-          name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : "Visibility",
-          type: "sw-visibility"
-        }, {
-          desc: d.cloudrate[0].avg,
-          name: that.store.data.languageValue == 'zh_CN' ? "云量" : that.store.data.languageValue == 'zh_TW' ? "雲量" : "Cloudiness",
-          type: "sw-cloudrate"
-        }, {
-          desc: ~~(d.pressure[0].avg) + "mb",
-          name: that.store.data.languageValue == 'zh_CN' ? "气压" : that.store.data.languageValue == 'zh_TW' ? "氣壓" : "Pressure",
-          type: "sw-pressure"
-        }]
-      }
+      var serviceData = [{
+        desc: ~~(d.temperature[0].avg) + '°',
+        name: that.store.data.languageValue == 'zh_CN' ? "体感温度" : that.store.data.languageValue == 'zh_TW' ? "體感溫度" : "Feels Like",
+        type: "sw-temperature"
+      }, {
+        desc: ~~(d.humidity[0].avg * 100) + "%",
+        name: that.store.data.languageValue == 'zh_CN' ? "湿度" : that.store.data.languageValue == 'zh_TW' ? "濕度" : "Humidity",
+        type: "sw-humidity"
+      }, {
+        desc: ~~(d.life_index.ultraviolet[0].index),
+        name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数" : "UV index",
+        type: "sw-ultraviolet"
+      }, {
+        desc: d.visibility[0].avg + "km",
+        name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : "Visibility",
+        type: "sw-visibility"
+      }, {
+        desc: d.cloudrate[0].avg,
+        name: that.store.data.languageValue == 'zh_CN' ? "云量" : that.store.data.languageValue == 'zh_TW' ? "雲量" : "Cloudiness",
+        type: "sw-cloudrate"
+      }, {
+        desc: ~~(d.pressure[0].avg) + "mb",
+        name: that.store.data.languageValue == 'zh_CN' ? "气压" : that.store.data.languageValue == 'zh_TW' ? "氣壓" : "Pressure",
+        type: "sw-pressure"
+      }]
       return serviceData
     }
     const daily = (dailyData) => {
