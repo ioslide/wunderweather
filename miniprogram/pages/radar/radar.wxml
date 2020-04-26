@@ -1,6 +1,0 @@
-	<page-meta background-color="#000000" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="background:#000000">
-		<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
-	</page-meta>
-
-	<web-view src="{{radarSrc}}"></web-view>
-
