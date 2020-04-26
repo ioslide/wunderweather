@@ -1,16 +1,12 @@
-// miniprogram/pages/dailyCanvas/dailyCanvas.js
-Page({
-
-  /**
-   * 页面的初始数据
-   */
+const app = getApp();
+import create from '../../../../../utils/create'
+import store from '../../../../../store/index'
+create(store, {
   data: {
-
+    StatusBar: app.globalData.StatusBar,
+    CustomBar: app.globalData.CustomBar,
+    Custom: app.globalData.Custom,
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
 
   },
@@ -56,11 +52,19 @@ Page({
   onReachBottom: function () {
 
   },
-
+  BackPage: function () {
+    wx.navigateBack({
+      delta: 1
+    });
+  },
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
-  }
+  onShareAppMessage: function (a) {
+    return {
+      title: '奇妙天气',
+      imageUrl: 'https://weather.ioslide.com/shareimg.png',
+      path: "/pages/index/index"
+    };
+  },
 })

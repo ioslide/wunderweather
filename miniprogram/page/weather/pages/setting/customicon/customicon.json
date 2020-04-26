@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "sc-button": "/weatherui/components/scButton/sc-button",
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group",
+    "sc-radio": "/weatherui/components/scRadio/sc-radio",
+    "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group"
+  }
+}

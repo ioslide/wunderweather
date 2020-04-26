@@ -156,8 +156,6 @@ create(store, {
     }
     store.onChange(handler)
     t.loadDataFromNet()
-
-
   },
   onShow() {
     const t = this
@@ -173,9 +171,12 @@ create(store, {
         log('hasCusImage,cusImage')
       }
     }
-    if(location == null){
-      log(`[chooseLocation.getLocation()] =>`, location)
-      app.changeStorage('getLocationMethod', 'auto')
+    if (location == null) {
+      // log(`[chooseLocation.getLocation()] =>`, location)
+      // if(t.store.data.getLocationMethod == auto){
+      // }else{
+      //   app.changeStorage('getLocationMethod', 'auto')
+      // }
       // t.store.data.getLocationMethod = 'auto'
     }
     if (location !== null) {
@@ -188,12 +189,12 @@ create(store, {
       })
       //auth状态手动获取经纬度后先不请求数据
       t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
-      t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
-        'modalName': null
-      })) : 
-      t.store.data.startScreen == 'default' ? (t.getNowWeather(true), t.setData({
-        'modalName': null
-      })) : ''
+        t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
+          'modalName': null
+        })) :
+        t.store.data.startScreen == 'default' ? (t.getNowWeather(true), t.setData({
+          'modalName': null
+        })) : ''
       log('[manualLocationData]', location)
       app.saveData('manualLocationData', location)
       //make sure location value != null
@@ -203,7 +204,6 @@ create(store, {
   },
   onReady() {
     const t = this
-    t.checkNetWorkType()
     t.data.datePicker = scui.DatePicker("#datepicker")
   },
   loadDataFromStorage() {
@@ -211,45 +211,46 @@ create(store, {
     const t = this
     const getHistoryCityData = () => {
         wx.getStorage({
-          key: "forecastData",
-          success: res => {
-            t.setAllWeather(res.data);
-          }
-        }),
-        wx.getStorage({
-          key: "historyCityList",
-          success: res => {
-            log('[historyCityList]', res.data)
-            t.setData({
-              'forecastData.city': res.data[1].city,
-              'forecastData.address': res.data[1].address,
-              'forecastData.latitude': res.data[1].latitude,
-              'forecastData.longitude': res.data[1].longitude,
-              'forecastData.nowTemp': res.data[1].nowTemp
-            });
-          }
-        }),
-        wx.getStorage({
-          key: "lastRefreshTime",
-          success: res => {
-            t.setData({
-              'lastRefreshTime': res.data
-            });
-          }
+            key: "forecastData",
+            success: res => {
+              t.setAllWeather(res.data);
+            }
+          }),
+          wx.getStorage({
+            key: "historyCityList",
+            success: res => {
+              log('[historyCityList]', res.data)
+              t.setData({
+                'forecastData.city': res.data[1].city,
+                'forecastData.address': res.data[1].address,
+                'forecastData.latitude': res.data[1].latitude,
+                'forecastData.longitude': res.data[1].longitude,
+                'forecastData.nowTemp': res.data[1].nowTemp
+              });
+            }
+          }),
+          wx.getStorage({
+            key: "lastRefreshTime",
+            success: res => {
+              t.setData({
+                'lastRefreshTime': res.data
+              });
+            }
+          })
+      }
+      (async () => {
+        t.setData({
+          'canBlurRoot': true
         })
-    }
-    (async () => {
-      t.setData({
-        'canBlurRoot': true
-      })
-      await t.screenFadeIn()
-      await getHistoryCityData()
-      await t.screenFadeOut()
-      await t.setData({
-        'canBlurRoot': false
-      })
-      await t.scrollToTop()
-    })()
+        await t.screenFadeIn()
+        await getHistoryCityData()
+        await t.screenFadeOut()
+        await t.setData({
+          'canBlurRoot': false
+        })
+        await t.scrollToTop()
+        await t.checkNetWorkType()
+      })()
   },
   loadDataFromNet() {
     const t = this
@@ -310,14 +311,13 @@ create(store, {
       })
     }
     t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() : t.store.data.startScreen == 'auth' ? authScreenFadeIn() : t.store.data.startScreen == 'default' ? defaultScreenFadeIn() : warn('[startScreen]')
-    // t.intersectionObserver()
+    // t.onIntersectionObserver()
   },
   screenFadeOut() {
     const t = this
-    t.intersectionObserver()
+    // t.onIntersectionObserver()
     log('[screenFadeOut]', t.store.data.startScreen)
     const poetryScreenFadeOut = () => {
-      log('[poetryScreenFadeOut]')
       let poetryScreenAction = wx.createAnimation({
         duration: 1600,
         timingFunction: 'ease-in-out',
@@ -335,7 +335,6 @@ create(store, {
         }, 3000)
     }
     const defaultScreenFadeOut = () => {
-      log('[defaultScreenFadeOut]')
       let defaultScreenAction = wx.createAnimation({
         duration: 1600,
         timingFunction: 'ease-in-out',
@@ -353,7 +352,6 @@ create(store, {
         }, 2200)
     }
     const authScreenFadeOut = () => {
-      log('[authScreenFadeOut]')
       let authScreenAction = wx.createAnimation({
         duration: 1400,
         timingFunction: 'ease-in-out',
@@ -372,21 +370,20 @@ create(store, {
     }
 
     const screenFadeOut = (screenFadeOutType) => {
-      screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
-        t.store.data.startScreen = 'poetry'
-      }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-      //t.store.data.startScreen = 'poetry' To prevent startScreen = auth  !=> getNowWeather()
-    }
-    (async () => {
-      await t.getBingImage()
-      await screenFadeOut(t.store.data.startScreen)
-      t.intersectionObserver()
-      // await t.getMoonPhaseList()
-      // await t.getBingImage()
-      t.refreshWeather()
-      t.onGetWXACode()
-      t.savePoetry()
-    })()
+        screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
+          t.store.data.startScreen = 'poetry'
+        }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
+        //t.store.data.startScreen = 'poetry' To prevent startScreen = auth  !=> getNowWeather()
+      }
+      (async () => {
+        await screenFadeOut(t.store.data.startScreen)
+        t.onIntersectionObserver()
+        // await t.getMoonPhaseList()
+        // await t.getBingImage()
+        t.onRefreshWeather()
+        t.onGetWXACode()
+        t.savePoetry()
+      })()
   },
   checkNetWorkType() {
     const t = this
@@ -413,60 +410,60 @@ create(store, {
   chooseGetLocationType() {
     const t = this
     log('[chooseGetLocationType] =>', t.store.data.getLocationMethod)
-    t.store.data.getLocationMethod == 'manual' ? t.manualGetLocation() : 
-    t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() : 
-    t.store.data.getLocationMethod == 'historyCity' ? t.historyGetLocation() : 
-    warn('[getLocationMethod]')
+    t.store.data.getLocationMethod == 'manual' ? t.manualGetLocation() :
+      t.store.data.getLocationMethod == 'auto' ? t.autoGetLocation() :
+      t.store.data.getLocationMethod == 'historyCity' ? t.historyGetLocation() :
+      warn('[getLocationMethod]')
   },
   manualGetLocation() {
     const t = this
     log('[manualGetLocation]', t.data.manualLocationData)
-    const changeStorage = () =>{
-      app.changeStorage('getLocationMethod', 'manual')
-      // t.store.data.getLocationMethod = 'manual'
-    }
-    (async () => {
-      await t.setData({
-        'forecastData.latitude': t.data.manualLocationData.latitude,
-        'forecastData.longitude': t.data.manualLocationData.longitude,
-        'forecastData.city': t.data.manualLocationData.city,
-        'forecastData.address': t.data.manualLocationData.name
-      })
-      await t.getNowWeather(false)
-      await changeStorage()
-    })()
+    const changeStorage = () => {
+        app.changeStorage('getLocationMethod', 'manual')
+        // t.store.data.getLocationMethod = 'manual'
+      }
+      (async () => {
+        await t.setData({
+          'forecastData.latitude': t.data.manualLocationData.latitude,
+          'forecastData.longitude': t.data.manualLocationData.longitude,
+          'forecastData.city': t.data.manualLocationData.city,
+          'forecastData.address': t.data.manualLocationData.name
+        })
+        await t.getNowWeather(false)
+        await changeStorage()
+      })()
   },
   historyGetLocation() {
     const t = this
     var historyCityData = wx.getStorageSync('historyCityList')
-    const changeStorage = () =>{
-      app.changeStorage('getLocationMethod', 'historyCity')
-      // t.store.data.getLocationMethod = 'historyCity'
-    }
-    (async () => {
-      await t.setData({
-        'forecastData.latitude': historyCityData[0].latitude,
-        'forecastData.longitude': historyCityData[0].longitude,
-        'forecastData.city': historyCityData[0].city,
-        'forecastData.address': historyCityData[0].address
-      })
-      await t.getNowWeather(false)
-      await changeStorage()
-    })()
+    const changeStorage = () => {
+        app.changeStorage('getLocationMethod', 'historyCity')
+        // t.store.data.getLocationMethod = 'historyCity'
+      }
+      (async () => {
+        await t.setData({
+          'forecastData.latitude': historyCityData[0].latitude,
+          'forecastData.longitude': historyCityData[0].longitude,
+          'forecastData.city': historyCityData[0].city,
+          'forecastData.address': historyCityData[0].address
+        })
+        await t.getNowWeather(false)
+        await changeStorage()
+      })()
   },
   autoGetLocation() {
     const t = this
     log('[autoGetLocation]')
     const changeStorage = () => {
-    console.log("changeStorage -> changeStorage")
+      console.log("changeStorage -> changeStorage")
       // t.store.data.getLocationMethod = 'auto'
       app.changeStorage('getLocationMethod', 'auto')
     }
-    if(t.store.data.startScreen == 'auth'){
+    if (t.store.data.startScreen == 'auth') {
       log('[autoGetLocation] => [canNavToFinalScreen] ')
       t.authScreenNext('canNavToFinalScreen'), changeStorage()
     }
-    if(t.store.data.startScreen !== 'auth'){
+    if (t.store.data.startScreen !== 'auth') {
       (async () => {
         await wx.getLocation({
           success: res => {
@@ -527,71 +524,80 @@ create(store, {
       'modalName': null
     })
     const changeStorage = () => {
-      app.changeStorage('getLocationMethod', 'historyCity')
-      t.store.data.getLocationMethod = 'historyCity'
-    }
-    (async () => {
-      await t.getNowWeather(true)
-      await changeStorage()
-    })()
+        app.changeStorage('getLocationMethod', 'historyCity')
+        t.store.data.getLocationMethod = 'historyCity'
+      }
+      (async () => {
+        await t.getNowWeather(true)
+        await changeStorage()
+      })()
   },
   getNowWeather(canRefreshChart) {
     const t = this
     log('[getNowWeather] => canScreenFadeOut')
-    const reqNowWeather = () => {
-      log('[getNowWeather]', t.data.forecastData.longitude, t.data.forecastData.latitude)
-      let apiHost = config.default.weatherApiHost + "/" + config.default.weatherApiVersion + "/" + config.default.weatherApiToken + "/" + t.data.forecastData.longitude + "," + t.data.forecastData.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
-      log('[getNowWeather] => apiHost', apiHost)
-      wx.request({
-        url: apiHost,
-        success: a => {
-          let weatherData = a.data.result;
-          const checkRefreshChart= (canRefreshChart) => {
-            log('[canRefreshChart] => ', canRefreshChart)
-            if (canRefreshChart == true) {
-              t.setData({
-                'refreshChart': !t.data.refreshChart
-              })
-            }
-            if (canRefreshChart == false) {
-              t.setData({
-                'initChart': !t.data.initChart
-              })
-            }
+    // const reqNowWeather = () => {
+    log('[getNowWeather]', t.data.forecastData.longitude, t.data.forecastData.latitude)
+    let apiHost = config.default.weatherApiHost + "/" + config.default.weatherApiVersion + "/" + config.default.weatherApiToken + "/" + t.data.forecastData.longitude + "," + t.data.forecastData.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
+    log('[getNowWeather] => apiHost', apiHost)
+    wx.request({
+      url: apiHost,
+      success: a => {
+        let weatherData = a.data.result;
+        const checkRefreshChart = (canRefreshChart) => {
+          log('[canRefreshChart] => ', canRefreshChart)
+          if (canRefreshChart == true) {
+            t.setData({
+              'refreshChart': !t.data.refreshChart
+            })
           }
-          const waitToCheck = async (weatherData, canRefreshChart) => {
-            await t.setAllWeather(weatherData)
-            await checkRefreshChart(canRefreshChart)
-            app.saveData("forecastData", weatherData)
+          if (canRefreshChart == false) {
+            t.setData({
+              'initChart': !t.data.initChart
+            })
           }
-          waitToCheck(weatherData, canRefreshChart)
         }
-      })
-    }
-    (async () => {
-      try{
-        await t.setData({
-          'canBlurRoot': true
-        })
-        await reqNowWeather()
-        await t.reqRadar()
-        await t.screenFadeOut()
-        await t.scrollToTop()
-        await t.setData({
-          'canBlurRoot': false
-        })
+        const waitToCheck = async (weatherData, canRefreshChart) => {
+          await t.setData({
+            'canBlurRoot': true
+          })
+          await t.setAllWeather(weatherData)
+          await t.getBingImage()
+          await t.screenFadeOut()
+          await t.scrollToTop()
+          await t.setData({
+            'canBlurRoot': false
+          })
+          checkRefreshChart(canRefreshChart)
+          app.saveData("forecastData", weatherData)
+          t.checkNetWorkType()
+        }
+        waitToCheck(weatherData, canRefreshChart)
       }
-      catch{
-        error('asyncGetNowWeather')
-      }
-    })()
+    })
+    // }
+    // (async () => {
+    //   try{
+    //     // await t.setData({
+    //     //   'canBlurRoot': true
+    //     // })
+    //     // await reqNowWeather()
+    //     // await t.screenFadeOut()
+    //     // await t.scrollToTop()
+    //     // await t.setData({
+    //     //   'canBlurRoot': false
+    //     // })
+    //   }
+    //   catch{
+    //     error('asyncGetNowWeather')
+    //   }
+    // })()
   },
-  refreshWeather() {
+  onRefreshWeather() {
     const t = this
     let refreshTime = t.store.data.refreshfrequencyValue * 60 * 1000
     log('[refreshTime]', refreshTime)
     setInterval(() => {
-      log('[refreshWeather] => setInterval()', refreshTime)
+      log('[onRefreshWeather] => setInterval()', refreshTime)
       t.getNowWeather(true)
     }, refreshTime);
   },
@@ -669,16 +675,16 @@ create(store, {
         historyCityListData
       }
     }
-    const minutely = () => {
-      log('[setAllWeather] => [minutely]', a.minutely)
-      that.setData({
-        'forecastData.minutely': {
-          precipitation: a.minutely.precipitation,
-          precipitation_2h: a.minutely.precipitation_2h,
-          probability: a.minutely.probability
-        }
-      })
-    }
+    // const minutely = () => {
+    //   log('[setAllWeather] => [minutely]', a.minutely)
+    //   that.setData({
+    //     'forecastData.minutely': {
+    //       precipitation: a.minutely.precipitation,
+    //       precipitation_2h: a.minutely.precipitation_2h,
+    //       probability: a.minutely.probability
+    //     }
+    //   })
+    // }
     const hourly = (hourlyData) => {
       log('[setAllWeather] => [hourly]', hourlyData)
       for (var t = hourlyData, hourlyReduce = [], r = new Date().getHours(), n = 0; n < 48; n++) {
@@ -701,79 +707,27 @@ create(store, {
       if (that.store.data.languageValue == 'zh_CN') {
         var serviceData = [{
           desc: ~~(d.temperature[0].avg) + '°',
-          name: "体感温度",
+          name: that.store.data.languageValue == 'zh_CN' ? "体感温度" : that.store.data.languageValue == 'zh_TW' ? "體感溫度" : "Feels Like",
           type: "sw-temperature"
         }, {
           desc: ~~(d.humidity[0].avg * 100) + "%",
-          name: "湿度",
+          name: that.store.data.languageValue == 'zh_CN' ? "湿度" : that.store.data.languageValue == 'zh_TW' ? "濕度" : "Humidity",
           type: "sw-humidity"
         }, {
           desc: ~~(d.life_index.ultraviolet[0].index),
-          name: "紫外线指数",
+          name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数" : "UV index",
           type: "sw-ultraviolet"
         }, {
           desc: d.visibility[0].avg + "km",
-          name: "能见度",
+          name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : "Visibility",
           type: "sw-visibility"
         }, {
           desc: d.cloudrate[0].avg,
-          name: "云量",
+          name: that.store.data.languageValue == 'zh_CN' ? "云量" : that.store.data.languageValue == 'zh_TW' ? "雲量" : "Cloudiness",
           type: "sw-cloudrate"
         }, {
           desc: ~~(d.pressure[0].avg) + "mb",
-          name: "气压",
-          type: "sw-pressure"
-        }]
-      } else if (that.store.data.languageValue == 'zh_TW') {
-        var serviceData = [{
-          desc: ~~(d.temperature[0].avg) + '°',
-          name: "體感溫度",
-          type: "sw-temperature"
-        }, {
-          desc: ~~(d.humidity[0].avg * 100) + "%",
-          name: "濕度",
-          type: "sw-humidity"
-        }, {
-          desc: ~~(d.life_index.ultraviolet[0].index),
-          name: "紫外線指數",
-          type: "sw-ultraviolet"
-        }, {
-          desc: d.visibility[0].avg + "km",
-          name: "能見度",
-          type: "sw-visibility"
-        }, {
-          desc: d.cloudrate[0].avg,
-          name: "雲量",
-          type: "sw-cloudrate"
-        }, {
-          desc: ~~(d.pressure[0].avg) + "mb",
-          name: "氣壓",
-          type: "sw-pressure"
-        }]
-      } else if (that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'en_US') {
-        var serviceData = [{
-          desc: ~~(d.temperature[0].avg) + '°',
-          name: "Feels Like",
-          type: "sw-temperature"
-        }, {
-          desc: ~~(d.humidity[0].avg * 100) + "%",
-          name: "Humidity",
-          type: "sw-humidity"
-        }, {
-          desc: ~~(d.life_index.ultraviolet[0].index),
-          name: "UV index",
-          type: "sw-ultraviolet"
-        }, {
-          desc: d.visibility[0].avg + "km",
-          name: "Visibility",
-          type: "sw-visibility"
-        }, {
-          desc: d.cloudrate[0].avg,
-          name: "Cloudiness",
-          type: "sw-cloudrate"
-        }, {
-          desc: ~~(d.pressure[0].avg) + "mb",
-          name: "Pressure",
+          name: that.store.data.languageValue == 'zh_CN' ? "气压" : that.store.data.languageValue == 'zh_TW' ? "氣壓" : "Pressure",
           type: "sw-pressure"
         }]
       }
@@ -865,33 +819,22 @@ create(store, {
       app.saveData("lastRefreshTime", curDetailTime)
       return curDetailTime
     }
-    async function asyncSetTimelyWeather(forecastData) {
-      const realtimeData = await realtime(forecastData.realtime)
-      // await minutely()
-      const hourlyData = await hourly(forecastData.hourly)
-      const dailyData = await daily(forecastData.daily)
-      const serviceData = await service(forecastData.daily)
-      const alertContentData = await alertContent(forecastData.alert.content)
+    const asyncSetTimelyWeather = (forecastData) => {
+      const realtimeData = realtime(forecastData.realtime)
+      const hourlyData = hourly(forecastData.hourly)
+      const dailyData = daily(forecastData.daily)
+      const serviceData = service(forecastData.daily)
+      const alertContentData = alertContent(forecastData.alert.content)
       const curTime = setCurTime()
-      return {
-        realtimeData,
-        hourlyData,
-        dailyData,
-        serviceData,
-        alertContentData,
-        curTime
-      }
-    }
-    asyncSetTimelyWeather(a).then(obj => {
       that.setData({
-        'forecastData.daily': obj.dailyData,
-        'forecastData.realtime': obj.realtimeData.realtimeData,
-        'forecastData.hourly': obj.hourlyData,
-        'forecastData.serviceData': obj.serviceData,
+        'forecastData.daily': dailyData,
+        'forecastData.realtime': realtimeData.realtimeData,
+        'forecastData.hourly': hourlyData,
+        'forecastData.serviceData': serviceData,
         'forecastData.hourlyKeypoint': a.hourly.description,
-        'forecastData.alarmInfo': obj.alertContentData,
-        'historyCityList': obj.realtimeData.historyCityListData,
-        'curDetailTime': obj.curTime
+        'forecastData.alarmInfo': alertContentData,
+        'historyCityList': realtimeData.historyCityListData,
+        'curDetailTime': curTime
         // 'forecastData.minutelyKeypoint': a.minutely.description,
         // 'forecastData.minutely':{
         //   precipitation:a.minutely.precipitation,
@@ -899,7 +842,34 @@ create(store, {
         //   probability:a.minutely.probability
         // }
       });
-    })
+      // return {
+      //   realtimeData,
+      //   hourlyData,
+      //   dailyData,
+      //   serviceData,
+      //   alertContentData,
+      //   curTime
+      // }
+    }
+    asyncSetTimelyWeather(a)
+    // asyncSetTimelyWeather(a).then(obj => {
+    //   that.setData({
+    //     'forecastData.daily': obj.dailyData,
+    //     'forecastData.realtime': obj.realtimeData.realtimeData,
+    //     'forecastData.hourly': obj.hourlyData,
+    //     'forecastData.serviceData': obj.serviceData,
+    //     'forecastData.hourlyKeypoint': a.hourly.description,
+    //     'forecastData.alarmInfo': obj.alertContentData,
+    //     'historyCityList': obj.realtimeData.historyCityListData,
+    //     'curDetailTime': obj.curTime
+    //     // 'forecastData.minutelyKeypoint': a.minutely.description,
+    //     // 'forecastData.minutely':{
+    //     //   precipitation:a.minutely.precipitation,
+    //     //   precipitation_2h:a.minutely.precipitation_2h,
+    //     //   probability:a.minutely.probability
+    //     // }
+    //   });
+    // })
   },
   setAqiColor(a) {
     let t = "#4ADC9B";
@@ -1080,7 +1050,7 @@ create(store, {
     t.getNowWeather(false)
   },
   authScreenNext(e) {
-    log('[authScreenNext]',e)
+    log('[authScreenNext]', e)
     const t = this
     var windowWidth = t.data.windowWidth
     const checkLocationAuth = () => {
@@ -1194,9 +1164,9 @@ create(store, {
   switchChange(e) {
     log('[switchChange]')
     const t = this
-    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : 
-    e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : 
-    error("switchChange")
+    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) :
+      e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) :
+      error("switchChange")
   },
   showModal(e) {
     log('[showModal]', e)
@@ -1221,19 +1191,16 @@ create(store, {
   hideModal(e) {
     log('[hideModal]')
     const t = this
-    const setData = (modalName) => {
-      t.setData({
-        modalName: null
-      })
-    }
-    e.detail == 'DrawerModalR' ? (setData(e.detail), t.intersectionObserver()) : setData(e.detail)
+    t.setData({
+      modalName: null
+    })
     wx.hideLoading()
   },
   navChange(e) {
     log(`[navChange] => ${e.currentTarget.dataset.cur}`)
     const cur = e.currentTarget.dataset.cur
     wx.navigateTo({
-      url: '../' + cur + '/' + cur
+      url: '../weather/pages/' + cur + '/' + cur
     });
   },
   navRadar() {
@@ -1243,36 +1210,41 @@ create(store, {
     const t = this
     log('[navigateTo]')
     wx.navigateTo({
-      url: '../radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
+      url: '../weather/pages/radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
     })
   },
   navSetting() {
     wx.navigateTo({
-      url: '../setting/setting'
+      url: '../weather/pages/setting/setting'
     });
   },
   navAbout() {
     wx.navigateTo({
-      url: '../setting/about/about'
+      url: '../weather/pages/setting/about/about'
+    });
+  },
+  navWechatsi(){
+    wx.navigateTo({
+      url: '../plugins/pages/wechatsi/wechatsi'
     });
   },
   onPullDownRefresh() {
     const t = this
-    log(`[onPullDownRefresh]`,t.store.data.startScreen)
-    if(t.store.data.startScreen !== 'auth'){
+    log(`[onPullDownRefresh]`, t.store.data.startScreen)
+    if (t.store.data.startScreen !== 'auth') {
       let time = util.formatDate(new Date())
       let date = util.getDates(7, time)
       app.saveData("lastRefreshTime", date[0].time)
-      (async () => {
-        await t.setData({
-          'canBlurRoot': true
-        })
-        await t.getNowWeather(true) //(canScreenFadeOut,canRefreshChart)
-        await wx.stopPullDownRefresh();
-        await t.setData({
-          'canBlurRoot': false
-        })
-      })()
+        (async () => {
+          await t.setData({
+            'canBlurRoot': true
+          })
+          await t.getNowWeather(true) //(canScreenFadeOut,canRefreshChart)
+          await wx.stopPullDownRefresh();
+          await t.setData({
+            'canBlurRoot': false
+          })
+        })()
     }
   },
   onReachBottom() {
@@ -1281,62 +1253,56 @@ create(store, {
   eventDraw() {
     log(`[eventDraw]`)
     const t = this
-    const draw = async () => {
-      await wx.showLoading({
-        title: 'Loading',
-        mask: true
-      })
-      await t.setData({
-        painting: {
-          width: 300,
-          height: 350,
-          clear: true,
-          views: [{
-              type: 'image',
-              url: t.data.bingImage,
-              top: 0,
-              left: 0,
-              width: 300,
-              height: 210
-            },
-            {
-              type: 'rect',
-              background: '#ffffff',
-              top: 210,
-              left: 0,
-              width: 300,
-              height: 140
-            },
-            {
-              type: 'text',
-              content: t.data.forecastData.hourlyKeypoint,
-              fontSize: 14,
-              lineHeight: 21,
-              color: '#383549',
-              textAlign: 'center',
-              top: 220,
-              left: 146,
-              width: 200,
-              MaxLineNumber: 2,
-              breakWord: true,
-              bolder: true
-            },
-            {
-              type: 'image',
-              url: t.data.qrImageURL, //二维码
-              top: 270,
-              left: 120,
-              width: 65,
-              height: 65
-            }
-          ]
-        }
-      })
-      await setTimeout(function () {
-        wx.hideLoading()
-      }, 2000)
-    }
-    draw()
+    wx.showLoading({
+      title: 'Loading',
+      mask: true
+    })
+    t.setData({
+      painting: {
+        width: 300,
+        height: 350,
+        clear: true,
+        views: [{
+            type: 'image',
+            url: t.data.bingImage,
+            top: 0,
+            left: 0,
+            width: 300,
+            height: 210
+          },
+          {
+            type: 'rect',
+            background: '#ffffff',
+            top: 210,
+            left: 0,
+            width: 300,
+            height: 140
+          },
+          {
+            type: 'text',
+            content: t.data.forecastData.hourlyKeypoint,
+            fontSize: 14,
+            lineHeight: 21,
+            color: '#383549',
+            textAlign: 'center',
+            top: 220,
+            left: 146,
+            width: 200,
+            MaxLineNumber: 2,
+            breakWord: true,
+            bolder: true
+          },
+          {
+            type: 'image',
+            url: t.data.qrImageURL, //二维码
+            top: 270,
+            left: 120,
+            width: 65,
+            height: 65
+          }
+        ]
+      }
+    })
   },
   eventSave() {
     log(`[eventSave]`)
@@ -1463,7 +1429,7 @@ create(store, {
   pickerClosed() {
     console.log(`picker closed`);
   },
-  EventHandle(e) {
+  eventHandle(e) {
     log('[official-account] =>', e)
   },
   touchStart(e) {
@@ -1582,13 +1548,13 @@ create(store, {
       })
     }
     const reqRadar = async () => {
-        await reqRainRadar()
-        await reqAqiRadar()
+      await reqRainRadar()
+      await reqAqiRadar()
     }
     reqRadar()
   },
-  intersectionObserver() {
-    log('[intersectionObserver]')
+  onIntersectionObserver() {
+    log('[onIntersectionObserver]')
     const t = this
     var ani = wx.createAnimation({
       duration: 700,
@@ -1643,9 +1609,12 @@ create(store, {
         // log('[rainObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#radarObserver', (res) => {
+    wx.createIntersectionObserver().relativeToViewport({
+      top: 10
+    }).observe('#radarObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[radarObserver] => start')
+        t.reqRadar()
         ani.opacity(1).step()
         t.setData({
           radarObserverAni: ani.export()
@@ -1936,21 +1905,9 @@ create(store, {
   },
   onDev() {
     const t = this
-    let title = ''
-    let content = ''
-    if (t.store.data.languageValue == 'zh_TW') {
-      title = '沒錢開發中'
-      content = '不要期待'
-    } else if (t.store.data.languageValue == 'zh_CN') {
-      title = '没钱开发中'
-      content = '不要期待'
-    } else {
-      title = "No money"
-      content = 'Do not expect'
-    }
     wx.showModal({
-      title: title,
-      content: content
+      title: t.store.data.languageValue == 'zh_TW' ?'沒錢開發中':t.store.data.languageValue == 'zh_CN'?'没钱开发中':'No money',
+      content: t.store.data.languageValue == 'zh_TW' ?'不要期待':t.store.data.languageValue == 'zh_CN'?'不要期待':'Do not expect'
     })
   },
   refreshLocation() {
@@ -1958,19 +1915,20 @@ create(store, {
     const t = this
 
     //自动获取系统定位的location,请求数据
-    async function event() {
-      await t.setData({
-        refreshLocation: true
-      })
-      await t.autoGetLocation()
-      await setTimeout(() => {
-        t.setData({
-          refreshLocation: false
-        })
-      }, 2400);
-      app.changeStorage('getLocationMethod', 'auto')
-    }
-    event()
+    t.autoGetLocation()
+    // async function event() {
+    //   await t.setData({
+    //     refreshLocation: true
+    //   })
+    //   await t.autoGetLocation()
+    //   await setTimeout(() => {
+    //     t.setData({
+    //       refreshLocation: false
+    //     })
+    //   }, 2400);
+    // }
+    // event()
+    app.changeStorage('getLocationMethod', 'auto')
   },
   scrollToTop() {
     let query = wx.createSelectorQuery();
@@ -1985,33 +1943,3 @@ create(store, {
     });
   }
 });
-
-// var s = this;
-// e.request(t.WEATHER.replace("#LOCATION#", a), {}, "GET", !0).then(function(e) {
-//     if ("ok" === e.status) {
-//         if (0 == e.result.alert.content.length) e.result.alert.message = "暂无预警信息"; else {
-//             e.result.alert.message = e.result.alert.content[e.result.alert.content.length - 1].description;
-//             var t = e.result.alert.message;
-//             (t.search("高温黄色预警") > -1 || t.search("高温橙色预警") > -1) && (e.result.alert.message = "天气闷热，注意防暑");
-//         }
-//         var a = 2, n = e.result.forecast_keypoint;
-//         if (n.search("伞") > -1 || n.search("正在下") > -1 || n.search("开始下") > -1 || n.search("雨渐小") > -1 || n.search("细雨") > -1 || n.search("正下着") > -1 || n.search("会下一小会儿") > -1 || n.search("会下一阵") > -1) a = 1; else if (n.search("不会有雨") > -1 || n.search("不会有雪") > -1 || n.search("不会下雨") > -1) a = 2; else for (var r = 0; r < 3; r++) if ("RAIN" == (u = e.result.hourly.skycon[r].value) || "SNOW" == u) {
-//             a = 1;
-//             break;
-//         }
-//         var o = n.replace(/[^0-9]/gi, " ").trim().split(/\s+/);
-//         1 == o.length && n.search("正在下") > -1 && parseInt(o[0]) > 5 && (a = 2);
-//         var i = Math.trunc(e.result.hourly.temperature[0].value), c = e.result.hourly.skycon[0].value, u = "duoyun";
-//         "CLOUDY" == c ? (c = "多云", u = "yintian") : c.search("PARTLY_CLOUDY") > -1 ? (c = "云", 
-//         u = "duoyun") : "RAIN" == c ? (c = "有雨", u = "xiaoyu") : "CLEAR_DAY" == c || "CLEAR_NIGHT" == c ? (c = "晴", 
-//         u = "qing") : "WIND" == c ? (c = "风", u = "shachenbao") : "SNOW" == c && (c = "雪", 
-//         u = "xiaoxue"), s.setData({
-//             weather: e.result,
-//             willRain: a,
-//             temperature: i,
-//             skycon_desc: c,
-//             skycon: u,
-//             klass: ""
-//         });
-//     }
-// });

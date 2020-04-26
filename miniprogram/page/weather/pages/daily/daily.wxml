@@ -1,0 +1,24 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
+
+<view style="padding-top: {{CustomBar}}px;">
+	<view class="{{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{daily}}" wx:key="index" wx:if="{{item&&index<16}}">
+		<sc-cell cellHeight="90" subheader1Padding="5" right-icon="iconfont icon-cloudqueue" themeValue="{{$.themeValue}}">
+			<text slot="subheader">{{item.monthday}}, {{item.date}}</text>
+			<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'zh_TW'}}">
+				<text slot="subheader1">{{item.weather}}, {{item.windDirect}}</text>
+			</block>
+			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">
+				<text class="text-abc" slot="subheader1">{{item.weatherEN}} , {{item.windDirect}}</text>
+			</block>
+			<text slot="subbottom">{{item.min}}° / {{item.max}}°</text>
+			<view class="flex margin-sm" slot="iconimageleft">
+				<view class="flex align-center justify-center weatherIcon">
+					<image class="flex align-center justify-center weatherIconCircle" mode="aspectFit" src="{{item.iconPath}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+				</view>
+			</view>
+		</sc-cell>
+	</view>
+</view>
