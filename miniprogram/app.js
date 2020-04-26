@@ -1,5 +1,7 @@
 const log = console.log.bind(console)
 const warn = console.warn.bind(console)
+var chatRobot = requirePlugin("chatRobot");
+
 // const group = console.group.bind(console)
 // const groupEnd = console.groupEnd.bind(console)
 
@@ -34,12 +36,20 @@ App({
     })
     t.initCloud()
     // log(xhy)
+    t.initChatRobot()
     t.updateManager()
     t.initWxBass()
     t.getSystemInfo()
     t.loadFontFace()
     t.getWxContext()
     //t.dataPrePull()
+  },
+  initChatRobot(){
+    chatRobot.init({
+      appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
+      success: () => {},
+      fail: error => {}
+    });
   },
   loadFontFace() {
     wx.loadFontFace({
@@ -84,7 +94,7 @@ App({
     })
   },
   initWxBass() {
-    wx.BaaS = requirePlugin('sdkPlugin')
+    wx.BaaS = requirePlugin('zhixiaoyun')
     wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
     wx.BaaS.init(config.default.wxBassId)
     wx.BaaS.auth.loginWithWechat() // 静默登录
