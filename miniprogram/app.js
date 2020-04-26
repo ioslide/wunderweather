@@ -21,6 +21,7 @@ App({
     Custom: "",
     pixelRatio: "",
     windowWidth: "",
+    screenWidth:"",
     systemInfo: "",
     openid: ''
   },
@@ -118,6 +119,7 @@ App({
         t.globalData.barHeight = e.statusBarHeight,
           t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
           t.globalData.windowWidth = e.windowWidth,
+          t.globalData.screenWidth = e.screenWidth,
           t.globalData.systemInfo = e,
           t.globalData.pixelRatio = e.pixelRatio
         if (menuButtonInfo) {
@@ -240,6 +242,24 @@ App({
     let $$ = wx.getStorageSync('$$')
     $$[i] = t
     wx.setStorageSync('$$', $$)
+  },
+  changeStorageAsync(i, t) {
+    log([i], t)
+    wx.getStorage({
+      key: '$$',
+      complete: (res) => {},
+      fail: (res) => {
+        warn(res)
+      },
+      success: (result) => {
+        let $$ = result.data
+        $$[i] = t
+        wx.setStorage({
+          data: $$,
+          key: '$$'
+        })
+      },
+    })
   },
   bioCheck() {
     const startSoterAuthentication = () => {

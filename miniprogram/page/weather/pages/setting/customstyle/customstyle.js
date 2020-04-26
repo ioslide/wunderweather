@@ -27,11 +27,12 @@ create(store, {
       path: "/pages/index/index"
     };
   },
+
   switchChange(e) {
     const t = this
     const changeStyle = (target) => {
       t.store.data.style[target] = !t.store.data.style[target]
-      app.changeStorage('style', t.store.data.style)
+      app.changeStorageAsync('style', t.store.data.style)
       log(target,t.store.data.style[target])
     }
     const keepScreenOnSwitchChange = (keepScreenOnSwitch) => {
@@ -39,18 +40,9 @@ create(store, {
         keepScreenOn: keepScreenOnSwitch
       })
     }
-    const event = (target, result) => {
-      switch (true) {
-        case (target == 'KeepScreenOnSwitchChange'):
-          keepScreenOnSwitchChange(result),
-            changeStyle(target, result)
-          break
-        default:
-          changeStyle(target, result)
-          break
-      }
-    }
-    event(e.currentTarget.dataset.cur, e.detail.value)
-    console.log('[switchChange] =>', e)
+    let Tatget = e.currentTarget.dataset.cur
+    let DetailValue = e.detail.value
+    Tatget == 'KeepScreenOnSwitchChange'? (keepScreenOnSwitchChange(DetailValue),
+    changeStyle(Tatget)):changeStyle(Tatget)
   }
 })

@@ -367,7 +367,7 @@
 			<view class="headBackground {{headBackgroundAni == true ?'imageBlurloaded' :''}}">
 				<!-- <sc-headImage indexHeadImageValue="{{$.indexHeadImageValue}}" networkType="{{networkType}}"></sc-headImage> -->
 				<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
-					<view class="square-100" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="bing">
+					<view class="square-100" style="background-image: url('{{bingImage}}');background-size: cover;background-position: 50% 99%;-webkit-transform:translate({{x}}px,{{y}}px);" mode="aspectFill" bindtap="navChange" data-cur="bing">
 						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
 							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
 

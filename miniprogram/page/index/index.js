@@ -75,6 +75,10 @@ var weatherSkycon = {
   })
 create(store, {
   data: {
+    x: 0,
+    y: 0,
+    ww: 0,
+    hh: 0,
     datePicker: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
@@ -157,8 +161,13 @@ create(store, {
     store.onChange(handler)
     t.loadDataFromNet()
   },
+  onHide(){
+    log("[onHide]")
+    wx.stopAccelerometer();
+  },
   onShow() {
     const t = this
+    t.onStartAccelerometer()
     const location = chooseLocation.getLocation();
     let hasCusImage = wx.getStorageSync('hasCusImage') || false
     if (hasCusImage == true) {
@@ -359,21 +368,20 @@ create(store, {
       });
       authScreenAction.translate3d(-t.data.windowWidth * 3, 0, 0).opacity(0).step()
       t.setData({
-          defaultScreenAni: authScreenAction.export(),
-        }),
-        setTimeout(() => {
-          t.setData({
-            headBackgroundAni: true,
-            authScreen: true
-          })
-        }, 1600)
+        defaultScreenAni: authScreenAction.export(),
+      }),
+      setTimeout(() => {
+        t.setData({
+          headBackgroundAni: true,
+          authScreen: true
+        })
+      }, 1600)
     }
 
     const screenFadeOut = (screenFadeOutType) => {
         screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
           t.store.data.startScreen = 'poetry'
         }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-        //t.store.data.startScreen = 'poetry' To prevent startScreen = auth  !=> getNowWeather()
       }
       (async () => {
         await screenFadeOut(t.store.data.startScreen)
@@ -454,18 +462,16 @@ create(store, {
   autoGetLocation() {
     const t = this
     log('[autoGetLocation]')
-    const changeStorage = () => {
-      console.log("changeStorage -> changeStorage")
-      // t.store.data.getLocationMethod = 'auto'
-      app.changeStorage('getLocationMethod', 'auto')
-    }
+    // const changeStorage = () => {
+    //   console.log("changeStorage -> changeStorage")
+    //   app.changeStorage('getLocationMethod', 'auto')
+    // }
     if (t.store.data.startScreen == 'auth') {
       log('[autoGetLocation] => [canNavToFinalScreen] ')
-      t.authScreenNext('canNavToFinalScreen'), changeStorage()
+      t.authScreenNext('canNavToFinalScreen')
     }
-    if (t.store.data.startScreen !== 'auth') {
-      (async () => {
-        await wx.getLocation({
+    // if (t.store.data.startScreen !== 'auth') {
+        wx.getLocation({
           success: res => {
             log(`[autoGetLocation] =>`, res)
             t.setData({
@@ -484,7 +490,9 @@ create(store, {
                   'forecastData.city': e.district,
                   'forecastData.address': e.street
                 })
-                t.getNowWeather(false)
+                if(t.store.data.startScreen !== 'auth'){
+                  t.getNowWeather(false)
+                }
               },
               fail: err => {
                 log(`[reverseGeocoder] = > ${err}`)
@@ -495,9 +503,8 @@ create(store, {
             log(`[getLocation] => fail => ${err}`)
           }
         });
-        await changeStorage()
-      })()
-    }
+        app.changeStorage('getLocationMethod', 'auto')
+    // }
   },
   manualGetNewLocation() {
     log('[manualGetNewLocation]')
@@ -1044,6 +1051,28 @@ create(store, {
       }
     });
   },
+  onStartAccelerometer(){
+    wx.startAccelerometer({
+      interval: "ui"
+    });
+    const that = this
+    let t = app.globalData.screenWidth
+    let a = t / 750
+    let o = 75 * a
+    let n = 168.5 * a
+    that.setData({
+      ww:o,
+      hh:n
+    })
+    wx.onAccelerometerChange(function(t) {
+        let a = -50 * t.x
+        let o = -50 * t.y;
+        Math.abs(a) > 35 || Math.abs(o) > 50 || (that.setData({
+          x : a,
+          y : o
+        }))
+    });
+  },
   onAuthFinalScreen() {
     log('[onAuthFinalScreen]')
     const t = this
@@ -1164,9 +1193,8 @@ create(store, {
   switchChange(e) {
     log('[switchChange]')
     const t = this
-    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) :
-      e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) :
-      error("switchChange")
+    e.currentTarget.dataset.target == 'manualGetNewLocation' ? (log('[switchChange] => manualGetNewLocation'), t.manualGetNewLocation()) : 
+    e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : error("switchChange")
   },
   showModal(e) {
     log('[showModal]', e)
@@ -1727,21 +1755,22 @@ create(store, {
   themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this
+    var themeValue = e.detail.value.toString()
+    var theme = {
+      themeChecked_auto: false,
+      themeChecked_light: false,
+      themeChecked_dark: false
+    }
     const setData = () => {
-      let themeValue = e.detail.value.toString()
-      let theme = {
-        themeChecked_auto: false,
-        themeChecked_light: false,
-        themeChecked_dark: false
-      }
-      if (themeValue == 'light') {
-        theme['themeChecked_light'] = true
-      } else {
-        theme['themeChecked_dark'] = true
-      }
+      themeValue == 'light' ? theme['themeChecked_light'] = true :theme['themeChecked_dark'] = true
+      // if (themeValue == 'light') {
+      //   theme['themeChecked_light'] = true
+      // } else {
+      //   theme['themeChecked_dark'] = true
+      // }
       t.setData({
-        themeValue: themeValue,
-        theme: theme,
+        // themeValue: themeValue,
+        // theme: theme,
         modalName: null,
         isChangeSetting: true
       })
@@ -1761,19 +1790,20 @@ create(store, {
   },
   unitValueRadioChange(e) {
     const t = this
+    var unit = {
+      metric: false,
+      SI: false,
+      imperial: false
+    }
     const setData = () => {
-      let unit = {
-        metric: false,
-        SI: false,
-        imperial: false
-      }
-      if (e.detail.value == 'metric') {
-        unit['metric'] = true
-      } else if (e.detail.value == 'imperial') {
-        unit['imperial'] = true
-      } else if (e.detail.value == 'SI') {
-        unit['SI'] = true
-      }
+      e.detail.value == 'metric'? (unit['metric'] = true) :e.detail.value == 'imperial'? (unit['imperial'] = true) :(unit['SI'] = true)
+      // if (e.detail.value == 'metric') {
+      //   unit['metric'] = true
+      // } else if (e.detail.value == 'imperial') {
+      //   unit['imperial'] = true
+      // } else if (e.detail.value == 'SI') {
+      //   unit['SI'] = true
+      // }
       t.setData({
         modalName: null,
         isChangeSetting: true
@@ -1794,28 +1824,31 @@ create(store, {
   },
   languageRadioChange: function (e) {
     const t = this
+    var language = {
+      languageChecked_zh_TW: false,
+      languageChecked_zh_CN: false,
+      languageChecked_en_US: false,
+      languageChecked_en_GB: false
+    }
+    var languageValue = e.detail.value.toString()
     const setData = () => {
-      let language = {
-        languageChecked_zh_TW: false,
-        languageChecked_zh_CN: false,
-        languageChecked_en_US: false,
-        languageChecked_en_GB: false
-      }
-      let languageValue = e.detail.value.toString()
       log('[languageValue] =>', e.detail.value.toString())
-      if (e.detail.value == 'zh_TW') {
-        language['languageChecked_zh_TW'] = true
-        log('[language] =>', 'languageChecked_zh_TW = true')
-      } else if (e.detail.value == 'zh_CN') {
-        language['languageChecked_zh_CN'] = true
-        log('[language] =>', 'languageChecked_zh_CN = true')
-      } else if (e.detail.value == 'en_US') {
-        language['languageChecked_en_US'] = true
-        log('[language] =>', 'languageChecked_en_US = true')
-      } else if (e.detail.value == 'en_GB') {
-        language['languageChecked_en_GB'] = true
-        log('[language] =>', 'languageChecked_en_GB = true')
-      }
+      e.detail.value == 'zh_TW' ? (language['languageChecked_zh_TW'] = true):
+      e.detail.value == 'zh_CN' ? (language['languageChecked_zh_CN'] = true):
+      e.detail.value == 'en_US' ? (language['languageChecked_en_US'] = true): (language['languageChecked_en_GB'] = true)
+      // if (e.detail.value == 'zh_TW') {
+      //   language['languageChecked_zh_TW'] = true
+      //   log('[language] =>', 'languageChecked_zh_TW = true')
+      // } else if (e.detail.value == 'zh_CN') {
+      //   language['languageChecked_zh_CN'] = true
+      //   log('[language] =>', 'languageChecked_zh_CN = true')
+      // } else if (e.detail.value == 'en_US') {
+      //   language['languageChecked_en_US'] = true
+      //   log('[language] =>', 'languageChecked_en_US = true')
+      // } else if (e.detail.value == 'en_GB') {
+      //   language['languageChecked_en_GB'] = true
+      //   log('[language] =>', 'languageChecked_en_GB = true')
+      // }
       this.setData({
         language: language,
         languageValue: languageValue,
