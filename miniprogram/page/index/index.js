@@ -75,6 +75,7 @@ var weatherSkycon = {
   })
 create(store, {
   data: {
+    drawerModalName:null,
     x: 0,
     y: 0,
     ww: 0,
@@ -196,6 +197,9 @@ create(store, {
         'forecastData.longitude': location.longitude,
         'forecastData.latitude': location.latitude
       })
+      app.globalData.latitude = location.latitude
+      app.globalData.longitude = location.longitude
+
       //auth状态手动获取经纬度后先不请求数据
       t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
         t.store.data.startScreen == 'poetry' ? (t.getNowWeather(true), t.setData({
@@ -236,6 +240,8 @@ create(store, {
                 'forecastData.longitude': res.data[1].longitude,
                 'forecastData.nowTemp': res.data[1].nowTemp
               });
+              app.globalData.latitude = res.data[1].latitude
+              app.globalData.longitude = res.data[1].longitude
             }
           }),
           wx.getStorage({
@@ -436,7 +442,9 @@ create(store, {
           'forecastData.longitude': t.data.manualLocationData.longitude,
           'forecastData.city': t.data.manualLocationData.city,
           'forecastData.address': t.data.manualLocationData.name
-        })
+        }),
+        app.globalData.latitude = t.data.manualLocationData.latitude,
+        app.globalData.longitude = t.data.manualLocationData.longitude
         await t.getNowWeather(false)
         await changeStorage()
       })()
@@ -454,7 +462,9 @@ create(store, {
           'forecastData.longitude': historyCityData[0].longitude,
           'forecastData.city': historyCityData[0].city,
           'forecastData.address': historyCityData[0].address
-        })
+        }),
+        app.globalData.latitude = historyCityData[0].latitude,
+        app.globalData.longitude = historyCityData[0].longitude
         await t.getNowWeather(false)
         await changeStorage()
       })()
@@ -477,7 +487,9 @@ create(store, {
             t.setData({
               'forecastData.latitude': res.latitude,
               'forecastData.longitude': res.longitude
-            })
+            }),
+            app.globalData.latitude = res.latitude,
+            app.globalData.longitude = res.longitude
             qqMap.reverseGeocoder({
               location: {
                 latitude: res.latitude,
@@ -529,7 +541,9 @@ create(store, {
       'forecastData.city': historyCityData.city,
       'forecastData.address': historyCityData.address,
       'modalName': null
-    })
+    }),
+    app.globalData.latitude = historyCityData.latitude,
+    app.globalData.longitude = historyCityData.longitude
     const changeStorage = () => {
         app.changeStorage('getLocationMethod', 'historyCity')
         t.store.data.getLocationMethod = 'historyCity'
@@ -1204,6 +1218,20 @@ create(store, {
     }
     e.currentTarget.dataset.target == 'DrawerModalB' ? (t.onGetWXACode(), setData(e.currentTarget.dataset.target)) : e.currentTarget.dataset.target == 'shareImage' ? (t.eventDraw(), setData(e.currentTarget.dataset.target)) : setData(e.currentTarget.dataset.target)
   },
+  showDrawerModal(e){
+    const t = this
+    t.setData({
+      drawerModalName: e.currentTarget.dataset.target
+    })
+  },
+  hideDrawerModal(e){
+    log(e)
+    var drawerModalName = e.detail.drawerModalName;
+    const t = this
+    t.setData({
+      drawerModalName: drawerModalName
+    })
+  },
   showModalListener(e) {
     log('[showModal]', e)
     const t = this
@@ -1226,7 +1254,7 @@ create(store, {
     log(`[navChange] => ${e.currentTarget.dataset.cur}`)
     const cur = e.currentTarget.dataset.cur
     wx.navigateTo({
-      url: '../weather/pages/' + cur + '/' + cur
+      url: '../' + cur + '/' + cur
     });
   },
   navRadar() {
@@ -1236,17 +1264,17 @@ create(store, {
     const t = this
     log('[navigateTo]')
     wx.navigateTo({
-      url: '../weather/pages/radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
+      url: '../radar/radar?latitude=' + t.data.forecastData.latitude + "&longitude=" + t.data.forecastData.longitude
     })
   },
   navSetting() {
     wx.navigateTo({
-      url: '../weather/pages/setting/setting'
+      url: '../setting/setting'
     });
   },
   navAbout() {
     wx.navigateTo({
-      url: '../weather/pages/setting/about/about'
+      url: '../setting/about/about'
     });
   },
   navWechatsi(){
@@ -1459,30 +1487,26 @@ create(store, {
     log('[official-account] =>', e)
   },
   touchStart(e) {
-    log('[touchStart]')
     let sx = e.touches[0].pageX
     let sy = e.touches[0].pageY
     this.data.touchS = [sx, sy]
   },
   touchMove(e) {
-    log('[touchMove]')
     let sx = e.touches[0].pageX
     let sy = e.touches[0].pageY
     this.data.touchE = [sx, sy]
   },
   touchEnd(e) {
-    log('[touchEnd]')
     const t = this
     let start = this.data.touchS
     let end = this.data.touchE
     if (start[0] < end[0] - 50) {} else if (start[0] > end[0] + 50) {
       t.setData({
-        modalName: e.currentTarget.dataset.target
+        drawerModalName: e.currentTarget.dataset.target
       })
     } else {}
   },
   touchEndLess(e) {
-    log('[touchEndLess]')
     const t = this
     let start = this.data.touchS
     let end = this.data.touchE
@@ -1491,7 +1515,7 @@ create(store, {
     } else if (start[0] > end[0] + 5) {
       //左滑
       t.setData({
-        modalName: e.currentTarget.dataset.target
+        drawerModalName: e.currentTarget.dataset.target
       })
     } else {}
   },
