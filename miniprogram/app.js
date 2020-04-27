@@ -13,6 +13,8 @@ App({
   isReady: !1,
   isError: !1,
   globalData: {
+    latitude:659,
+    longitude:949,
     appid: wx.getAccountInfoSync().miniProgram.appId,
     StatusBar: "",
     CustomBar: "",

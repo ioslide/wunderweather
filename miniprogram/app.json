@@ -1,6 +1,19 @@
 {
   "pages": [
-    "page/index/index"
+    "page/index/index",
+    "page/bing/bing",
+    "page/daily/daily",
+    "page/hourly/hourly",
+    "page/moon/moon",
+    "page/nasa/nasa",
+    "page/promode/promode",
+    "page/setting/setting",
+    "page/setting/pro/pro",
+    "page/setting/customstyle/customstyle",
+    "page/setting/customicon/customicon",
+    "page/setting/about/about",
+    "page/rain/rain",
+    "page/radar/radar"
   ],
   "window": {
     "navigationStyle": "custom",
@@ -50,27 +63,8 @@
   },
   "subPackages": [
     {
-      "root": "page/weather/",
-      "name":"weather",
-      "pages": [
-        "pages/bing/bing",
-        "pages/daily/daily",
-        "pages/hourly/hourly",
-        "pages/moon/moon",
-        "pages/nasa/nasa",
-        "pages/promode/promode",
-        "pages/setting/setting",
-        "pages/setting/pro/pro",
-        "pages/setting/customstyle/customstyle",
-        "pages/setting/customicon/customicon",
-        "pages/setting/about/about",
-        "pages/rain/rain",
-        "pages/radar/radar"
-      ]
-    },
-    {
       "root": "page/plugins/",
-      "name":"plugins",
+      "name":"wechatsi",
       "pages": [
         "pages/wechatsi/wechatsi"
       ]
@@ -79,7 +73,7 @@
   "preloadRule": {
     "page/index/index": {
       "network": "all",
-      "packages": ["weather"]
+      "packages": ["wechatsi"]
     }
   },
   "sitemapLocation": "sitemap.json"
