@@ -1,6 +1,6 @@
 const log = console.log.bind(console)
 const app = getApp()
-const computedBehavior = require('miniprogram-computed')
+// const computedBehavior = require('miniprogram-computed')
 import lazyFunction from "../../../utils/lazyFunction"
 // import _ from "../../../utils/lodash"
 
@@ -77,15 +77,31 @@ function onInitChart(F2, config) {
   chart;
 }
 Component({
-  behaviors: [computedBehavior],
+  // behaviors: [computedBehavior],
   properties: {
     initChart: {
       type: Boolean,
-      value: !1
+      value: !1,
+      observer:function(){
+        const t = this
+        t.data.initChart && t.setData({
+          initChart: !1
+        });
+        log('[rain initChart]', t.data.initChart)
+        t.rainChartComponent = t.selectComponent('#rainChart');
+        t.rainChartComponent.init(onInitChart);
+      }
     },
     refreshChart: {
       type: Boolean,
-      value: !1
+      value: !1,
+      observer:function(){
+        const t = this
+        let chartData = getChartData()
+        log('[rain refreshChart]',chartData)
+        t.rainChartComponent = t.selectComponent('#rainChart');
+        t.rainChartComponent.init(onInitChart);
+      }
     },
     themeValue: {
       type: String
@@ -111,24 +127,24 @@ Component({
     show: function () {},
     hide: function () {}
   },
-  watch: {
-    initChart: lazyFunction.throttle(function (e) {
-      const t = this
-      t.data.initChart && t.setData({
-        initChart: !1
-      });
-      log('[rain initChart]', t.data.initChart)
-      t.rainChartComponent = t.selectComponent('#rainChart');
-      t.rainChartComponent.init(onInitChart);
-    }),
-    refreshChart() {
-      const t = this
-      let chartData = getChartData()
-      log('[rain refreshChart]',chartData)
-      t.rainChartComponent = t.selectComponent('#rainChart');
-      t.rainChartComponent.init(onInitChart);
-    }
-  },
+  // watch: {
+  //   initChart: lazyFunction.throttle(function (e) {
+  //     const t = this
+  //     t.data.initChart && t.setData({
+  //       initChart: !1
+  //     });
+  //     log('[rain initChart]', t.data.initChart)
+  //     t.rainChartComponent = t.selectComponent('#rainChart');
+  //     t.rainChartComponent.init(onInitChart);
+  //   }),
+  //   refreshChart() {
+  //     const t = this
+  //     let chartData = getChartData()
+  //     log('[rain refreshChart]',chartData)
+  //     t.rainChartComponent = t.selectComponent('#rainChart');
+  //     t.rainChartComponent.init(onInitChart);
+  //   }
+  // },
   methods: {
   }
 })

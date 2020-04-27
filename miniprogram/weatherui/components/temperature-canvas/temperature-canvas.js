@@ -1,7 +1,7 @@
 const log = console.log.bind(console)
 const app = getApp()
 // const F2 = require('@antv/wx-f2');
-const computedBehavior = require('miniprogram-computed')
+// const computedBehavior = require('miniprogram-computed')
 import lazyFunction from "../../../utils/lazyFunction"
 
 let chart = null
@@ -88,15 +88,31 @@ function onInitChart(F2,config) {
     chart;
 }
 Component({
-  behaviors: [computedBehavior],
+  // behaviors: [computedBehavior],
   properties: {
     initChart: {
       type: Boolean,
-      value: !1
+      value: !1, 
+      observer:function (e) {
+        const t = this
+        t.data.initChart && t.setData({
+          initChart: !1
+        });
+        log('[temperature initChart]', t.data.initChart)
+        t.dailyChartComponent = t.selectComponent('#dailyChart');
+        t.dailyChartComponent.init(onInitChart);
+      }
     },
     refreshChart: {
       type: Boolean,
-      value: !1
+      value: !1,
+      observer:function(){
+        const t = this
+        let chartData = getChartData()
+        log('[temperature refreshChart]',chartData)
+        t.dailyChartComponent = t.selectComponent('#dailyChart');
+        t.dailyChartComponent.init(onInitChart);
+      }
     },
     themeValue: {
       type: String
@@ -126,24 +142,24 @@ Component({
     },
     hide: function () {}
   },
-  watch: {
-    initChart: lazyFunction.throttle(function (e) {
-      const t = this
-      t.data.initChart && t.setData({
-        initChart: !1
-      });
-      log('[temperature initChart]', t.data.initChart)
-      t.dailyChartComponent = t.selectComponent('#dailyChart');
-      t.dailyChartComponent.init(onInitChart);
-    }),
-    refreshChart() {
-      const t = this
-      let chartData = getChartData()
-      log('[temperature refreshChart]',chartData)
-      t.dailyChartComponent = t.selectComponent('#dailyChart');
-      t.dailyChartComponent.init(onInitChart);
-    }
-  },
+  // watch: {
+  //   initChart: lazyFunction.throttle(function (e) {
+  //     const t = this
+  //     t.data.initChart && t.setData({
+  //       initChart: !1
+  //     });
+  //     log('[temperature initChart]', t.data.initChart)
+  //     t.dailyChartComponent = t.selectComponent('#dailyChart');
+  //     t.dailyChartComponent.init(onInitChart);
+  //   }),
+  //   refreshChart() {
+  //     const t = this
+  //     let chartData = getChartData()
+  //     log('[temperature refreshChart]',chartData)
+  //     t.dailyChartComponent = t.selectComponent('#dailyChart');
+  //     t.dailyChartComponent.init(onInitChart);
+  //   }
+  // },
   methods: {
 
   }
