@@ -1,8 +1,8 @@
-.dailyChart{
-  width: 100%;
-  height: 200px;
+.f2-chart{
+    width:100%;
+    height: 200px ;
 }
-.dailyChart{
-  width: 100%;
-  height: 100%;
+.container{
+  height: 200px;
+  width:414px
 }

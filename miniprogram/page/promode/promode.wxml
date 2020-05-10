@@ -4,7 +4,7 @@
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
 
 
-<view class="padding" style="padding-top: {{CustomBar}}px;">
+<view class="padding">
   <view class="body">
     <view icon="sunny" class="icon sunny" data-label="Sunny">
       <span class="sun"></span>

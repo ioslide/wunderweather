@@ -40,16 +40,16 @@ create(store, {
     const loadBingListFromeNet = () => {
         log('[loadBingListFromeNet')
       wx.request({
-        url: config.default.bingApiHost + '/api/bing/lists',
+        url: config.default.bingApiHost + '/lists',
         header: {
           "content-type": "application/json"
         },
         success: res => {
           log('[requestBing]',res)
           t.setData({
-            bingLists: res.data.data
+            bingLists: res.data.data.data
           });
-          app.saveData('bingLists', res.data.data)
+          app.saveData('bingLists', res.data.data.data)
           app.saveData('hasBingLists',true)
         },
         fail: err =>{

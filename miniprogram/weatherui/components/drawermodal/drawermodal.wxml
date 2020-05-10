@@ -133,3 +133,213 @@
 		</view>
 	</view>
 </view>
+
+<view class="share-modal drawer-modal justify-end {{drawerModalName=='DrawerModalB' || drawerModalName=='DrawerModalHeadImage' ?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="preventTouchMove">
+	<view class="flex share-dialog" catchtap style="border-top-left-radius:30px;border-top-right-radius:30px;padding: 50px 0;">
+		<view class="flex padding-5 justify-center align-center" style="width: 100%;">
+			<block wx:if="{{drawerModalName=='DrawerModalB'}}">
+				<view style="width:33.33%">
+					<button openType="share" class="shareFriends"></button>
+					<!-- <canvas id="shareFriends-lottie" type="2d"  style="height:30px;width:30px"></canvas> -->
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">分享朋友</view>
+				</view>
+				<view style="width:33.33%" bindtap="openDatePicker">
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/subWeather.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">订阅天气</view>
+				</view>
+				<view style="width:33.33%" bindtap="savePostImg" data-target="shareImage">
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/savePosts.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">保存海报</view>
+				</view>
+			</block>
+			<block wx:if="{{drawerModalName=='DrawerModalHeadImage'}}">
+				<view style="width:40.40%" bindtap="chooseCropImage" data-type="album">
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/album1.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">相册</view>
+				</view>
+				<view style="width:40.40%" bindtap="chooseCropImage" data-type="camera">
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/camera1.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">拍摄</view>
+				</view>
+			</block>
+		</view>
+	</view>
+</view>
+
+<view class="cu-modal drawer-modal justify-start {{drawerModalName=='DrawerModalL'?'show':''}} {{$.themeValue == 'light'?'bg-none':''}}" bindtap="hideDrawerModal" catchtouchmove="true">
+	<view class="cu-dialog basis-lx {{$.themeValue == 'light'?'cu-dialog-bg-light':'cu-dialog-bg-dark'}}" catchtap style="height:{{windowHeight}}px;">
+		<view class="cu-custom">
+			<view catchtouchmove="return" class="cu-bar text-white" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{bgImage?'background-image:url(' + bgImage+')':''}}">
+				<view class="action border-custom-modalL" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+					<button class="modalL-cu-bar-left" bindtap="navChange" data-cur="setting"></button>
+					<text class="cuIcon-moreandroid"></text>
+					<button class="modalL-cu-bar-right" bindtap="manualGetNewLocation"></button>
+					<text class="cuIcon-add text-xl" style="font-size: 44rpx;"></text>
+				</view>
+			</view>
+		</view>
+		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{windowHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
+			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
+				<view class="cu-card dynamic" data-curdetaildata="{{item}}" bindtap="setHistoryCityLocation">
+					<view class="cu-item shadow margin-3" style="height:{{(windowHeight-CustomBar)/4}}px;">
+						<view class="flex" style="height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
+							<view class="flex-twice">
+								<view class="flex align-start margin-left-10 margin-top-20 " style="width: {{windowWidth/2.5}}px;height:30px;">
+									<text class="ellipsis-text font-weight-300 text-white text-xxl">{{item.address}}</text>
+								</view>
+								<view class="flex align-end temp">
+									{{item.nowTemp}}°
+								</view>
+							</view>
+							<view class="flex-sub">
+								<view class="flex align-start justify-end margin-top-20 margin-right-20">
+									<view class="flex align-center justify-center weatherIcon">
+										<image class="flex align-center justify-center weatherIconCircle" src="{{item.whitePath}}"></image>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_DAY}}">
+					</block>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.PARTLY_CLOUDY_DAY}}">
+					</block>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.RAIN}}">
+					</block>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.SNOW}}">
+					</block>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.THUNDERRAIN}}">
+					</block>
+					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_NIGHT}}">
+					</block>
+
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+
+	<view class="cu-modal {{drawerModalName=='themeRadio'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+					</button>
+				</view>
+			</view>
+			<sc-radio-group class="block" bindchange="themeRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item" value="light" catchtap>
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="light" checked="{{$.theme.themeChecked_light}}" value="light" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item" value="dark" catchtap>
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="dark" checked="{{$.theme.themeChecked_dark}}" value="dark" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="cu-modal {{drawerModalName=='language'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return" >
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+					</button>
+				</view>
+			</view>
+			<sc-radio-group class="block" bindchange="languageRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="American English" value="en_US" style="width:100%;" checked="{{$.language.languageChecked_en_US}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="British English" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="繁體中文" value="zh_TW" style="width:100%;" checked="{{$.language.languageChecked_zh_TW}}"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="简体中文" value="zh_CN" style="width:100%;" checked="{{$.language.languageChecked_zh_CN}}"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="cu-modal {{drawerModalName=='unit'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return">
+		<view class="cu-dialog" catchtap>
+			<view class="cu-bar justify-start" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+					</button>
+				</view>
+			</view>
+			<sc-radio-group class="block" bindchange="unitValueRadioChange">
+				<view class="cu-list menu text-left" style="width: 100%;">
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="metric" checked="{{$.unit.metric}}" value="metric" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="imperial" checked="{{$.unit.imperial}}" value="imperial" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+					<view class="cu-item">
+						<label class="flex justify-left align-center flex-sub">
+							<sc-radio label="SI" checked="{{$.unit.SI}}" value="SI" style="width:100%;"></sc-radio>
+						</label>
+					</view>
+				</view>
+			</sc-radio-group>
+			<view class="cu-bar justify-end" style="background: #2D2D2D;">
+				<view class="action">
+					<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+						<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+						<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
+					</button>
+				</view>
+			</view>
+		</view>
+	</view>

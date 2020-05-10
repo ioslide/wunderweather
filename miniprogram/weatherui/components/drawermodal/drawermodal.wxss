@@ -1,5 +1,5 @@
 @import "/weatherui/assets/wxss/main.wxss";
-
+@import "/weatherui/assets/wxss/icon.wxss";
 .soft-button-light {
   border-radius: 20px;
   border: none;
@@ -8,7 +8,6 @@
     -1px -1px 1px 0px rgba(255, 255, 255, 0.3),
     1px 1px 1px 0px rgba(206, 206, 206, 0.15),
     9px 9px 9px 0 rgba(206, 206, 206, 0.3);
-  /* margin: 14px; */
   padding: 12px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -67,4 +66,39 @@ soft-button-light:hover {
   font-size: 13px;
   font-weight: 200;
   color: #8799a3
+}
+.weatherIconCircle {
+  width: 30px;
+  height: 30px;
+}
+
+.weatherIcon {
+  width: 45px;
+  height: 45px;
+  background: rgba(190, 174, 174, 0.576);
+  border-radius: 50%;
+}
+
+.cu-item .temp {
+  font-weight: 300;
+  font-size: 50px;
+  color: #ffffff;
+  text-align: left;
+  margin: 30px 10px 30px 10px;
+}
+
+.modalL-cu-bar-left {
+  background: none;
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+}
+
+.modalL-cu-bar-right {
+  background: none;
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
 }

@@ -1,6 +1,7 @@
-<view class="cu-custom">
-	<view class="cu-bar fixed" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{isBack == true ? themeValue == 'light'?'background:#F5F6F7':'background:#010101':'background:none'}}">
-		<view class="action border-custom" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
+<view class="cu-custom" style="height: {{navBarHeight+ navBarExtendHeight}}px;">
+	<view class="cu-bar-placeholder {{ios ? 'ios' : 'android'}}" style="padding-top: {{navBarHeight+ navBarExtendHeight}}px;visibility: hidden;"></view>
+	<view class="cu-bar fixed" style="{{navigationbarinnerStyle}};{{isBack == true ? themeValue == 'light'?'background:#F5F6F7':'background:#010101':'background:none'}}">
+		<view class="action border-custom" style="{{navBarLeft}}">
 			<block wx:if="{{isBack == true}}">
 				<text class="cuIcon-back" bindtap="backPage"></text>
 				<button open-type="share" style="background:none;border:none">
@@ -14,7 +15,6 @@
         </text>
 			</block>
 		</view>
-
 		<view class="content {{themeValue == 'light'?'text-grey':'text-white'}}" style="top:{{StatusBar}}px">
 			{{contentText}}
 		</view>

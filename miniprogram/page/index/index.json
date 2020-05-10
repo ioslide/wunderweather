@@ -14,7 +14,8 @@
     "rain-canvas":"/weatherui/components/rain-canvas/rain-canvas",
     "radar":"/weatherui/components/radar/radar",
     "sunSet":"/weatherui/components/sunSet/sunSet",
-    "drawermodal":"/weatherui/components/drawermodal/drawermodal"
+    "drawermodal":"/weatherui/components/drawermodal/drawermodal",
+    "f2": "@antv/wx-f2"
   },
   "onReachBottomDistance": 100,
   "enablePullDownRefresh": true

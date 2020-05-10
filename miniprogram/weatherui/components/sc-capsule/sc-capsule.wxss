@@ -1,1 +1,39 @@
-/* weatherui/components/sc-capsule/sc-capsule.wxss */
+view,
+text,
+scroll-view,
+input,
+button,
+image,
+cover-view {
+  box-sizing: border-box;
+}
+page {
+  --height: 44px; /* 4*2+32 */
+  --right: 97px; /* 10+87 */
+  --navBarExtendHeight: 4px;
+  box-sizing: border-box;
+}
+.cu-custom .ios {
+  --height: 44px; /* 4*2+32 */
+  --right: 97px; /* 10+87 */
+  --navBarExtendHeight: 4px;
+  box-sizing: border-box;
+}
+.cu-custom .android {
+  --height: 48px; /* 8*2+32 */
+  --right: 96px; /* 10+87 */
+  --navBarExtendHeight: 4px;
+  box-sizing: border-box;
+}
+.cu-custom .devtools {
+  --height: 42px; /* 5*2+32 */
+  --right: 88px; /* 10+87 */
+  --navBarExtendHeight: 4px;
+  box-sizing: border-box;
+}
+.cu-bar-placeholder {
+  height: var(--height);
+  /* background: #f8f8f8; */
+  position: relative;
+  z-index: 50;
+}

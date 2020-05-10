@@ -58,7 +58,7 @@ button::after {
   background-position: 50% 99%;
 }
 
-.xhyicon {
+/* .xhyicon {
   padding: 42px 0;
   opacity: 0;
   display: flex;
@@ -70,9 +70,9 @@ button::after {
   bottom: 0rpx;
   background-color: rgba(255, 255, 255, 0);
   z-index: 999;
-}
+} */
 
-.official-account {
+/* .official-account {
   display: flex;
   box-shadow: 0 30rpx 20rpx rgba(0, 0, 0, 0.2);
   overflow: hidden;
@@ -83,9 +83,9 @@ button::after {
   padding: 0;
   background-color: rgba(255, 255, 255, 0);
   z-index: 999;
-}
+} */
 
-.buttoncontainer {
+/* .buttoncontainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,7 +124,7 @@ button::after {
 
 .buttoncontainer .btn:hover:before {
   left: 100%;
-}
+} */
 
 .poetry {
   height: 100%;
@@ -2954,21 +2954,6 @@ button::after {
   justify-content: space-between;
 }
 
-.modalL-cu-bar-left {
-  background: none;
-  width: 50%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-}
-
-.modalL-cu-bar-right {
-  background: none;
-  width: 50%;
-  height: 100%;
-  position: absolute;
-  left: 50%;
-}
 
 .cell-col-light {
   font-weight: 100;

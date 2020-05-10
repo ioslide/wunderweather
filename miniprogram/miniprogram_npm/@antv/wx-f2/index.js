@@ -18290,6 +18290,7 @@
 
 
 
+
 	var lib = core;
 
 	function wrapEvent(e) {
@@ -18302,10 +18303,6 @@
 
 	Component({
 	  properties: {
-	    // onInit: {
-	    //   type: 'Function',
-	    //   value: () => {}
-	    // },
 			opts: {
 				type: Object
 			},
@@ -18342,23 +18339,15 @@
 							context: true
 						})
 						.exec(res => {
-							const {
-								node,
-								width,
-								height
-							} = res[0];
+							const { node, width, height } = res[0];
 							const context = node.getContext('2d');
-							const dpr = wx.getSystemInfoSync().pixelRatio
-							node.width = width * dpr
-							node.height = height * dpr
-							let config = this.data.config
+							const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+							// 高清设置
+							node.width = width * pixelRatio;
+							node.height = height * pixelRatio;
+							const config = this.data.config
 							config['context'] = context
-							config['height'] = height
-							config['width'] = width
 							const chart = onInitChart(lib,config);
-							console.log('[wx-f2 res]',res[0])
-							console.log('[wx-f2 node]',node.width,node.height)
-							console.log('[wx-f2 config]',config)
 							if (chart) {
 								this.chart = chart;
 								console.log('[wx-f2 chart]',chart)

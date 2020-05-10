@@ -23,6 +23,7 @@ App({
     Custom: "",
     pixelRatio: "",
     windowWidth: "",
+    windowHeight:"",
     screenWidth:"",
     systemInfo: "",
     openid: ''
@@ -121,6 +122,7 @@ App({
         t.globalData.barHeight = e.statusBarHeight,
           t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
           t.globalData.windowWidth = e.windowWidth,
+          t.globalData.windowHeight = e.windowHeight,
           t.globalData.screenWidth = e.screenWidth,
           t.globalData.systemInfo = e,
           t.globalData.pixelRatio = e.pixelRatio

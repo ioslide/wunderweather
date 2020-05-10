@@ -3,7 +3,7 @@
 </page-meta>
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
 
-<view style="padding-top: {{CustomBar}}px;">
+<view>
 	<view class="flex justify-center align-center padding">
 		<view class="flex-between">
 			<view class="flex justify-center margin align-center padding-top-15">

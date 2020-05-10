@@ -2,7 +2,7 @@
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
 
-<view class="cu-custom {{modalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
+<view id="top" class="{{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
 	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
 	</sc-capsule>
 </view>
@@ -133,7 +133,7 @@
 					</view>
 					<view class="flex margin-top-50">
 						<view class="cu-list menu-avatar" style="width:100%">
-							<view class="cu-item" bindtap="showModal" data-target="themeRadio">
+							<view class="cu-item" bindtap="showDrawerModal" data-target="themeRadio">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTheme.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -150,7 +150,7 @@
 								</view>
 							</view>
 							<!-- https://weather.ioslide.com/weather/authScreenTemperature.svg); -->
-							<view class="cu-item" bindtap="showModal" data-target="unit">
+							<view class="cu-item" bindtap="showDrawerModal" data-target="unit">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -162,7 +162,7 @@
 									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
 								</view>
 							</view>
-							<view class="cu-item" bindtap="showModal" data-target="language">
+							<view class="cu-item" bindtap="showDrawerModal" data-target="language">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
 								</view>
 								<view class="content flex-sub">
@@ -229,7 +229,7 @@
 	</block>
 </view>
 
-<block wx:if="{{$.startScreen == 'auth'}}">
+<!-- <block wx:if="{{$.startScreen == 'auth'}}">
 	<view class="cu-modal {{modalName=='themeRadio'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
@@ -266,7 +266,7 @@
 			</view>
 		</view>
 	</view>
-	<view catchtouchmove="return" class="cu-modal {{modalName=='language'?'show':''}}" bindtap="hideModal">
+	<view class="cu-modal {{modalName=='language'?'show':''}}" bindtap="hideModal" catchtouchmove="return" >
 		<view class="cu-dialog" catchtap>
 			<view class="cu-bar justify-start" style="background: #2D2D2D;">
 				<view class="action">
@@ -353,13 +353,11 @@
 			</view>
 		</view>
 	</view>
-</block>
+</block> -->
 
 <sc-star themeValue="{{$.themeValue}}"></sc-star>
 
-<view class="root {{drawerModalName == 'DrawerModalR' || modalName == 'DrawerModalB' || modalName == 'DrawerModalL' || modalName == 'shareImage' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
-	<view id="top" class="flex padding-15 justify-center padding-bottom-0" style="padding-top: {{CustomBar}}px;">
-	</view>
+<view class="root {{drawerModalName == 'DrawerModalR' || drawerModalName == 'DrawerModalB' || drawerModalName == 'DrawerModalL' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-5 justify-left margin-5" style="min-height:280px">
 			<view class="headBackground {{headBackgroundAni == true ?'imageBlurloaded' :''}}">
@@ -392,14 +390,12 @@
 					</image>
 				</block>
 				<block wx:if="{{$.indexHeadImageValue == 'customize'}}">
-					<!-- <view class="flex square-100"> -->
 					<view class="flex square-100 align-center justify-center">
 						<image class="square-100" style="background-size: cover;" mode="aspectFit" src="{{cusImage}}"></image>
-						<view class="padding-15 {{hasCusImage == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="showModal" data-target="DrawerModalHeadImage">
+						<view class="padding-15 {{hasCusImage == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="showDrawerModal" data-target="DrawerModalHeadImage">
 							<image class="square-40" mode="aspectFit" src="https://teaimg.ioslide.com/weather/camera.svg"></image>
 						</view>
 					</view>
-					<!-- </view> -->
 				</block>
 				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
 					<view class="square-100" style="background-image: url('{{nasaImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="nasa">
@@ -441,7 +437,7 @@
 		</view>
 	</block>
 
-	<view bindtap="showDrawerModal" data-target="DrawerModalR" class="flex justify-left align-end padding-left-10 padding-bottom-0 padding-top-10" style="min-height:60px;width:100%">
+	<view class="flex justify-left align-end padding-left-10 padding-bottom-0 padding-top-10" style="min-height:60px;width:100%">
 			<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == 'light'?'nowTemp-light':'nowTemp-dark'}}">
 				{{forecastData.realtime.nowTemp}}°
 			</view>
@@ -573,7 +569,6 @@
 			</view>
 			<view class="action"></view>
 		</view>
-
 		<view class="flex padding-lr-15 opacity-0 padding-top-30" style="min-height:140px" animation="{{thirdObserverAni}}">
 			<view class="flex justify-start">
 				<view class="flex align-center">
@@ -832,7 +827,6 @@
 			</view>
 		</view>
 	</block>
-
 	<view class="{{$.themeValue == 'light'?'text-grey':'text-black'}} refer">Powered by XHY</view>
 </view>
 
@@ -845,94 +839,6 @@
 		<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
 	</view>
 </block>
-
-<view class="cu-modal drawer-modal justify-start {{modalName=='DrawerModalL'?'show':''}} {{$.themeValue == 'light'?'bg-none':''}}" bindtap="hideModal" catchtouchmove="true">
-	<view class="cu-dialog basis-lx {{$.themeValue == 'light'?'cu-dialog-bg-light':'cu-dialog-bg-dark'}}" catchtap style="height:{{windowHeight}}px;">
-		<view class="cu-custom">
-			<view catchtouchmove="return" class="cu-bar text-white" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{bgImage?'background-image:url(' + bgImage+')':''}}">
-				<view class="action border-custom-modalL" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
-					<button class="modalL-cu-bar-left" bindtap="navChange" data-cur="setting"></button>
-					<text class="cuIcon-moreandroid"></text>
-					<button class="modalL-cu-bar-right" bindtap="manualGetNewLocation"></button>
-					<text class="cuIcon-add text-xl" style="font-size: 44rpx;"></text>
-				</view>
-			</view>
-		</view>
-		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{windowHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
-			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
-				<view class="cu-card dynamic" data-bean="{{item}}" bindtap="setHistoryCityLocation">
-					<view class="cu-item shadow margin-3" style="height:{{(windowHeight-CustomBar)/4}}px;">
-						<view class="flex" style="height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
-							<view class="flex-twice">
-								<view class="flex align-start margin-left-10 margin-top-20 " style="width: {{windowWidth/2.5}}px;height:30px;">
-									<!-- <text class="historyCityLists-text"> -->
-									<text class="ellipsis-text font-weight-300 text-white text-xxl">{{item.address}}</text>
-									<!-- </text> -->
-								</view>
-								<view class="flex align-end temp">
-									{{item.nowTemp}}°
-								</view>
-							</view>
-							<view class="flex-sub">
-								<view class="flex align-start justify-end margin-top-20 margin-right-20">
-									<view class="flex align-center justify-center weatherIcon">
-										<image class="flex align-center justify-center weatherIconCircle" src="{{item.whitePath}}"></image>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_DAY}}">
-					</block>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.PARTLY_CLOUDY_DAY}}">
-					</block>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.RAIN}}">
-					</block>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.SNOW}}">
-					</block>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.THUNDERRAIN}}">
-					</block>
-					<block wx:if="{{item.realtime.skyconCN ==allWeather.CLEAR_NIGHT}}">
-					</block>
-
-				</view>
-			</view>
-		</scroll-view>
-	</view>
-</view>
-
-<view class="share-modal drawer-modal justify-end {{modalName=='DrawerModalB' || modalName=='DrawerModalHeadImage' ?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">
-	<view class="flex share-dialog" catchtap style="border-top-left-radius:30px;border-top-right-radius:30px;padding: 50px 0;">
-		<view class="flex padding-5 justify-center align-center" style="width: 100%;">
-			<block wx:if="{{modalName=='DrawerModalB'}}">
-				<view style="width:33.33%">
-					<button openType="share" class="shareFriends"></button>
-					<!-- <canvas id="shareFriends-lottie" type="2d"  style="height:30px;width:30px"></canvas> -->
-					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg" style="height:30px;width:30px"></image>
-					<view style="color:#010101">分享朋友</view>
-				</view>
-				<view style="width:33.33%" bindtap="openDatePicker">
-					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/subWeather.svg" style="height:30px;width:30px"></image>
-					<view style="color:#010101">订阅天气</view>
-				</view>
-				<view style="width:33.33%" bindtap="showModal" data-target="shareImage">
-					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/savePosts.svg" style="height:30px;width:30px"></image>
-					<view style="color:#010101">保存海报</view>
-				</view>
-			</block>
-			<block wx:if="{{modalName=='DrawerModalHeadImage'}}">
-				<view style="width:40.40%" bindtap="chooseCropImage" data-type="album">
-					<image mode="widthFix" src="https://weather.ioslide.com/weather/album1.svg" style="height:30px;width:30px"></image>
-					<view style="color:#010101">相册</view>
-				</view>
-				<view style="width:40.40%" bindtap="chooseCropImage" data-type="camera">
-					<image mode="widthFix" src="https://weather.ioslide.com/weather/camera1.svg" style="height:30px;width:30px"></image>
-					<view style="color:#010101">拍摄</view>
-				</view>
-			</block>
-		</view>
-	</view>
-</view>
 
 <sc-crop wx:if="{{visible}}" size="{{size}}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="#ffffff" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
 
@@ -953,12 +859,12 @@
 	</view>
 </view>
 
-<view class="xhyicon flex padding-25 justify-center" animation="{{toXHYIManima}}">
+<!-- <view class="xhyicon flex padding-25 justify-center" animation="{{toXHYIManima}}">
 	<view class="buttoncontainer">
 		<navigator target="miniProgram" app-id="wx4ffcd811b31b23ac" path="yyf_company/pages/index/index" open-type='navigate'>
 			<image class="btn" src="https://weather.ioslide.com/aichat/customVoiceBtn.png" style="width:50px;height:50px"> </image>
 		</navigator>
 	</view>
-</view>
+</view> -->
 
-<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal"/>
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg"/>

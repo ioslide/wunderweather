@@ -168,7 +168,7 @@ create(store, {
   },
   onShow() {
     const t = this
-    t.onStartAccelerometer()
+    // t.onStartAccelerometer()
     const location = chooseLocation.getLocation();
     let hasCusImage = wx.getStorageSync('hasCusImage') || false
     if (hasCusImage == true) {
@@ -531,10 +531,11 @@ create(store, {
     });
   },
   setHistoryCityLocation(e) {
-    let n = e.currentTarget.dataset
+    log(e)
     const t = this
-    log('[setHistoryCityLocation]', n.bean)
-    var historyCityData = n.bean
+    var historyCityData = e.detail.historyCityData
+    log('[setHistoryCityLocation]', historyCityData)
+
     t.setData({
       'forecastData.latitude': historyCityData.latitude,
       'forecastData.longitude': historyCityData.longitude,
@@ -1043,14 +1044,14 @@ create(store, {
     log('[getBingImage]')
     const t = this
     wx.request({
-      // url: 'https://www.benweng.com/api/bing/lists',
-      url: 'https://www.benweng.com/api/bing/getlastimg',
+      // url: 'https://www.bingpic.com/api/bing/lists',
+      url: config.default.bingApiHost + '/getlastimg',
       header: {
         "content-type": "application/json"
       },
       success: res => {
         log('[requestBing]', res)
-        let bingImage = res.data.img
+        let bingImage = res.data.data.img
         t.setData({
           bingImage: bingImage
         })
@@ -1115,7 +1116,6 @@ create(store, {
                 app.changeStorage('startScreen', 'poetry')
               },
               fail: err => {
-                //req location auth again
                 log(`check = > [wx.authorize] =>`, err)
                 wx.showModal({
                   title: '是否auth以下应用权限',
@@ -1148,7 +1148,6 @@ create(store, {
     }
     const transX = (steps) => {
       log('[transX] =>', steps)
-      const t = this
       let stepAction = wx.createAnimation({
         duration: 1000,
         timingFunction: 'ease-in-out',
@@ -1162,7 +1161,12 @@ create(store, {
     if (e == 'canNavToFinalScreen') {
       transX(windowWidth * 3), log('[authFinalStep]')
     } else {
-      e.currentTarget.dataset.target == 'authFirstStep' ? (transX(windowWidth), log('[authFirstStep]')) : e.currentTarget.dataset.target == 'authSecondStep' ? (checkLocationAuth(), log('[authSecondStep]')) : e.currentTarget.dataset.target == 'authThirdStep' ? (transX(windowWidth * 3), log('[authThirdStep]')) : e.currentTarget.dataset.target == 'authFourthStep' ? (transX(windowWidth * 3), log('[authFourthStep]')) : warn('[transX]')
+      let detailDarget = e.currentTarget.dataset.target
+      detailDarget == 'authFirstStep' ? (transX(windowWidth), log('[authFirstStep]')) : 
+      detailDarget == 'authSecondStep' ? (checkLocationAuth(), log('[authSecondStep]')) : 
+      detailDarget == 'authThirdStep' ? (transX(windowWidth * 3), log('[authThirdStep]')) : 
+      detailDarget == 'authFourthStep' ? (transX(windowWidth * 3), log('[authFourthStep]')) : 
+      (warn("transX"))
     }
   },
   authScreenBack(e) {
@@ -1232,12 +1236,18 @@ create(store, {
       drawerModalName: drawerModalName
     })
   },
+  savePostImg(e){
+    this.setData({
+      modalName:e.detail.modalName
+    })
+    this.eventDraw()
+  },
   showModalListener(e) {
     log('[showModal]', e)
     const t = this
-    const setData = (modalName) => {
+    const setData = (drawerModalName) => {
       t.setData({
-        modalName: modalName
+        drawerModalName: drawerModalName
       })
     }
     e.detail == 'DrawerModalB' ? (t.onGetWXACode(), setData(e.detail)) : e.detail == 'shareImage' ? (t.eventDraw(), setData(e.detail)) : setData(e.detail)
@@ -1858,22 +1868,7 @@ create(store, {
       e.detail.value == 'zh_TW' ? (language['languageChecked_zh_TW'] = true):
       e.detail.value == 'zh_CN' ? (language['languageChecked_zh_CN'] = true):
       e.detail.value == 'en_US' ? (language['languageChecked_en_US'] = true): (language['languageChecked_en_GB'] = true)
-      // if (e.detail.value == 'zh_TW') {
-      //   language['languageChecked_zh_TW'] = true
-      //   log('[language] =>', 'languageChecked_zh_TW = true')
-      // } else if (e.detail.value == 'zh_CN') {
-      //   language['languageChecked_zh_CN'] = true
-      //   log('[language] =>', 'languageChecked_zh_CN = true')
-      // } else if (e.detail.value == 'en_US') {
-      //   language['languageChecked_en_US'] = true
-      //   log('[language] =>', 'languageChecked_en_US = true')
-      // } else if (e.detail.value == 'en_GB') {
-      //   language['languageChecked_en_GB'] = true
-      //   log('[language] =>', 'languageChecked_en_GB = true')
-      // }
       this.setData({
-        language: language,
-        languageValue: languageValue,
         modalName: null,
         isChangeSetting: true
       })

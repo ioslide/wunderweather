@@ -4,7 +4,7 @@
 
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
 
-<view style="padding-top: {{CustomBar}}px;">
+<view>
 	<view class="{{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{moonPhaseLists}}" wx:key="index" wx:if="{{item&&index<16}}">
 		<sc-cell cellHeight="80" subheader1Padding="5" right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader">

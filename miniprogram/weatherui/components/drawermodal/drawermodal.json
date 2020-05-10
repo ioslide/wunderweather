@@ -1,4 +1,7 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "sc-radio": "/weatherui/components/scRadio/sc-radio",
+    "sc-radio-group": "/weatherui/components/scRadioGroup/sc-radio-group"
+  }
 }

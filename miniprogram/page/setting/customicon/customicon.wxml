@@ -4,7 +4,7 @@
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
 
 
-<view style="padding-top: {{CustomBar}}px;">
+<view>
 
   <sc-radio-group class="block" bindchange="themeRadioChange">
     <view class="cu-list menu text-left" style="width: 100%;margin-top: 0;">
