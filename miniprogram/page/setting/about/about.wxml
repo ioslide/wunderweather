@@ -19,7 +19,7 @@
 		</view>
 	</view>
 
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="star">
 		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">评分</block>
@@ -34,7 +34,7 @@
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}">
 		<button open-type="feedback" bindcontact="handleContact" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
 		</button>
 		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
@@ -51,7 +51,7 @@
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}">
 		<button open-type="share" style="background: none;border: none;position: absolute;width: 100%;height: 60px;z-index: 99999;">
 		</button>
 		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
@@ -67,7 +67,24 @@
 			</text>
 		</sc-cell>
 	</view>
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
+
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="dondate">
+		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">捐赠</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">捐赠</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Donate</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">捐赠维持基本开销</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">捐贈維持基本開銷</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Donation to maintain basic expenses</block>
+			</text>
+		</sc-cell>
+	</view>
+
+	
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}">
 		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">群组</block>
@@ -81,14 +98,11 @@
 			</text>
 				<!-- 企业客户联系 -->
 			<view class="margin-right-15" slot="iconimageright">
-				<chatGroupPlugin bind:startmessage='startmessage' bind:completemessage="completemessage" plugid='e8a369601c203c5f5350367e2c5a3afe'  />
+				<joinWxGroup bind:startmessage='startmessage' bind:completemessage="completemessage" plugid='e8a369601c203c5f5350367e2c5a3afe'  />
 			</view>
 		</sc-cell>
 	</view>
 
-	<!-- <view class="flex text-white padding-top-xs padding-bottom-xs" style="width:100%;border-top:1px solid #131313">
-		<official-account bindload="EventHandle" binderror="EventHandle" style="width: 100%;padding: 0px 14px;"></official-account>
-	</view> -->
 </view>
 
 <view style="position:fixed;bottom:20px;left:20px">

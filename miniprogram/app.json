@@ -32,24 +32,20 @@
   },
   "plugins": {
     "chooseLocation": {
-      "version": "1.0.2",
+      "version": "1.0.3",
       "provider": "wx76a9a06e5b4e693e"
-    },
-    "chatGroupPlugin": {
-      "version": "1.0.2",
-      "provider": "wxaae6519cee98d824"
     },
     "zhixiaoyun": {
       "version": "3.9.0",
       "provider": "wxc6b86e382a1e3294"
     },
     "chatRobot": {
-      "version": "1.1.15",
+      "version": "1.1.16",
       "provider": "wx8c631f7e9f2465e1"
     },
-    "WechatSI": {
-      "version": "0.3.3",
-      "provider": "wx069ba97219f66d99"
+    "joinWxGroup":{
+      "version": "1.0.2",
+      "provider": "wxaae6519cee98d824"
     }
   },
   "requiredBackgroundModes": ["audio"],

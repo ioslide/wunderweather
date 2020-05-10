@@ -392,7 +392,7 @@ create(store, {
       (async () => {
         await screenFadeOut(t.store.data.startScreen)
         t.onIntersectionObserver()
-        // await t.getMoonPhaseList()
+        t.getMoonPhaseList()
         // await t.getBingImage()
         t.onRefreshWeather()
         t.onGetWXACode()
@@ -1688,13 +1688,15 @@ create(store, {
     fourthObserver.relativeToViewport().observe('#fourthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         ani.opacity(1).step()
-        const event = async () => {
-          await t.getMoonPhaseList()
-          await t.setData({
-            fourthObserverAni: ani.export()
-          })
-        }
-        event()
+        t.setData({
+          fourthObserverAni: ani.export()
+        })
+        // (async () => {
+        //   await t.getMoonPhaseList()
+        //   await t.setData({
+        //     fourthObserverAni: ani.export()
+        //   })
+        // })()
       }
       if (res.boundingClientRect.top < 0) {
         // log('[fourthObserver] => end')
