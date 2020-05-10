@@ -27,7 +27,7 @@ create(store, {
       path: "/pages/index/index"
     };
   },
-  dondate(){
+  donate(){
     let params = {
       totalCost: 0.01,
       merchandiseDescription: '捐赠奇妙天气'
