@@ -40,10 +40,8 @@ Component({
     created: function() {
       this.getSystemInfo();
     },
-    attached: function() {
-      this.setStyle();
-    },
     attached:function(){
+      this.setStyle();
       var e = this.properties
       this.setData({
         themeValue:e.themeValue,
