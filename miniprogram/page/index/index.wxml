@@ -438,12 +438,12 @@
 	</block>
 
 	<view class="flex justify-left align-end padding-left-10 padding-bottom-0 padding-top-10" style="min-height:60px;width:100%">
-			<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == 'light'?'nowTemp-light':'nowTemp-dark'}}">
-				{{forecastData.realtime.nowTemp}}°
-			</view>
-			<view class="text-grey text-xl font-weight-200 padding-bottom-15">
-					{{forecastData.daily[0].min}}/{{forecastData.daily[0].max}}
-			</view>
+		<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == 'light'?'nowTemp-light':'nowTemp-dark'}}">
+			{{forecastData.realtime.nowTemp}}°
+		</view>
+		<view class="text-grey text-xl font-weight-200 padding-bottom-15">
+			{{forecastData.daily[0].min}}/{{forecastData.daily[0].max}}
+		</view>
 	</view>
 
 	<view class="flex padding-left-15 padding-bottom-3" style="min-height:20px;">
@@ -524,7 +524,7 @@
 			<view class="flex justify-center align-center" style="min-height:260px">
 				<!-- <temperature-canvas class="margin-tb-15" initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" /> -->
 				<view class="temperature-container">
-						<f2 class="f2-chart" canvas-id="temperatureChart" id="temperatureChart"  opts="{{opts}}" config="{{config}}"/>
+					<f2 class="f2-chart" canvas-id="temperatureChart" id="temperatureChart" opts="{{opts}}" config="{{temperatureChartConfig}}" />
 				</view>
 			</view>
 		</view>
@@ -558,9 +558,9 @@
 		</view>
 		<view class="flex opacity-0" animation="{{rainObserverAni}}" style="min-height:200px">
 			<!-- <rain-canvas initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" /> -->
-				<view class="rain-container">
-	<f2 class="f2-chart" canvas-id="rainChart" id="rainChart" opts="{{opts}}" config="{{config}}"/>
-				</view>
+			<view class="rain-container">
+				<f2 class="f2-chart" canvas-id="rainChart" id="rainChart" opts="{{opts}}" config="{{rainChartConfig}}" />
+			</view>
 		</view>
 	</block>
 
@@ -873,4 +873,4 @@
 	</view>
 </view> -->
 
-<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg"/>
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg" />

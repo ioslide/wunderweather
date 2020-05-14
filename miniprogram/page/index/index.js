@@ -81,9 +81,16 @@ create(store, {
     opts:{
       lazyLoad: true
     },
-    config:{
-      appendPadding:[0,0,0,0],
-      padding:[0,0,0,0],
+    temperatureChartConfig : {
+      appendPadding:0,
+      padding:[30,0,30,0],
+      pixelRatio : app.globalData.pixelRatio,
+      width: app.globalData.windowWidth,
+      height: 210
+    },
+    rainChartConfig : {
+      appendPadding:0,
+      padding:0,
       pixelRatio : app.globalData.pixelRatio,
       width: app.globalData.windowWidth,
       height: 200
