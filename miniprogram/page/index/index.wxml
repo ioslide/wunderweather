@@ -522,7 +522,10 @@
 		</view>
 		<view class="flex opacity-0" animation="{{temperatureObserverAni}}">
 			<view class="flex justify-center align-center" style="min-height:260px">
-				<temperature-canvas class="margin-tb-15" initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" />
+				<!-- <temperature-canvas class="margin-tb-15" initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" /> -->
+				<view class="temperature-container">
+						<f2 class="f2-chart" canvas-id="temperatureChart" id="temperatureChart"  opts="{{opts}}" config="{{config}}"/>
+				</view>
 			</view>
 		</view>
 		<view class="flex margin-bottom-15 margin-left-5 opacity-0 {{$.themeValue == 'light'?'text-grey':'text-white'}} " bindtap="navChange" data-cur="daily" animation="{{temperatureObserverAni}}">
@@ -554,7 +557,10 @@
 			</view>
 		</view>
 		<view class="flex opacity-0" animation="{{rainObserverAni}}" style="min-height:200px">
-			<rain-canvas initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" />
+			<!-- <rain-canvas initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" /> -->
+				<view class="rain-container">
+	<f2 class="f2-chart" canvas-id="rainChart" id="rainChart" opts="{{opts}}" config="{{config}}"/>
+				</view>
 		</view>
 	</block>
 

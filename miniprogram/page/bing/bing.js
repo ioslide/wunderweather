@@ -15,7 +15,7 @@ var t = void 0,
 
 create(store, {
   data: {
-    bingLists: {},
+    bingImageLists: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
@@ -25,53 +25,14 @@ create(store, {
   },
   onLoad: function () {
     const t = this
-    let 
-      lists = wx.getStorageSync('bingLists') || [{
-        datesign : "1998-03-13"
-      }],
-      isToday = app.isToday(lists[0].datesign),
-      hasBingLists = wx.getStorageSync('hasBingLists') || false
-    const loadBingListFromeStorage = () =>{
-      log('[loadBingListFromeNet]')
-      t.setData({
-        bingLists: lists
-      });
-    }
-    const loadBingListFromeNet = () => {
-        log('[loadBingListFromeNet')
-      wx.request({
-        url: config.default.bingApiHost + '/lists',
-        header: {
-          "content-type": "application/json"
-        },
-        success: res => {
-          log('[requestBing]',res)
-          t.setData({
-            bingLists: res.data.data.data
-          });
-          app.saveData('bingLists', res.data.data.data)
-          app.saveData('hasBingLists',true)
-        },
-        fail: err =>{
-          warn('requestBing',err)
-          app.saveData('hasBingLists',false)
-        }
-      });
-    }
-    const event = (isToday,hasBingLists) => {
-      switch (true) {
-        case (isToday == true && hasBingLists == true):
-          loadBingListFromeStorage()
-          break
-        case (hasBingLists == false):
-          loadBingListFromeNet()
-          break
-        default:
-          loadBingListFromeNet()
-          break
-      }
-    }
-    event(isToday,hasBingLists)
+    let pages = getCurrentPages();
+    let currPage = pages[pages.length - 2]
+    log(currPage)
+    let bingImageLists = currPage.data.bingImageLists
+    t.setData({
+      bingImageLists:bingImageLists
+    })
+    log('[bingImageLists]',bingImageLists)
   },
   onShow() {
     const t = this
@@ -96,9 +57,9 @@ create(store, {
   },
   showModal(e) {
     var t = this
-    console.log(wx.getStorageSync('bingLists')[e.currentTarget.dataset.order])
+    console.log(wx.getStorageSync('bingImageLists')[e.currentTarget.dataset.order])
     t.setData({
-      // modalImage: wx.getStorageSync('bingLists')[e.currentTarget.dataset.order],
+      // modalImage: wx.getStorageSync('bingImageLists')[e.currentTarget.dataset.order],
       currDay: e.currentTarget.dataset.order,
       modalName: e.currentTarget.dataset.target
     })
@@ -126,7 +87,7 @@ create(store, {
     var t = this
     wx.showModal({
       title: '是否下载图片',
-      content: wx.getStorageSync('bingLists')[t.data.currDay].title,
+      content: wx.getStorageSync('bingImageLists')[t.data.currDay].title,
       success(res) {
         if (res.confirm) {
           t.downloadCur()
@@ -144,7 +105,7 @@ create(store, {
       scope: 'scope.writePhotosAlbum',
       success: function success() {
         t.downloading = true;
-        let safeUrl = wx.getStorageSync('bingLists')[t.data.currDay].oldurl.replace(/http/, 'https')
+        let safeUrl = wx.getStorageSync('bingImageLists')[t.data.currDay].oldurl.replace(/http/, 'https')
         wx.downloadFile({
           url: safeUrl,
           success: function success(res) {

@@ -1,3 +1,5 @@
+
+
 const app = getApp()
 // const AUTH_MODE = 'fingerPrint'
 const log = console.log.bind(console)
@@ -73,8 +75,19 @@ var weatherSkycon = {
   qqMap = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
   })
+  let chart = null
 create(store, {
   data: {
+    opts:{
+      lazyLoad: true
+    },
+    config:{
+      appendPadding:[0,0,0,0],
+      padding:[0,0,0,0],
+      pixelRatio : app.globalData.pixelRatio,
+      width: app.globalData.windowWidth,
+      height: 200
+    },
     drawerModalName:null,
     x: 0,
     y: 0,
@@ -110,6 +123,7 @@ create(store, {
     historyCityList: [],
     authScreen: false,
     bingImage: "",
+    bingImageLists:null,
     src: null,
     visible: false,
     size: {
@@ -578,6 +592,12 @@ create(store, {
             })
           }
         }
+        const initChart = () => {
+          t.temperatureChartComponent = t.selectComponent('#temperatureChart');
+          t.temperatureChartComponent.lazyInit(t.initTemperatureChart);
+          t.rainChartComponent = t.selectComponent('#rainChart');
+          t.rainChartComponent.lazyInit(t.initRainChart);
+        }
         const waitToCheck = async (weatherData, canRefreshChart) => {
           await t.setData({
             'canBlurRoot': true
@@ -585,6 +605,7 @@ create(store, {
           await t.setAllWeather(weatherData)
           await t.getBingImage()
           await t.screenFadeOut()
+          await initChart()
           await t.scrollToTop()
           await t.setData({
             'canBlurRoot': false
@@ -839,7 +860,7 @@ create(store, {
       app.saveData("lastRefreshTime", curDetailTime)
       return curDetailTime
     }
-    const asyncSetTimelyWeather = (forecastData) => {
+    const setTimelyWeather = (forecastData) => {
       const realtimeData = realtime(forecastData.realtime)
       const hourlyData = hourly(forecastData.hourly)
       const dailyData = daily(forecastData.daily)
@@ -862,34 +883,8 @@ create(store, {
         //   probability:a.minutely.probability
         // }
       });
-      // return {
-      //   realtimeData,
-      //   hourlyData,
-      //   dailyData,
-      //   serviceData,
-      //   alertContentData,
-      //   curTime
-      // }
     }
-    asyncSetTimelyWeather(a)
-    // asyncSetTimelyWeather(a).then(obj => {
-    //   that.setData({
-    //     'forecastData.daily': obj.dailyData,
-    //     'forecastData.realtime': obj.realtimeData.realtimeData,
-    //     'forecastData.hourly': obj.hourlyData,
-    //     'forecastData.serviceData': obj.serviceData,
-    //     'forecastData.hourlyKeypoint': a.hourly.description,
-    //     'forecastData.alarmInfo': obj.alertContentData,
-    //     'historyCityList': obj.realtimeData.historyCityListData,
-    //     'curDetailTime': obj.curTime
-    //     // 'forecastData.minutelyKeypoint': a.minutely.description,
-    //     // 'forecastData.minutely':{
-    //     //   precipitation:a.minutely.precipitation,
-    //     //   precipitation_2h:a.minutely.precipitation_2h,
-    //     //   probability:a.minutely.probability
-    //     // }
-    //   });
-    // })
+    setTimelyWeather(a)
   },
   setAqiColor(a) {
     let t = "#4ADC9B";
@@ -1044,16 +1039,16 @@ create(store, {
     log('[getBingImage]')
     const t = this
     wx.request({
-      // url: 'https://www.bingpic.com/api/bing/lists',
-      url: config.default.bingApiHost + '/getlastimg',
+      url: config.default.bingApiHost + '/HPImageArchive.aspx?format=js&idx=0&n=30&nc=1589441449314&pid=hp',
       header: {
         "content-type": "application/json"
       },
       success: res => {
-        log('[requestBing]', res)
-        let bingImage = res.data.data.img
+        log('[requestBing]', res.data.images)
+        let bingImageLists = res.data.images
         t.setData({
-          bingImage: bingImage
+          bingImage: 'https://cn.bing.com/' + bingImageLists[0].url,
+          bingImageLists : bingImageLists
         })
       },
       fail: err => {
@@ -1993,5 +1988,150 @@ create(store, {
           duration: 1200
         });
     });
+  },
+  initTemperatureChart(F2,config){
+    const getTemperatureChartData =() =>{
+      var chartData = []
+      var dailyWeather = this.data.forecastData.daily
+      for (var s = dailyWeather, d = 1; d < 8; d++) {
+        var u = {
+          x: s[d].date,
+          y: [s[d].min, s[d].max]
+        };
+        chartData.push(u);
+      }
+      let range = {
+          max : Math.max.apply(Math, dailyWeather.map(function (o) {
+          return o.max
+         })),
+          min:Math.min.apply(Math, dailyWeather.map(function (o) {
+            return o.min
+          }))
+      }
+      return {chartData,range}
+    }
+    let chartData = getTemperatureChartData().chartData
+    let range = getTemperatureChartData().range
+    // log('[onInitChart]', getTemperatureChartData())
+    chart = new F2.Chart(config);
+    chart.clear(), chart.legend(!1),
+    chart.axis("y", !1),
+    chart.axis("x", !1),
+    chart.tooltip(false),
+    chart.source(chartData, {
+      x: {
+        tickCount: 7
+      },
+      y: {
+        min: range.min,
+        max: range.max
+      }
+    }),
+    chartData.map(function (obj) {
+      chart.guide().text({
+        top: true,
+        position: [obj.x, obj.y[0]],
+        content: obj.y[0],
+        style: {
+          textAlign: 'center',
+          textBaseline: 'top',
+          fontSize: 12,
+          fill: '#8799a3'
+        },
+        offsetY: 10
+      });
+      chart.guide().text({
+        top: true,
+        position: [obj.x, obj.y[1]],
+        content: obj.y[1],
+        style: {
+          textAlign: 'center',
+          textBaseline: 'bottom',
+          fontSize: 12,
+          fill: '#8799a3'
+        },
+        offsetY: -10
+      });
+    }),
+    chart.interval().position('x*y')
+      .animate({
+        appear: {
+          animation: 'shapesScaleInY'
+        }
+      })
+      .size(9)
+      .style({
+        radius: [4, 4, 4, 4]
+      })
+      .color('l(90) 0:#d5effc 1:#bcc8d4'),
+      chart.render()
+      return chart;
+  },
+  initRainChart(F2, config) {
+    const getRainChartData = () =>{
+      var chartData = []
+      var hourly = this.data.forecastData.hourly
+      for (var s = hourly, d = 0; d < 48; d++) {
+        var u = {
+          time: s[d].precipitation.datetime,
+          value: s[d].precipitation.value,
+        };
+        chartData.push(u);
+      }
+      // log('[getRainChartData rainWeather]',chartData)
+      return chartData  
+    }
+    let chartData = getRainChartData()
+    // log('[initChartFuc]', chartData)
+    chart = new F2.Chart(config);
+    return chart.clear(), chart.legend(!1),
+    chart.source(chartData, {
+      time: {
+        type: 'timeCat',
+        tickCount: 5
+      },
+      value: {
+        tickCount: 2,
+        min: 0
+      }
+    }),
+    chart.axis('time', false),
+    chart.tooltip({
+      showCrosshairs: true,
+      showItemMarker: false,
+      alwaysShow: false,
+      triggerOn: ['touchstart', 'touchmove'],
+      triggerOff: 'touchend',
+      background: {
+        radius: 2,
+        fill: '#4AA2FC',
+        padding: [3, 5]
+      },
+      showCrosshairs: true, // 是否显示辅助线，点图、路径图、线图、面积图默认展示
+      crosshairsStyle: {
+        stroke: 'rgba(71,231,255,1)',
+        lineWidth: 1
+      },
+      tooltipMarkerStyle: {
+        fill: '#4AA2FC',
+        fillOpacity: 0.2
+      },
+      onShow: function onShow(ev) {
+        const items = ev.items;
+        items[0].name = null;
+        log(items[0].origin)
+        items[0].value = items[0].origin.time +'/ 降水强度:'
+      }
+    }),
+    chart.area()
+      .position('time*value')
+      .color('l(90) 0:#1890FF 1:#f7f7f7')
+      .shape('smooth'),
+    chart.line()
+      .position('time*value')
+      .color('l(90) 0:#1890FF 1:#8dd9f7')
+      .shape('smooth'),
+    chart.render(),
+    chart;
   }
 });

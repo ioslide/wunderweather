@@ -4,13 +4,13 @@
 
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
 
-<view class="cu-card case margin-5" wx:for="{{bingLists}}" wx:key="index">
+<view class="cu-card case margin-5" wx:for="{{bingImageLists}}" wx:key="index">
 	<view class="cu-item shadow" bindtap="showModal" data-target="Image" data-order="{{index}}" style="background: none;">
 		<view class="image">
-			<image class="blurloaded bingImage" bindchange="swipeEnd" src="{{item.oldurl}}" lazy-load='true' mode="widthFix"></image>
-			<view class="cu-tag tag" style="background: rgba(0, 0, 0, 0.384);color: #fff;border-bottom-left-radius: 10px;border-top-right-radius: 5px;">{{item.datesign}}</view>
+			<image class="blurloaded bingImage" bindchange="swipeEnd" src="https://cn.bing.com/{{item.url}}" lazy-load='true' mode="widthFix"></image>
+			<view class="cu-tag tag" style="background: rgba(0, 0, 0, 0.384);color: #fff;border-bottom-left-radius: 10px;border-top-right-radius: 5px;">{{item.startdate}}</view>
 			<view class="cu-bar {{$.themeValue == 'light'?'bg-shadeBottom-light':'bg-shadeBottom-dark'}}">
-				<text class="text-cut">{{item.titlelong}}</text>
+				<text class="text-cut">{{item.copyright}}</text>
 			</view>
 		</view>
 	</view>
@@ -19,11 +19,11 @@
 <view class="cu-modal {{modalName=='Image'?'show':''}}">
 	<view class="cu-dialog" style="height: 100%;width: 100%;">
 		<swiper bindchange="swipeEnd" class="view_box" current="{{currDay}}" vertical="{{true}}">
-			<swiper-item wx:for="{{bingLists}}" wx:for-index="day" wx:for-item="i" wx:key="key1">
-				<image class="blurloaded" lazy-load='true' catch:longpress="downloadImageModal" catch:tap="hideModal" data-link="{{day}}" lazyLoad="true" mode="aspectFill" src="{{i.oldurl}}"></image>
+			<swiper-item wx:for="{{bingImageLists}}" wx:for-index="day" wx:for-item="i" wx:key="key1">
+				<image class="blurloaded" lazy-load='true' catch:longpress="downloadImageModal" catch:tap="hideModal" data-link="{{day}}" lazyLoad="true" mode="aspectFill" src="https://cn.bing.com/{{i.url}}"></image>
 				<view bindtap="goToday" class="copy_text">
-					<view>{{i.title}}</view>
-					<view>{{i.datesign}} | {{i.author}}</view>
+					<view>{{i.copyright}}</view>
+					<!-- <view>{{i.startdate}}</view> -->
 				</view>
 			</swiper-item>
 		</swiper>
