@@ -1,3 +1,0 @@
-<view class="container" style="width:{{config.width}}px;height:{{config.height}}px">
-	<f2 class="f2-chart" canvas-id="dailyChart" id="dailyChart" opts="{{opts}}" config="{{config}}"  />
-</view>

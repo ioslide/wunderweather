@@ -10,7 +10,8 @@ exports.default = {
   radarApiToken:"Y2FpeXVuIGFuZHJpb2QgYXBp",
   radarApiVersion: "v1",
   // https://api.caiyunapp.com/v1/radar/fine_images?lat=31.473364419367254&lon=104.68616446943008&level=1&token=Y2FpeXVuIGFuZHJpb2QgYXBp
-  bingApiHost:"https://www.bingpic.com/api",
+  // bingApiHost:"https://www.bingpic.com/api",
+  bingApiHost:"https://cn.bing.com",
   cosApiHost:"https://weather.ioslide.com",
   // cloudEnv:"subweather-5hkjz",//订阅号
   // appid:'wx673e7d2fe4e6a413',  //订阅号

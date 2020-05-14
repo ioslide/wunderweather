@@ -124,10 +124,8 @@ create.Component(store, {
     },
     manualGetNewLocation() {
       const t = this
-      (async () => {
-        await t.triggerEvent('manualGetNewLocation')
-        await t.hideDrawerModal()
-      })
+      t.triggerEvent('manualGetNewLocation')
+      t.hideDrawerModal()
     },
     savePostImg: function (e) {
       log(e.currentTarget.dataset.target)

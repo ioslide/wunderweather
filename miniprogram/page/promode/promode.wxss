@@ -1,4 +1,4 @@
-page{
+/* page{
   background: #010101
 }
 .b {
@@ -26,7 +26,7 @@ page {
   border-radius: 100%;
   box-shadow: 0 0 0 .05em var(--ring) inset, 0 0 .3em -.03em var(--shadow);
   background: linear-gradient( to var(--blend-dir), var(--blend1) var(--blend-from), var(--blend2) var(--blend-to));
-/*   filter: saturate(0); */
+
 }
 .icon {
   flex: none;
@@ -39,11 +39,9 @@ page {
   border-radius: 100%;
   box-shadow: 0 0 0 .05em var(--ring) inset, 0 0 .3em -.03em var(--shadow);
   background: linear-gradient( to var(--blend-dir), var(--blend1) var(--blend-from), var(--blend2) var(--blend-to));
-/*   filter: saturate(0); */
+
 }
-/* [icon]:hover {
-  filter: saturate(1);
-} */
+
 [icon]::after {
   content: attr(data-label);
   position: absolute;
@@ -107,8 +105,6 @@ page {
   --blend-to: 65%;
   --blend-dir: bottom right;
 }
-/* SUNNY */
-/* --------------------- */
 .sun {
   position: absolute;
   top: 20%;
@@ -140,8 +136,6 @@ page {
           animation: flare 12000ms infinite alternate linear;
 }
 
-/* CLOUDY */
-/* --------------------- */
 .cloud { 
   position: absolute;
   top: .1em;
@@ -180,8 +174,6 @@ page {
   height: .15em;
 }
 
-/* SNOWY */
-/* --------------------- */
 .snowy ul {
   position: absolute;
   list-style: none;
@@ -285,8 +277,6 @@ page {
           animation: snowman 9000ms infinite ease-in;
 }
 
-/* STORMY */
-/* --------------------- */
 .stormy::before {
   --shadow: rgba(255, 255, 255, 0);
   content: '';
@@ -381,9 +371,6 @@ page {
   -webkit-animation-delay: 2500ms;
           animation-delay: 2500ms;
 }
-
-/* SUPERMOON */
-/* --------------------- */
 [icon="supermoon"]::before {
   content: '';
   position: absolute;
@@ -585,4 +572,4 @@ page {
 .slide-rotate-ver-right {
 	-webkit-animation: slide-rotate-ver-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 	        animation: slide-rotate-ver-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-}
+} */
