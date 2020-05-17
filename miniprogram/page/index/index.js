@@ -1,5 +1,6 @@
 
-
+let temperatureChart = null
+let rainChart = null
 const app = getApp()
 // const AUTH_MODE = 'fingerPrint'
 const log = console.log.bind(console)
@@ -19,6 +20,8 @@ log('[config]', config)
 // import calcSunUtil from '../../utils/calcnew.js'
 import create from '../../utils/create'
 import store from '../../store/index'
+import _ from '../../utils/lodash';
+
 // import lazyFunction from "../../utils/lazyFunction"
 var weatherSkycon = {
     CLEAR_DAY: "晴",
@@ -75,7 +78,6 @@ var weatherSkycon = {
   qqMap = new(require("../../weatherui/assets/lib/qqMap/qqMap.js"))({
     key: "47ABZ-AJN3P-POPDO-VGI22-X5PBV-ZTFFP"
   })
-  let chart = null
 create(store, {
   data: {
     opts:{
@@ -90,7 +92,7 @@ create(store, {
     },
     rainChartConfig : {
       appendPadding:0,
-      padding:0,
+      padding:[30,0,0,0],
       pixelRatio : app.globalData.pixelRatio,
       width: app.globalData.windowWidth,
       height: 200
@@ -107,8 +109,8 @@ create(store, {
     windowWidth: app.globalData.windowWidth,
     windowHeight: app.globalData.windowHeight,
     lastRefreshTime: '',
-    initChart: !1,
-    refreshChart: !1,
+    // initChart: !1,
+    // refreshChart: !1,
     refreshSunset: false,
     refreshLocation: false,
     refreshRadar: false,
@@ -503,6 +505,8 @@ create(store, {
     }
     // if (t.store.data.startScreen !== 'auth') {
         wx.getLocation({
+          isHighAccuracy:true,
+          highAccuracyExpireTime:3000,
           success: res => {
             log(`[autoGetLocation] =>`, res)
             t.setData({
@@ -586,42 +590,79 @@ create(store, {
       url: apiHost,
       success: a => {
         let weatherData = a.data.result;
-        const checkRefreshChart = (canRefreshChart) => {
+        const refreshOrInitChart = (canRefreshChart) => {
+          const initChart = () => {
+            log('initChart')
+            const temperatureChartComponent = t.selectComponent('#temperatureChart');
+            temperatureChartComponent.lazyInitTemperatureChart(t.initTemperatureChart);
+            const rainChartComponent = t.selectComponent('#rainChart');
+            rainChartComponent.lazyInitRainChart(t.initRainChart);
+            const testChartComponent = t.selectComponent('#testChart');
+            testChartComponent.lazyInitRainChart(t.initTestChart);
+          }
+          const refreshChart = () => {
+            let temperatureChartData = t.getTemperatureChartData().chartData
+            let rainChartData= t.getRainChartData()
+            rainChart.changeData(rainChartData)
+            temperatureChart.changeData(temperatureChartData)
+            temperatureChart.guide().clear();
+            // temperatureChartData.map(function (obj) {
+            //   let guide = temperatureChart.guide().text({
+            //     top: true,
+            //     position: [obj.x, obj.y[0]],
+            //     content: obj.y[0],
+            //     style: {
+            //       textAlign: 'center',
+            //       textBaseline: 'top',
+            //       fontSize: 12,
+            //       fill: '#8799a3'
+            //     },
+            //     offsetY: 10
+            //   });
+            //   let guide1 = temperatureChart.guide().text({
+            //     top: true,
+            //     position: [obj.x, obj.y[1]],
+            //     content: obj.y[1],
+            //     style: {
+            //       textAlign: 'center',
+            //       textBaseline: 'bottom',
+            //       fontSize: 12,
+            //       fill: '#8799a3'
+            //     },
+            //     offsetY: -10
+            //   });
+            //   guide.repaint()
+            //   guide1.repaint()
+            //   log(guide1)
+            //   log(guide)
+            //   log(guide.repaint())
+            // })
+            log('[refreshChartData]')
+          }
           log('[canRefreshChart] => ', canRefreshChart)
           if (canRefreshChart == true) {
-            t.setData({
-              'refreshChart': !t.data.refreshChart
-            })
+            refreshChart()
           }
           if (canRefreshChart == false) {
-            t.setData({
-              'initChart': !t.data.initChart
-            })
+            initChart()
           }
         }
-        const initChart = () => {
-          t.temperatureChartComponent = t.selectComponent('#temperatureChart');
-          t.temperatureChartComponent.lazyInit(t.initTemperatureChart);
-          t.rainChartComponent = t.selectComponent('#rainChart');
-          t.rainChartComponent.lazyInit(t.initRainChart);
-        }
-        const waitToCheck = async (weatherData, canRefreshChart) => {
+        (async (weatherData, canRefreshChart) => {
           await t.setData({
             'canBlurRoot': true
           })
           await t.setAllWeather(weatherData)
           await t.getBingImage()
           await t.screenFadeOut()
-          await initChart()
+          // await initChart()
           await t.scrollToTop()
           await t.setData({
             'canBlurRoot': false
           })
-          checkRefreshChart(canRefreshChart)
+          await refreshOrInitChart(canRefreshChart)
           app.saveData("forecastData", weatherData)
           t.checkNetWorkType()
-        }
-        waitToCheck(weatherData, canRefreshChart)
+        })(weatherData, canRefreshChart)
       }
     })
     // }
@@ -1053,8 +1094,14 @@ create(store, {
       success: res => {
         log('[requestBing]', res.data.images)
         let bingImageLists = res.data.images
+        let copyrightlink = 'https://bing.ioslide.com' + bingImageLists[0].copyrightlink
+        let bingImage = 'https://cn.bing.com' + bingImageLists[0].url
+        let enddate = bingImageLists[0].enddate
+        log('copyrightlink',copyrightlink)
         t.setData({
-          bingImage: 'https://cn.bing.com/' + bingImageLists[0].url,
+          copyrightlink:copyrightlink,
+          bingIndex : 0,
+          bingImage: bingImage,
           bingImageLists : bingImageLists
         })
       },
@@ -1215,7 +1262,7 @@ create(store, {
     e.currentTarget.dataset.target == 'autoGetLocation' ? (log('[switchChange] => autoGetLocation'), t.autoGetLocation()) : error("switchChange")
   },
   showModal(e) {
-    log('[showModal]', e)
+    log('[showModal]', e.currentTarget.dataset.target)
     const t = this
     const setData = (modalName) => {
       t.setData({
@@ -1231,7 +1278,7 @@ create(store, {
     })
   },
   hideDrawerModal(e){
-    log(e)
+    log('[hideDrawerModal]')
     var drawerModalName = e.detail.drawerModalName;
     const t = this
     t.setData({
@@ -1265,6 +1312,13 @@ create(store, {
   navChange(e) {
     log(`[navChange] => ${e.currentTarget.dataset.cur}`)
     const cur = e.currentTarget.dataset.cur
+    wx.navigateTo({
+      url: '../' + cur + '/' + cur
+    });
+  },
+  navCopyrightlink(e){
+    log('[navCopyrightlink]')
+    let cur = e.target.dataset.cur
     wx.navigateTo({
       url: '../' + cur + '/' + cur
     });
@@ -1539,7 +1593,13 @@ create(store, {
       wx.request({
         url: rainRadarApiHost,
         success: (result) => {
-          log('[rainRadar result]', result)
+          log('[rainRadarApiHost result]', result)
+          if(result.data.status == 'failed'){
+            return t.setData({
+              'forecastData.rainRadar.latitude': t.data.forecastData.latitude,
+              'forecastData.rainRadar.longitude':  t.data.forecastData.longitude
+            })
+          }
           let rainRadarImg = result.data.images[result.data.images.length - 1][0]
           let source = result.data.images[result.data.images.length - 1]
           let rainRadarPosition = source[2]
@@ -1584,8 +1644,7 @@ create(store, {
             })
           })
         },
-        fail: (res) => {},
-        complete: () => {
+        fail: (res) => {
 
         }
       })
@@ -1609,14 +1668,13 @@ create(store, {
         }
       })
     }
-    const reqRadar = async () => {
+    (async () => {
       await reqRainRadar()
       await reqAqiRadar()
-    }
-    reqRadar()
+    })()
   },
   onIntersectionObserver() {
-    log('[onIntersectionObserver]')
+    // log('[onIntersectionObserver]')
     const t = this
     var ani = wx.createAnimation({
       duration: 700,
@@ -1799,14 +1857,7 @@ create(store, {
     }
     const setData = () => {
       themeValue == 'light' ? theme['themeChecked_light'] = true :theme['themeChecked_dark'] = true
-      // if (themeValue == 'light') {
-      //   theme['themeChecked_light'] = true
-      // } else {
-      //   theme['themeChecked_dark'] = true
-      // }
       t.setData({
-        // themeValue: themeValue,
-        // theme: theme,
         modalName: null,
         isChangeSetting: true
       })
@@ -1996,36 +2047,36 @@ create(store, {
         });
     });
   },
-  initTemperatureChart(F2,config){
-    const getTemperatureChartData =() =>{
-      var chartData = []
-      var dailyWeather = this.data.forecastData.daily
-      for (var s = dailyWeather, d = 1; d < 8; d++) {
-        var u = {
-          x: s[d].date,
-          y: [s[d].min, s[d].max]
-        };
-        chartData.push(u);
-      }
-      let range = {
-          max : Math.max.apply(Math, dailyWeather.map(function (o) {
-          return o.max
-         })),
-          min:Math.min.apply(Math, dailyWeather.map(function (o) {
-            return o.min
-          }))
-      }
-      return {chartData,range}
+  getTemperatureChartData (){
+    var chartData = []
+    var dailyWeather = this.data.forecastData.daily
+    for (var s = dailyWeather, d = 1; d < 8; d++) {
+      var u = {
+        x: s[d].date,
+        y: [s[d].min, s[d].max]
+      };
+      chartData.push(u);
     }
-    let chartData = getTemperatureChartData().chartData
-    let range = getTemperatureChartData().range
-    // log('[onInitChart]', getTemperatureChartData())
-    chart = new F2.Chart(config);
-    chart.clear(), chart.legend(!1),
-    chart.axis("y", !1),
-    chart.axis("x", !1),
-    chart.tooltip(false),
-    chart.source(chartData, {
+    let range = {
+        max : Math.max.apply(Math, dailyWeather.map(function (o) {
+        return o.max
+       })),
+        min:Math.min.apply(Math, dailyWeather.map(function (o) {
+          return o.min
+        }))
+    }
+    return {chartData,range}
+  },
+  initTemperatureChart(F2,config){
+    let chartData = this.getTemperatureChartData().chartData
+    let range = this.getTemperatureChartData().range
+    temperatureChart = new F2.Chart(config);
+    return temperatureChart.clear(),
+    temperatureChart.legend(!1),
+    temperatureChart.axis("y", !1),
+    temperatureChart.axis("x", !1),
+    temperatureChart.tooltip(false),
+    temperatureChart.source(chartData, {
       x: {
         tickCount: 7
       },
@@ -2035,7 +2086,7 @@ create(store, {
       }
     }),
     chartData.map(function (obj) {
-      chart.guide().text({
+      temperatureChart.guide().text({
         top: true,
         position: [obj.x, obj.y[0]],
         content: obj.y[0],
@@ -2047,7 +2098,7 @@ create(store, {
         },
         offsetY: 10
       });
-      chart.guide().text({
+      temperatureChart.guide().text({
         top: true,
         position: [obj.x, obj.y[1]],
         content: obj.y[1],
@@ -2060,7 +2111,7 @@ create(store, {
         offsetY: -10
       });
     }),
-    chart.interval().position('x*y')
+    temperatureChart.interval().position('x*y')
       .animate({
         appear: {
           animation: 'shapesScaleInY'
@@ -2071,40 +2122,43 @@ create(store, {
         radius: [4, 4, 4, 4]
       })
       .color('l(90) 0:#d5effc 1:#bcc8d4'),
-      chart.render()
-      return chart;
+      temperatureChart.render(),
+      temperatureChart;
+  },
+  getRainChartData(){
+    var chartData = []
+    var hourly = this.data.forecastData.hourly
+    for (var s = hourly, d = 0; d < 48; d++) {
+      var u = {
+        time: s[d].precipitation.datetime,
+        value: s[d].precipitation.value,
+      };
+      chartData.push(u);
+    }
+    // log('[getRainChartData rainWeather]',chartData)
+    return chartData  
   },
   initRainChart(F2, config) {
-    const getRainChartData = () =>{
-      var chartData = []
-      var hourly = this.data.forecastData.hourly
-      for (var s = hourly, d = 0; d < 48; d++) {
-        var u = {
-          time: s[d].precipitation.datetime,
-          value: s[d].precipitation.value,
-        };
-        chartData.push(u);
-      }
-      // log('[getRainChartData rainWeather]',chartData)
-      return chartData  
-    }
-    let chartData = getRainChartData()
+    let chartData = this.getRainChartData()
     // log('[initChartFuc]', chartData)
-    chart = new F2.Chart(config);
-    return chart.clear(), chart.legend(!1),
-    chart.source(chartData, {
+    rainChart = new F2.Chart(config);
+    return rainChart.clear(), 
+    rainChart.legend(!1),
+    rainChart.source(chartData, {
       time: {
         type: 'timeCat',
-        tickCount: 5
+        mask: 'MM/DD',
+        tickCount: 3,
+        range: [ 0, 1 ]
       },
       value: {
         tickCount: 2,
-        min: 0
+        min: 0,
+        alias: '降水强度'
       }
     }),
-    chart.axis('time', false),
-    chart.tooltip({
-      showCrosshairs: true,
+    rainChart.axis('time', false),
+    rainChart.tooltip({
       showItemMarker: false,
       alwaysShow: false,
       triggerOn: ['touchstart', 'touchmove'],
@@ -2127,18 +2181,163 @@ create(store, {
         const items = ev.items;
         items[0].name = null;
         log(items[0].origin)
-        items[0].value = items[0].origin.time +'/ 降水强度:'
+        items[0].value = items[0].origin.time
       }
     }),
-    chart.area()
+    rainChart.area()
       .position('time*value')
       .color('l(90) 0:#1890FF 1:#f7f7f7')
       .shape('smooth'),
-    chart.line()
+    rainChart.line()
       .position('time*value')
       .color('l(90) 0:#1890FF 1:#8dd9f7')
       .shape('smooth'),
-    chart.render(),
-    chart;
+    rainChart.render(),
+    rainChart;
+  },
+  initTestChart(F2, config) {
+    const t = this
+    const data = [{
+      item: 'Aqi',
+      user: ' ',
+      score: t.data.forecastData.realtime.airQuality.aqi
+    }, {
+      item: 'NO2',
+      score: t.data.forecastData.realtime.airQuality.no2
+    },{
+      user: ' ',
+      item: 'O3',
+      score: t.data.forecastData.realtime.airQuality.o3
+    }, {
+      user: ' ',
+      item: 'PM10',
+      score: t.data.forecastData.realtime.airQuality.pm10
+    }, {
+      user: ' ',
+      item: 'PM25',
+      score: t.data.forecastData.realtime.airQuality.pm25
+    }, {
+      user: ' ',
+      item: 'SO2',
+      score: t.data.forecastData.realtime.airQuality.so2
+    }, {
+      user: ' ',
+      item: 'CO',
+      score: t.data.forecastData.realtime.airQuality.co
+    }];
+    const chart = new F2.Chart(config);
+    
+    chart.coord('polar');
+    chart.source(data, {
+      score: {
+        min: 0,
+        max: 250,
+        nice: false,
+        tickCount: 4
+      }
+    });
+    chart.axis('score', {
+      label: function label(text, index, total) {
+        if (index === total - 1) {
+          return null;
+        }
+        return {
+          top: true
+        };
+      },
+      grid: {
+        lineDash: null,
+        type: 'arc' // 弧线网格
+      }
+    });
+    chart.axis('item', {
+      grid: {
+        lineDash: null
+      }
+    });
+    chart.area().position('item*score').color('user')
+    .animate({
+      appear: {
+        animation: 'groupWaveIn'
+      }
+    });
+  chart.line().position('item*score').color('user')
+    .animate({
+      appear: {
+        animation: 'groupWaveIn'
+      }
+    });
+  chart.point().position('item*score').color('user')
+    .style({
+      stroke: '#fff',
+      lineWidth: 1
+    })
+    .animate({
+      appear: {
+        delay: 300
+      }
+    });
+  
+    chart.render();
+    
+    return chart
+  },
+  navNextBing(){
+    const t = this
+    this.animate('#bingImage', [
+      { opacity: 1.0, ease:'ease-in' },
+      { opacity: 0.0, ease:'ease-out' },
+      ], 350, function () {
+        let bingIndex = t.data.bingIndex
+        if(t.data.bingIndex == 7){
+          bingIndex = 0
+        }else{
+          bingIndex += 1 
+        }
+        let copyrightlink = 'https://bing.ioslide.com' + t.data.bingImageLists[bingIndex].copyrightlink
+        let bingImage = 'https://cn.bing.com' + t.data.bingImageLists[bingIndex].url
+        t.setData({
+          copyrightlink:copyrightlink,
+          bingIndex : bingIndex,
+          bingImage: bingImage
+        })
+        this.animate('#bingImage', [
+          { opacity: 0, ease:'ease-in' },
+          { opacity: 1, ease:'ease-out' },
+          ], 350)
+    }.bind(this))  
+  },
+  navPreBing(){
+    const t = this
+    this.animate('#bingImage', [
+      { opacity: 1.0, ease:'ease-in',backgroundColor: '#F5F6F7' },
+      { opacity: 0.5, ease:'ease-in',backgroundColor: '#F5F6F7'},
+      { opacity: 0.0, ease:'ease-out',backgroundColor: '#F5F6F7' },
+      ], 350, function () {
+        let bingIndex = t.data.bingIndex
+        if(t.data.bingIndex == 0){
+          bingIndex = 7
+        }else{
+          bingIndex -= 1 
+        }
+        let copyrightlink = 'https://bing.ioslide.com' + t.data.bingImageLists[bingIndex].copyrightlink
+        let bingImage = 'https://cn.bing.com' + t.data.bingImageLists[bingIndex].url
+        t.setData({
+          copyrightlink:copyrightlink,
+          bingIndex : bingIndex,
+          bingImage: bingImage
+        })
+        this.animate('#bingImage', [
+          { opacity: 0, ease:'ease-in',backgroundColor: '#F5F6F7' },
+          { opacity: 0.5, ease:'ease-in',backgroundColor: '#F5F6F7'},
+          { opacity: 1, ease:'ease-out',backgroundColor: '#F5F6F7' },
+          ], 350)
+    }.bind(this))  
+  },
+  setTemperatureImage(e){
+    this.setData({
+      temperatureImage:e.detail.temperatureImage,
+      temperatureImageWidth:e.detail.width
+    })
   }
 });

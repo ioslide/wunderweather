@@ -1,7 +1,8 @@
 {
   "pages": [
     "page/index/index",
-    "page/bing/bing",
+    "page/bingLists/bingLists",
+    "page/bingDetail/bingDetail",
     "page/daily/daily",
     "page/hourly/hourly",
     "page/moon/moon",

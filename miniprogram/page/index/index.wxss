@@ -2823,6 +2823,7 @@ button::after {
   bottom: -4px;
   z-index: 6;
 }
+
 .sunriseDot-dark {
   background: #FCBF42;
   width: 8px;
@@ -2856,9 +2857,12 @@ button::after {
   bottom: -4px;
   z-index: 6;
 }
-
+.cuIcon-close{
+  margin:0!important
+}
 
 .headBackground {
+  background: #333333;
   filter: blur(20px);
   position: relative;
   /* background: linear-gradient(to bottom, #1a2238 40%, #222 100%); */
@@ -2991,6 +2995,36 @@ button::after {
   animation-delay: 0s;
   filter: blur(0);
   -webkit-animation-delay: 0s;
+}
+.bingBlur {
+  animation: bingBlurAni 0.8s both;
+  animation-delay: 0s;
+  filter: blur(0);
+  -webkit-animation-delay: 0s;
+}
+.bingUnBlur {
+  animation: bingUnBlurAni 0.8s both;
+  animation-delay: 0s;
+  filter: blur(0);
+  -webkit-animation-delay: 0s;
+}
+@keyframes bingBlurAni {
+  0% {
+    filter: blur(10px);
+  }
+
+  100% {
+    filter: blur(0px);
+  }
+}
+@keyframes bingBlurAni {
+  0% {
+    filter: blur(0px);
+  }
+
+  100% {
+    filter: blur(10px);
+  }
 }
 
 @keyframes revSharpen {
@@ -3187,15 +3221,18 @@ button::after {
   width: 100%;
   height: 200px;
 }
-.f2-chart{
-  width:100%;
-  height: 200px ;
-}
-.temperature-container{
-height: 200px;
-width:414px
-}
-.rain-container{
+
+.f2-chart {
+  width: 100%;
   height: 200px;
-  width:414px
-  }
+}
+
+.temperature-container {
+  height: 200px;
+  width: 414px
+}
+
+.rain-container {
+  height: 200px;
+  width: 414px
+}

@@ -27,7 +27,7 @@ create.Component(store, {
       type: String,
       value: null,
       observer: function () {
-        log(this)
+        // log(this)
         const t = this
         if (t.data.drawerModalName == "DrawerModalL") {
           var pages = getCurrentPages();
@@ -113,7 +113,7 @@ create.Component(store, {
     },
     setHistoryCityLocation(e) {
       const t = this
-      log(e)
+      // log(e)
       var historyCityData = e.currentTarget.dataset.curdetaildata
       let eventDetail = {
         historyCityData: historyCityData

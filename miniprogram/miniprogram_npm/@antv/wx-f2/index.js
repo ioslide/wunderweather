@@ -18406,14 +18406,15 @@
 			}
 		},
 		data: {
+			hasTemperatureImage:false,
 		},
 		ready() {
+			const t = this
 			if (this.data.opts.lazyLoad) {
 				console.warn('lazyload f2 true');
 				return;
 			}
 			if (!this.data.opts.lazyLoad) {
-				const t = this
 				console.warn('lazyload f2 false');
 				var version = wx.version.version.split(".").map(function (t) {
 					return parseInt(t, 10);
@@ -18451,14 +18452,14 @@
 			}
 		},
 		methods: {
-			lazyInit(func) {
+			lazyInitTemperatureChart(func) {
 				const t = this
 				var version = wx.version.version.split(".").map(function (t) {
 					return parseInt(t, 10);
 				});
 				if (version[0] > 1 || 1 === version[0] && version[1] > 9 || 1 === version[0] && 9 === version[1] && version[2] >= 91) {
 					const query = wx.createSelectorQuery().in(this);
-					query.select('.f2-canvas')
+					query.select('#f2-canvas')
 						.fields({
 							dataset: true,
 							node: true,
@@ -18472,6 +18473,66 @@
 								height
 							} = res[0];
 							const context = node.getContext('2d');
+							const pixelRatio = wx.getSystemInfoSync().pixelRatio;
+							node.width = width * pixelRatio;
+							node.height = height * pixelRatio;
+							t.data.config['context'] = context
+							const chart = func(lib, t.data.config);
+							console.log('chart config',t.data.config)
+							if (chart) {
+								this.chart = chart;
+								console.log('[wx-f2 chart]', chart)
+								this.canvasEl = chart.get('el');
+							}
+							// setTimeout(() => {
+							// 	wx.canvasToTempFilePath({
+							// 		x: 0,
+							// 		y: 0,
+							// 		canvas:node,
+							// 		width: width,
+							// 		height: height,
+							// 		destWidth: width * pixelRatio,
+							// 		destHeight: height * pixelRatio,
+							// 		success: function (res) {
+							// 			let eventDetail = {
+							// 				temperatureImage: res.tempFilePath,
+							// 				width:width
+							// 			}
+							// 			t.triggerEvent('setTemperatureImage', eventDetail)
+							// 			t.setData({
+							// 				hasTemperatureImage :true
+							// 			})
+							// 		},
+							// 		fail: function (res) {
+							// 			console.log(res);
+							// 		}
+							// 	});
+							// },600)
+
+						});
+				} else console.error("微信基础库版本过低，需大于1.9.91");
+			},
+			lazyInitRainChart(func) {
+				const t = this
+				var version = wx.version.version.split(".").map(function (t) {
+					return parseInt(t, 10);
+				});
+				if (version[0] > 1 || 1 === version[0] && version[1] > 9 || 1 === version[0] && 9 === version[1] && version[2] >= 91) {
+					const query = wx.createSelectorQuery().in(this);
+					query.select('#f2-canvas')
+						.fields({
+							dataset: true,
+							node: true,
+							size: true,
+							context: true
+						})
+						.exec(res => {
+							const {
+								node,
+								width,
+								height
+							} = res[0];
+							var context = node.getContext('2d');
 							const pixelRatio = wx.getSystemInfoSync().pixelRatio;
 							node.width = width * pixelRatio;
 							node.height = height * pixelRatio;
