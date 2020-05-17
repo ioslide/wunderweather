@@ -12,6 +12,8 @@ create.Component(store, {
     windowWidth: app.globalData.windowWidth,
     windowHeight: app.globalData.windowHeight,
     drawerModalName: null,
+    rateIndex:3,
+    currentRate:0,
     use: [
       'themeValue',
       'languageValue',
@@ -54,8 +56,14 @@ create.Component(store, {
   },
 
   methods: {
+    rateChange: function (e) {
+      this.setData({
+        rateIndex: e.detail.index,
+        currentRate: e.detail.index
+      })
+    },
     hideDrawerModal(e) {
-      log('[hideModal]')
+      log('[hideModal]',e)
       const t = this
       t.setData({
         drawerModalName: null

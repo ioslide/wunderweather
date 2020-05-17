@@ -56,7 +56,9 @@
     "wx673e7d2fe4e6a413"
   ],
   "usingComponents": {
-    "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule"
+    "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule",
+    "drawermodal":"/weatherui/components/drawermodal/drawermodal",
+    "f2": "@antv/wx-f2"
   },
   "subPackages": [
     {

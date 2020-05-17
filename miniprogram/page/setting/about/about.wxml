@@ -19,7 +19,7 @@
 		</view>
 	</view>
 
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="star">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showDrawerModal" data-target="DrawerModalRate">
 		<sc-cell cellHeight="70" subheader1Padding="5" right-icon="iconfont icon-right" style="width:100%;" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">评分</block>
@@ -113,3 +113,5 @@
 		<p class="subtitle slide-bar {{$.themeValue == 'light'?'fill-text-dark':'fill-text-white'}}">Special thanks</p>
 	</view>
 </view>
+
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal"/>

@@ -676,7 +676,33 @@ radio.white[checked] .wx-radio-input {
 .opacity-0 {
 	opacity: 0
 }
-
+.opacity-01 {
+	opacity: 0.1
+}
+.opacity-02 {
+	opacity: 0.2
+}
+.opacity-03 {
+	opacity: 0.3
+}
+.opacity-04 {
+	opacity: 0.4
+}
+.opacity-05 {
+	opacity: 0.5
+}
+.opacity-06 {
+	opacity: 0.6
+}
+.opacity-07 {
+	opacity: 0.7
+}
+.opacity-08 {
+	opacity: 0.8
+}
+.opacity-09 {
+	opacity: 0.9
+}
 .opacity-1 {
 	opacity: 0
 }
@@ -2745,6 +2771,19 @@ button.icon.lg {
 .cu-dialog-drawerR-bg-dark {
 	background: rgba(51, 51, 51, 0.323);
 }
+.radar-dialog {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: auto;
+	margin-right: auto;
+	width: 250px;
+	height: 250px;
+	max-width: 100%;
+	/* background-color: #f8f8f8; */
+	border-radius: 3rpx;
+	overflow: hidden;
+}
 
 .shareImage-dialog {
 	position: relative;
@@ -3298,6 +3337,12 @@ scroll-view.cu-steps .cu-item {
  ==================== */
 .absolute{
 	position:absolute
+}
+.relative{
+	position:relative
+}
+.fixed{
+	position: fixed;
 }
 .flex {
 	display: flex;
@@ -4974,7 +5019,22 @@ scroll-view.cu-steps .cu-item {
 	line-height: 18px;
 	letter-spacing: .6px;
 }
-
+.square-10 {
+	height: 10px;
+	width: 10px
+}
+.square-12 {
+	height: 12px;
+	width: 12px
+}
+.square-20 {
+	height: 20px;
+	width: 20px
+}
+.square-25 {
+	height: 25px;
+	width: 25px
+}
 .square-28 {
 	height: 28px;
 	width: 28px
@@ -5024,11 +5084,28 @@ scroll-view.cu-steps .cu-item {
 	width: 150px;
 	height: 150px;
 }
-
+.square-200 {
+	width: 200px;
+	height: 200px;
+}
+.square-250 {
+	width: 250px;
+	height: 250px;
+}
+.square-300 {
+	width: 300px;
+	height: 300px;
+}
 .border-bottom-1e1e1e {
 	border-bottom: 1px solid #1E1E1E
 }
 
 .border-bottom-f1f1f1 {
 	border-bottom: 1px solid #f1f1f1
+}
+.circle{
+	border-radius: 50%;
+}
+.width-100{
+	width: 100%;
 }

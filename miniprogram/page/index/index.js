@@ -1,6 +1,7 @@
 
 let temperatureChart = null
 let rainChart = null
+let radarChart = null
 const app = getApp()
 // const AUTH_MODE = 'fingerPrint'
 const log = console.log.bind(console)
@@ -97,6 +98,14 @@ create(store, {
       width: app.globalData.windowWidth,
       height: 200
     },
+    radarChartConfig : {
+      appendPadding:0,
+      padding:30,
+      pixelRatio : app.globalData.pixelRatio,
+      width: 250,
+      height: 250
+    },
+    showAirQuatityRadar:false,
     drawerModalName:null,
     x: 0,
     y: 0,
@@ -597,8 +606,8 @@ create(store, {
             temperatureChartComponent.lazyInitTemperatureChart(t.initTemperatureChart);
             const rainChartComponent = t.selectComponent('#rainChart');
             rainChartComponent.lazyInitRainChart(t.initRainChart);
-            const testChartComponent = t.selectComponent('#testChart');
-            testChartComponent.lazyInitRainChart(t.initTestChart);
+            const radarChartComponent = t.selectComponent('#radarChart');
+            radarChartComponent.lazyInitRadarChart(t.initRadarChart);
           }
           const refreshChart = () => {
             let temperatureChartData = t.getTemperatureChartData().chartData
@@ -1577,9 +1586,7 @@ create(store, {
     let start = this.data.touchS
     let end = this.data.touchE
     if (start[0] < end[0] - 5) {
-      //右滑
     } else if (start[0] > end[0] + 5) {
-      //左滑
       t.setData({
         drawerModalName: e.currentTarget.dataset.target
       })
@@ -2195,7 +2202,7 @@ create(store, {
     rainChart.render(),
     rainChart;
   },
-  initTestChart(F2, config) {
+  initRadarChart(F2, config) {
     const t = this
     const data = [{
       item: 'Aqi',
@@ -2225,10 +2232,10 @@ create(store, {
       item: 'CO',
       score: t.data.forecastData.realtime.airQuality.co
     }];
-    const chart = new F2.Chart(config);
-    
-    chart.coord('polar');
-    chart.source(data, {
+    radarChart = new F2.Chart(config);
+    radarChart.legend(false)
+    radarChart.coord('polar');
+    radarChart.source(data, {
       score: {
         min: 0,
         max: 250,
@@ -2236,7 +2243,7 @@ create(store, {
         tickCount: 4
       }
     });
-    chart.axis('score', {
+    radarChart.axis('score', {
       label: function label(text, index, total) {
         if (index === total - 1) {
           return null;
@@ -2250,39 +2257,41 @@ create(store, {
         type: 'arc' // 弧线网格
       }
     });
-    chart.axis('item', {
+    radarChart.axis('item', {
       grid: {
         lineDash: null
       }
     });
-    chart.area().position('item*score').color('user')
+    radarChart.area().position('item*score').color('user')
     .animate({
       appear: {
         animation: 'groupWaveIn'
       }
     });
-  chart.line().position('item*score').color('user')
-    .animate({
-      appear: {
-        animation: 'groupWaveIn'
-      }
-    });
-  chart.point().position('item*score').color('user')
-    .style({
-      stroke: '#fff',
-      lineWidth: 1
-    })
-    .animate({
-      appear: {
-        delay: 300
-      }
-    });
+    radarChart.line().position('item*score').color('user')
+      .animate({
+        appear: {
+          animation: 'groupWaveIn'
+        }
+      });
+    radarChart.point().position('item*score').color('user')
+      .style({
+        stroke: '#fff',
+        lineWidth: 1
+      })
+      .animate({
+        appear: {
+          delay: 300
+        }
+      });
   
-    chart.render();
+    radarChart.render();
     
-    return chart
+    return radarChart
   },
   navNextBing(){
+    // https://cn.bing.com/ImageResolution.aspx?w=375&h=667
+    // https://cn.bing.com/th?id=OHR.LofotenIslands_ZH-CN0114482586_480x800.jpg&rf=LaDigue_1920x1080.jpg&pid=hp
     const t = this
     this.animate('#bingImage', [
       { opacity: 1.0, ease:'ease-in' },
@@ -2338,6 +2347,33 @@ create(store, {
     this.setData({
       temperatureImage:e.detail.temperatureImage,
       temperatureImageWidth:e.detail.width
+    })
+  },
+  changeAirQuatityView(){
+    const t = this
+    if(t.data.showAirQuatityRadar == true){
+      this.animate('#airQuatityRadar', [
+        { opacity: 1.0, ease:'ease-in' },
+        { opacity: 0.0, ease:'ease-out' },
+        ], 280, function () {
+          this.animate('#airQuatityItem', [
+            { opacity: 0, ease:'ease-in' },
+            { opacity: 1, ease:'ease-out' },
+            ], 280)
+      }.bind(this))  
+    }else{
+      this.animate('#airQuatityItem', [
+        { opacity: 1.0, ease:'ease-in' },
+        { opacity: 0.0, ease:'ease-out' },
+        ], 280, function () {
+          this.animate('#airQuatityRadar', [
+            { opacity: 0, ease:'ease-in' },
+            { opacity: 1, ease:'ease-out' },
+            ], 280)
+      }.bind(this))  
+    }
+    t.setData({
+      showAirQuatityRadar:!t.data.showAirQuatityRadar
     })
   }
 });

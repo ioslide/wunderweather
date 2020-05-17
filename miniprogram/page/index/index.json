@@ -12,7 +12,6 @@
     "sc-star":"/weatherui/components/scStar/sc-star",
     "radar":"/weatherui/components/radar/radar",
     "sunSet":"/weatherui/components/sunSet/sunSet",
-    "drawermodal":"/weatherui/components/drawermodal/drawermodal",
     "f2": "@antv/wx-f2"
   },
   "onReachBottomDistance": 100,

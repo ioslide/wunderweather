@@ -265,7 +265,7 @@
 							</block>
 						</image>
 						<view class="absolute left-0 bottom-0">
-							<view class="flex justift-left align-end">
+							<view class="flex justify-left align-end">
 								<view class="flex padding-left-10 padding-bottom-10">
 									<!-- <image bindtap="navCopyrightlink" data-cur="bingDetail" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image> -->
 									<image bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
@@ -273,7 +273,7 @@
 							</view>
 						</view>
 						<view class="absolute right-0 bottom-0">
-							<view class="flex justift-left align-end">
+							<view class="flex justify-left align-end">
 								<view class="flex padding-left-10 padding-bottom-10">
 									<image bindtap="navPreBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
 								</view>
@@ -382,14 +382,14 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Details</block>
 				</text>
 			</view>
-			<view class="barRightIcon margin-right-0" bindtap="showModal" data-target="airQualityRadar" style="width: 50px;height: 30px;">
-				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
+			<view class="barRightIcon margin-right-0" bindtap="changeAirQuatityView" style="width: 50px;height: 30px;">
+					<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
 			</view>
 		</view>
 		<view class="{{$.themeValue == 'light'?'padding-5':'padding-15'}}" id="firstObserver" animation="{{firstObserverAni}}" style="min-height:260px">
 			<view class="service-swiper">
 				<view class="service-swiper-item">
-					<view class="grid col-3 margin-bottom-15 text-center" style="width:100%">
+					<view id="airQuatityItem" class="grid col-3 margin-bottom-15 text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="service" wx:if="{{item&&index<8}}" wx:for="{{forecastData.serviceData}}" wx:key="index">
 							<view class="{{$.themeValue == 'light'?'item-inner-light':'item-inner-dark'}}">
 								<image class="square-28" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
@@ -398,8 +398,16 @@
 							</view>
 						</view>
 					</view>
+					<view id="airQuatityRadar" class="grid col-1 margin-bottom-15 text-center opacity-0 absolute top-0" style="width:100%">
+						<view class="flex align-center justify-center">
+							<view class="square-250">
+								<f2 class="radarChart" canvas-id="radarChart" id="radarChart" opts="{{opts}}" config="{{radarChartConfig}}" />
+							</view>
+						</view>
+					</view>
 				</view>
 			</view>
+
 		</view>
 	</block>
 
@@ -761,13 +769,6 @@
 		</view>
 	</view>
 </view>
-
-<view class="cu-modal {{modalName=='airQualityRadar'?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">
-	<view class="flex" style="min-height:200px;width:100%;height:200px">
-		<f2 class="f2-chart" canvas-id="testChart" id="testChart" opts="{{opts}}" config="{{rainChartConfig}}" />
-	</view>
-</view>
-
 
 <!-- <view class="xhyicon flex padding-25 justify-center" animation="{{toXHYIManima}}">
 	<view class="buttoncontainer">

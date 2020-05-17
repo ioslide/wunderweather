@@ -135,7 +135,7 @@
 	</view>
 </view>
 
-<view class="share-modal drawer-modal justify-end {{drawerModalName=='DrawerModalB' || drawerModalName=='DrawerModalHeadImage' ?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="preventTouchMove">
+<view class="share-modal drawer-modal justify-end {{drawerModalName=='DrawerModalB' || drawerModalName=='DrawerModalHeadImage' || drawerModalName=='DrawerModalRate' ?'show':''}}" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" catchtouchmove="preventTouchMove">
 	<view class="flex share-dialog" catchtap style="border-top-left-radius:30px;border-top-right-radius:30px;padding: 50px 0;">
 		<view class="flex padding-5 justify-center align-center" style="width: 100%;">
 			<block wx:if="{{drawerModalName=='DrawerModalB'}}">
@@ -164,11 +164,16 @@
 					<view style="color:#010101">拍摄</view>
 				</view>
 			</block>
+			<block wx:if="{{drawerModalName=='DrawerModalRate'}}">
+				<view style="width:80.40%" bindtap="chooseCropImage" data-type="album">
+					<rate current="{{rateIndex}}" bind:change="rateChange" size="26" normal="#ccc" hollow="{{true}}" active="#ff7900"></rate>
+				</view>
+			</block>
 		</view>
 	</view>
 </view>
 
-<view class="cu-modal drawer-modal justify-start {{drawerModalName=='DrawerModalL'?'show':''}} {{$.themeValue == 'light'?'bg-none':''}}" bindtap="hideDrawerModal" catchtouchmove="true">
+<view class="cu-modal drawer-modal justify-start {{drawerModalName=='DrawerModalL'?'show':''}} {{$.themeValue == 'light'?'bg-none':''}}" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" catchtouchmove="true">
 	<view class="cu-dialog basis-lx {{$.themeValue == 'light'?'cu-dialog-bg-light':'cu-dialog-bg-dark'}}" catchtap style="height:{{windowHeight}}px;">
 		<view class="cu-custom">
 			<view catchtouchmove="return" class="cu-bar text-white" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{bgImage?'background-image:url(' + bgImage+')':''}}">
@@ -221,11 +226,11 @@
 	</view>
 </view>
 
-<view class="cu-modal {{drawerModalName=='themeRadio'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return">
+<view class="cu-modal {{drawerModalName=='themeRadio'?'show':''}}" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" catchtouchmove="return">
 	<view class="cu-dialog" catchtap>
 		<view class="cu-bar justify-start" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
@@ -248,7 +253,7 @@
 		</sc-radio-group>
 		<view class="cu-bar justify-end" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
@@ -257,11 +262,11 @@
 		</view>
 	</view>
 </view>
-<view class="cu-modal {{drawerModalName=='language'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return">
+<view class="cu-modal {{drawerModalName=='language'?'show':''}}" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" catchtouchmove="return">
 	<view class="cu-dialog" catchtap>
 		<view class="cu-bar justify-start" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
@@ -294,7 +299,7 @@
 		</sc-radio-group>
 		<view class="cu-bar justify-end" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
@@ -303,11 +308,11 @@
 		</view>
 	</view>
 </view>
-<view class="cu-modal {{drawerModalName=='unit'?'show':''}}" bindtap="hideDrawerModal" catchtouchmove="return">
+<view class="cu-modal {{drawerModalName=='unit'?'show':''}}" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" catchtouchmove="return">
 	<view class="cu-dialog" catchtap>
 		<view class="cu-bar justify-start" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px">
+				<button class="cu-btn text-lg text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
@@ -335,7 +340,7 @@
 		</sc-radio-group>
 		<view class="cu-bar justify-end" style="background: #2D2D2D;">
 			<view class="action">
-				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
+				<button class="cu-btn text-lg margin-left-5 text-white" bindtap="hideDrawerModal" data-target="{{drawerModalName}}" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
