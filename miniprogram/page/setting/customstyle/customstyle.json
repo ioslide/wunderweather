@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "sc-cell": "/weatherui/components/scCell/sc-cell",
-    "sc-switch": "/weatherui/components/scSwitch/sc-switch"
-  }
-}
