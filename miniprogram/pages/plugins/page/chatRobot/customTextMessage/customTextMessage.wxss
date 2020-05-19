@@ -1,0 +1,409 @@
+.leftView {
+  background-color: #fff;
+  padding: 13px 20px;
+  margin: 10px 0;
+  float: left;
+  color: #000;
+  border-radius: 24px;
+  border-top-left-radius: 2px;
+  font-size: 16px;
+  line-height: 22px;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-align: justify;
+  box-shadow: 0px 2px 4px rgba(212, 212, 212, 0.5);
+}
+
+.answerimage {
+  width: 38px;
+  height: 38px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+
+.answer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageView {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 192px;
+  margin: 10px 0;
+}
+
+.bg_img {
+  min-width: 240px;
+  max-width: 100%;
+  height: 100%;
+}
+
+.bg_img_sim {
+  width: 89px;
+  height: 21px;
+}
+
+.first0 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.first1 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.first2 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 127px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.first_word0 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 10px;
+}
+
+.first_word1 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 10px;
+}
+
+.first_word2 {
+  width: 89px;
+  height: 21px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.simple_word {
+  text-align: center;
+  line-height: 21px;
+  font-size: 10px;
+  color: #fff;
+}
+
+.scoreview {
+  position: absolute;
+  top: 145px;
+  left: 0;
+  width: 100%;
+}
+
+.score {
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+}
+
+.ai-qqemoji {
+  background: url("https://res.wx.qq.com/mmspraiweb_node/dist/static/img/qqface2.7582741.png") no-repeat;
+  width: 20px;
+  height: 20px;
+  text-indent: -999em;
+  display: inline-block;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  background-size: 360px 192px;
+}
+
+.xiaoweiview {
+  position: relative;
+  margin: 10px 0;
+  min-width: 236px;
+  min-height: 208px;
+  background-image: url(http://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/poetry.png);
+  background-size: 100% 100%;
+}
+
+.xiaoweitext {
+  text-align: center;
+  font-size: 12px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: rgba(89, 111, 139, 1);
+  line-height: 18px;
+}
+
+.content {
+  margin-top: 45px;
+}
+
+.titleView {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.empty {
+  width: 24.5px;
+  height: 1px;
+  background: rgba(66, 90, 119, 1);
+}
+
+.title {
+  margin-left: 8px;
+  background: url(http://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/xiaowei_left.png) top left/4.5px 8px no-repeat,
+                url(http://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/xiaowei_right.png) bottom right/4.5px 8px no-repeat;
+  padding: 0 10px;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(66, 90, 119, 1);
+}
+
+.marks1 {
+  width: 8.5px;
+  height: 7.5px;
+  margin-bottom: 7.5px;
+  margin-left: -8.5px;
+  margin-right: 3px;
+  font-family: HYQiHei-GZS, HYQiHei;
+  font-weight: normal;
+  color: rgba(136, 170, 210, 1);
+}
+
+.marks2 {
+  width: 8.5px;
+  height: 7.5px;
+  margin-bottom: -7.5px;
+  margin-left: 3px;
+  font-family: HYQiHei-GZS, HYQiHei;
+  font-weight: normal;
+  color: rgba(136, 170, 210, 1);
+}
+
+.text {
+  background-color: #fff;
+  padding: 13px 20px;
+  margin: 10px 0;
+  float: left;
+  color: #000;
+  border-radius: 24px;
+  border-top-left-radius: 2px;
+  font-size: 16px;
+  line-height: 22px;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-align: justify;
+  box-shadow: 0px 2px 4px rgba(212, 212, 212, 0.5);
+}
+
+.slot-box {
+  clear: both;
+}
+
+.slot-picker {
+}
+
+
+.slot-title {
+  height: 42px;
+  background-color: #e7f4ff;
+  border-top-right-radius: 24px;
+  border-top-left-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+  color: #303133;
+  line-height: 42px;
+  padding-left: 15px;
+  box-sizing: border-box;
+}
+
+.slot-selector {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 24px;
+  height: 48px;
+  background-color: #fff;
+}
+
+.slot-selector picker {
+  height: 100%;
+}
+
+.slot-selector .picker {
+  display: flex;
+  justify-content: middle;
+  align-items: center;
+  padding: 0 18px;
+  color: #606266;
+  font-size: 12px;
+  height: 48px;
+}
+
+.slot-selector .picker .icon {
+  flex: 2;
+}
+
+.slot-selector .picker .select-text {
+  text-align: left;
+  flex: 8;
+}
+
+.slot-selector .picker .arrow {
+  text-align: right;
+  flex: 2;
+}
+
+.slot-value-list {
+  background-color: #fff;
+  padding: 10px 32px 10px 20px;
+}
+
+
+.slot-value-list {
+  width: calc(100vw - 88px);
+  background-color: #fff;
+  padding: 10px 20px 10px 20px;
+  box-sizing: border-box;
+}
+
+.slot-title-2 {
+}
+
+.info-box {
+  width: 100%;
+  display: flex;
+  justify-content: middle;
+  align-items: center;
+  height: 62px;
+  border-bottom: 0.5px solid rgba(216, 216, 216, 0.5);
+}
+
+.info {
+  flex: 2;
+}
+
+.right, .left, .right {
+  float: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.info .time {
+  color: #303133;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.info .location {
+  color: #606266;
+  font-size: 9px;
+  text-align: center;
+}
+
+.center {
+  flex: 4;
+  text-align: center;
+}
+
+.center .icon {
+}
+
+.center .icon image {
+  width: 26px;
+  height: 10px;
+}
+
+.center .line {
+  width: 100%;
+  height: 1px;
+  background-color: #eaeaea;
+}
+
+.center .tips {
+  font-size: 9px;
+  color: #07c05f;
+  margin-top: 5px;
+}
+
+.radio {
+  margin-right: 5px;
+}
+
+.microVision {
+  max-width: calc(96vw - 120px);
+}
+
+.microVisionOptions {
+  background: rgba(255, 255, 255, 1);
+  border-radius: 4px;
+  padding-bottom: 10px;
+  margin: 10px 0;
+}
+
+.microVisionOptions_title {
+  padding: 0 17px;
+  box-sizing: border-box;
+  margin: 10px 0;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(121, 171, 249, 1);
+}
+
+.microVisionOptions_title:last-child {
+  margin-bottom: 0px;
+}
+
+.microVisionOptions_content {
+  padding-left: 10px;
+  height: 37.5px;
+  line-height: 37.5px;
+  background: rgba(233, 243, 254, 1);
+  border-radius: 4px 4px 0px 0px;
+  font-size: 13px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: rgba(48, 49, 51, 1);
+}
+
+.link {
+  font-size: 14px;
+  color: #359ae1;
+}

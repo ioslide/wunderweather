@@ -13,6 +13,10 @@ Component({
       type: [Boolean, String],
       default: false
     },
+    isFixd:{
+      type: Boolean,
+      default: false
+    },
     themeValue:{
       type: String,
       value: ""
@@ -45,6 +49,7 @@ Component({
       var e = this.properties
       this.setData({
         themeValue:e.themeValue,
+        isFixd:e.isFixd,
         contentText:e.contentText
       })
     }
@@ -173,6 +178,7 @@ Component({
       }
     },
     backPage() {
+      console.log('backPage')
       wx.navigateBack({
         delta: 1
       });

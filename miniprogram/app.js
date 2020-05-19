@@ -1,7 +1,9 @@
 const log = console.log.bind(console)
 const warn = console.warn.bind(console)
 var chatRobot = requirePlugin("chatRobot");
-
+import { promisifyAll, promisify } from 'miniprogram-api-promise';
+const wxp = {}
+promisifyAll(wx, wxp)
 // const group = console.group.bind(console)
 // const groupEnd = console.groupEnd.bind(console)
 
@@ -38,16 +40,10 @@ App({
     wx.onMemoryWarning(function () {
       warn('[onMemoryWarningReceive]')
     })
-    wx.cloud.init({
-      env: config.default.cloudEnv
-    }),
-    wx.cloud ? wx.cloud.init({
-      traceUser: !0
-    }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
     log('[initCloud]')
-    // t.initCloud()
+    t.initCloud()
     // log(xhy)
-    t.initChatRobot()
+    // t.initChatRobot()
     t.updateManager()
     t.initWxBass()
     t.getSystemInfo()
@@ -55,12 +51,27 @@ App({
     t.getWxContext()
     //t.dataPrePull()
   },
-  initChatRobot(){
+  initChatRobot(charRobotBar){
     chatRobot.init({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
-      success: () => {},
-      fail: error => {}
+      navHeight: charRobotBar, 
+      textToSpeech: true, //默认为ture打开状态
+      welcome: '你好，我是小O',
+      history: true,
+      historySize: 60,
+      background: "#F5F6F7",
+      guideCardHeight: 50,
+      operateCardHeight: 120,
+      history: false,
+      success: function () { },
+      fail: function (e) { }
     });
+  },
+  setData: function (e, t) {
+    this.globalData[e] = t;
+  },
+  getData: function () {
+    return this.globalData.difference;
   },
   loadFontFace() {
     wx.loadFontFace({
@@ -114,6 +125,8 @@ App({
     const t = this
     wx.getSystemInfo({
       success: function (e) {
+        var tt = e.system.indexOf("iOS") > -1;
+        t.globalData.charRobotBar = (tt ? 44 : 48) + e.statusBarHeight;
         let menuButtonInfo = wx.getMenuButtonBoundingClientRect();
         (0 == menuButtonInfo.buttom && 0 == menuButtonInfo.height && 0 == menuButtonInfo.left && 0 == menuButtonInfo.right && 0 == menuButtonInfo.top && 0 == menuButtonInfo.width || void 0 === menuButtonInfo.buttom && void 0 === menuButtonInfo.height && void 0 === menuButtonInfo.left && void 0 === menuButtonInfo.right && void 0 === menuButtonInfo.top && void 0 === menuButtonInfo.width) && (menuButtonInfo = {
           bottom: 58,
@@ -141,6 +154,8 @@ App({
         }
         t.checkVersion(e.SDKVersion)
         log('[globalData]', t.globalData)
+
+        t.initChatRobot(t.globalData.charRobotBar)
       },
       fail: function (e) {
         t.isError = !0, wx.showModal({
@@ -184,11 +199,11 @@ App({
   },
   initCloud() {
     wx.cloud.init({
-        env: config.default.cloudEnv
-      }),
-      wx.cloud ? wx.cloud.init({
-        traceUser: !0
-      }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
+      env: config.default.cloudEnv
+    }),
+    wx.cloud ? wx.cloud.init({
+      traceUser: !0
+    }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
     log('[initCloud]')
   },
   updateManager() {
@@ -349,5 +364,59 @@ App({
     } else {
       return false;
     }
-  }
+  },
+  request(method, url, data){
+    var promise = new Promise((resolve, reject) => {
+        wx.request({
+            url: url,
+            data: data,
+            method: method,
+            header: {
+            },
+            success: function (res) {
+                //服务器返回数据
+                if (res.statusCode == 200) {
+                    resolve(res);
+                } else {
+                    //返回错误提示信息
+                    reject(res.data);
+                }
+            },
+            fail: function (e) {
+                reject('网络出错');
+            }
+        })
+    });
+    return promise;
+}
 })
+Object.assign(global, {
+  Object : Object,
+  Array : Array,
+  DataView : DataView,
+  Date : Date,
+  Error : Error,
+  Float32Array : Float32Array,
+  Float64Array : Float64Array,
+  Function : Function,
+  Int8Array : Int8Array,
+  Int16Array : Int16Array,
+  Int32Array : Int32Array,
+  Map : Map,
+  Math : Math,
+  Promise : Promise,
+  RegExp : RegExp,
+  Set : Set,
+  String : String,
+  Symbol : Symbol,
+  TypeError : TypeError,
+  Uint8Array : Uint8Array,
+  Uint8ClampedArray : Uint8ClampedArray,
+  Uint16Array : Uint16Array,
+  Uint32Array : Uint32Array,
+  WeakMap : WeakMap,
+  clearTimeout : clearTimeout,
+  isFinite : isFinite,
+  parseInt : parseInt,
+  setTimeout : setTimeout
+  });

@@ -25,7 +25,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
@@ -155,6 +155,13 @@
 					"id": -1,
 					"name": "pages/wechatsi/wechatsi",
 					"pathName": "pages/wechatsi/wechatsi",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
+					"pathName": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
 					"scene": null
 				}
 			]

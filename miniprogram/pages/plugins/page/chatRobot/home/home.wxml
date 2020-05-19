@@ -1,0 +1,227 @@
+<view class="container">
+  <view class="nav-wrap" style="width: 100vw;height: {{statusBarHeight}}px;">
+    <view class="" style="height: {{status}}px"></view>
+    <view class="nav-title" style="width: 100vw; text-align: center; line-height: {{navHeight}}px">示例小程序</view>
+  </view>
+  <scroll-view enableBackToTop scrollY class="scroll-view" style="height: calc(100vh - 120px - {{statusBarHeight}}px);">
+    <swiper autoplay circular indicatorDots interval="{{2000}}" style="width: 100vw; height: {{infoheight}}px;">
+      <swiper-item>
+        <view class="info" style="height: {{infoheight}}px; background-image: url(https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/bannerCard.png);background-size: 100% 100%;">
+          <view class="info_title">{{title}}</view>
+          <view class="info_para">{{info}}</view>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view catchtap="catchtapdooms" class="info" style="height: {{infoheight}}px; background-image: url(https://res.wx.qq.com/mmspraiweb_node/dist/static/game/banner2.png);background-size: 100% 100%;"></view>
+      </swiper-item>
+      <swiper-item>
+        <view catchtap="goXiaoWeiXieShi" class="info" style="height: {{infoheight}}px; background-image: url(https://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/banner-xieshi.png);background-size: 100% 100%;"></view>
+      </swiper-item>
+      <swiper-item>
+        <view catchtap="reserve" class="info" style="height: {{infoheight}}px; background-image: url(https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/reserveTrainBanner.png);background-size: 100% 100%;"></view>
+      </swiper-item>
+    </swiper>
+    <view class="blockingcontent">
+      <block wx:for="{{cardList}}" wx:key="item">
+        <view bindtap="goChat" class="blockingcontent_all" data-item="{{item}}">
+          <image class="blockingcontent_all_img" src="{{item.url}}"></image>
+          <view class="blockingcontent_all_content">
+            <view class="blockingcontent_all_content_title">{{item.title}}</view>
+            <view class="blockingcontent_all_content_word">{{item.content}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="NLPcard">
+      <view class="NLPcard_top">
+        <image class="NLPcard_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/nlpapi/NLPBg.png"></image>
+      </view>
+      <view class="NLPcard_bottom">
+        <view class="NLPcard_bottom_left">
+          <view class="NLPcard_bottom_left_chat">NLP语义接口</view>
+          <view class="NLPcard_bottom_left_info">微信智言自然语言处理</view>
+        </view>
+        <view bindtap="goNLP" class="NLPcard_bottom_right">
+          试试
+        </view>
+      </view>
+    </view>
+    <view class="blast">
+      <view class="blast_top">
+        <image class="blast_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/nlpapi/bigBangBg.png"></image>
+      </view>
+      <view class="blast_bottom">
+        <view class="blast_bottom_left">
+          <view class="blast_bottom_left_chat">大爆炸</view>
+          <view class="blast_bottom_left_info">词法分析，分词和词性标注</view>
+        </view>
+        <view bindtap="goBlast" class="blast_bottom_right">
+          试试
+        </view>
+      </view>
+    </view>
+    <view class="microVision">
+      <view class="microVision_top">
+        <image class="microVision_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/veishi/veishi.png"></image>
+      </view>
+      <view class="microVision_bottom">
+        <view class="microVision_bottom_left">
+          <view class="microVision_bottom_left_chat">微视 短视频</view>
+          <view class="microVision_bottom_left_info">在微视看到不一样的视界</view>
+        </view>
+        <view bindtap="goMicroVision" class="microVision_bottom_right">
+          试试
+        </view>
+      </view>
+    </view>
+    <view class="game">
+      <view class="game_top">
+        <view class="game_top_content">
+          <view class="game_top_content_title">游戏</view>
+          <view class="game_top_content_para">Game</view>
+        </view>
+        <image class="game_top_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/game.png"></image>
+      </view>
+      <view class="game_bottom">
+        <block wx:for="{{gameList}}" wx:key="item">
+          <view bindtap="goGame" class="game_bottom_content" data-item="{{item}}">
+            <view class="game_bottom_content_img_view">
+              <image class="game_bottom_content_img{{index}}" src="{{item.url}}"></image>
+            </view>
+            <view class="game_bottom_content_title">{{item.title}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="weatherCard" style="height: {{weatherheight}}px">
+      <block wx:for="{{weatherCardList}}" wx:key="item">
+        <view bindtap="goWeatherCard" class="weatherCardList" data-item="{{item}}">
+          {{item.title}}
+        </view>
+      </block>
+    </view>
+    <view class="experience">
+      <view class="experience_top">
+        <view class="experience_top_title">示例体验</view>
+      </view>
+      <view class="experience_bottom">
+        <view class="treeplanting">
+          <image class="treeplanting_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/arrowIcon.png"></image>
+          <view bindtap="gotoPure" class="treeplanting_title">默认展示</view>
+        </view>
+        <view class="flameIcon">
+          <image class="flameIcon_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/flameIcon.png"></image>
+          <view bindtap="gotoChatCom" class="flameIcon_title">复写组件展示</view>
+        </view>
+        <view class="todayWeather">
+          <image class="todayWeather_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/weatherIcon.png"></image>
+          <view bindtap="gotoChatNoUI" class="todayWeather_title">NLU展示</view>
+        </view>
+        <view class="imageCom">
+          <image class="imageCom_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/imageCom.png"></image>
+          <view bindtap="goImageCom" class="imageCom_title">复写图片组件</view>
+        </view>
+        <view class="weatherCom">
+          <image class="weatherCom_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/weatherSun.png"></image>
+          <view bindtap="goweatherCom" class="weatherCom_title">复写天气组件</view>
+        </view>
+        <view style="clear: both;"></view>
+      </view>
+    </view>
+    <view class="queryBMI">
+      <view class="queryBMI_top">
+        <view class="queryBMI_top_content">
+          <view class="queryBMI_top_content_title">BMI体质指数查询</view>
+          <view class="queryBMI_top_content_para">如果不运动就会长胖了哦</view>
+        </view>
+        <image class="queryBMI_top_img" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/Bodybuilding.png"></image>
+      </view>
+      <view class="queryBMI_bottom">
+        <block wx:for="{{queryBMIList}}" wx:key="item">
+          <view bindtap="goBMI" class="queryBMI_bottom_content" data-item="{{item}}">
+            <view class="queryBMI_bottom_content_img_view">
+              <image class="queryBMI_bottom_content_img{{index}}" src="{{item.url}}"></image>
+            </view>
+            <view class="queryBMI_bottom_content_title">{{item.title}}</view>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="garbageCard" style="height: {{weatherheight}}px">
+      <view class="garbageCardTop">
+        <view class="garbageCardTop_left">
+          <view class="garbageCardTop_left_word">垃圾分类</view>
+          <view class="garbageCardTop_left_english">REFUSE CLASSIFICATIONG</view>
+        </view>
+        <image class="garbageCardTop_right" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/garbage.png"></image>
+      </view>
+      <block wx:for="{{garbageCardList}}" wx:key="item">
+        <view bindtap="goGarbage" class="garbageCardList" data-item="{{item}}">
+          {{item.title}}
+        </view>
+      </block>
+    </view>
+    <view class="chatCard">
+      <view class="chatCard_top">
+        <image class="chatCard_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/chatCardImage.png"></image>
+      </view>
+      <view class="chatCard_bottom">
+        <view class="chatCard_bottom_left">
+          <view class="chatCard_bottom_left_chat">聊天</view>
+          <view class="chatCard_bottom_left_info">可以和小微聊天，沟通感情</view>
+        </view>
+        <view bindtap="goChat" class="chatCard_bottom_right" data-item="{{chatTitle}}">
+          试试
+        </view>
+      </view>
+    </view>
+    <view class="idiomsCard" style="height: {{weatherheight}}px">
+      <view class="idiomsCardTop">
+        <view class="idiomsCardTop_left">
+          <view class="idiomsCardTop_left_word">成语接龙</view>
+          <view class="idiomsCardTop_left_english">Idiom Salon Game</view>
+        </view>
+        <image class="idiomsCardTop_right" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/chengyu.png"></image>
+      </view>
+      <block wx:for="{{idiomGuideList}}" wx:key="item">
+        <view bindtap="goIdiom" class="idiomsCardList" data-item="{{item}}">
+          {{item.title}}
+        </view>
+      </block>
+    </view>
+    <view class="encyclopediasCard">
+      <view class="encyclopediasCard_top">
+        <image class="encyclopediasCard_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/baike.png"></image>
+      </view>
+      <view class="encyclopediasCard_bottom">
+        <view class="encyclopediasCard_bottom_left">
+          <view class="encyclopediasCard_bottom_left_chat">百科</view>
+          <view class="encyclopediasCard_bottom_left_info">不懂的知识点可以问小微</view>
+        </view>
+        <view bindtap="goChat" class="encyclopediasCard_bottom_right" data-item="{{encyclopediasTitle}}">
+          试试
+        </view>
+      </view>
+    </view>
+    <view class="xiaowei">
+      <view class="xiaowei_top">
+        <image class="xiaowei_top_image" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/poet/img/xiaoweixieshi.png"></image>
+      </view>
+      <view class="xiaowei_bottom">
+        <view class="xiaowei_bottom_left">
+          <view class="xiaowei_bottom_left_chat">小微写诗</view>
+          <view class="xiaowei_bottom_left_info">一起畅游诗歌的海洋</view>
+        </view>
+        <view bindtap="goChat" class="xiaowei_bottom_right" data-item="{{xiaoweixieshiTitle}}">
+          试试
+        </view>
+      </view>
+    </view>
+    <view style="clear: both;height: 54px"></view>
+  </scroll-view>
+  <view class="footer">
+    <image bindtap="gotoChat" class="keyboard" data-item="keyboard" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/keyboard.png"></image>
+    <image bindtap="gotoChat" class="voiceCard" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/customVoiceBtn.png"></image>
+    <image bindtap="goWebview" class="questionIcon" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/pluginimage/questionIcon.png"></image>
+  </view>
+</view>

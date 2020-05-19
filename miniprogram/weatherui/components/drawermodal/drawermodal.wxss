@@ -26,6 +26,15 @@
   -o-border-radius: 20px;
 }
 
+.shareFriends {
+  border: none;
+  background: none;
+  width: 33.33%;
+  height: 100%;
+  position: absolute;
+  bottom: 1px
+}
+
 .soft-button-pushed-only {
   animation: fadeIn 0.3s linear;
   box-shadow: inset 9px 9px 9px 0 rgba(206, 206, 206, 0.3),

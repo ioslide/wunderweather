@@ -1,0 +1,22 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}"  scroll-duration="1000"  bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
+
+
+<view>
+
+  <sc-radio-group class="block" bindchange="themeRadioChange">
+    <view class="cu-list menu text-left" style="width: 100%;margin-top: 0;">
+      <label class="flex justify-left align-center flex-sub" >
+        <sc-radio label="图标1" value="图标1" style="width:100%;;border-bottom:1px solid #131313"></sc-radio>
+      </label>
+    </view>
+    <view class="cu-list menu text-left" style="width: 100%;margin-top: 0;">
+      <label class="flex justify-left align-center flex-sub" >
+        <sc-radio label="图标2" value="图标2" style="width:100%;;border-bottom:1px solid #131313"></sc-radio>
+      </label>
+    </view>
+  </sc-radio-group>
+
+</view>

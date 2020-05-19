@@ -1,0 +1,24 @@
+<view class="">
+    <block>
+        <block wx:if="{{welcomeArray}}">
+            <view class="">
+                <block wx:for="{{list}}" wx:key="item">
+                    <view class="text">
+                        <image class="header" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+                        <view class="leftView">
+        {{item}}
+      </view>
+                    </view>
+                </block>
+            </view>
+        </block>
+        <block wx:else>
+            <view class="text">
+                <image class="header" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+                <view class="leftView">
+                    <text>{{msg.content}}</text>
+                </view>
+            </view>
+        </block>
+    </block>
+</view>

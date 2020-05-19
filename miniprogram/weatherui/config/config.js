@@ -27,4 +27,4 @@ exports.default = {
   // gitHost:'https://git.weixin.qq.com/ioslide/weather.git',
   name: "XHY",
   description: ""
-};
+}

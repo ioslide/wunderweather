@@ -1,0 +1,30 @@
+<view class="container">
+    <view class="nav-wrap" style="width: 100vw; height: 240px;">
+        <view class="" style="height: {{status}}px"></view>
+        <view class="nav-title" style="position: relative;width: 100vw;text-align: center;height: {{navHeight}}px;line-height: {{navHeight}}px">
+            <view bindtap="back" style="cursor: pointer;position: absolute; top:{{(navHeight-16)/2}}px;left: 15px; width: 20px; height: 20px;">
+                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/nlpapi/blastArrow.png" style="cursor: pointer;position: absolute; top:0px; left: 0px; width: 9px;height: 16px;"></image>
+            </view>
+            <view class="words">
+        NLP语义接口
+      </view>
+        </view>
+    </view>
+    <scroll-view scrollY class="content" style="height: calc(100vh - {{statusBarHeight}}px); top:  -{{240-statusBarHeight}}px">
+        <view class="" style="height: {{240-statusBarHeight-91}}px; width: 100%;"></view>
+        <block wx:for="{{list}}" wx:key="item">
+            <view bindtap="goBlastDetail" class="content_card" data-item="{{item}}">
+                <view class="content_card_all">
+                    <view class="content_card_all_circle">
+                        <image class="content_card_all_circle_img" src="{{item.imgUrl}}"></image>
+                    </view>
+                    <view class="content_card_all_words">
+                        <view class="content_card_all_words_title">{{item.title}}</view>
+                        <view class="content_card_all_words_paras">{{item.description}}</view>
+                    </view>
+                </view>
+            </view>
+        </block>
+        <view class="" style="height: 15px; width: 100vw;"></view>
+    </scroll-view>
+</view>

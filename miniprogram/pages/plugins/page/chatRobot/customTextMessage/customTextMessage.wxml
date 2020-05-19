@@ -1,0 +1,202 @@
+<view class="container">
+    <view class="answer">
+        <!-- <image class="answerimage" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/answerImage.png"></image> -->
+        <block>
+            <block wx:if="{{!xiaoweiValue&&!reserve}}">
+                <view>
+                    <block>
+                        <block wx:if="{{!optionsValue}}">
+                            <view class="leftView">
+                                <block>
+                                    <block wx:if="{{isRitch}}">
+                                        <view>
+                                            <rich-text nodes="{{answer}}"></rich-text>
+                                            <block>
+                                                <block wx:if="{{linkArr.length}}">
+                                                    <view>
+                                                        <block wx:for="{{linkArr}}" wx:key="key">
+                                                            <view bindtap="tap" class="link" data-weburl="{{item.href}}">
+              {{item.name}}
+            </view>
+                                                        </block>
+                                                    </view>
+                                                </block>
+                                            </block>
+                                        </view>
+                                    </block>
+                                    <block wx:else>
+                                        <text>{{msg.content}}</text>
+                                    </block>
+                                </block>
+                                <block>
+                                    <block wx:if="{{flag}}">
+                                        <view class="imageView">
+                                            <image alt="" class="bg_img" src="{{url}}"></image>
+                                            <block>
+                                                <block wx:if="{{score!==0}}">
+                                                    <view class="scoreview">
+                                                        <view class="score">
+              评分:  {{score}}
+            </view>
+                                                    </view>
+                                                </block>
+                                            </block>
+                                            <block wx:for="{{listMR}}" wx:key="item">
+                                                <view bindtap="choose" class="first{{index}}" data-title="{{item.title}}">
+                                                    <image class="bg_img_sim bg_img{{index}}" src="{{item.url}}"></image>
+                                                    <view class="first_word{{index}}">
+                                                        <view class="simple_word">
+                {{item.title}}
+              </view>
+                                                    </view>
+                                                </view>
+                                            </block>
+                                        </view>
+                                    </block>
+                                </block>
+                            </view>
+                        </block>
+                    </block>
+                    <block>
+                        <block wx:if="{{optionsValue}}">
+                            <view class="microVision">
+                                <view class="microVisionOptions">
+                                    <view class="microVisionOptions_content">{{msg.content}}</view>
+                                    <block wx:for="{{options}}" wx:key="item">
+                                        <view bindtap="choosemicroVision" class="microVisionOptions_title" data-title="{{item.title}}">{{item.title}}</view>
+                                    </block>
+                                </view>
+                            </view>
+                        </block>
+                    </block>
+                </view>
+            </block>
+        </block>
+        <block>
+            <block wx:if="{{xiaoweiValue&&!reserve}}">
+                <view class="xiaoweiview">
+                    <view class="content">
+                        <block wx:for="{{arr}}" wx:key="item">
+                            <view class="xiaoweitext">
+                                <rich-text class="" nodes="{{item}}"></rich-text>
+                            </view>
+                        </block>
+                    </view>
+                    <view class="titleView">
+                        <view class="empty"></view>
+                        <view class="title">
+          {{query}}
+        </view>
+                    </view>
+                </view>
+            </block>
+        </block>
+        <block>
+            <block wx:if="{{reserve&&!xiaoweiValue}}">
+                <view class="" style="height:100%;min-width: 140px;">
+                    <block>
+                        <block wx:if="{{isRich}}">
+                            <rich-text bindtap="tap" class="text" nodes="{{answer}}"></rich-text>
+                        </block>
+                        <block wx:elif="{{showSlot}}">
+                            <view class="slot-box">
+                                <view class="slot-title slot-title-2">为您查到以下车次</view>
+                                <view class="slot-value-list">
+                                    <radio-group bindchange="" class="radio-group">
+                                        <block wx:for="{{candidates}}" wx:key="index">
+                                            <view>
+                                                <label>
+                                                    <view bindtap="sendMsg" class="info-box" data-index="{{index}}" data-msg="wechat">
+                                                        <radio class="radio" disabled="{{disabled}}" value="{{index}}"></radio>
+                                                        <view class="left info">
+                                                            <view class="time">
+                                      {{item.from_time}}
+                                  </view>
+                                                            <view class="location">
+                                      {{item.from}}
+                                  </view>
+                                                        </view>
+                                                        <view class="center">
+                                                            <view class="icon">
+                                                                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/train.png"></image>
+                                                            </view>
+                                                            <view class="line"></view>
+                                                            <view class="tips">{{item.tips}}</view>
+                                                        </view>
+                                                        <view class="right info">
+                                                            <view class="time">
+                                      {{item.to_time}}
+                                  </view>
+                                                            <view class="location">
+                                      {{item.to}}
+                                  </view>
+                                                        </view>
+                                                    </view>
+                                                </label>
+                                            </view>
+                                        </block>
+                                    </radio-group>
+                                </view>
+                            </view>
+                        </block>
+                        <block wx:elif="{{showFromLocation}}">
+                            <view class="slot-box slot-picker">
+                                <view class="slot-title">{{msg.content}}</view>
+                                <view class="slot-selector">
+                                    <picker mode="region" bindchange="bindFromPickerChange" range="{{fromArray}}"custom-item="{{customItem}}">
+                                        <view class="picker">
+                                            <view class="icon">
+                                                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/train.png" style="width:26px;height: 10px"></image>
+                                            </view>
+                                            <view class="select-text">
+                                                <block>
+                                                    <block wx:if="{{fromIndex>=0}}">{{fromArray[fromIndex]}}</block>
+                                                    <block wx:else>请选择</block>
+                                                </block>
+                                            </view>
+                                            <view class="arrow">
+                                                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/arrow.png" style="width:12px;height: 12px"></image>
+                                            </view>
+                                        </view>
+                                    </picker>
+                                </view>
+                            </view>
+                        </block>
+                        <block wx:elif="{{showToLocation}}">
+                            <view class="slot-box slot-picker">
+                                <view class="slot-title">{{msg.content}}</view>
+                                <view class="slot-selector">
+                                    <picker mode="region" bindchange="bindToPickerChange" range="{{toArray}}" custom-item="{{customItem}}">
+                                        <view class="picker">
+                                            <view class="icon">
+                                                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/train.png" style="width:26px;height: 10px"></image>
+                                            </view>
+                                            <view class="select-text">
+                                                <block>
+                                                    <block wx:if="{{toIndex>=0}}">{{toArray[toIndex]}}</block>
+                                                    <block wx:else>请选择</block>
+                                                </block>
+                                            </view>
+                                            <view class="arrow">
+                                                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/huoche/image/arrow.png" style="width:12px;height: 12px"></image>
+                                            </view>
+                                        </view>
+                                    </picker>
+                                </view>
+                            </view>
+                        </block>
+                        <block wx:else>
+                            <view>
+                                <block>
+                                    <block wx:if="{{msg.content}}">
+                                        <text class="text">{{msg.content}}</text>
+                                    </block>
+                                </block>
+                            </view>
+                        </block>
+                    </block>
+                </view>
+            </block>
+        </block>
+    </view>
+</view>

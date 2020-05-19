@@ -1,0 +1,48 @@
+<view class="container">
+  <!-- <image class="answerimage" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/answerImage.png"></image> -->
+
+    <!-- <view class="answer">
+      <view>{{weatherDis.answer}}</view>
+      <block wx:for="{{queryBMIList}}" wx:key="index">
+        <view bindtap="send" class="hrefWord" data-item="{{item}}">
+          {{item.description}}
+        </view>
+      </block>
+    </view> -->
+    <view class="weather-view">
+      <view class="top-view">
+        <view class="left-view">
+          <view class="nowTp-txt">{{nowtp}}</view>
+          <view class="nowTp-char-txt">°</view>
+        </view>
+        <view class="midd-view">
+          <view class="weather-icon">
+            <image class="weather-iconImg" src="https://openai.weixin.qq.com/mmspraiweb_node/dist/static/weather/{{weatherImg}}.png"></image>
+          </view>
+          <view class="weather-txt">{{weatherName}}</view>
+        </view>
+        <view class="right-view">
+          <view class="date-time">{{dateTime}} {{weekTime}}</view>
+          <view class="temperature-txt">{{mintp}}°~{{maxtp}}°</view>
+        </view>
+      </view>
+      <view class="bottom-view">
+        <block wx:for="{{weatherArray}}" wx:key="item">
+          <block>
+            <block wx:if="{{index!=0}}">
+              <view class="other-weather">
+                <view class="other-date">{{item.dateTime}}</view>
+                <view class="other-time">{{item.week}}</view>
+                <view class="other-weather-txt">{{item.condition}}</view>
+                <view class="other-icon">
+                  <image class="other-weather-icon" src="https://openai.weixin.qq.com/mmspraiweb_node/dist/static/weather/{{item.picture}}.png"></image>
+                </view>
+                <view class="other-temperature">{{item.min_tp}}° / {{item.max_tp}}°</view>
+              </view>
+            </block>
+          </block>
+        </block>
+      </view>
+    </view>
+
+</view>

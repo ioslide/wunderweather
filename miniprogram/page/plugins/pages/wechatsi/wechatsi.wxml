@@ -1,5 +1,0 @@
-<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
-
-<view style="height: 100vh;">
-    <chat bind:backHome="goBackHome" bind:queryCallback="getQueryCallback" bind:openWebview="openWebview" bind:openMiniProgram="openMiniProgram" />
-</view>

@@ -1,0 +1,73 @@
+<view class="container">
+    <view class="nav-wrap" style="width: 100vw; height: 240px;">
+        <view class="" style="height: {{status}}px"></view>
+        <view class="nav-title" style="position: relative;width: 100vw;text-align: center;height: {{navHeight}}px;line-height: {{navHeight}}px">
+            <view bindtap="back" style="cursor: pointer;position: absolute; top:{{(navHeight-16)/2}}px;left: 15px; width: 20px; height: 20px;">
+                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/nlpapi/blastArrow.png" style="cursor: pointer;position: absolute; top:0px; left: 0px; width: 9px;height: 16px;"></image>
+            </view>
+            <view class="words">
+        大爆炸
+      </view>
+        </view>
+    </view>
+    <scroll-view class="content" scrollY="{{true}}" style="height: calc(100vh - {{statusBarHeight}}px); top:  -{{240-statusBarHeight}}px">
+        <view class="" style="height: {{240-statusBarHeight-94}}px; width: 100%;"></view>
+        <view class="content_top">
+            <view class="content_top_title">功能体验</view>
+            <view class="content_top_para">输入一段想分析的文字</view>
+            <view class="section">
+                <textarea bindconfirm="bindconfirm" bindinput="bindinput" class="textarea" maxlength="{{-1}}" placeholder="请输入" value="{{value}}"></textarea>
+            </view>
+            <view class="switchview">
+                <switch bindchange="change" checked="{{checked}}" class="switch" color="rgba(101, 178, 255, 1)"></switch>
+                <view class="switch_word">混合颗粒：将相关联名词合并</view>
+            </view>
+            <image bindtap="btn" class="btnImage" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/nlpapi/btn.png"></image>
+        </view>
+        <view class="content_bottom">
+            <view class="terms">
+                <view class="terms_top {{terms_top_border===true?'terms_top_border':''}}">
+                    <block wx:for="{{checked?words_mix:words}}" wx:key="item">
+                        <view bindtap="chooseW" class="terms_top_card {{choosePOSs===item.date&&flag?'chooseWords':''}} {{currentIndex===index&&!flag?'chooseWords':''}}" data-code="{{item.date}}" data-index="{{index}}" data-name="{{item.data}}">{{item.data}}</view>
+                    </block>
+                    <view class="" style="clear: both;"></view>
+                </view>
+                <view class="terms_bottom">
+                    <block wx:for="{{checked?POSs_mix:POSs}}" wx:key="item">
+                        <view bindtap="chooseP" class="terms_bottom_card {{choosePOSs===item?'choosePOSs':''}}" data-code="{{item}}" data-index="{{index}}">{{tools.getPOSsCoding(item)}}</view>
+                    </block>
+                    <view class="" style="clear: both;"></view>
+                </view>
+            </view>
+            <view class="roperTerms">
+                <block>
+                    <block wx:if="{{entitiesBoolean}}">
+                        <view class="roperTerms_title">专有名词</view>
+                    </block>
+                </block>
+                <block wx:for="{{properNoun}}" wx:key="item.date">
+                    <block>
+                        <block wx:if="{{entitiesBoolean}}">
+                            <view class="name">
+                                <view class="name_left">
+                                    <view class="name_circle"></view>
+                                    <view class="name_title">{{tools.getEntity_types(item.date-0)}}</view>
+                                    <view class="" style="clear:both"></view>
+                                </view>
+                                <view class="name_right">
+                                    <block wx:for="{{item.data}}" wx:for-item="data" wx:key="item">
+                                        <view class="name_right_com">{{data}}</view>
+                                    </block>
+                                    <view class="" style="clear:both"></view>
+                                </view>
+                                <view class="" style="clear:both"></view>
+                            </view>
+                        </block>
+                    </block>
+                </block>
+            </view>
+        </view>
+        <view class="" style="height: 15px; width: 100vw;"></view>
+    </scroll-view>
+</view>
+<wxs module="tools" src="../../wxs/sub.wxs" />

@@ -1,0 +1,805 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" background-text-style="{{$.themeValue == 'light'?'dark':'light'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+
+<view id="top" class="{{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
+	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
+	</sc-capsule>
+</view>
+
+<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px " catchtouchmove="true">
+	<block wx:if="{{$.startScreen == 'auth'}}">
+		<view class="authScreenStep" style="left:0">
+			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view>
+					<view class="flex justify-center padding-15 align-center" bindtap="checkLocationAuth">
+						<image class="square-150" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
+					</view>
+					<view class="flex justify-center padding-15 align-center">
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+					</view>
+					<view class="flex justify-center align-center">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+					<view class="flex justify-center align-center margin-top-50" bindtap="authScreenNext" data-target="authFirstStep">
+						<button class="authFirstStepButton">开始</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">你好</text>
+					</view>
+					<view class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authSecondScreenLocation.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">地点</view>
+									<view class="text-gray text-d flex justify-between">用来确定天气预报所在的地点</view>
+								</view>
+							</view>
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authSecondScreenSave.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">存储</view>
+									<view class="text-gray text-d flex justify-between">用来本地化存储用户个性化设置</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="authScreenNextCell" bindtap="authScreenNext" data-target="authSecondStep">
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth*2}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
+					</view>
+					<view class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改授权</text>
+					</view>
+					<!-- <view class="flex justify-center align-center margin-top-75">
+						<view>
+							<view class="flex justify-center align-center " bindtap="autoGetLocation">
+								<view class="authFirstStepButton">自动定位</view>
+							</view>
+						</view>
+					</view>
+					<view class="flex justify-center align-center margin-top-25">
+						<view>
+							<view class="flex justify-center align-center" bindtap="manualGetNewLocation">
+								<view class="authFirstStepButton">手动选取位置</view>
+							</view>
+						</view>
+					</view> -->
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<!-- <view class="cu-item" bindtap="autoGetLocation"> -->
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenAutolocation.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">自动定位</view>
+									<view class="text-gray text-d flex justify-between">Automatic positioning</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="autoGetLocation"></sc-switch>
+							</view>
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenManuallocationn.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">手动选取位置</view>
+									<view class="text-gray text-d flex justify-between">Select location manually</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="manualGetNewLocation"></sc-switch>
+							</view>
+						</view>
+					</view>
+					<view class="authScreenPreCell" bindtap="authScreenBack" data-target="authSecondStep">
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenLeft.svg" class="square-35"></image>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth*3}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">最后</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">最後</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">At last</block>
+						</text>
+					</view>
+					<view class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">还有一些设置你需要核对</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">還有一些設置你需要核對</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Some settings need to check</block>
+						</text>
+					</view>
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<view class="cu-item" bindtap="showDrawerModal" data-target="themeRadio">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTheme.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">选择你最喜欢的外观</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">選擇你最喜歡的外觀</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Choose your favorite theme</block>
+									</view>
+								</view>
+							</view>
+							<!-- https://weather.ioslide.com/weather/authScreenTemperature.svg); -->
+							<view class="cu-item" bindtap="showDrawerModal" data-target="unit">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
+								</view>
+							</view>
+							<view class="cu-item" bindtap="showDrawerModal" data-target="language">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Chinese / English</block>
+									</view>
+								</view>
+							</view>
+							<view class="cu-item" bindtap="openDatePicker">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscription settings</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅即将出行的日期，并勾选持续订阅</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱即將出行的日期，並勾選持續訂閱</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscribe to weather for upcoming travel dates</block>
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="authScreenNextCell" bindtap="onAuthFinalScreen">
+						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+	<block wx:if="{{$.startScreen == 'poetry'}}">
+		<view class="flex justify-center align-center" style="height: 100%;">
+			<view class="flex">
+				<text animation="{{guideScreenTextAni}}" style="opacity:0" class="{{$.themeValue == 'light'?'text-grey':'text-white'}} poetry font-family-wencangshufang">{{poetry}}</text>
+			</view>
+		</view>
+	</block>
+	<block wx:if="{{$.startScreen == 'default'}}">
+		<view class="authScreenStep" style="left:0">
+			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view>
+					<view class="flex justify-center padding-15 align-center" bindtap="checkLocationAuth">
+						<image class="square-150" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
+					</view>
+					<view class="flex justify-center padding-15 align-center">
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+					</view>
+					<view class="flex justify-center align-center">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+</view>
+
+<sc-star themeValue="{{$.themeValue}}"></sc-star>
+
+<view class="root {{drawerModalName == 'DrawerModalR' || drawerModalName == 'DrawerModalB' || drawerModalName == 'DrawerModalL' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
+	<block wx:if="{{$.style.imageSwitchChange == true}}">
+		<view class="flex padding-5 justify-left margin-5" style="min-height:280px">
+			<view class="headBackground {{headBackgroundAni == true ?'imageBlurloaded' :''}}">
+				<!-- <sc-headImage indexHeadImageValue="{{$.indexHeadImageValue}}" networkType="{{networkType}}"></sc-headImage> -->
+
+				<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
+					<view class="flex square-100 align-center justify-center">
+						<image id="bingImage" class="square-100" src="{{bingImage}}" catchtouchmove="touchmove" style="background-size: cover;transform:translate({{x}}px,{{y}}px);background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+							<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+								<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
+
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
+
+								</block>
+							</block>
+						</image>
+						<view class="absolute left-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<!-- <image bindtap="navCopyrightlink" data-cur="bingDetail" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image> -->
+									<image bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								</view>
+							</view>
+						</view>
+						<view class="absolute right-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<image bindtap="navPreBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+								<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
+									<image bindtap="navNextBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+							</view>
+						</view>
+					</view>
+				</block>
+
+				<block wx:if="{{$.indexHeadImageValue == 'customize'}}">
+					<view class="flex square-100 align-center justify-center">
+						<image class="square-100" style="background-size: cover;" mode="aspectFill" src="{{cusImage}}"></image>
+						<view class="padding-15 {{hasCusImage == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="showDrawerModal" data-target="DrawerModalHeadImage">
+							<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/camera.svg"></image>
+						</view>
+					</view>
+				</block>
+
+				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
+					<view class="square-100" style="background-image: url('{{nasaImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="nasa">
+						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
+
+							</block>
+						</block>
+					</view>
+				</block>
+
+				<block wx:if="{{$.indexHeadImageValue == 'Weather'}}">
+					<view class="flex square-100 align-center justify-center">
+						<image id="bingImage" class="square-100" src="{{bingImage}}" catchtouchmove="touchmove" style="background-size: cover;transform:translate({{x}}px,{{y}}px);background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+						</image>
+						<view class="absolute left-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<!-- <image bindtap="navCopyrightlink" data-cur="bingDetail" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image> -->
+									<image bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								</view>
+							</view>
+						</view>
+						<view class="absolute right-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<image bindtap="navPreBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+								<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
+									<image bindtap="navNextBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+							</view>
+						</view>
+					</view>
+				</block>
+
+				<block wx:if="{{networkType == 'none' || networkType == 'unknown' || networkType == undefined}}">
+					<view class="networkType" bindtap="refreshLocation">
+						<view class="networkType-button">
+							<image class="{{refreshLocation == true ? 'refreshLocationAni':''}} square-30 margin-left-15" mode="aspectFit" src="../../weatherui/assets/images/weather/refresh.svg"></image>
+						</view>
+						<view class="text-df text-left text-white padding-left-10 padding-top-7">离线模式</view>
+						<view class="text-df text-left text-white padding-left-10 padding-top-5">上次更新时间:{{lastRefreshTime}}</view>
+					</view>
+				</block>
+			</view>
+		</view>
+	</block>
+
+	<view class="flex justify-left align-end padding-left-10 padding-bottom-0 padding-top-10" style="min-height:60px;width:100%">
+		<view class="text-xsl text-left font-family-wencangshufang {{$.themeValue == 'light'?'nowTemp-light':'nowTemp-dark'}}">
+			{{forecastData.realtime.nowTemp}}°<text class="text-grey text-xl font-weight-200">{{forecastData.daily[0].min}}/{{forecastData.daily[0].max}}</text>
+		</view>
+	</view>
+
+	<view class="flex padding-left-15 padding-bottom-3" style="min-height:20px;">
+		<view class="text-left text-grey text-df">{{curDetailTime}}</view>
+	</view>
+
+	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
+		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
+			{{forecastData.address}}·{{forecastData.realtime.skyconCN}}
+		</view>
+	</view>
+
+	<view class="flex padding-left-15" style="min-height:20px;">
+		<view class="text-left text-grey text-s padding-top-10">{{forecastData.realtime.wind.windLevel}} , {{forecastData.realtime.humidity}}</view>
+	</view>
+
+	<view class="flex padding-left-15" style="min-height:20px;">
+		<view class="text-left text-grey text-s padding-top-10">{{forecastData.hourlyKeypoint}}</view>
+	</view>
+
+	<block wx:if="{{$.style.hourlySwitchChange == true}}">
+		<view class="margin-top-25" bindtap="navChange" data-cur="hourly" style="min-height:180px;">
+			<scroll-view scroll-with-animation="true" scroll-x="true" scroll-y="false">
+				<view class="forecast-list margin-lr-15">
+					<view class="{{$.themeValue == 'light'?'forecast-item-light':'forecast-item-dark'}}" style="width:{{windowWidth/6-5}}px" wx:for="{{forecastData.hourly}}" wx:key="index">
+						<view class="{{$.themeValue == 'light'?'forecast-time-light':'forecast-time-dark'}}">
+							{{item.temp}}
+						</view>
+						<image class="forecast-weather" src="{{item.iconPath}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+						<view class="forecast-temp text-grey">{{item.time}}</view>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+	</block>
+	<block wx:if="{{$.style.detailSwitchChange == true}}">
+		<view class="cu-bar margin-top-15 {{$.themeValue == 'light'?'':'solid-bottom'}}" animation="{{firstObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">详情</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">詳情</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Details</block>
+				</text>
+			</view>
+			<view class="barRightIcon margin-right-0" bindtap="changeAirQuatityView" style="width: 50px;height: 30px;">
+				<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+			</view>
+		</view>
+		<view class="{{$.themeValue == 'light'?'padding-5':'padding-15'}}" id="firstObserver" animation="{{firstObserverAni}}" style="min-height:260px">
+			<view class="service-swiper">
+				<view class="service-swiper-item">
+					<view id="airQuatityItem" class="grid col-3 margin-bottom-15 text-center" style="width:100%">
+						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="service" wx:if="{{item&&index<8}}" wx:for="{{forecastData.serviceData}}" wx:key="index">
+							<view class="{{$.themeValue == 'light'?'item-inner-light':'item-inner-dark'}}">
+								<image class="square-28" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+								<text class="margin-top-5 text-sm {{$.themeValue == 'light'?'text-c9d7e6cc':'text-grey'}}">{{item.name}}</text>
+								<text class="margin-top-10 {{$.themeValue == 'light'?'cell-col-light':'cell-col-dark'}}">{{item.desc}}</text>
+							</view>
+						</view>
+					</view>
+					<view id="airQuatityRadar" class="grid col-1 margin-bottom-15 text-center opacity-0 absolute top-0" style="width:100%">
+						<view class="flex align-center justify-center">
+							<view class="square-250">
+								<f2 class="radarChart" canvas-id="radarChart" id="radarChart" opts="{{opts}}" config="{{radarChartConfig}}" />
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+
+		</view>
+	</block>
+
+	<block wx:if="{{$.style.dailySwitchChange == true}}">
+		<view class="cu-bar solid-bottom opacity-0" id='temperatureObserver' animation="{{temperatureObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来7天</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來7天</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Daily</block>
+				</text>
+			</view>
+			<view class="barRightIcon margin-right-0" bindtap="navChange" data-cur="daily" style="width: 50px;height: 30px;">
+				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
+			</view>
+		</view>
+		<view class="flex">
+			<view class="flex justify-center align-center" style="min-height:260px">
+				<!-- <temperature-canvas class="margin-tb-15" initChart="{{initChart}}" refreshChart="{{refreshChart}}" style="width:{{windowWidth}}px;height:200px" /> -->
+				<view class="temperature-container">
+					<!-- <image src="{{temperatureImage}}" style="position:absolute;width:{{temperatureImageWidth}}px;height:200px;"></image> -->
+					<f2 class="f2-chart" canvas-id="temperatureChart" id="temperatureChart" opts="{{opts}}" config="{{temperatureChartConfig}}" bind:setTemperatureImage="setTemperatureImage" />
+				</view>
+			</view>
+		</view>
+		<view class="flex margin-bottom-15 margin-left-5 opacity-0 {{$.themeValue == 'light'?'text-grey':'text-white'}} " bindtap="navChange" data-cur="daily" animation="{{temperatureObserverAni}}">
+			<view class="grid col-7 margin-bottom-15 text-center" style="width:100%">
+				<view class="daily-item flex" wx:for="{{forecastData.daily}}" wx:key="index" wx:if="{{item&&index<7}}">
+					<view class="flex align-end">
+						<view class="flex-sub text-center">
+							<image class="square-30 margin-top-10 margin-bottom-10 text-sm" src="{{item.iconPath}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+							<view class="daily-date text-sm text-grey">{{item.date}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+
+	<block wx:if="{{$.style.rainSwitchChange == true}}">
+		<view class="cu-bar solid-bottom opacity-0" id='rainObserver' animation="{{rainObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">降水·{{rainChartName}}</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">降水·{{rainChartName}}</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Rain·{{rainChartName}}</block>
+				</text>
+			</view>
+			<view class="barRightIcon margin-right-0" bindtap="changeRainChartData" style="width: 50px;height: 30px;">
+				<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+			</view>
+		</view>
+		<view class="flex opacity-0" animation="{{rainObserverAni}}" style="min-height:200px">
+			<view class="rain-container">
+				<f2 class="f2-chart" canvas-id="rainChart" id="rainChart" opts="{{opts}}" config="{{rainChartConfig}}" />
+			</view>
+		</view>
+	</block>
+
+	<block wx:if="{{$.style.aqiSwitchChange == true}}">
+		<view class="cu-bar margin-top-20 solid-bottom opacity-0" id='thirdObserver' animation="{{thirdObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">空气污染质量指数</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">空氣污染質量指數</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Air Quality Index</block>
+				</text>
+			</view>
+			<view class="action"></view>
+		</view>
+		<view class="flex padding-lr-15 opacity-0 padding-top-30" style="min-height:140px" animation="{{thirdObserverAni}}">
+			<view class="flex justify-start">
+				<view class="flex align-center">
+					<view class="text-left text-xxsl" style="font-weight:100;color:{{forecastData.realtime.aqiColor}};font-family: 'Lato', sans-serif;">
+						{{forecastData.realtime.airQuality.aqi}}
+					</view>
+				</view>
+			</view>
+			<view class="flex justify-start padding-left-15">
+				<view class="flex align-center justify-start">
+					<view class="flex flex-direction">
+						<view class="flex align-center">
+							<view class="text-xl {{$.themeValue == 'light'?'text-grey':'text-white'}} ">
+								{{forecastData.realtime.airQuality.aqiName}}
+							</view>
+						</view>
+						<view class="flex align-center">
+							<view class="text-xl margin-top-5 {{$.themeValue == 'light'?'text-c9d7e6cc':'text-grey'}}">
+								{{forecastData.realtime.airQuality.aqiDescription}}
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view class="padding-lr-15 opacity-0" animation="{{thirdObserverAni}}">
+			<view class="flex flex-wrap padding-bottom-15 {{$.themeValue == 'light'?'text-grey':'text-white'}}">
+				<view class="basis-xxs" style="height:4px">
+					<text class="text-xs" decode="{{true}}">0</text>
+				</view>
+				<view class="basis-xxs" style="height:4px">
+					<text class="text-xs" decode="{{true}}">50</text>
+				</view>
+				<view class="basis-xxs" style="height:4px">
+					<text class="text-xs" decode="{{true}}">100</text>
+				</view>
+				<view class="basis-xxs" style="height:4px">
+					<text class="text-xs" decode="{{true}}">150</text>
+				</view>
+				<view class="basis-xs" style="height:4px">
+					<text class="text-xs" decode="{{true}}">200</text>
+				</view>
+				<view class="basis-sm" style="height:4px">
+					<text class="text-xs" decode="{{true}}">300</text>
+				</view>
+			</view>
+
+			<view class="flex flex-wrap">
+				<view class="flex justify-end" style="flex-basis: {{(forecastData.realtime.airQuality.aqi-8)*100/500}}%;">
+					<view>
+						<view class="polute-line" decode="{{true}}"></view>
+					</view>
+				</view>
+			</view>
+
+			<view class="flex flex-wrap" style="padding-top: 2px;">
+				<view class="basis-xxs" style="background:#4ADC9B;height:4px"></view>
+				<view class="basis-xxs" style="background:#F5E878;height:4px"></view>
+				<view class="basis-xxs" style="background:#FC9F62;height:4px"></view>
+				<view class="basis-xxs" style="background:#FD4452;height:4px"></view>
+				<view class="basis-xs" style="background:#B044FC;height:4px"></view>
+				<view class="basis-sm" style="background:#AC3231;height:4px"></view>
+			</view>
+
+			<view class="flex padding-top-20 justify-between">
+				<view class="line-height-0 align-start">
+					<text class="text-sm text-grey" decode="{{true}}">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">优</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">優</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Good</block>
+					</text>
+				</view>
+				<view class="line-height-0 align-start">
+					<text class="text-sm text-grey letter-spacing-1" decode="{{true}}">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">严重污染</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">嚴重污染</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Hazardous</block>
+					</text>
+				</view>
+			</view>
+		</view>
+	</block>
+
+
+	<block wx:if="{{$.style.sunlightSwitchChange == true}}">
+		<view class="cu-bar margin-top-20 solid-bottom opacity-0" id='fourthObserver' animation="{{fourthObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}}  text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">日照</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">日照</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sun</block>
+				</text>
+			</view>
+			<view class="action"></view>
+		</view>
+
+		<view class="flex flex-wrap padding-lr-15 justify-center opacity-0 padding-bottom-0 margin-top-50 {{$.themeValue == 'light'?'border-bottom-f1f1f1':'border-bottom-1e1e1e'}} " animation="{{fourthObserverAni}}">
+			<view class="flex-sub flex align-end justify-end">
+				<view class="{{$.themeValue == 'light'?'sunriseDot-light':'sunriseDot-dark'}}"></view>
+			</view>
+			<view class="flex-twice flex justify-center">
+				<sunSet refreshSunset="{{refreshSunset}}" sunset="{{sunset}}" sunrise="{{sunrise}}"></sunSet>
+			</view>
+			<view class="flex-sub flex align-end justify-start">
+				<view class="{{$.themeValue == 'light'?'sunsetDot-light':'sunsetDot-dark'}}"></view>
+			</view>
+		</view>
+
+		<view class="flex flex-wrap padding-15 justify-center opacity-0 margin-top-15 {{$.themeValue == 'light'?'text-grey':'sun-text-fc9f62'}}" animation="{{fourthObserverAni}}">
+			<view class="basis-xs flex align-start justify-end">
+				{{sunrise}}
+			</view>
+			<view class="basis-df flex justify-center">
+			</view>
+			<view class="basis-xs flex align-start justify-start">
+				{{sunset}}
+			</view>
+		</view>
+	</block>
+	<block wx:if="{{$.style.radarSwitchChange == true}}">
+		<view class="cu-bar margin-top-50 solid-bottom opacity-0" id='radarObserver' animation="{{radarObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">雷达</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">雷達</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
+				</text>
+			</view>
+			<view class="barRightIcon margin-right-0" bindtap="navRadar" style="width: 50px;height: 30px;">
+				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
+			</view>
+		</view>
+		<view class="flex padding-15 opacity-0" animation="{{radarObserverAni}}" style="height:250px;width:100%">
+			<map id="map" latitude="{{forecastData.rainRadar.latitude}}" longitude="{{forecastData.rainRadar.longitude}}" scale="7" subkey="BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D" layer-style="{{$.themeValue == 'light'?'3':'2'}}" enable-zoom="false" enable-scroll="false" enable-rotate="false" style="width: 100%; height: 250px;">
+				<view style="width: 100%; height: 250px;">
+					<image src="{{forecastData.rainRadar.coverImage}}" mode="widthFix" style="width:{{windowWidth-30}}px;height:{{windowWidth-30}}px;position:absolute;left:0;top:-{{(windowWidth-30-250)/2}}px;">
+					</image>
+				</view>
+			</map>
+		</view>
+	</block>
+
+	<block wx:if="{{$.style.moonSwitchChange == true}}">
+		<view class="cu-bar margin-top-20 solid-bottom opacity-0" id='fifthObserver' animation="{{fifthObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
+				</text>
+			</view>
+			<view class="barRightIcon margin-right-0" bindtap="navChange" data-cur="moon" style="width: 50px;height: 30px;">
+				<text class="cuIcon-right {{$.themeValue == 'light' ? 'text-grey':'text-white'}} text-sm"></text>
+			</view>
+		</view>
+
+		<view class="flex padding-15 text-white opacity-0" bindtap="navChange" data-cur="moon" animation="{{fifthObserverAni}}">
+			<view class="moon-swiper padding-15">
+				<view class="moon-swiper-item">
+					<view class="grid col-3 margin-bottom-15 text-center" style="width:100%">
+						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="moon" wx:if="{{item&&index<3}}" wx:for="{{moonPhaseLists}}" wx:key="index">
+							<view class="item-phase-inner">
+								<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonPhaseName_Image}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+								<text class="margin-top-5 text-sm text-grey padding-top-15">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseName_zh_CN}}</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
+								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_en_US_en_GB}}</block>
+								</text>
+								<text class="margin-top-10 text-sm {{$.themeValue == 'light'?'moon-text-c9d7e6cc':'moon-text-grey'}}">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseDate_zh_CN}}</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseDate_zh_TW}}</block>
+								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseDate_en_US_en_GB}}</block>
+								</text>
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+
+	<block wx:if="{{$.style.windSwitchChange == true}}">
+		<view class="cu-bar {{$.themeValue == 'light'?'':'solid-bottom '}} opacity-0" id='sixthObserver' animation="{{sixthObserverAni}}">
+			<view class="action">
+				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">风速</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">風速</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Wind</block>
+				</text>
+			</view>
+			<view class="action"></view>
+		</view>
+
+		<view class="flex opacity-0" animation="{{sixthObserverAni}}">
+			<view class="{{$.themeValue == 'light'?'windcontainer-light':'windcontainer-dark'}}">
+				<view class="{{$.themeValue == 'light'?'sky-light':'sky-dark'}}">
+				</view>
+				<!-- <view class="sun"></view> -->
+				<view class="clouds">
+					<view class="birds">
+						<view class="bird bird-1">
+							<view class="wing left"></view>
+							<view class="body"></view>
+							<view class="wing right"></view>
+						</view>
+						<view class="bird bird-2">
+							<view class="wing left"></view>
+							<view class="body"></view>
+							<view class="wing right"></view>
+						</view>
+						<view class="bird bird-3">
+							<view class="wing left"></view>
+							<view class="body"></view>
+							<view class="wing right"></view>
+						</view>
+					</view>
+				</view>
+				<view class="{{$.themeValue == 'light'?'earth-light':'earth-dark'}}"></view>
+				<view class="wind-mills">
+					<view class="wind-mill wind-mill-1">
+						<view class="{{$.themeValue == 'light'?'foot-light':'foot-dark'}}"></view>
+						<view class="wings" style="animation: rotate 2s infinite;animation-timing-function: linear;">
+							<view class="wing"></view>
+						</view>
+					</view>
+					<view class="wind-mill wind-mill-2">
+						<view class="{{$.themeValue == 'light'?'foot-light':'foot-dark'}}"></view>
+						<view class="wings" style="animation: rotate 2s infinite;animation-timing-function: linear;">
+							<view class="wing"></view>
+						</view>
+					</view>
+					<view class="wind-mill wind-mill-3">
+						<view class="{{$.themeValue == 'light'?'foot-light':'foot-dark'}}"></view>
+						<view class="wings" style="animation: rotate 2s infinite;animation-timing-function: linear;">
+							<view class="wing"></view>
+						</view>
+					</view>
+					<view class="wind-mill wind-mill-4">
+						<view class="{{$.themeValue == 'light'?'foot-light':'foot-dark'}}"></view>
+						<view class="wings" style="animation: rotate 2s infinite;animation-timing-function: linear;">
+							<view class="wing"></view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<view class="flex justify-center align-center padding-15 opacity-0" animation="{{sixthObserverAni}}">
+			<view class="flex-between">
+				<view class="flex justify-center align-center text-grey text-xxxl" style="font-family: 'Lato', sans-serif;font-weight:100">
+					{{forecastData.realtime.wind.windSpeed}}km/h
+				</view>
+				<view class="flex justify-center align-center text-grey padding-top-15" style="font-family: 'Lato', sans-serif;">
+					{{forecastData.realtime.wind.windDirection}} </view>
+			</view>
+		</view>
+	</block>
+	<view class="{{$.themeValue == 'light'?'text-grey':'text-black'}} refer">Powered by XHY</view>
+</view>
+
+<view class='navSlide justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd' data-target="DrawerModalR" catchtouchmove="ture"></view>
+
+<view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
+
+<block wx:if="{{$.getLocationMethod == 'manual' || $.getLocationMethod == 'historyCity'}}">
+	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}}" bindtap="refreshLocation">
+		<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
+	</view>
+</block>
+
+<sc-crop wx:if="{{visible}}" size="{{size}}" src="{{src}}" cropSizePercent="{{cropSizePercent}}" borderColor="#ffffff" bindcropUpload="uploadCallback" bindcropClose="closeCallback" bindcropCrop="cropCallback"></sc-crop>
+
+<sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
+
+<view class="cu-modal {{modalName=='shareImage'?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">
+	<view class="shareImage-dialog margin-top-40" catchtap>
+		<canvasdrawer painting="{{painting}}" class="canvasdrawer" bind:getImage="eventGetImage" />
+		<view class="bg-img bg-white" style="background-image: url('{{shareImage}}');height: 350px;width:300px">
+		</view>
+		<view class="cu-bar bg-white" style="border-top:1px solid #131313">
+			<view class="action margin-0 flex-sub solid-left" bind:tap="eventSave" style="font-size:30rpx">保存到本地</view>
+		</view>
+		<view class="cu-bar" bindtap="hideModal">
+			<view class="action margin-0 flex-sub solid-left"><text class="text-white cuIcon-close"></text>
+			</view>
+		</view>
+	</view>
+</view>
+
+<!-- <view class="xhyicon flex padding-25 justify-center" animation="{{toXHYIManima}}">
+	<view class="buttoncontainer">
+		<navigator target="miniProgram" app-id="wx4ffcd811b31b23ac" path="yyf_company/pages/index/index" open-type='navigate'>
+			<image class="btn" src="https://weather.ioslide.com/aichat/customVoiceBtn.png" style="width:50px;height:50px"> </image>
+		</navigator>
+	</view>
+</view> -->
+
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg" />

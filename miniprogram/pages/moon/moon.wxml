@@ -1,0 +1,27 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
+
+<view>
+	<view class="{{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" wx:for="{{moonPhaseLists}}" wx:key="index" wx:if="{{item&&index<16}}">
+		<sc-cell cellHeight="80" subheader1Padding="5" right-icon="iconfont icon-cloudqueue" style="width:100%;" themeValue="{{$.themeValue}}">
+			<text slot="subheader">
+				<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseDate_zh_CN}}</block>
+				<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseDate_zh_TW}}</block>
+				<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseDate_en_US_en_GB}}</block>
+			</text>
+			<text slot="subheader1">
+				<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_zh_CN}}</block>
+				<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
+			</text>
+			<text slot="subbottom">{{item.moonPhaseName_en_US_en_GB}}</text>
+			<view slot="iconimageright">
+				<view class="flex align-center justify-center margin-10">
+					<image class="flex align-center justify-center moonIconCircle" mode="aspectFit" src="https://weather.ioslide.com/weather/moon/{{item.moonPhaseName_Image}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+				</view>
+			</view>
+		</sc-cell>
+	</view>
+</view>

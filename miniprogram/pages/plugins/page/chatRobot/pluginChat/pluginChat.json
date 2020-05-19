@@ -1,0 +1,15 @@
+{
+  "disableScroll": true,
+  "usingComponents": {
+    "chat": "plugin://chatRobot/chat",
+    "customoperateCard": "../customoperateCard/customoperateCard",
+    "customGuideCard": "../customGuideCard/customGuideCard",
+    "customWeatherMessage": "../customWeatherMessage/customWeatherMessage",
+    "customUnsupportedMessage": "../customUnsupportedMessage/customUnsupportedMessage",
+    "customTextMessage": "../customTextMessage/customTextMessage",
+    "customQueryMessage": "../customQueryMessage/customQueryMessage",
+    "customMiniprogramMessage": "../customMiniprogramMessage/customMiniprogramMessage",
+    "customWelcomeCard": "../customWelcomeCard/customWelcomeCard"
+
+  }
+}

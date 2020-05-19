@@ -1,0 +1,155 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText=""></sc-capsule>
+
+<view>
+	<view class="cu-list menu text-left" style="width: 100%;">
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页图片</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁圖片</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Index Image</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.imageSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="imageSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气特效</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">天氣特效</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Weather effects</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.weatherAniSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="weatherAniSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">详情列表</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">詳情列表</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Detail list</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.detailSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="detailSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来24小时</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來24小時</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">The next 24 hours</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.hourlySwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="hourlySwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来7天</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來7天</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Next 7 days</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.dailySwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="dailySwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">空气质量指数</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">空氣質量指數</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Air quality index</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.aqiSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="aqiSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">降水</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">降水</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Precipitation</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.rainSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="rainSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">日照轨迹</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">日照軌跡</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sunshine track</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.sunlightSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="sunlightSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">月相</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Lunar phase</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.moonSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="moonSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">风速</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">風速</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Wind speed</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.windSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="windSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">雷达</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">雷達</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.radarSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="radarSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}">
+			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
+				<text>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">屏幕常亮</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">屏幕常亮</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Keep screen on</block>
+				</text>
+				<view slot="action">
+					<sc-switch class="sc-switch" name="switch" checked="{{$.style.KeepScreenOnSwitchChange}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="KeepScreenOnSwitchChange"></sc-switch>
+				</view>
+			</sc-cell>
+		</label>
+	</view>
+</view>

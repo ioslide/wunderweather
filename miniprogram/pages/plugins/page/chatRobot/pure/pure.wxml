@@ -1,0 +1,20 @@
+<view class="container">
+    <view class="nav-wrap" style="width: 100vw; height: {{statusBarHeight}}px;">
+        <view class="" style="height: {{status}}px"></view>
+        <view class="nav-title" style="position: relative;width: 100vw;text-align: center;height: {{navHeight}}px;line-height: {{navHeight}}px">
+            <view bindtap="back" style="cursor: pointer;position: absolute; top:{{(navHeight-16)/2}}px;left: 15px; width: 20px; height: 20px;">
+                <image src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/arrow.png" style="cursor: pointer;position: absolute; top:0px; left: 0px; width: 9px;height: 16px;"></image>
+            </view>
+            <view class="">
+            默认展示
+        </view>
+        </view>
+    </view>
+    <block>
+        <block wx:if="{{showChat}}">
+            <view style="height: calc(100vh - {{statusBarHeight}}px);">
+                <chat bind:backHome="goBackHome" bind:queryCallback="getQueryCallback"></chat>
+            </view>
+        </block>
+    </block>
+</view>

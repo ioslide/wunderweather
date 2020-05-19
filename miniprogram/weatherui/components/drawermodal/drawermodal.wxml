@@ -81,7 +81,7 @@
 			</view>
 		</view>
 		<view class="flex padding-5 justify-center align-center" style="height: 20%;">
-			<view style="width:50%" bindtap="onDev" data-cur="sun">
+			<view style="width:50%" bindtap="navLive">
 				<view class="flex padding-5 justify-center align-center">
 					<view class="flex padding-5 justify-center align-center {{$.themeValue == 'light'?'soft-button-light':'soft-button-dark'}}">
 						<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == 'light'?'-light':''}}.svg"></image>
@@ -119,7 +119,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
 				</view>
 			</view>
-			<view style="width:50%" bindtap="navWechatsi" data-cur="wechatsi">
+			<view style="width:50%" bindtap="navChatRobot">
 				<view class="flex padding-5 justify-center align-center">
 					<view class="flex padding-5 justify-center align-center {{$.themeValue == 'light'?'soft-button-light':'soft-button-dark'}}">
 						<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/wind{{$.themeValue == 'light'?'-light':''}}.svg"></image>
@@ -140,7 +140,7 @@
 		<view class="flex padding-5 justify-center align-center" style="width: 100%;">
 			<block wx:if="{{drawerModalName=='DrawerModalB'}}">
 				<view style="width:33.33%">
-					<button openType="share" class="shareFriends"></button>
+					<button open-type="share" class="shareFriends"></button>
 					<!-- <canvas id="shareFriends-lottie" type="2d"  style="height:30px;width:30px"></canvas> -->
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/icon/shareFriends.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">分享朋友</view>
@@ -155,11 +155,15 @@
 				</view>
 			</block>
 			<block wx:if="{{drawerModalName=='DrawerModalHeadImage'}}">
-				<view style="width:40.40%" bindtap="chooseCropImage" data-type="album">
+				<view style="width:33.33%" bindtap="chooseCropImage" data-type="album">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/album1.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">相册</view>
 				</view>
-				<view style="width:40.40%" bindtap="chooseCropImage" data-type="camera">
+				<view style="width:33.33%">
+					<image mode="widthFix" src="https://weather.ioslide.com/weather/imageAlbum.svg" style="height:30px;width:30px"></image>
+					<view style="color:#010101">图库</view>
+				</view>
+				<view style="width:33.33%" bindtap="chooseCropImage" data-type="camera">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/camera1.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">拍摄</view>
 				</view>
@@ -189,7 +193,7 @@
 			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
 				<view class="cu-card dynamic" data-curdetaildata="{{item}}" bindtap="setHistoryCityLocation">
 					<view class="cu-item shadow margin-3" style="height:{{(windowHeight-CustomBar)/4}}px;">
-						<view class="flex" style="height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
+						<view class="flex" style=";background-size: cover;height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
 							<view class="flex-twice">
 								<view class="flex align-start margin-left-10 margin-top-20 " style="width: {{windowWidth/2.5}}px;height:30px;">
 									<text class="ellipsis-text font-weight-300 text-white text-xxl">{{item.address}}</text>

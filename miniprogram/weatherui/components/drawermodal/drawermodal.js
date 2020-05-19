@@ -54,7 +54,14 @@ create.Component(store, {
       })
     },
   },
-
+  onShareAppMessage(a) {
+    const t = this
+    return {
+      title: '奇妙天气',
+      path: "/pages/index/index",
+      imageUrl:"https://teaimg.ioslide.com/weather/onShareAppMessage.png"
+    };
+  },
   methods: {
     rateChange: function (e) {
       this.setData({
@@ -101,9 +108,9 @@ create.Component(store, {
         url: '../setting/about/about'
       });
     },
-    navWechatsi() {
+    navChatRobot() {
       wx.navigateTo({
-        url: '../plugins/pages/wechatsi/wechatsi'
+        url: '../plugins/page/chatRobot/pluginChat/pluginChat'
       });
     },
     onDev() {
@@ -113,8 +120,28 @@ create.Component(store, {
         content: t.store.data.languageValue == 'zh_TW' ? '不要期待' : t.store.data.languageValue == 'zh_CN' ? '不要期待' : 'Do not expect'
       })
     },
-    chooseCropImage() {
-      this.triggerEvent('chooseCropImage')
+    navLive(){
+      wx.cloud.callFunction({
+        name: 'getLiveRoomLists',
+        success: res => {
+          log(res)
+          let roomId = [3]
+          let customParams = encodeURIComponent(JSON.stringify({ path: 'pages/index/index', pid: 1 }))
+          wx.navigateTo({
+              url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
+          })
+        },
+        fail: err => {
+          log(err)
+        }
+      })
+
+    },
+    chooseCropImage(e) {
+      let eventDetail = {
+        type: e.currentTarget.dataset.type
+      }
+      this.triggerEvent('chooseCropImage',eventDetail)
     },
     openDatePicker() {
       this.triggerEvent('openDatePicker')

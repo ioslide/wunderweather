@@ -1,0 +1,31 @@
+<view>
+    <block>
+        <block wx:if="{{recording&&msg.content==''}}">
+            <image class="recordingView" src="https://res.wx.qq.com/mmspraiweb_node/dist/static/openaiplugin/img/recording.gif"></image>
+        </block>
+    </block>
+    <block>
+        <block wx:if="{{msg.content!=''}}">
+            <view class="query">
+                <block>
+                    <block wx:if="{{!flag}}">
+                        <view class="rightView">{{msg.content}}</view>
+                    </block>
+                </block>
+                <block>
+                    <block wx:if="{{flag}}">
+                        <view class="xiaoweiQuery">
+                            <view class="rightView2">{{msg.content}}</view>
+                            <image class="bird" src="http://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/bird.png"></image>
+                            <image class="mountain" src="http://res.wx.qq.com/mmspraiweb_node/dist/static/xieshi/mountain.png"></image>
+                        </view>
+                    </block>
+                </block>
+                <view class="queryimageview">
+                    <open-data class="queryimage" type="userAvatarUrl"></open-data>
+                </view>
+            </view>
+        </block>
+    </block>
+    <view style="clear: both;"></view>
+</view>

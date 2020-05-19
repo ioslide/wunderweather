@@ -1,20 +1,20 @@
 {
   "pages": [
-    "page/index/index",
-    "page/bingLists/bingLists",
-    "page/bingDetail/bingDetail",
-    "page/daily/daily",
-    "page/hourly/hourly",
-    "page/moon/moon",
-    "page/nasa/nasa",
-    "page/promode/promode",
-    "page/setting/setting",
-    "page/setting/pro/pro",
-    "page/setting/customstyle/customstyle",
-    "page/setting/customicon/customicon",
-    "page/setting/about/about",
-    "page/rain/rain",
-    "page/radar/radar"
+    "pages/index/index",
+    "pages/bingLists/bingLists",
+    "pages/bingDetail/bingDetail",
+    "pages/daily/daily",
+    "pages/hourly/hourly",
+    "pages/moon/moon",
+    "pages/nasa/nasa",
+    "pages/promode/promode",
+    "pages/setting/setting",
+    "pages/setting/pro/pro",
+    "pages/setting/customstyle/customstyle",
+    "pages/setting/customicon/customicon",
+    "pages/setting/about/about",
+    "pages/rain/rain",
+    "pages/radar/radar"
   ],
   "window": {
     "navigationStyle": "custom",
@@ -44,12 +44,12 @@
       "version": "1.1.16",
       "provider": "wx8c631f7e9f2465e1"
     },
-    "joinWxGroup":{
-      "version": "1.0.2",
-      "provider": "wxaae6519cee98d824"
+    "WechatSI": {
+      "version": "0.3.4",
+      "provider": "wx069ba97219f66d99"
     }
   },
-  "requiredBackgroundModes": ["audio"],
+  "requiredBackgroundModes": ["audio", "location"],
   "navigateToMiniProgramAppIdList": [
     "wx4ffcd811b31b23ac",
     "wx7b4bbc2d9c538e84",
@@ -57,22 +57,44 @@
   ],
   "usingComponents": {
     "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule",
-    "drawermodal":"/weatherui/components/drawermodal/drawermodal",
+    "drawermodal": "/weatherui/components/drawermodal/drawermodal",
     "f2": "@antv/wx-f2"
   },
   "subPackages": [
     {
-      "root": "page/plugins/",
-      "name":"wechatsi",
+      "root": "pages/plugins/",
+      "name": "chatRobot",
       "pages": [
-        "pages/wechatsi/wechatsi"
+        "page/chatRobot/pluginChat/pluginChat",
+        "page/chatRobot/customWelcomeCard/customWelcomeCard",
+        "page/chatRobot/base/base",
+        "page/chatRobot/blast-detail/blast-detail",
+        "page/chatRobot/costomImageMessage/costomImageMessage",
+        "page/chatRobot/customGuideCard/customGuideCard",
+        "page/chatRobot/customh5Message/customh5Message",
+        "page/chatRobot/customMiniprogramMessage/customMiniprogramMessage",
+        "page/chatRobot/customoperateCard/customoperateCard",
+        "page/chatRobot/customQuery/customQuery",
+        "page/chatRobot/customQueryMessage/customQueryMessage",
+        "page/chatRobot/customTextMessage/customTextMessage",
+        "page/chatRobot/customUnsupportedMessage/customUnsupportedMessage",
+        "page/chatRobot/home/home",
+        "page/chatRobot/index/index",
+        "page/chatRobot/nlpSemantics/nlpSemantics",
+        "page/chatRobot/noUI/noUI",
+        "page/chatRobot/pure/pure",
+        "page/chatRobot/webviewPage/webviewPage",
+        "page/chatRobot/welcomeCard/welcomeCard"
+
       ]
     }
   ],
   "preloadRule": {
-    "page/index/index": {
+    "pages/index/index": {
       "network": "all",
-      "packages": ["wechatsi"]
+      "packages": [
+        "chatRobot"
+      ]
     }
   },
   "sitemapLocation": "sitemap.json"

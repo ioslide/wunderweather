@@ -1,0 +1,30 @@
+<block>
+    <block wx:if="{{!inputing&&!isShowGuideView}}">
+        <view class="bottom-operate-view" style="height: {{height}}px">
+            <view catchtap="chooseType" class="list-btn" data-type="input">
+                <image class="list-img" src="https://teaimg.ioslide.com/aichat/ic_keyboard.png"></image>
+            </view>
+            <view bindtouchcancel="inputVoiceEnd" bindtouchend="inputVoiceEnd" bindtouchstart="inputVoiceStart" class="voice-btn">
+                <image class="voice-img" src="https://teaimg.ioslide.com/aichat/aichatcustomVoiceBtn.png"></image>
+            </view>
+            <view catchtap="showGuideView" class="input-btn">
+                <image class="input-img" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+            </view>
+        </view>
+    </block>
+</block>
+<block>
+    <block wx:if="{{inputing&&!isShowGuideView}}">
+        <view class="bottom-operate-view">
+            <view catchtap="chooseType" class="list-btn-inputView" data-type="voice">
+                <image class="list-img2" src="https://teaimg.ioslide.com/aichat/voiceBtn.png"></image>
+            </view>
+            <view class="input-btn-inputView">
+                <input bindblur="tuneDownInput" bindconfirm="bindconfirmInput" bindinput="bindInput" class="input-view" confirmType="send" cursorSpacing="10" focus="{{focus}}" placeholder="请输入" placeholderStyle="color: #c4c5c7" type="text" value="{{inputText}}"></input>
+            </view>
+            <view catchtap="showGuideView" class="voice-btn-inputView">
+                <image class="voice-img2" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+            </view>
+        </view>
+    </block>
+</block>
