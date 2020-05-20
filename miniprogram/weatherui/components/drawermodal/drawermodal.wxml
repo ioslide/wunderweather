@@ -39,7 +39,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
 				</view>
 			</view>
-			<view style="width:50%" bindtap="onDev" data-cur="todayIndex">
+			<view style="width:50%" bindtap="_scrollTo" data-target="sunView">
 				<view class="flex padding-5 justify-center align-center">
 					<view class="flex padding-5 justify-center align-center {{$.themeValue == 'light'?'soft-button-light':'soft-button-dark'}}">
 						<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/sunrise{{$.themeValue == 'light'?'-light':''}}.svg"></image>
@@ -93,7 +93,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Weather Live</block>
 				</view>
 			</view>
-			<view style="width:50%" bindtap="onDev" data-cur="rain">
+			<view style="width:50%" bindtap="_scrollTo" data-target="rainChart">
 				<view class="flex padding-5 justify-center align-center">
 					<view class="flex padding-5 justify-center align-center {{$.themeValue == 'light'?'soft-button-light':'soft-button-dark'}}">
 						<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/airIndex{{$.themeValue == 'light'?'-light':''}}.svg"></image>

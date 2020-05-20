@@ -18478,7 +18478,6 @@
 							node.height = height * pixelRatio;
 							t.data.config['context'] = context
 							const chart = func(lib, t.data.config);
-							console.log('chart config',t.data.config)
 							if (chart) {
 								this.chart = chart;
 								console.log('[wx-f2 chart]', chart)

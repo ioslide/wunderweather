@@ -1,0 +1,3 @@
+<view id="marchingAnts" role="progressbar" class="{{canLoading == true ? 'progress-indicator' : ''}}">
+	<view></view>
+</view>

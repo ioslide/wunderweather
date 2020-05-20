@@ -1,7 +1,7 @@
 <page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" background-text-style="{{$.themeValue == 'light'?'dark':'light'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
-
+<loading id="loading"/>
 <view id="top" class="{{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
 	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
 	</sc-capsule>
@@ -104,7 +104,7 @@
 									<view class="text-lg text-4a5568">手动选取位置</view>
 									<view class="text-gray text-d flex justify-between">Select location manually</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="{{$.getLocationMethod == 'manual' ? true : false}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="manualGetNewLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="{{isManualGetNewLocation}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="manualGetNewLocation"></sc-switch>
 							</view>
 						</view>
 					</view>
@@ -601,12 +601,12 @@
 			<view class="action"></view>
 		</view>
 
-		<view class="flex flex-wrap padding-lr-15 justify-center opacity-0 padding-bottom-0 margin-top-50 {{$.themeValue == 'light'?'border-bottom-f1f1f1':'border-bottom-1e1e1e'}} " animation="{{fourthObserverAni}}">
+		<view id="sunView" class="flex flex-wrap padding-lr-15 justify-center opacity-0 padding-bottom-0 margin-top-50 {{$.themeValue == 'light'?'border-bottom-f1f1f1':'border-bottom-1e1e1e'}} " animation="{{fourthObserverAni}}">
 			<view class="flex-sub flex align-end justify-end">
 				<view class="{{$.themeValue == 'light'?'sunriseDot-light':'sunriseDot-dark'}}"></view>
 			</view>
 			<view class="flex-twice flex justify-center">
-				<sunSet refreshSunset="{{refreshSunset}}" sunset="{{sunset}}" sunrise="{{sunrise}}"></sunSet>
+				<sunSet id="refreshSunset" refreshSunset="{{refreshSunset}}" sunset="{{sunset}}" sunrise="{{sunrise}}"></sunSet>
 			</view>
 			<view class="flex-sub flex align-end justify-start">
 				<view class="{{$.themeValue == 'light'?'sunsetDot-light':'sunsetDot-dark'}}"></view>
@@ -802,4 +802,4 @@
 	</view>
 </view> -->
 
-<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg" />
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:_scrollTo="_scrollTo" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg" />

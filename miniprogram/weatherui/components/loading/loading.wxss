@@ -1,0 +1,61 @@
+
+
+::-ms-expand {
+  margin: 0 6px 0 20px;
+  background-color: transparent;
+  border: 0;
+}
+
+.progress-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress-indicator>view {
+  height: 3px;
+  position: absolute;
+  width: 33%;
+  z-index: 100;
+  background: linear-gradient(to right, rgba(0, 103, 184, 0) 0, #C1D0DC 50%, rgba(0, 103, 184, 0) 100%);
+  -webkit-animation: progressLine 3s ease 0s infinite normal none;
+  -moz-animation: progressLine 3s ease 0s infinite normal none;
+  -o-animation: progressLine 3s ease 0s infinite normal none;
+  animation: progressLine 3s ease 0s infinite normal none;
+}
+@-webkit-keyframes progressLine {
+  0% {
+    left: -30%;
+    opacity: 0;
+  }
+
+  25%,
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes progressLine {
+  0% {
+    left: -30%;
+    opacity: 0;
+  }
+
+  25%,
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}

@@ -74,6 +74,7 @@ create(store, {
     refreshRadar: false,
     canBlurRoot: false,
     isHourlyRainChart:true,
+    isManualGetNewLocation:false,
     rainChartName:'小时',
     isChangeSetting: false,
     hasCusImage: false,
@@ -165,6 +166,10 @@ create(store, {
       }
     }
     if (location == null) {
+      log('[location == null]')
+      t.setData({
+        isManualGetNewLocation:false
+      })
       // log(`[chooseLocation.getLocation()] =>`, location)
       // if(t.store.data.getLocationMethod == auto){
       // }else{
@@ -175,6 +180,7 @@ create(store, {
     if (location !== null) {
       log(`[chooseLocation.getLocation()] =>`, location)
       t.setData({
+        isManualGetNewLocation:true,
         'forecastData.city': location.city,
         'forecastData.address': location.name,
         'longitude': location.longitude,
@@ -516,11 +522,9 @@ create(store, {
     });
   },
   setHistoryCityLocation(e) {
-    log(e)
     const t = this
     var historyCityData = e.detail.historyCityData
     log('[setHistoryCityLocation]', historyCityData)
-
     t.setData({
       'latitude': historyCityData.latitude,
       'longitude': historyCityData.longitude,
@@ -552,7 +556,7 @@ create(store, {
         let weatherData = a.data.result;
         const refreshOrInitChart = (canRefreshChart) => {
           const initChart = () => {
-            log('initChart')
+            log('[initChart]')
             const temperatureChartComponent = t.selectComponent('#temperatureChart');
             temperatureChartComponent.lazyInitTemperatureChart(t.initTemperatureChart);
             const rainChartComponent = t.selectComponent('#rainChart');
@@ -579,6 +583,7 @@ create(store, {
           }
         }
         (async (weatherData, canRefreshChart) => {
+          await t.loadingProgress(true)
           await t.setData({
             'canBlurRoot': true
           })
@@ -586,11 +591,12 @@ create(store, {
           await t.getBingImage()
           await t.screenFadeOut()
           // await initChart()
-          await t.scrollToTop()
+          await t.scrollTo('#top')
           await t.setData({
             'canBlurRoot': false
           })
           await refreshOrInitChart(canRefreshChart)
+          await t.loadingProgress(false)
           app.saveData("forecastData", weatherData)
           t.checkNetWorkType()
         })(weatherData, canRefreshChart)
@@ -641,7 +647,7 @@ create(store, {
         aqiColor: realtimeAqiColor
       }
       const reduceHistoryCityData = (reduceData) => {
-        let historyCityList = wx.getStorageSync("historyCityList") || []
+        let historyCityList = wx.getStorageSync('historyCityList') || []
         let hash = {}
         historyCityList.unshift(reduceData)
         historyCityList = historyCityList.reduce(
@@ -651,12 +657,11 @@ create(store, {
           }, [])
         return historyCityList
       }
-      var count = _.random(1,10),keyword = transWeatherName.weatherSkycon[realtimeSkycon]
+      var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
       app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
-        let randomBgIndex = _.random(1,count)
-        log('randomBgIndex',randomBgIndex)
-        let backgroundBg = result.data.data[randomBgIndex-1].url.p4
-        log('backgroundBg',backgroundBg,keyword)
+        let randomBgIndex = _.random(0,result.data.data.length)
+        let backgroundBg = result.data.data[randomBgIndex].url.p4
+        log('[backgroundBg]',backgroundBg,keyword)
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
@@ -671,10 +676,10 @@ create(store, {
           longitude: that.data.longitude
         }
         let historyCityList = reduceHistoryCityData(data)
-        app.saveData("historyCityList", historyCityList)
         that.setData({
           'historyCityList': historyCityList
         })
+        app.saveData("historyCityList", historyCityList)
       }).catch((err) => {
         console.log(err);
       })
@@ -759,14 +764,14 @@ create(store, {
         if (chartsMargin < 0) {
           chartsMargin = ~~(d.temperature[f].min) + 20
         }
-        if (f == 0) {
-          that.setData({
-            'updateSunsetTime': d.astro[f].date,
-            'sunrise': d.astro[f].sunrise.time,
-            'sunset': d.astro[f].sunset.time,
-            'refreshSunset': true
-          })
-        }
+        // if (f == 0) {
+        //   that.setData({
+        //     'updateSunsetTime': d.astro[f].date,
+        //     'sunrise': d.astro[f].sunrise.time,
+        //     'sunset': d.astro[f].sunset.time,
+        //     'refreshSunset': true
+        //   })
+        // }
         const getWeek = (l) => {
           let tweek = ''
           if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
@@ -1011,7 +1016,7 @@ create(store, {
         let copyrightlink = 'https://bing.ioslide.com' + bingImageLists[0].copyrightlink
         let bingImage = 'https://cn.bing.com' + bingImageLists[0].url
         let enddate = bingImageLists[0].enddate
-        log('copyrightlink',copyrightlink)
+        log('[copyrightlink]',copyrightlink)
         t.setData({
           copyrightlink:copyrightlink,
           bingIndex : 0,
@@ -1260,15 +1265,15 @@ create(store, {
   navWechatsi(){
     wx.navigateTo({
       url: '../plugins/page/wechatsi/wechatsi'
-    });
+    })
   },
   onPullDownRefresh() {
     const t = this
     log(`[onPullDownRefresh]`, t.store.data.startScreen)
+    let time = util.formatDate(new Date())
+    let date = util.getDates(7, time)
+    app.saveData("lastRefreshTime", date[0].time)
     if (t.store.data.startScreen !== 'auth') {
-      let time = util.formatDate(new Date())
-      let date = util.getDates(7, time)
-      app.saveData("lastRefreshTime", date[0].time)
         (async () => {
           await t.setData({
             'canBlurRoot': true
@@ -1381,9 +1386,9 @@ create(store, {
         page: 'pages/index/index',
         unit: t.store.data.unitValue,
         language: t.store.data.languageValue,
-        latitude: t.data.latitude,
         city: t.data.forecastData.city,
         startTime: startTime,
+        latitude: t.data.latitude,
         longitude: t.data.longitude,
         templateId: templateId,
         done: false
@@ -1605,6 +1610,22 @@ create(store, {
         // log('[firstObserver] => end')
       }
     })
+    wx.createIntersectionObserver().relativeToViewport().observe('#refreshSunset', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        log('[refreshSunset] => start')
+        ani.opacity(1).step()
+        t.setData({
+          'updateSunsetTime': t.data.forecastData.daily[0].astro.date,
+          'sunrise': t.data.forecastData.daily[0].astro.sunrise,
+          'sunset': t.data.forecastData.daily[0].astro.sunset,
+          'refreshSunset': true
+        })
+      }
+      if (res.boundingClientRect.top < 0) {
+        // log('[refreshSunset] => end')
+      }
+    })
+
     wx.createIntersectionObserver().relativeToViewport().observe('#temperatureObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[temperatureObserver] => start')
@@ -1949,14 +1970,27 @@ create(store, {
     // event()
     app.changeStorage('getLocationMethod', 'auto')
   },
-  scrollToTop() {
+  scrollTo(viewId) {
     let query = wx.createSelectorQuery();
-    query.select("#top").boundingClientRect();
+    query.select(viewId).boundingClientRect();
     query.selectViewport().scrollOffset()
     query.exec((res) => {
       if (res[0] && res[1])
         wx.pageScrollTo({
           scrollTop: res[0].top + res[1].scrollTop,
+          duration: 1200
+        });
+    });
+  },
+  _scrollTo(e) {
+    const t = this
+    let query = wx.createSelectorQuery();
+    query.select(e.detail.viewId).boundingClientRect();
+    query.selectViewport().scrollOffset()
+    query.exec((res) => {
+      if (res[0] && res[1])
+        wx.pageScrollTo({
+          scrollTop: res[0].top + res[1].scrollTop - t.data.windowHeight/3,
           duration: 1200
         });
     });
@@ -2363,5 +2397,15 @@ create(store, {
       chartData.push(u);
     }
     return chartData
+  },
+  loadingProgress(canLoading){
+    const t = this
+    log('[loading]',canLoading)
+    const loadingComponent = t.selectComponent('#loading');
+    if(canLoading == true){
+      loadingComponent.startLoading();
+    }else{
+      loadingComponent.stopLoading();
+    }
   }
 });

@@ -31,10 +31,12 @@ create.Component(store, {
       observer: function () {
         // log(this)
         const t = this
-        if (t.data.drawerModalName == "DrawerModalL") {
+        log('[drawerModalName]',t.properties.drawerModalName)
+        if (t.properties.drawerModalName == "DrawerModalL") {
           var pages = getCurrentPages();
           var currPage = pages[pages.length - 1]
           var historyCityList = currPage.data.historyCityList
+          log('historyCityList',historyCityList)
           t.setData({
             historyCityList: historyCityList
           })
@@ -44,7 +46,10 @@ create.Component(store, {
   },
   lifetimes: {
     ready: function () {},
-    attached: function () {
+    attached: function () {},
+  },
+  pageLifetimes: {
+    show: function() {
       this.setData({
         StatusBar: app.globalData.StatusBar,
         CustomBar: app.globalData.CustomBar,
@@ -53,6 +58,7 @@ create.Component(store, {
         windowHeight: app.globalData.windowHeight
       })
     },
+    hide: function() {}
   },
   onShareAppMessage(a) {
     const t = this
@@ -169,6 +175,14 @@ create.Component(store, {
         modalName: modalName
       }
       this.triggerEvent('savePostImg', eventDetail)
+    },
+    _scrollTo(e){
+      this.hideDrawerModal()
+      log(e.currentTarget.dataset.target)
+      let eventDetail = {
+        viewId: '#' + e.currentTarget.dataset.target
+      }
+      this.triggerEvent('_scrollTo', eventDetail)
     },
     onShareAppMessage(a) {
       const t = this

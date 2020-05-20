@@ -1,9 +1,7 @@
 const log = console.log.bind(console)
 const warn = console.warn.bind(console)
 var chatRobot = requirePlugin("chatRobot");
-import { promisifyAll, promisify } from 'miniprogram-api-promise';
-const wxp = {}
-promisifyAll(wx, wxp)
+
 // const group = console.group.bind(console)
 // const groupEnd = console.groupEnd.bind(console)
 

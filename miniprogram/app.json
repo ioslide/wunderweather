@@ -58,6 +58,9 @@
   "usingComponents": {
     "sc-capsule": "/weatherui/components/sc-capsule/sc-capsule",
     "drawermodal": "/weatherui/components/drawermodal/drawermodal",
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group",
+    "loading": "/weatherui/components/loading/loading",
     "f2": "@antv/wx-f2"
   },
   "subPackages": [

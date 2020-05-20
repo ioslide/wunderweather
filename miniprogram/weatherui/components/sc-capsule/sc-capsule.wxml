@@ -1,4 +1,4 @@
-<view class="cu-custom" style="height: {{isFixd == false ? navBarHeight+ navBarExtendHeight : 0}}px;z-index:99999">
+<view class="cu-custom" style="height: {{isFixd == false ? navBarHeight+ navBarExtendHeight : 0}}px;z-index:199">
 	<view class="cu-bar-placeholder {{ios ? 'ios' : 'android'}}" style="padding-top: {{navBarHeight+ navBarExtendHeight}}px;visibility: hidden;"></view>
 	<view class="cu-bar fixed" style="{{navigationbarinnerStyle}};{{isBack == true ? themeValue == 'light'?'background:#F5F6F7':'background:#010101':'background:none'}}">
 		<view class="action border-custom" style="{{navBarLeft}}">
