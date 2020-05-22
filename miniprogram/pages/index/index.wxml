@@ -1,7 +1,7 @@
 <page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" background-text-style="{{$.themeValue == 'light'?'dark':'light'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
-<loading id="loading"/>
+<loading id="loading" />
 <view id="top" class="{{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}} ">
 	<sc-capsule isBack="{{false}}" themeValue="{{$.themeValue}}" contentText="{{forecastData.city}}" bind:showModalListener="showModalListener">
 	</sc-capsule>
@@ -11,8 +11,11 @@
 	<block wx:if="{{$.startScreen == 'auth'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view class="absolute left-0 bottom--30">
+					<image id="leaf" src="https://teaimg.ioslide.com/weather/leaf3.png" style="left:{{windowWidth/2+80}}px;transform:rotate3d(0,0,1,45deg) scale(1)" class="square-200" mode="widthFix"></image>
+				</view>
 				<view>
-					<view class="flex justify-center padding-15 align-center" bindtap="checkLocationAuth">
+					<view class="flex justify-center padding-15 align-center" id="firstStepLogo" bindtap="checkLocationAuth">
 						<image class="square-150" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
@@ -21,8 +24,21 @@
 					<view class="flex justify-center align-center">
 						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
 					</view>
-					<view class="flex justify-center align-center margin-top-50" bindtap="authScreenNext" data-target="authFirstStep">
+					<view class="flex justify-center align-center margin-top-50" bindtap="authScreenNext" id="firstStepButton" data-target="authFirstStep">
 						<button class="authFirstStepButton">开始</button>
+					</view>
+				</view>
+				<view class="flex justify-center align-center fixed bottom-30">
+					<view class="flex justify-center align-center margin-top-30">
+						<view class="blurText blur-preloader-loading v-preloader__item">
+							<text class="blurText blur-text-letter blur-text-letter_0 v-preloader__item">W</text>
+							<text class="blurText blur-text-letter blur-text-letter_1 v-preloader__item">E</text>
+							<text class="blurText blur-text-letter blur-text-letter_2 v-preloader__item">A</text>
+							<text class="blurText blur-text-letter blur-text-letter_3 v-preloader__item">T</text>
+							<text class="blurText blur-text-letter blur-text-letter_4 v-preloader__item">H</text>
+							<text class="blurText blur-text-letter blur-text-letter_5 v-preloader__item">E</text>
+							<text class="blurText blur-text-letter blur-text-letter_6 v-preloader__item">R</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -33,7 +49,7 @@
 					<view class="flex justify-left padding-15 align-center">
 						<text class="text-4a5568 text-xxxl font-weight-300">你好</text>
 					</view>
-					<view class="flex justify-left align-center padding-left-15">
+					<view id="authScreenStepContent" class="flex justify-left align-center padding-left-15">
 						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
 					</view>
 					<view class="flex margin-top-50">
@@ -239,7 +255,7 @@
 
 				<block wx:if="{{$.indexHeadImageValue == 'Bing'}}">
 					<view class="flex square-100 align-center justify-center">
-						<image id="bingImage" class="square-100" src="{{bingImage}}" catchtouchmove="touchmove" style="background-size: cover;transform:translate({{x}}px,{{y}}px);background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+						<image id="bingImage" class="square-100" src="{{bingImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
 							<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
 								<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
 

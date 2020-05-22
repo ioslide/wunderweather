@@ -81,7 +81,7 @@
 			</view>
 		</view>
 		<view class="flex padding-5 justify-center align-center" style="height: 20%;">
-			<view style="width:50%" bindtap="navLive">
+			<view style="width:50%" bindtap="onLive">
 				<view class="flex padding-5 justify-center align-center">
 					<view class="flex padding-5 justify-center align-center {{$.themeValue == 'light'?'soft-button-light':'soft-button-dark'}}">
 						<image class="square-30" mode="widthFix" src="https://weather.ioslide.com/weather/drawermodal/r/todayIndex{{$.themeValue == 'light'?'-light':''}}.svg"></image>

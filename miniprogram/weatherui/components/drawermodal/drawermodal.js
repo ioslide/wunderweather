@@ -126,7 +126,11 @@ create.Component(store, {
         content: t.store.data.languageValue == 'zh_TW' ? '不要期待' : t.store.data.languageValue == 'zh_CN' ? '不要期待' : 'Do not expect'
       })
     },
-    navLive(){
+    onLive(){
+      const t = this
+      wx.showToast({
+        title: t.store.data.languageValue == 'zh_TW' ? '還未開播' : t.store.data.languageValue == 'zh_CN' ? '还未开播' : 'Not yet broadcast'
+      })
       wx.cloud.callFunction({
         name: 'getLiveRoomLists',
         success: res => {

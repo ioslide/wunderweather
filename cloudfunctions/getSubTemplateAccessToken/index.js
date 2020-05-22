@@ -2,7 +2,7 @@
 //timerGetAccessToken
 const cloud = require('wx-server-sdk')
 const APPID = 'wx7b4bbc2d9c538e84'
-const APPSECRET = 'f7c6ba05eb3a1b0b58208dd2f1b0c19b'
+const APPSECRET = '4ebadf0e08f79dccd6b894ffa8716d49'
 
 cloud.init({
   env: 'wunderweather-nwepb'

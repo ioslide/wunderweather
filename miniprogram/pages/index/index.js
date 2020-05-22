@@ -271,6 +271,7 @@ create(store, {
   },
   screenFadeIn() {
     const t = this
+    var windowWidth = t.data.windowWidth
     log('[screenFadeIn]', t.store.data.startScreen)
     const poetryScreenFadeIn = () => {
       log('[poetryScreenFadeIn]')
@@ -377,16 +378,16 @@ create(store, {
         screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
           t.store.data.startScreen = 'poetry'
         }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-      }
-      (async () => {
-        await screenFadeOut(t.store.data.startScreen)
-        t.onIntersectionObserver()
-        t.getMoonPhaseList()
-        // await t.getBingImage()
-        t.onRefreshWeather()
-        t.onGetWXACode()
-        t.savePoetry()
-      })()
+    }
+    (async () => {
+      await screenFadeOut(t.store.data.startScreen)
+      t.onIntersectionObserver()
+      t.getMoonPhaseList()
+      // await t.getBingImage()
+      t.onRefreshWeather()
+      t.onGetWXACode()
+      t.savePoetry()
+    })()
   },
   checkNetWorkType() {
     const t = this
@@ -588,13 +589,12 @@ create(store, {
             'canBlurRoot': true
           })
           await t.setAllWeather(weatherData)
-          await t.getBingImage()
           await t.screenFadeOut()
-          // await initChart()
-          await t.scrollTo('#top')
+          await t.getBingImage()
           await t.setData({
             'canBlurRoot': false
           })
+          await t.scrollTo('#top')
           await refreshOrInitChart(canRefreshChart)
           await t.loadingProgress(false)
           app.saveData("forecastData", weatherData)
@@ -1046,9 +1046,9 @@ create(store, {
       hh:n
     })
     wx.onAccelerometerChange(function(t) {
-        let a = -50 * t.x
-        let o = -50 * t.y;
-        Math.abs(a) > 35 || Math.abs(o) > 50 || (that.setData({
+        let a = -10 * t.x
+        let o = -10 * t.y;
+        Math.abs(a) > 7 || Math.abs(o) > 10 || (that.setData({
           x : a,
           y : o
         }))
@@ -1056,13 +1056,28 @@ create(store, {
   },
   onAuthFinalScreen() {
     log('[onAuthFinalScreen]')
-    const t = this
+    const t = this,
+    windowHeight = t.data.windowHeight,
+    windowWidth = t.data.windowWidth
+    t.animate('#leaf', [
+      { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' },
+      { translate3d: [windowWidth * 2.7,250,0],rotate3d: [0,0,-1,45],scale:[0.7],ease:'ease-in-out' }
+    ], 1000)
     t.getNowWeather(false)
   },
   authScreenNext(e) {
     log('[authScreenNext]', e)
     const t = this
-    var windowWidth = t.data.windowWidth
+    let windowWidth = t.data.windowWidth
+    let windowHeight = t.data.windowHeight
+    const authSecondStepLeaf = () =>{
+      wx.createSelectorQuery().select('#authScreenStepContent').boundingClientRect(function(rect){
+        t.animate('#leaf', [
+          { translate3d: [windowWidth,-rect.top,0],rotate3d: [0,0,-1,45],scale:[0.3],ease:'ease-in-out'},
+          { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' }
+        ], 1000)
+      }).exec()
+    }
     const checkLocationAuth = () => {
       log('[authScreenNext] => checkLocationAuth')
       wx.getSetting({
@@ -1070,6 +1085,7 @@ create(store, {
           log(`[authSetting] =>`, res)
           if (res.authSetting['scope.userLocation']) {
             transX(windowWidth * 2)
+            authSecondStepLeaf()
             app.saveData('hasUserLocation', true)
             app.changeStorage('startScreen', 'poetry')
             log('[hasUserLocation]')
@@ -1080,6 +1096,7 @@ create(store, {
               success: res => {
                 log('[scope.userLocation] =>', res)
                 transX(windowWidth * 2)
+                authSecondStepLeaf()
                 app.saveData('hasUserLocation', true)
                 app.changeStorage('startScreen', 'poetry')
               },
@@ -1097,6 +1114,7 @@ create(store, {
                           log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
                           if (res.authSetting['scope.userLocation'] == true) {
                             transX(windowWidth * 2)
+                            authSecondStepLeaf()
                             app.saveData('hasUserLocation', true)
                             app.changeStorage('startScreen', 'poetry')
                             log('[scope.userLocation] success')
@@ -1117,7 +1135,7 @@ create(store, {
     const transX = (steps) => {
       log('[transX] =>', steps)
       let stepAction = wx.createAnimation({
-        duration: 1000,
+        duration: 1200,
         timingFunction: 'ease-in-out',
         delay: 0
       });
@@ -1126,11 +1144,20 @@ create(store, {
         defaultScreenAni: stepAction.export(),
       })
     }
+    const authFirstStepLeaf = () =>{
+      wx.createSelectorQuery().select('#authScreenStepContent').boundingClientRect(function(rect){
+        t.animate('#leaf', [
+          { translate3d: [0,0,0], rotate3d: [0,0,1,45],scale:[1],ease:'ease-in-out' },
+          { translate3d: [windowWidth,-rect.top,0],rotate3d: [0,0,-1,45],scale:[0.3],ease:'ease-in-out'  },
+        ], 1000)
+      }).exec()
+    }
     if (e == 'canNavToFinalScreen') {
       transX(windowWidth * 3), log('[authFinalStep]')
     } else {
+
       let detailDarget = e.currentTarget.dataset.target
-      detailDarget == 'authFirstStep' ? (transX(windowWidth), log('[authFirstStep]')) : 
+      detailDarget == 'authFirstStep' ? (transX(windowWidth), authFirstStepLeaf(),log('[authFirstStep]')) : 
       detailDarget == 'authSecondStep' ? (checkLocationAuth(), log('[authSecondStep]')) : 
       detailDarget == 'authThirdStep' ? (transX(windowWidth * 3), log('[authThirdStep]')) : 
       detailDarget == 'authFourthStep' ? (transX(windowWidth * 3), log('[authFourthStep]')) : 

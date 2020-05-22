@@ -88,17 +88,16 @@ exports.main = async (event, context) => {
         }
         console.log('-----------sendTemplateData-----------', sendTemplateData)
         console.log('-----------userWeatherData.data-----------', userWeatherData)
-
         let getToken = await db.collection("accessToken").doc("ACCESS_TOKEN").get();
         let token = getToken.data.token;
-        console.log(token)
         let curData = {
           'touser': userWeatherData.touser,
           'page': userWeatherData.page,
           'data': sendTemplateData,
           'templateId': userWeatherData.templateId,
         }
-        console.log('______curData_____', curData)
+        console.log('------------token-----------',token)
+        console.log('----------curData-----------', curData)
         await templateMessage.sendTemplateMsg(token, curData);
         return db
           .collection('sub_daily_weather_user')

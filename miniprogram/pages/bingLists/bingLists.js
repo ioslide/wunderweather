@@ -87,7 +87,7 @@ create(store, {
     var t = this
     wx.showModal({
       title: '是否下载图片',
-      content: wx.getStorageSync('bingImageLists')[t.data.currDay].title,
+      content: t.data.bingImageLists[t.data.currDay].copyright,
       success(res) {
         if (res.confirm) {
           t.downloadCur()
@@ -105,7 +105,7 @@ create(store, {
       scope: 'scope.writePhotosAlbum',
       success: function success() {
         t.downloading = true;
-        let safeUrl = wx.getStorageSync('bingImageLists')[t.data.currDay].oldurl.replace(/http/, 'https')
+        let safeUrl = 'https://cn.bing.com/' + t.data.bingImageLists[t.data.currDay].url
         wx.downloadFile({
           url: safeUrl,
           success: function success(res) {
