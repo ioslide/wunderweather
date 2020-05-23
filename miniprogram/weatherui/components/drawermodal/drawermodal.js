@@ -156,20 +156,20 @@ create.Component(store, {
     openDatePicker() {
       this.triggerEvent('openDatePicker')
     },
-    setHistoryCityLocation(e) {
+    setNewWeatherDataByHistory(e) {
       const t = this
       // log(e)
-      var historyCityData = e.currentTarget.dataset.curdetaildata
+      var cityData = e.currentTarget.dataset.curdetaildata
       let eventDetail = {
-        historyCityData: historyCityData
+        historyCityData: cityData
       }
       let eventOption = {}
       t.hideDrawerModal()
-      t.triggerEvent('setHistoryCityLocation', eventDetail, eventOption)
+      t.triggerEvent('setNewWeatherDataByHistory', eventDetail, eventOption)
     },
-    manualGetNewLocation() {
+    getNewLocationByManual() {
       const t = this
-      t.triggerEvent('manualGetNewLocation')
+      t.triggerEvent('getNewLocationByManual')
       t.hideDrawerModal()
     },
     savePostImg: function (e) {

@@ -96,7 +96,7 @@
 					</view>
 					<view class="flex justify-center align-center margin-top-25">
 						<view>
-							<view class="flex justify-center align-center" bindtap="manualGetNewLocation">
+							<view class="flex justify-center align-center" bindtap="getNewLocationByManual">
 								<view class="authFirstStepButton">手动选取位置</view>
 							</view>
 						</view>
@@ -111,7 +111,7 @@
 									<view class="text-lg text-4a5568">自动定位</view>
 									<view class="text-gray text-d flex justify-between">Automatic positioning</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="autoGetLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="getLocationByAuto"></sc-switch>
 							</view>
 							<view class="cu-item">
 								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenManuallocationn.svg);">
@@ -120,7 +120,7 @@
 									<view class="text-lg text-4a5568">手动选取位置</view>
 									<view class="text-gray text-d flex justify-between">Select location manually</view>
 								</view>
-								<sc-switch class="sc-switch" name="switch" checked="{{isManualGetNewLocation}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="manualGetNewLocation"></sc-switch>
+								<sc-switch class="sc-switch" name="switch" checked="{{isManualGetNewLocation}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="getNewLocationByManual"></sc-switch>
 							</view>
 						</view>
 					</view>
@@ -818,4 +818,4 @@
 	</view>
 </view> -->
 
-<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:_scrollTo="_scrollTo" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:manualGetNewLocation="manualGetNewLocation" bind:setHistoryCityLocation="setHistoryCityLocation" bind:savePostImg="savePostImg" />
+<drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:_scrollTo="_scrollTo" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:getNewLocationByManual="getNewLocationByManual" bind:setNewWeatherDataByHistory="setNewWeatherDataByHistory" bind:savePostImg="savePostImg" />

@@ -184,14 +184,14 @@
 				<view class="action border-custom-modalL" style="width:{{Custom.width}}px;height:{{Custom.height}}px;margin-left:calc(750rpx - {{Custom.right}}px)">
 					<button class="modalL-cu-bar-left" bindtap="navChange" data-cur="setting"></button>
 					<text class="cuIcon-moreandroid"></text>
-					<button class="modalL-cu-bar-right" bindtap="manualGetNewLocation"></button>
+					<button class="modalL-cu-bar-right" bindtap="getNewLocationByManual"></button>
 					<text class="cuIcon-add text-xl" style="font-size: 44rpx;"></text>
 				</view>
 			</view>
 		</view>
 		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{windowHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
 			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
-				<view class="cu-card dynamic" data-curdetaildata="{{item}}" bindtap="setHistoryCityLocation">
+				<view class="cu-card dynamic" data-cityData="{{item}}" bindtap="setNewWeatherDataByHistory">
 					<view class="cu-item shadow margin-3" style="height:{{(windowHeight-CustomBar)/4}}px;">
 						<view class="flex" style=";background-size: cover;height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
 							<view class="flex-twice">

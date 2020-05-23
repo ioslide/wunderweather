@@ -1,6 +1,6 @@
 
 let $$ = {}
-let c = wx.getStorageSync('hasUserLocation') || false
+let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
 const setStoreage = () =>{
   $$ = {
     // id: '',
@@ -66,7 +66,7 @@ const setStoreage = () =>{
 const getStoreage = () =>{
   $$ = wx.getStorageSync('$$')
 }
-const event = (result) => {
+const hasUserLocationEvent = (result) => {
   switch (true) {
     case (result == true):
       getStoreage(result)
@@ -78,7 +78,13 @@ const event = (result) => {
       setStoreage(result)
   }
 }
-event(c)
+hasUserLocationEvent(hasUserLocation)
+// let languageValue = $$.languageValue || 'zh_CN',languageContent = $$.languageContent
+// if(languageValue == 'zh_CN'){
+//   languageContent = {
+
+//   }
+// }
 
 export default {
   data: {
@@ -94,10 +100,11 @@ export default {
     themeValue: $$.themeValue,
     language:$$.language,
     languageValue:$$.languageValue,
+    // languageContent:{},
     temperatureUnit: $$.temperatureUnit,
     temperatureUnitValue: $$.temperatureUnitValue,
     unit:$$.unit,
-    unitValue:$$.unitValue
+    unitValue:$$.unitValue,
   },
   updateAll: true,
   debug: true
