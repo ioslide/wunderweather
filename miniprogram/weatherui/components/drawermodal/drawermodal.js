@@ -33,13 +33,16 @@ create.Component(store, {
         const t = this
         log('[drawerModalName]',t.properties.drawerModalName)
         if (t.properties.drawerModalName == "DrawerModalL") {
-          var pages = getCurrentPages();
-          var currPage = pages[pages.length - 1]
-          var historyCityList = currPage.data.historyCityList
-          log('historyCityList',historyCityList)
+          // var pages = getCurrentPages();
+          // var currPage = pages[pages.length - 1]
+          // var historyCityList = currPage.data.historyCityList
+          // log('historyCityList',historyCityList)
           t.setData({
-            historyCityList: historyCityList
+            historyCityList: wx.getStorageSync('historyCityList')
           })
+        }
+        if(t.properties.drawerModalName == "DrawerModalL") {
+          wx.vibrateShort()
         }
       }
     },

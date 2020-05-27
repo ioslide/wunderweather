@@ -186,7 +186,7 @@ create(store, {
       app.globalData.longitude = location.longitude
 
       //auth状态手动获取经纬度后先不请求数据
-      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
+        t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
         t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
           'modalName': null
         })) :
@@ -442,19 +442,18 @@ create(store, {
         await t.screenFadeOut()
         await changeStorage()
       })()
-      
   },
   getLocationByAuto() {
     const t = this
     wx.getLocation({
-      isHighAccuracy:true,
       success: res => {
-        (async (res) => {
+        (async (res) =>{
+          log('[getLocationByAuto]',res)
           await t.setData({
             'latitude': res.latitude,
             'longitude': res.longitude
           })
-          await qqMapWX.reverseGeocoder({
+          qqMapWX.reverseGeocoder({
             location: {
               latitude: res.latitude,
               longitude: res.longitude
@@ -471,21 +470,66 @@ create(store, {
               log(`[reverseGeocoder] = > ${err}`)
             }
           })
-          await t.getWeatherData(false)
-          if(t.store.data.startScreen !== 'auth'){
-            t.screenFadeOut()
-          }
-        })(res);
+          await t.store.data.startScreen !== 'auth' ? t.getWeatherData(false) : t.authScreenNext('canNavToFinalScreen')
+        })(res)
         log(`[getLocationByAuto] =>`, res)
-
       },
       fail: err => {
-        log(`[getLocation] => fail => ${err}`)
+        wx.showModal({
+          title: '是否授权以下应用权限',
+          content: '地理位置',
+          confirmText: "确认",
+          cancelText: "取消",
+          success: res => {
+            if (res.confirm) {
+              wx.openSetting({
+                success: res => {
+                  log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
+                  if (res.authSetting['scope.userLocation'] == true) {
+                    wx.getLocation({
+                      success: res => {
+                        (async (res) =>{
+                          log('[getLocationByAuto]',res)
+                          await t.setData({
+                            'latitude': res.latitude,
+                            'longitude': res.longitude
+                          })
+                          qqMapWX.reverseGeocoder({
+                            location: {
+                              latitude: res.latitude,
+                              longitude: res.longitude
+                            },
+                            success: res => {
+                              log(`[reverseGeocoder]`, res)
+                              let e = res.result.address_component;
+                              t.setData({
+                                'forecastData.city': e.district,
+                                'forecastData.address': e.street
+                              })
+                            },
+                            fail: err => {
+                              log(`[reverseGeocoder] = > ${err}`)
+                            }
+                          })
+                          await t.store.data.startScreen !== 'auth' ?(t.getWeatherData(false)) : t.authScreenNext('canNavToFinalScreen')
+                        })(res)
+                        log(`[getLocationByAuto] =>`, res)
+                      },
+                      fail: err => {
+                        log(`[getLocation] => fail =>`,err)
+                      }
+                    });
+                  } 
+                }
+              });
+            } else {
+              log('[scope.userLocation] fail')
+            }
+          }
+        });
+        log(`[getLocation] => fail =>`,err)
       }
     });
-    if (t.store.data.startScreen == 'auth') {
-      t.authScreenNext('canNavToFinalScreen')
-    }
     app.changeStorage('getLocationMethod', 'auto')
   },
   getNewLocationByManual() {
@@ -1033,6 +1077,7 @@ create(store, {
     });
   },
   onAuthFinalScreen() {
+      log('[onAuthFinalScreen]')
     const t = this
     const windowWidth = t.data.windowWidth
     const authFinalStepLeaf = () =>{
@@ -1042,8 +1087,14 @@ create(store, {
       ], 1000)
     }
     (async () => {
+      await wx.showToast({
+        title: 'Loading',
+        mask:true,
+        icon:'loading'
+      })
       await t.getWeatherData(false)
       await authFinalStepLeaf()
+      await wx.hideToast()
       // await t.screenFadeOut()
     })()
   },
@@ -1093,7 +1144,7 @@ create(store, {
               fail: err => {
                 log(`check = > [wx.authorize] =>`, err)
                 wx.showModal({
-                  title: '是否auth以下应用权限',
+                  title: '是否授权以下应用权限',
                   content: '地理位置',
                   confirmText: "确认",
                   cancelText: "取消",
@@ -1137,7 +1188,6 @@ create(store, {
     if (e == 'canNavToFinalScreen') {
       transX(windowWidth * 3), log('[authFinalStep]')
     } else {
-
       let detailDarget = e.currentTarget.dataset.target
       detailDarget == 'authFirstStep' ? (transX(windowWidth), authFirstStepLeaf(),log('[authFirstStep]')) : 
       detailDarget == 'authSecondStep' ? (checkLocationAuth(), log('[authSecondStep]')) : 
