@@ -94,13 +94,13 @@ create(store, {
     }
     const storeChange = () =>{
       let iconValue = e.detail.value.toString(),
-      icon = {
+      icon = { 
         lineIcon:false,
         colorIcon:false,
         solidIcon:false,
         flatIcon:false
       }
-      iconValue == 'lineIcon' ? (icon['lineIcon'] = true) :  iconValue == 'colorIcon' ? (icon['colorIcon'] = true) :  iconValue == 'dashIcon' ? (icon['dashIcon'] = true) : (icon['flatIcon'] = true)
+      iconValue == 'lineIcon' ? (icon['lineIcon'] = true) :  iconValue == 'colorIcon' ? (icon['colorIcon'] = true) :  iconValue == 'solidIcon' ? (icon['solidIcon'] = true) : (icon['flatIcon'] = true)
       t.store.data.icon = icon
       t.store.data.iconValue = iconValue
       app.changeStorage('iconValue', iconValue)

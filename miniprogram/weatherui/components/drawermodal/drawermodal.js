@@ -22,6 +22,8 @@ create.Component(store, {
       'language',
       'unit',
       'unitValue',
+      'iconValue',
+      'icon'
     ]
   },
   properties: {
@@ -204,7 +206,6 @@ create.Component(store, {
           themeChecked_dark: false
         }
         themeValue == 'light' ? theme['themeChecked_light'] = true : theme['themeChecked_dark'] = true
-
         log('[isChangeSetting]', true)
         t.store.data.theme = theme
         t.store.data.themeValue = themeValue
@@ -225,7 +226,6 @@ create.Component(store, {
           imperial: false
         }
         e.detail.value == 'metric' ? (unit['metric'] = true) : e.detail.value == 'imperial' ? (unit['imperial'] = true) : (unit['SI'] = true)
-
         log('[isChangeSetting]', true)
         t.store.data.unitValue = e.detail.value.toString()
         t.store.data.unit = unit
@@ -237,7 +237,29 @@ create.Component(store, {
         await event()
       })()
     },
-    languageRadioChange: function (e) {
+    iconRadioChange(e) {
+      log('[iconRadioChange]', e.detail.value)
+      const t = this
+      const storeChange = () =>{
+        let iconValue = e.detail.value.toString(),
+        icon = { 
+          lineIcon:false,
+          colorIcon:false,
+          solidIcon:false,
+          flatIcon:false
+        }
+        iconValue == 'lineIcon' ? (icon['lineIcon'] = true) :  iconValue == 'colorIcon' ? (icon['colorIcon'] = true) :  iconValue == 'solidIcon' ? (icon['solidIcon'] = true) : (icon['flatIcon'] = true)
+        t.store.data.icon = icon
+        t.store.data.iconValue = iconValue
+        app.changeStorage('iconValue', iconValue)
+        app.changeStorage('icon', icon)
+      }
+      (async () => {
+        await t.hideDrawerModal()
+        await storeChange()
+      })()
+    },
+    languageRadioChange(e) {
       const t = this
       const event = () => {
         var language = {
@@ -249,8 +271,8 @@ create.Component(store, {
         var languageValue = e.detail.value.toString()
         log('[languageValue] =>', e.detail.value.toString())
         e.detail.value == 'zh_TW' ? (language['languageChecked_zh_TW'] = true) :
-          e.detail.value == 'zh_CN' ? (language['languageChecked_zh_CN'] = true) :
-          e.detail.value == 'en_US' ? (language['languageChecked_en_US'] = true) : (language['languageChecked_en_GB'] = true)
+        e.detail.value == 'zh_CN' ? (language['languageChecked_zh_CN'] = true) :
+        e.detail.value == 'en_US' ? (language['languageChecked_en_US'] = true) : (language['languageChecked_en_GB'] = true)
         t.store.data.languageValue = languageValue
         t.store.data.language = language
         app.changeStorage('language', language)
@@ -261,5 +283,5 @@ create.Component(store, {
         await event()
       })()
     },
-  }
+  },
 })

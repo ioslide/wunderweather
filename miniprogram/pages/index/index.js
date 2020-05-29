@@ -684,9 +684,10 @@ create(store, {
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
-          iconPath: config.cosApiHost + "/weather/icon/0/" + realtime.skycon + "-icon.svg",
-          whitePath: config.cosApiHost + "/weather/icon/0/" + realtime.skycon + "-icon-white.svg",
-          // backgroundBg: "https://source.unsplash.com/450x450/?" + transWeatherName.weatherSkycon[realtimeSkycon] + "," + "nature" + "," + that.data.forecastData.city,
+          solidIcon: config.cosApiHost + "/weather/icon/solidIcon/" + realtime.skycon + "-icon.svg",
+          flatIcon: config.cosApiHost + "/weather/icon/flatIcon/" + realtime.skycon + "-icon.svg",
+          lineIcon: config.cosApiHost + "/weather/icon/lineIcon/" + realtime.skycon + "-icon.svg",
+          colorIcon: config.cosApiHost + "/weather/icon/colorIcon/" + realtime.skycon + "-icon.svg",
           backgroundBg:backgroundBg,
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
@@ -1883,13 +1884,6 @@ create(store, {
     }
     const setData = () => {
       e.detail.value == 'metric'? (unit['metric'] = true) :e.detail.value == 'imperial'? (unit['imperial'] = true) :(unit['SI'] = true)
-      // if (e.detail.value == 'metric') {
-      //   unit['metric'] = true
-      // } else if (e.detail.value == 'imperial') {
-      //   unit['imperial'] = true
-      // } else if (e.detail.value == 'SI') {
-      //   unit['SI'] = true
-      // }
       t.setData({
         modalName: null,
         isChangeSetting: true

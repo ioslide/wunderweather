@@ -54,12 +54,12 @@ const setStoreage = () =>{
       indexHeadImageCus:false
     },
     indexHeadImageValue:'Bing',
-    iconValue : 'lineIcon',
+    iconValue : 'flatIcon',
     icon:{
-      lineIcon:true,
+      lineIcon:false,
       colorIcon:false,
       solidIcon:false,
-      flatIcon:false
+      flatIcon:true
     },
     getWeatherDataAgain : false
   }
