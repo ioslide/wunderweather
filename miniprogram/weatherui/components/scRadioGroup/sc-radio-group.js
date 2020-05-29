@@ -1,6 +1,9 @@
 "use strict";
 var radioGroupCount = 1;
-Component({
+import create from '../../../utils/create'
+import store from '../../../store/index'
+
+create.Component(store,{
   properties: {
     name: {
       type: String
@@ -11,7 +14,8 @@ Component({
     }
   },
   data: {
-    value: null
+    value: null,
+    use: ['themeValue']
   },
   relations: {
     "../scRadio/sc-radio": {

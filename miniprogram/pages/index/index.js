@@ -136,7 +136,10 @@ create(store, {
       'language',
       'unit',
       'unitValue',
-      'getLocationMethod'
+      'getLocationMethod',
+      'getWeatherDataAgain',
+      'icon',
+      'iconValue'
     ]
   },
   onLoad(a) {
@@ -197,6 +200,9 @@ create(store, {
       app.saveData('manualLocationData', location)
       //make sure location value != null
       app.changeStorage('getLocationMethod', 'manual')
+    }
+    if(t.store.data.getWeatherDataAgain == true){
+      t.getWeatherData(false)
     }
   },
   onReady() {
@@ -716,7 +722,7 @@ create(store, {
           time: c % 24 + ".00",
           weather: transWeatherName.weatherSkycon[t.skycon[n].value],
           weatherEN: t.skycon[n].value.replace(/_/g, ' '),
-          iconPath: config.cosApiHost + "/weather/icon/0/" + t.skycon[n].value + "-icon",
+          iconPath: config.cosApiHost + "/weather/icon/"+ that.store.data.iconValue +"/" + t.skycon[n].value + "-icon",
           temp: ~~(t.temperature[n].value) + '°',
           wind: that.getWindDirect(t.wind[n].direction) + "·" + that.getWindLevel(t.wind[n].speed),
           value: t.skycon[n].value,
@@ -778,7 +784,7 @@ create(store, {
           chartsMargin = ~~(d.temperature[f].min) + 20
         }
         // if (f == 0) {
-        //   that.setData({
+        //   that.setData({ 
         //     'updateSunsetTime': d.astro[f].date,
         //     'sunrise': d.astro[f].sunrise.time,
         //     'sunset': d.astro[f].sunset.time,
@@ -799,7 +805,7 @@ create(store, {
           date: getWeek(l),
           weather: transWeatherName.weatherSkycon[d.skycon[f].value],
           weatherEN: d.skycon[f].value.replace(/_/g, ' '),
-          iconPath: config.cosApiHost + "/weather/icon/0/" + d.skycon[f].value + "-icon",
+          iconPath: config.cosApiHost + "/weather/icon/"+ that.store.data.iconValue + "/" + d.skycon[f].value + "-icon",
           min: ~~(d.temperature[f].min),
           max: ~~(d.temperature[f].max),
           monthday: p,

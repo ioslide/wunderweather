@@ -3,9 +3,6 @@ let $$ = {}
 let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
 const setStoreage = () =>{
   $$ = {
-    // id: '',
-    // data: {},
-    // page: 'pages/index/index',
     getLocationMethod:'auto',
     language: {
       languageChecked_zh_TW: false,
@@ -56,7 +53,15 @@ const setStoreage = () =>{
       indexHeadImageWeather:false,
       indexHeadImageCus:false
     },
-    indexHeadImageValue:'Bing'
+    indexHeadImageValue:'Bing',
+    iconValue : 'lineIcon',
+    icon:{
+      lineIcon:true,
+      colorIcon:false,
+      solidIcon:false,
+      flatIcon:false
+    },
+    getWeatherDataAgain : false
   }
   wx.setStorage({
     data: $$,
@@ -79,12 +84,6 @@ const hasUserLocationEvent = (result) => {
   }
 }
 hasUserLocationEvent(hasUserLocation)
-// let languageValue = $$.languageValue || 'zh_CN',languageContent = $$.languageContent
-// if(languageValue == 'zh_CN'){
-//   languageContent = {
-
-//   }
-// }
 
 export default {
   data: {
@@ -100,10 +99,11 @@ export default {
     themeValue: $$.themeValue,
     language:$$.language,
     languageValue:$$.languageValue,
-    // languageContent:{},
     temperatureUnit: $$.temperatureUnit,
     temperatureUnitValue: $$.temperatureUnitValue,
     unit:$$.unit,
+    iconValue:$$.iconValue,
+    icon:$$.icon,
     unitValue:$$.unitValue,
   },
   updateAll: true,

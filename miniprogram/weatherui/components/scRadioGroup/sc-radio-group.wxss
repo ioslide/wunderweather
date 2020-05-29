@@ -2,7 +2,7 @@
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  background: #2D2D2D;
+  /* background: #2D2D2D; */
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
   -webkit-box-orient: horizontal;

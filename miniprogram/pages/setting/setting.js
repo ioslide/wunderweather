@@ -16,7 +16,10 @@ create(store, {
       'indexHeadImageValue',
       'indexHeadImage',
       'language',
-      'languageValue'
+      'languageValue',
+      'getWeatherDataAgain',
+      'iconValue',
+      'icon'
     ]
   },
   onLoad(e) {
@@ -81,6 +84,34 @@ create(store, {
     }
     change()
   },
+  iconRadioChange(e) {
+    log('[iconRadioChange]', e.detail.value)
+    const t = this
+    const modalName = () =>{
+      t.setData({
+        modalName: null
+      })
+    }
+    const storeChange = () =>{
+      let iconValue = e.detail.value.toString(),
+      icon = {
+        lineIcon:false,
+        colorIcon:false,
+        solidIcon:false,
+        flatIcon:false
+      }
+      iconValue == 'lineIcon' ? (icon['lineIcon'] = true) :  iconValue == 'colorIcon' ? (icon['colorIcon'] = true) :  iconValue == 'dashIcon' ? (icon['dashIcon'] = true) : (icon['flatIcon'] = true)
+      t.store.data.icon = icon
+      t.store.data.iconValue = iconValue
+      app.changeStorage('iconValue', iconValue)
+      app.changeStorage('icon', icon)
+    }
+    (async () => {
+      await modalName()
+      await storeChange()
+    })()
+    t.store.data.getWeatherDataAgain = true
+  },
   refreshfrequencyRadioChange:function(e){
     log('[refreshfrequencyRadioChange]', e.detail.value )
     const t = this
@@ -140,15 +171,15 @@ create(store, {
       app.changeStorage('unitValue', e.detail.value.toString())
       app.changeStorage('unit', unit)
     }
-    const getNowWeather = () =>{
+    const getWeatherData = () =>{
       let
       pages = getCurrentPages(),
       prevPage = pages[pages.length - 2];
-      prevPage.getNowWeather(null, false)
+      prevPage.getWeatherData(false)
     }
     async function change(){
       await modalName()
-      await getNowWeather()
+      await getWeatherData()
       await storeChange()
     }
     change()
@@ -190,16 +221,16 @@ create(store, {
     app.changeStorage('language', language)
     app.changeStorage('languageValue', languageValue)
     }
-    const getNowWeather = () =>{
+    const getWeatherData = () =>{
       let
       pages = getCurrentPages(),
       prevPage = pages[pages.length - 2];
-      prevPage.getNowWeather(null, false)
+      prevPage.getWeatherData(false)
     }
     async function change (){
       await modalName()
       await storeChange()
-      await getNowWeather()
+      await getWeatherData()
     }
     change()
   },

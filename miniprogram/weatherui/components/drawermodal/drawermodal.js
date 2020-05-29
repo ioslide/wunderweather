@@ -29,19 +29,14 @@ create.Component(store, {
       type: String,
       value: null,
       observer: function () {
-        // log(this)
         const t = this
         log('[drawerModalName]',t.properties.drawerModalName)
         if (t.properties.drawerModalName == "DrawerModalL") {
-          // var pages = getCurrentPages();
-          // var currPage = pages[pages.length - 1]
-          // var historyCityList = currPage.data.historyCityList
-          // log('historyCityList',historyCityList)
           t.setData({
             historyCityList: wx.getStorageSync('historyCityList')
           })
         }
-        if(t.properties.drawerModalName == "DrawerModalL") {
+        if(t.properties.drawerModalName == "DrawerModalR") {
           wx.vibrateShort()
         }
       }
