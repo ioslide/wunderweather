@@ -191,7 +191,7 @@
 		</view>
 		<scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{windowHeight-CustomBar}}px" scroll-with-animation="true" enable-back-to-top="true">
 			<view class='item' wx:for="{{historyCityList}}" wx:key="i">
-				<view class="cu-card dynamic" data-cityData="{{item}}" bindtap="setNewWeatherDataByHistory">
+				<view class="cu-card dynamic" data-city="{{item}}" bindtap="setNewWeatherDataByHistory">
 					<view class="cu-item shadow margin-3" style="height:{{(windowHeight-CustomBar)/4}}px;">
 						<view class="flex" style=";background-size: cover;height:100%;shadow: rgba(0, 0, 0, 0.66) 0px -24px 14px inset;background-image: url({{item.backgroundBg}});">
 							<view class="flex-twice">
@@ -205,7 +205,7 @@
 							<view class="flex-sub">
 								<view class="flex align-start justify-end margin-top-20 margin-right-20">
 									<view class="flex align-center justify-center weatherIcon"> 
-										<image class="flex align-center justify-center weatherIconCircle" src="{{$.iconValue == 'lineIcon'? item.lineIcon: $.iconValue == 'solidIcon'? item.solidIcon : $.iconValue == 'colorIcon' ? item.colorIcon :item.flatIcon}}"></image>
+										<image class="flex align-center justify-center weatherIconCircle" src="{{item.icon}}{{$.iconValue}}/{{item.skycon}}-icon-{{$.themeValue}}.svg"></image>
 									</view>
 								</view>
 							</view>

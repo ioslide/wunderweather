@@ -158,14 +158,36 @@ create.Component(store, {
     },
     setNewWeatherDataByHistory(e) {
       const t = this
-      // log(e)
-      var cityData = e.currentTarget.dataset.curdetaildata
-      let eventDetail = {
-        historyCityData: cityData
+      let pages = getCurrentPages()
+      let curCityData = e.currentTarget.dataset.city
+      let prevPage = pages[pages.length - 1];
+      app.globalData.latitude = curCityData.latitude,
+      app.globalData.longitude = curCityData.longitude
+      const changeStorage = () => {
+        app.changeStorage('getLocationMethod', 'historyCity')
+        t.store.data.getLocationMethod = 'historyCity'
       }
-      let eventOption = {}
-      t.hideDrawerModal()
-      t.triggerEvent('setNewWeatherDataByHistory', eventDetail, eventOption)
+      (async () => {
+        await prevPage.setData({
+          'latitude': curCityData.latitude,
+          'longitude': curCityData.longitude,
+          'forecastData.city': curCityData.city,
+          'forecastData.address': curCityData.address
+      })
+        await prevPage.getWeatherData(true)
+        await changeStorage()
+        await t.hideDrawerModal()
+      })()
+      
+      // const t = this
+      // let curCityData = e.currentTarget.dataset.cityData
+      // let eventDetail = {
+      //   curCityData: curCityData
+      // }
+      // log('citydata',eventDetail)
+      // let eventOption = {}
+      // t.hideDrawerModal()
+      // t.triggerEvent('setNewWeatherDataByHistory', eventDetail, eventOption)
     },
     getNewLocationByManual() {
       const t = this

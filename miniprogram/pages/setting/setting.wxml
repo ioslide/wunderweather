@@ -65,7 +65,7 @@
 		</sc-cell>
 	</view>
 
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
+	<!-- <view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气源</block>
@@ -78,7 +78,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Caiyun / WeatherBit</block>
 			</text>
 		</sc-cell>
-	</view>
+	</view> -->
 
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="warning">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
@@ -140,7 +140,6 @@
 		</sc-cell>
 	</view>
 
-
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="about">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
@@ -152,6 +151,21 @@
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">版本</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">版本</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Version </block>1.4.10
+			</text>
+		</sc-cell>
+	</view>
+
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="sponsorshipneeds">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">提需求</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">提需求</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Function demand</block>
+			</text>
+			<text slot="subbottom">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">赞助提需求</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">贊助提需求</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sponsorship needs</block>
 			</text>
 		</sc-cell>
 	</view>
@@ -172,22 +186,23 @@
 			<view class="cu-list menu text-left" style="width: 100%;background: #2D2D2D;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Line" value="lineIcon" checked="{{$.icon.lineIcon}}" style="width:100%;"></sc-radio>
+						<sc-radio label="Line" value="lineIcon" checked="{{$.icon.lineIcon}}" iconValue="lineIcon" style="width:100%;">
+						</sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Solid" value="solidIcon" checked="{{$.icon.solidIcon}}" style="width:100%;"></sc-radio>
+						<sc-radio label="Solid" value="solidIcon" checked="{{$.icon.solidIcon}}" iconValue="solidIcon" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Color" value="colorIcon" checked="{{$.icon.colorIcon}}" style="width:100%;"></sc-radio>
+						<sc-radio label="Color" value="colorIcon" checked="{{$.icon.colorIcon}}" iconValue="colorIcon" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Flat" value="flatIcon" checked="{{$.icon.flatIcon}}" style="width:100%;"></sc-radio>
+						<sc-radio label="Flat" value="flatIcon" checked="{{$.icon.flatIcon}}" iconValue="flatIcon" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>

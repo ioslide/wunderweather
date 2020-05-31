@@ -7,7 +7,7 @@
 	</sc-capsule>
 </view>
 
-<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px " catchtouchmove="true">
+<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px " catchtouchmove="true">
 	<block wx:if="{{$.startScreen == 'auth'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
@@ -674,6 +674,20 @@
 				<view style="width: 100%; height: 250px;">
 					<image src="{{forecastData.rainRadar.coverImage}}" mode="widthFix" style="width:{{windowWidth-30}}px;height:{{windowWidth-30}}px;position:absolute;left:0;top:-{{(windowWidth-30-250)/2}}px;">
 					</image>
+					<!-- <view class="ms-sf-nowcasting-bottom">
+						<view class="ms-sf-nowcasting-playbar">
+							<view class="ms-sf-nowcasting-timewrapper c-gap-right-small c-color-gray WA_LOG_OTHER">
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small" style="width: 16.6667%;">12:30</view>
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small" style="width: 16.6667%;">13:00</view>
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small" style="width: 16.6667%;">13:30</view>
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small c-color" style="width: 16.6667%;">14:00</view>
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small c-color" style="width: 16.6667%;">14:30</view>
+								<view class="ms-sf-nowcasting-timespan c-gap-inner-right-small c-gap-inner-left-small c-color" style="width: 16.6667%;">15:00</view>
+								<view class="ms-sf-nowcasting-timeblock" style="transform: translate3d(15.5333px, 0px, 0px);"></view>
+							</view>
+							<view class="ms-sf-nowcasting-playicon c-gap-left WA_LOG_OTHER"></view>
+						</view>
+					</view> -->
 				</view>
 			</map>
 		</view>
@@ -800,6 +814,10 @@
 <view class='navSlide justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEnd' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
+
+	<view class="tapRightDrawerModal" bindtap="showDrawerModal" data-target="DrawerModalR">
+		<image src="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" mode="widthFix"></image>
+	</view>
 
 <block wx:if="{{$.getLocationMethod == 'manual' || $.getLocationMethod == 'historyCity'}}">
 	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}}" bindtap="refreshLocation">

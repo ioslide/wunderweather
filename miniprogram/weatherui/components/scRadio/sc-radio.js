@@ -10,6 +10,7 @@ Component({
 
   properties:
   {
+    iconValue:{type:String,value:null},
     subHeader: { type: String },
     checked: { type: Boolean, value: !1 },
     disabled: { type: Boolean, value: !1 },
@@ -19,9 +20,10 @@ Component({
     reverse: { type: Boolean, value: !1 },
     ripple: { type: Boolean, value: !0 }
   },
-  data: { checked: !1, clicked: !1, showRipple: !1, disabled: !1, value: null },
+  data: { checked: !1, clicked: !1, showRipple: !1, disabled: !1, value: null,iconValue:null },
   ready: function () {
     this.setData({
+      iconValue:"https://weather.ioslide.com/weather/icon/all" + this.properties.iconValue + ".svg",
       checked:
         this.properties.checked,
       disabled: this.properties.disabled,

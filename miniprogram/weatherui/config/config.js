@@ -18,7 +18,7 @@ exports.default = {
   // locationKey : 'V6KBZ-WDCED-HTR44-PHG7F-V2AME-B3FFO', //订阅号
   // subTemplateId:'3HGni7nX2GM6bmaKk-_Mldf-mPFCmhFYIpEWBksBmUI', // 订阅号
   // wxBassId:'c3d88ee29b2337915fd0', //订阅号
-  wxBassId:'67d1ef54390bfb3aac39', //服务号
+  wxBassId:'2973ccfe4956634d9d8a', //服务号
   cloudEnv:"wunderweather-nwepb", //服务号
   appid:'wx7b4bbc2d9c538e84', //服务号
   locationKey : 'BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D', //服务号

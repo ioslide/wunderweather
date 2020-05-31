@@ -105,6 +105,11 @@ create(store, {
   },
   onPullDownRefresh: function () { },
   onReachBottom: function () { },
+  backPage() {
+    wx.navigateBack({
+      delta: 1
+    });
+  },
   onShareAppMessage: function (t) {
     if ("小微写诗" === this.data.title) {
       var a = JSON.stringify(["一江春水连海平", "朋友", "故乡", "小微写诗"]);

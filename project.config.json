@@ -164,6 +164,12 @@
 					"pathName": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
+					"pathName": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
+					"scene": null
 				}
 			]
 		}

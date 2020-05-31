@@ -187,18 +187,18 @@ create(store, {
       })
       app.globalData.latitude = location.latitude
       app.globalData.longitude = location.longitude
-
       //auth状态手动获取经纬度后先不请求数据
-        t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
-        t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
-          'modalName': null
-        })) :
-        t.store.data.startScreen == 'default' ? (t.getWeatherData(true), t.setData({
-          'modalName': null
-        })) : ''
+      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
+      t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
+        'modalName': null
+      })) :
+      t.store.data.startScreen == 'default' ? (t.getWeatherData(true), t.setData({
+        'modalName': null
+      })) : ''
       log('[manualLocationData]', location)
-      app.saveData('manualLocationData', location)
+      t.store.data.getLocationMethod = 'manual'
       //make sure location value != null
+      app.saveData('manualLocationData', location)
       app.changeStorage('getLocationMethod', 'manual')
     }
     if(t.store.data.getWeatherDataAgain == true){
@@ -415,39 +415,40 @@ create(store, {
   },
   getLocationByManual() {
     const t = this
-    log('[getLocationByManual]', t.data.manualLocationData)
+    let manualData = wx.getStorageSync('historyCityList')[0]
+    log('[getLocationByManual]', manualData)
     const changeStorage = () => {
-        app.changeStorage('getLocationMethod', 'manual')
-      }
-      (async () => {
-        await t.setData({
-          'latitude': t.data.manualLocationData.latitude,
-          'longitude': t.data.manualLocationData.longitude,
-          'forecastData.city': t.data.manualLocationData.city,
-          'forecastData.address': t.data.manualLocationData.name
-        }),
-        await t.getWeatherData(false)
-        await t.screenFadeOut()
-        await changeStorage()
-      })()
+      app.changeStorage('getLocationMethod', 'manual')
+    }
+    (async () => {
+      await t.setData({
+        'latitude': manualData.latitude,
+        'longitude': manualData.longitude,
+        'forecastData.city': manualData.city,
+        'forecastData.address': manualData.address
+      }),
+      await t.getWeatherData(false)
+      await t.screenFadeOut()
+      await changeStorage()
+    })()
   },
   getLocationByHistory() {
     const t = this
-    var historyCityData = wx.getStorageSync('historyCityList')
+    var historyCityData = wx.getStorageSync('historyCityList')[0]
     const changeStorage = () => {
-        app.changeStorage('getLocationMethod', 'historyCity')
-      }
-      (async () => {
-        await t.setData({
-          'latitude': historyCityData[0].latitude,
-          'longitude': historyCityData[0].longitude,
-          'forecastData.city': historyCityData[0].city,
-          'forecastData.address': historyCityData[0].address
-        }),
-        await t.getWeatherData(false)
-        await t.screenFadeOut()
-        await changeStorage()
-      })()
+      app.changeStorage('getLocationMethod', 'historyCity')
+    }
+    (async () => {
+      await t.setData({
+        'latitude': historyCityData.latitude,
+        'longitude': historyCityData.longitude,
+        'forecastData.city': historyCityData.city,
+        'forecastData.address': historyCityData.address
+      }),
+      await t.getWeatherData(false)
+      await t.screenFadeOut()
+      await changeStorage()
+    })()
   },
   getLocationByAuto() {
     const t = this
@@ -544,25 +545,23 @@ create(store, {
     let locationKey = config.locationKey
     const appReferer = '奇妙天气-小程序';
     const locationCategory = '奇妙天气,XHY';
-    app.changeStorage('getLocationMethod', 'manual')
-    t.store.data.getLocationMethod = 'manual'
     wx.navigateTo({
       url: 'plugin://chooseLocation/index?key=' + locationKey + '&referer=' + appReferer + '&category=' + locationCategory
     });
   },
   setNewWeatherDataByHistory(e) {
     const t = this
-    var historyCityData = e.detail.historyCityData
-    log('[setNewWeatherDataByHistory]', historyCityData)
+    var curCityData = e.detail.curCityData
+    log('[setNewWeatherDataByHistory]', e.detail)
     t.setData({
-      'latitude': historyCityData.latitude,
-      'longitude': historyCityData.longitude,
-      'forecastData.city': historyCityData.city,
-      'forecastData.address': historyCityData.address,
+      'latitude': curCityData.latitude,
+      'longitude': curCityData.longitude,
+      'forecastData.city': curCityData.city,
+      'forecastData.address': curCityData.address,
       'modalName': null
     }),
-    app.globalData.latitude = historyCityData.latitude,
-    app.globalData.longitude = historyCityData.longitude
+    app.globalData.latitude = curCityData.latitude,
+    app.globalData.longitude = curCityData.longitude
     const changeStorage = () => {
         app.changeStorage('getLocationMethod', 'historyCity')
         t.store.data.getLocationMethod = 'historyCity'
@@ -676,6 +675,18 @@ create(store, {
           }, [])
         return historyCityList
       }
+      const reduceChatRobotGuideCityList = (reduceData) => {
+        let chatRobotGuideCityList = wx.getStorageSync('chatRobotGuideCityList') || []
+        let hash = {}
+        chatRobotGuideCityList.unshift(reduceData.city + reduceData.address + '天气怎么样')
+        chatRobotGuideCityList = chatRobotGuideCityList.reduce(
+          function (item, next) {
+            log('next',next)
+            hash[next.address] ? '' : hash[next.address] = true && item.push(next);
+            return item
+          }, [])
+        return chatRobotGuideCityList
+      }
       var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
       app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
         let randomBgIndex = _.random(0,result.data.data.length)
@@ -684,10 +695,7 @@ create(store, {
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
-          solidIcon: config.cosApiHost + "/weather/icon/solidIcon/" + realtime.skycon + "-icon.svg",
-          flatIcon: config.cosApiHost + "/weather/icon/flatIcon/" + realtime.skycon + "-icon.svg",
-          lineIcon: config.cosApiHost + "/weather/icon/lineIcon/" + realtime.skycon + "-icon.svg",
-          colorIcon: config.cosApiHost + "/weather/icon/colorIcon/" + realtime.skycon + "-icon.svg",
+          icon: config.cosApiHost + "/weather/icon/",
           backgroundBg:backgroundBg,
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
@@ -695,10 +703,14 @@ create(store, {
           latitude: that.data.latitude,
           longitude: that.data.longitude
         }
+
         let historyCityList = reduceHistoryCityData(data)
+        let chatRobotGuideCityList = reduceChatRobotGuideCityList(data)
+
         that.setData({
           'historyCityList': historyCityList
         })
+        app.saveData("chatRobotGuideCityList", chatRobotGuideCityList)
         app.saveData("historyCityList", historyCityList)
       }).catch((err) => {
         console.log(err);
@@ -981,7 +993,6 @@ create(store, {
     return self.store.data.languageValue == 'zh_CN' ? zh_CN() : self.store.data.languageValue == 'zh_TW' ? zh_TW() : self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ? en_US_en_GB() : warn('[getWindDirect]')
   },
   getMoonPhaseList() {
-    log('[getMoonPhaseList]')
     const t = this
     let obj = Array.from(Array(30), (v, k) => k)
     obj.map(function (value, index, arr) {
@@ -1576,7 +1587,7 @@ create(store, {
       wx.request({
         url: rainRadarApiHost,
         success: (result) => {
-          log('[rainRadarApiHost result]', result)
+          log('[rainRadarApiHost result]', result.data)
           if(result.data.status == 'failed'){
             return t.setData({
               'forecastData.rainRadar.latitude': t.data.latitude,
@@ -1586,7 +1597,7 @@ create(store, {
           let rainRadarImg = result.data.images[result.data.images.length - 1][0]
           let source = result.data.images[result.data.images.length - 1]
           let rainRadarPosition = source[2]
-
+          //Today
           const reduceRainRadarImages = () => {
             let rainRadarImageData = []
             let rainRadarImages = result.data.images
@@ -1598,6 +1609,7 @@ create(store, {
             }
             return rainRadarImageData
           }
+          //Forecast
           const reduceRainRadarForecastImages = () => {
             var rainRadarforecastImagesData = []
             var rainRadarforecastImages = result.data.forecast_images
@@ -1618,6 +1630,7 @@ create(store, {
             }
           }
           reduceRainRadarData().then(res => {
+            log('[rainRadarImg]',rainRadarImg,res.rainRadarImageData)
             t.setData({
               'forecastData.rainRadar.latitude': (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
               'forecastData.rainRadar.longitude': (rainRadarPosition[1] + rainRadarPosition[3]) / 2,
@@ -1638,12 +1651,13 @@ create(store, {
       wx.request({
         url: aqiRadarApiHost,
         success: (result) => {
-          log('[reqAqiRadar result]', result)
+          log('[reqAqiRadar]', result.data.images)
           let aqiRadarImg = result.data.images[result.data.images.length - 1][0]
           t.setData({
             'forecastData.aqiRadar.coverImage': aqiRadarImg,
             'forecastData.aqiRadar.images': result.data.images
           })
+          log('[aqiRadarImg]',aqiRadarImg)
         },
         fail: (res) => {},
         complete: () => {
@@ -2446,7 +2460,7 @@ create(store, {
   },
   loadingProgress(canLoading){
     const t = this
-    log('[loading]',canLoading)
+    log('[loadingProgress]',canLoading)
     const loadingComponent = t.selectComponent('#loading');
     if(canLoading == true){
       loadingComponent.startLoading();

@@ -53,10 +53,11 @@ App({
     chatRobot.init({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
       navHeight: charRobotBar, 
-      textToSpeech: true, //默认为ture打开状态
+      textToSpeech: true,
       welcome: '你好，我是小O',
       history: true,
       historySize: 60,
+      guideList: wx.getStorageSync('chatRobotGuideCityList') || ["杭州天气怎么样", "深圳天气怎么样", "成都天气怎么样"],
       background: "#F5F6F7",
       guideCardHeight: 50,
       operateCardHeight: 120,
