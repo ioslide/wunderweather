@@ -57,7 +57,6 @@ App({
       welcome: '你好，我是小O',
       history: true,
       historySize: 60,
-      guideList: wx.getStorageSync('chatRobotGuideCityList') || ["杭州天气怎么样", "深圳天气怎么样", "成都天气怎么样"],
       background: "#F5F6F7",
       guideCardHeight: 50,
       operateCardHeight: 120,
@@ -136,6 +135,7 @@ App({
           width: 87
         })
         var o = RegExp("^.*iPhone X.*$");
+        log('getSystemInfo',e)
         e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
           t.globalData.StatusBar = e.statusBarHeight;
         t.globalData.barHeight = e.statusBarHeight,

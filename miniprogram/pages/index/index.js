@@ -3,6 +3,7 @@ let temperatureChart = null
 let rainChart = null
 let radarChart = null
 const app = getApp()
+const globalData = getApp().globalData
 // const AUTH_MODE = 'fingerPrint'
 const log = console.log.bind(console)
 const group = console.group.bind(console)
@@ -36,26 +37,27 @@ create(store, {
     temperatureChartConfig : {
       appendPadding:0,
       padding:[30,0,30,0],
-      pixelRatio : app.globalData.pixelRatio,
-      width: app.globalData.windowWidth,
+      pixelRatio : globalData.pixelRatio,
+      width: globalData.windowWidth,
       height: 210
     },
     rainChartConfig : {
       appendPadding:0,
       padding:[30,0,0,0],
-      pixelRatio : app.globalData.pixelRatio,
-      width: app.globalData.windowWidth,
+      pixelRatio : globalData.pixelRatio,
+      width: globalData.windowWidth,
       height: 200
     },
     radarChartConfig : {
       appendPadding:0,
       padding:30,
-      pixelRatio : app.globalData.pixelRatio,
+      pixelRatio : globalData.pixelRatio,
       width: 250,
       height: 250
     },
     showAirQuatityRadar:false,
     drawerModalName:null,
+    snackBarLength:0,
     x: 0,
     y: 0,
     ww: 0,
@@ -63,11 +65,11 @@ create(store, {
     latitude: "",
     longitude: "",
     datePicker: {},
-    StatusBar: app.globalData.StatusBar,
-    CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom,
-    windowWidth: app.globalData.windowWidth,
-    windowHeight: app.globalData.windowHeight,
+    StatusBar: globalData.StatusBar,
+    CustomBar: globalData.CustomBar,
+    Custom: globalData.Custom,
+    windowWidth: globalData.windowWidth,
+    windowHeight: globalData.windowHeight,
     lastRefreshTime: '',
     // initChart: !1,
     // refreshChart: !1,
@@ -185,8 +187,8 @@ create(store, {
         'longitude': location.longitude,
         'latitude': location.latitude
       })
-      app.globalData.latitude = location.latitude
-      app.globalData.longitude = location.longitude
+      globalData.latitude = location.latitude
+      globalData.longitude = location.longitude
       //auth状态手动获取经纬度后先不请求数据
       t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
       t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
@@ -209,6 +211,7 @@ create(store, {
     const t = this
     // t.setRefreshWeatherInterval()
     t.getBingImage()
+    t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
   },
   loadDataFromStorage() {
@@ -232,8 +235,8 @@ create(store, {
                 'longitude': res.data[1].longitude,
                 'forecastData.nowTemp': res.data[1].nowTemp
               });
-              app.globalData.latitude = res.data[1].latitude
-              app.globalData.longitude = res.data[1].longitude
+              globalData.latitude = res.data[1].latitude
+              globalData.longitude = res.data[1].longitude
             }
           }),
           wx.getStorage({
@@ -560,8 +563,8 @@ create(store, {
       'forecastData.address': curCityData.address,
       'modalName': null
     }),
-    app.globalData.latitude = curCityData.latitude,
-    app.globalData.longitude = curCityData.longitude
+    globalData.latitude = curCityData.latitude,
+    globalData.longitude = curCityData.longitude
     const changeStorage = () => {
         app.changeStorage('getLocationMethod', 'historyCity')
         t.store.data.getLocationMethod = 'historyCity'
@@ -675,18 +678,6 @@ create(store, {
           }, [])
         return historyCityList
       }
-      const reduceChatRobotGuideCityList = (reduceData) => {
-        let chatRobotGuideCityList = wx.getStorageSync('chatRobotGuideCityList') || []
-        let hash = {}
-        chatRobotGuideCityList.unshift(reduceData.city + reduceData.address + '天气怎么样')
-        chatRobotGuideCityList = chatRobotGuideCityList.reduce(
-          function (item, next) {
-            log('next',next)
-            hash[next.address] ? '' : hash[next.address] = true && item.push(next);
-            return item
-          }, [])
-        return chatRobotGuideCityList
-      }
       var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
       app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
         let randomBgIndex = _.random(0,result.data.data.length)
@@ -705,12 +696,10 @@ create(store, {
         }
 
         let historyCityList = reduceHistoryCityData(data)
-        let chatRobotGuideCityList = reduceChatRobotGuideCityList(data)
 
         that.setData({
           'historyCityList': historyCityList
         })
-        app.saveData("chatRobotGuideCityList", chatRobotGuideCityList)
         app.saveData("historyCityList", historyCityList)
       }).catch((err) => {
         console.log(err);
@@ -1077,7 +1066,7 @@ create(store, {
       interval: "ui"
     });
     const that = this
-    let t = app.globalData.screenWidth
+    let t = globalData.screenWidth
     let a = t / 750
     let o = 75 * a
     let n = 168.5 * a
@@ -1322,7 +1311,7 @@ create(store, {
   navRadar() {
     // appid:'wx673e7d2fe4e6a413',  //订阅号
     // appid:'wx7b4bbc2d9c538e84', //服务号
-    log('[navRadar]', app.globalData.appid)
+    log('[navRadar]', globalData.appid)
     const t = this
     log('[navigateTo]')
     wx.navigateTo({
@@ -2004,7 +1993,7 @@ create(store, {
         log(error)
       })
     }
-    let fileName = util.formatDateClear(new Date()).concat(app.globalData.openid)
+    let fileName = util.formatDateClear(new Date()).concat(globalData.openid)
     cloudUpload(event.detail.resultSrc, fileName)
   },
   uploadCallback(event) {
@@ -2467,5 +2456,30 @@ create(store, {
     }else{
       loadingComponent.stopLoading();
     }
-  }
+  },
+  openSnackBar(){
+    this.data.snackBar.open({
+        message:'天气预警'+this.data.snackBarLength++,
+        buttonText:'关闭',
+        buttonTextColor:'red',
+        color:'lightblue',
+        messageColor:'black',
+        closeOnButtonClick:true,
+        onButtonClick:() => {
+            console.log('点击button');
+        },
+        onOpen:() => {
+            console.log('snackBar打开中');
+        },
+        onOpened(){
+            console.log('snackBar已打开');
+        },
+        onClose(){
+            console.log('snackBar关闭中');
+        },
+        onClosed(){
+            console.log('snackBar已关闭');
+        }
+    });
+}
 });

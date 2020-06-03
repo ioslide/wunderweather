@@ -234,14 +234,6 @@
 }
 
 .sc-button-flat {
-  background-color: #010101;
-  text-align: left;
-  padding-left: 20px;
-  height: 50px;
-  line-height: 50px
-}
-
-.sc-button-flat-circle {
   text-align: center;
   height: 35px;
   border:none;
@@ -249,7 +241,6 @@
   width: 35px;
   border-radius: 50%;  
 }
-
 
 .sc-btn-fab {
   width: 112rpx;

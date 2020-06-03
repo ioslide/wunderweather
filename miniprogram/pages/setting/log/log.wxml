@@ -1,0 +1,40 @@
+<page-meta background-color="{{$.themeValue == 'light'?'#F5F6F7':'#010101'}}" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="{{$.themeValue == 'light'?'background:#F5F6F7':'background:#010101'}}">
+	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
+</page-meta>
+
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
+<view class="container">
+	<view class="tui-log">
+		<tui-time-axis>
+			<tui-timeaxis-item>
+				<view slot="node" class="tui-node">
+					<image mode="widthFix" class="square-20" src="https://weather.ioslide.com/weather/todo.svg"></image>
+				</view>
+				<view slot="content">
+					<view class="tui-content-log tui-log-gray">
+						<view class="tui-version-date">ToDo Lists | 2020</view>
+						<!-- <view class="tui-log-text">1.代码优化</view>
+						<view class="tui-log-text">2.雷达地图</view> -->
+						<sc-checkbox-group bindchange="checkboxChange">
+							<sc-checkbox label="1.代码优化" checked value="代码优化" color="red" disabled></sc-checkbox>
+						</sc-checkbox-group>
+						<sc-checkbox-group bindchange="checkboxChange">
+							<sc-checkbox label="2.雷达地图" checked="{{false}}" value="雷达地图" disabled></sc-checkbox>
+						</sc-checkbox-group>
+					</view>
+				</view>
+			</tui-timeaxis-item>
+			<tui-timeaxis-item>
+				<view slot="node" class="tui-node">
+					<image mode="widthFix" class="square-20" src="https://weather.ioslide.com/weather/bug.svg"></image>
+				</view>
+				<view slot="content">
+					<view class="tui-content-log tui-log-gray">
+						<view class="tui-version-date">已知Bug | 截止2020-06-01</view>
+						<view class="tui-log-text">1.F2数据刷新，图表重绘问题</view>
+					</view>
+				</view>
+			</tui-timeaxis-item>
+		</tui-time-axis>
+	</view>
+</view>

@@ -7,7 +7,7 @@
 	</sc-capsule>
 </view>
 
-<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px " catchtouchmove="true">
+<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px" catchtouchmove="true">
 	<block wx:if="{{$.startScreen == 'auth'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
@@ -15,7 +15,7 @@
 					<image id="leaf" src="https://teaimg.ioslide.com/weather/leaf3.png" style="left:{{windowWidth/2+80}}px;transform:rotate3d(0,0,1,45deg) scale(1)" class="square-200" mode="widthFix"></image>
 				</view>
 				<view>
-					<view class="flex justify-center padding-15 align-center" id="firstStepLogo" bindtap="checkLocationAuth">
+					<view class="flex justify-center padding-15 align-center" id="firstStepLogo">
 						<image class="square-150" mode="aspectFit" src="../../weatherui/assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
@@ -73,7 +73,7 @@
 						</view>
 					</view>
 					<view class="authScreenNextCell" bindtap="authScreenNext" data-target="authSecondStep">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenRight.svg" flat circle></sc-button>
 					</view>
 				</view>
 			</view>
@@ -125,7 +125,7 @@
 						</view>
 					</view>
 					<view class="authScreenPreCell" bindtap="authScreenBack" data-target="authSecondStep">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenLeft.svg" class="square-35"></image>
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenLeft.svg" flat circle></sc-button>
 					</view>
 				</view>
 			</view>
@@ -229,7 +229,7 @@
 						</view>
 					</view>
 					<view class="authScreenNextCell" bindtap="onAuthFinalScreen">
-						<image mode="aspectFit" src="https://weather.ioslide.com/weather/authScreenRight.svg" class="square-35"></image>
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenRight.svg" flat circle></sc-button>
 					</view>
 				</view>
 			</view>
@@ -402,7 +402,7 @@
 		<view class="text-left text-grey text-df">{{curDetailTime}}</view>
 	</view>
 
-	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
+	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;" bindtap="openSnackBar">
 		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
 			{{forecastData.address}}·{{forecastData.realtime.skyconCN}}
 		</view>
@@ -815,9 +815,9 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-	<view class="tapRightDrawerModal" bindtap="showDrawerModal" data-target="DrawerModalR">
-		<image src="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" mode="widthFix"></image>
-	</view>
+<view class="tapRightDrawerModal" bindtap="showDrawerModal" data-target="DrawerModalR">
+	<image src="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" mode="widthFix"></image>
+</view>
 
 <block wx:if="{{$.getLocationMethod == 'manual' || $.getLocationMethod == 'historyCity'}}">
 	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}}" bindtap="refreshLocation">
@@ -851,5 +851,6 @@
 		</navigator>
 	</view>
 </view> -->
+<sc-snackbar id="snackbar"></sc-snackbar>
 
 <drawermodal drawerModalName="{{drawerModalName}}" bind:hideDrawerModal="hideDrawerModal" bind:_scrollTo="_scrollTo" bind:openDatePicker="openDatePicker" bind:chooseCropImage="chooseCropImage" bind:getNewLocationByManual="getNewLocationByManual" bind:setNewWeatherDataByHistory="setNewWeatherDataByHistory" bind:savePostImg="savePostImg" />

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "tui-time-axis": "/weatherui/components/time-axis/time-axis",
+    "tui-timeaxis-item": "/weatherui/components/timeaxis-item/timeaxis-item"
+  }
+}

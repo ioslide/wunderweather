@@ -2,7 +2,7 @@
 	</sc-capsule>
 	<view class="container">
 		<view style="background:#F7FBFC" class="cu-custom">
-			<view class="cu-bar fixed {{bgImage!=''?'none-bg text-white bg-img':''}} {{bgColor}}" style="position:relative;height:{{CustomBar}}px;padding-top:{{StatusBar}}px;{{bgImage?'background-image:url(' + bgImage+')':''}}">
+			<view class="cu-bar fixed none-bg text-white bg-img" style="position:relative;height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
 				<view class="content" style="top:{{StatusBar}}px">
 					<slot name="content"></slot>
 				</view>

@@ -1,0 +1,13 @@
+{
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle": "black",
+  "backgroundColorTop": "#ebedf6",
+  "backgroundColorBottom": "#ebedf6",
+  "usingComponents": {
+    "tui-icon": "/weatherui/components/icon/icon",
+    "tui-badge": "/weatherui/components/badge/badge",
+    "tui-loadmore": "/weatherui/components/loadmore/loadmore",
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group"
+  }
+}

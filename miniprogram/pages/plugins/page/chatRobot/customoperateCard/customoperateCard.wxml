@@ -4,7 +4,7 @@
             <view catchtap="chooseType" class="list-btn" data-type="input">
                 <image class="list-img" src="https://teaimg.ioslide.com/aichat/ic_keyboard.png"></image>
             </view>
-            <view bindtouchcancel="inputVoiceEnd" bindtouchend="inputVoiceEnd" bindtouchstart="inputVoiceStart" class="voice-btn">
+            <view bindtouchcancel="inputVoiceEnd" bindtouchend="inputVoiceEnd" bindtouchstart="inputVoiceStart"  class="voice-btn" hover-class="voice-btn-hover" hover-stay-time="150">
                 <image class="voice-img" src="https://teaimg.ioslide.com/aichat/aichatcustomVoiceBtn.png"></image>
             </view>
             <view catchtap="showGuideView" class="input-btn">

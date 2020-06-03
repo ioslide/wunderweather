@@ -30,9 +30,9 @@
   box-sizing: border-box;
   width: 18px;
   height: 18px;
-  margin: 0 8px;
-  border-radius: 2px;
-  border: 2px solid rgba(0, 0, 0, .54)
+  margin: 0;
+  border-radius: 0px;
+  border: 1px solid rgba(207, 186, 186, 0.54)
 }
 
 .sc-checkbox-main .sc-checkbox-icon-bg {
@@ -188,5 +188,6 @@
 }
 
 .text-5 {
-  font-size: 28rpx
+  font-size: 28rpx;
+  padding-left: 10px;
 }

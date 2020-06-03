@@ -4195,7 +4195,12 @@ scroll-view.cu-steps .cu-item {
 .padding-left-25 {
 	padding-left: 25px;
 }
-
+.padding-left-30 {
+	padding-left: 30px;
+}
+.padding-left-50 {
+	padding-left: 50px;
+}
 
 /* .padding-left-xs {
 	padding-left: 10rpx;
@@ -4291,6 +4296,33 @@ scroll-view.cu-steps .cu-item {
 .fr {
 	float: right;
 }
+.height-0 {
+	height: 0px
+}
+
+.height-5 {
+	height: 5px
+}
+
+.height-10 {
+	height: 10px
+}
+
+.height-20 {
+	height: 20px
+}
+
+.height-30 {
+	height: 30px;
+}
+
+.height-40 {
+	height: 40px;
+}
+
+.height-50 {
+	height: 50px;
+}
 
 .line-height-0 {
 	line-height: 0px
@@ -4308,16 +4340,16 @@ scroll-view.cu-steps .cu-item {
 	line-height: 20px
 }
 
-.line-hight-30 {
+.line-height-30 {
 	line-height: 30px;
 }
 
-.line-hight-40 {
-	line-height: 30px;
+.line-height-40 {
+	line-height: 40px;
 }
 
-.line-hight-50 {
-	line-height: 30px;
+.line-height-50 {
+	line-height: 50px;
 }
 
 .line-red::after,
@@ -5089,7 +5121,10 @@ scroll-view.cu-steps .cu-item {
 	height: 40px;
 	width: 40px
 }
-
+.square-45 {
+	height: 45px;
+	width: 45px
+}
 .square-50 {
 	height: 50px;
 	width: 50px

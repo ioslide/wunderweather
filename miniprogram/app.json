@@ -12,9 +12,11 @@
     "pages/setting/pro/pro",
     "pages/setting/customstyle/customstyle",
     "pages/setting/customicon/customicon",
+    "pages/setting/sponsorshipneeds/sponsorshipneeds",
     "pages/setting/about/about",
     "pages/rain/rain",
-    "pages/radar/radar"
+    "pages/radar/radar",
+    "pages/setting/log/log"
   ],
   "window": {
     "navigationStyle": "custom",
@@ -49,7 +51,10 @@
       "provider": "wx069ba97219f66d99"
     }
   },
-  "requiredBackgroundModes": ["audio", "location"],
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
   "navigateToMiniProgramAppIdList": [
     "wx4ffcd811b31b23ac",
     "wx7b4bbc2d9c538e84",
@@ -60,7 +65,12 @@
     "drawermodal": "/weatherui/components/drawermodal/drawermodal",
     "sc-cell": "/weatherui/components/scCell/sc-cell",
     "sc-cell-group": "/weatherui/components/scCellGroup/sc-cell-group",
-    "loading": "/weatherui/components/loading/loading"
+    "loading": "/weatherui/components/loading/loading",
+    "sc-snackbar": "/weatherui/components/scSnackbar/sc-snackbar",
+    "sc-button": "/weatherui/components/scButton/sc-button",
+    "circleButton": "/weatherui/components/circleButton/circleButton",
+    "sc-checkbox":"/weatherui/components/scCheckbox/sc-checkbox",
+    "sc-checkbox-group":"/weatherui/components/scCheckboxGroup/sc-checkbox-group"
   },
   "subPackages": [
     {
@@ -87,7 +97,6 @@
         "page/chatRobot/pure/pure",
         "page/chatRobot/webviewPage/webviewPage",
         "page/chatRobot/welcomeCard/welcomeCard"
-
       ]
     }
   ],

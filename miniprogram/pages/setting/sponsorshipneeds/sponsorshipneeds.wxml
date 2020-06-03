@@ -1,0 +1,88 @@
+
+<sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}" contentText="赞助需求排行榜"></sc-capsule>
+<view class="container">
+
+	<!--tabbar-->
+	<view class="tui-chat-content">
+		<tui-loadmore visible="{{loadding}}" index="3" type="primary" text=""></tui-loadmore>
+		<view class="tui-chat-center margin-bottom-20">截止 2020-06-03</view>
+		<view wx:for="{{msgLists}}" wx:key="index">
+			<view class="tui-chat-center">星期五 12:09</view>
+			<view class="tui-chat-left">
+				<image src="{{item.avatar}}" class="tui-user-pic tui-right"></image>
+				<view class="tui-chatbox tui-chatbox-left">{{item.msg}}<br />
+					<view style="color:#C8C8C8;font-size；18rpx">赞助金额: {{item.price}}元 · 需求人数: {{item.index}}</view>
+				</view>
+			</view>
+		</view>
+		<!-- <view class="tui-chat-left">
+			<image src="https://weather.ioslide.com/weather/authScreenRight.svg" class="tui-user-pic tui-right"></image>
+			<view class="tui-flex-center">
+				<view class="tui-chatbox tui-chatbox-left tui-chat-flex tui-mr">
+					<image src="https://weather.ioslide.com/weather/authScreenRight.svg" class="tui-chat-voice tui-mr"></image>
+					<view style="width:300rpx">20"</view>
+				</view>
+				<tui-badge dot="{{true}}" type="danger"></tui-badge>
+			</view>
+		</view>
+
+		<view class="tui-chat-right">
+			<view class="tui-flex-center tui-flex-end">
+				<tui-badge dot="{{true}}" type="danger"></tui-badge>
+				<view class="tui-chatbox tui-chatbox-right tui-chat-flex tui-ml tui-flex-reverse">
+					<image src="https://weather.ioslide.com/weather/authScreenRight.svg" class="tui-chat-voice tui-rotate tui-ml"></image>
+					<view style="width:280rpx;text-align:right">18"</view>
+				</view>
+			</view>
+			<image src="https://weather.ioslide.com/weather/authScreenRight.svg" class="tui-user-pic tui-left"></image>
+		</view> -->
+
+	</view>
+	<!--tabbar-->
+	<view class="price-operation">
+		<view class="bottom-price-view">
+			<view class="price-btn justify-end align-center"><text style="text-shadow:inset 5px 5px 10px #cee3f2, inset -5px -5px 10px #faffff;">{{price}}</text></view>
+		</view>
+	</view>
+	<view class="tui-operation tui-chat-operation">
+		<block>
+			<block wx:if="{{!inputing&&!isShowGuideView}}">
+				<view class="bottom-operate-view" style="height: {{height}}px">
+					<view catchtap="chooseType" class="list-btn" data-type="input">
+						<button class="absolute list-img opacity-0" open-type="getUserInfo" bindgetuserinfo="bindgetUserInfo" style="z-index: 1000;"></button>
+						<image class="list-img" src="https://weather.ioslide.com/aichat/ic_keyboard.png"></image>
+					</view>
+					<view bindtouchcancel="inputVoiceEnd" bindtouchend="inputVoiceEnd" bindtouchstart="inputVoiceStart" class="voice-btn" hover-class="voice-btn-hover" hover-stay-time="150">
+						<button class="absolute voice-img opacity-0" open-type="getUserInfo" bindgetuserinfo="bindgetUserInfo" style="z-index: 1000;"></button>
+						<image class="voice-img" src="https://weather.ioslide.com/aichat/aichatcustomVoiceBtn.png"></image>
+					</view>
+					<picker bindchange="bindPickerPriceChange" value="{{index}}" range="{{priceLists}}">
+						<view class="input-btn">
+							<image class="input-img" src="https://weather.ioslide.com/weather/sponsorshipMoney.svg"></image>
+						</view>
+					</picker>
+				</view>
+			</block>
+		</block>
+		<block>
+			<block wx:if="{{inputing&&!isShowGuideView}}">
+				<view class="bottom-operate-view">
+					<view catchtap="chooseType" class="list-btn-inputView" data-type="voice">
+						<button class="absolute list-img opacity-0" open-type="getUserInfo" bindgetuserinfo="bindgetUserInfo" style="z-index: 1000;"></button>
+						<image class="list-img2" src="https://weather.ioslide.com/aichat/voiceBtn.png"></image>
+					</view>
+					<view class="input-btn-inputView">
+						<input bindblur="tuneDownInput" bindconfirm="bindconfirmInput" bindinput="bindInput" class="input-view" confirmType="send" cursorSpacing="10" focus="{{focus}}" placeholder="请输入" placeholderStyle="color: #c4c5c7" type="text" value="{{inputText}}"></input>
+					</view>
+					<picker bindchange="bindPickerPriceChange" value="{{index}}" range="{{priceLists}}">
+						<view class="voice-btn-inputView">
+							<image class="voice-img2" src="https://weather.ioslide.com/weather/sponsorshipMoney.svg"></image>
+						</view>
+					</picker>
+				</view>
+			</block>
+		</block>
+	</view>
+
+	<view class="tui-safearea-bottom"></view>
+</view>

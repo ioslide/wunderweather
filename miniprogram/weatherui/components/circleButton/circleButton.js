@@ -64,10 +64,6 @@ Component({
       type: Boolean,
       value: !1
     },
-    circle: {
-      type: Boolean,
-      value: !1
-    },
     raised: {
       type: Boolean,
       value: !1
@@ -78,7 +74,7 @@ Component({
     },
     icon:{
       type:String,
-      value:'null'
+      value:'https://weather.ioslide.com/weather/authScreenRight.svg'
     }
   },
   data: {
@@ -94,6 +90,13 @@ Component({
     "../scForm/sc-form": {
       type: "parent"
     }
+  },
+  attached: function () {
+    const t = this
+    let e = this.properties
+    this.setData({
+      icon: e.icon
+    })
   },
   externalClasses: ["sc-class", "sc-ripple-class"],
   methods: {
@@ -112,9 +115,6 @@ Component({
     },
     _rippleAnimationEnd: function () {
       this._rippleAnimationEnd_()
-    },
-    _tapNextScreen:function(){
-
     },
     _touchEnd: function () {
       var e = this;

@@ -17,6 +17,9 @@
 				<slot name="subbottom"></slot>
 			</view>
 			<view class="sc-cell-sub-header {{$.themeValue == 'light'?'detailText-light':'detailText-light'}}">
+				<slot name="vote"></slot>
+			</view>
+			<view class="sc-cell-sub-header {{$.themeValue == 'light'?'detailText-light':'detailText-light'}}">
 				<slot name="subbottom1"></slot>
 			</view>
 		</view>
@@ -26,6 +29,7 @@
 		<text class="right-text">
     	<slot name="righttext"></slot>
     </text>
+		<text class="big-right-text"><slot name="bigRightText"></slot></text>
 		<i class="iconfont right-icon"></i>
 		<slot name="action"></slot>
 		<!-- <block wx:if="{{switch}}">

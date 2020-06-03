@@ -4,7 +4,6 @@
 
 <sc-capsule isBack="{{true}}" themeValue="{{$.themeValue}}"></sc-capsule>
 
-
 <view>
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="themeRadio">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
@@ -65,7 +64,7 @@
 		</sc-cell>
 	</view>
 
-	<!-- <view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="datasource">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气源</block>
@@ -73,12 +72,12 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Data Source</block>
 			</text>
 			<text slot="subbottom">
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">彩云天气/中国气象局</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">彩雲天氣/中國氣象局</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Caiyun / WeatherBit</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">彩云天气/WeatherBit/Aqicn/Aeris</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">彩雲天氣/WeatherBit/Aqicn/Aeris</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Caiyun/WeatherBit/Aqicn/Aeris</block>
 			</text>
 		</sc-cell>
-	</view> -->
+	</view>
 
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="onDev" data-cur="warning">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
@@ -166,6 +165,15 @@
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">赞助提需求</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">贊助提需求</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sponsorship needs</block>
+			</text>
+		</sc-cell>
+	</view>
+		<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="log">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">开发日志</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">開發日誌</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Development log</block>
 			</text>
 		</sc-cell>
 	</view>

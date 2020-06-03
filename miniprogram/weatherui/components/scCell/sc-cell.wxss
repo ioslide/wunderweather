@@ -117,7 +117,13 @@
   color: rgba(0, 0, 0, 0.54);
   font-size: 28rpx;
 }
-
+.sc-cell-right .big-right-text {
+  display: inline-block;
+  color: rgba(189, 154, 154, 0.267);
+  font-size: 60rpx;
+  padding-right: 20px;
+  font-weight: 600;  
+}
 .sc-ripple {
   border-radius: 100%;
   background-color: rgb(255, 255, 255);
