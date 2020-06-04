@@ -1,5 +1,5 @@
 page {
-  background: #ebedf6;
+  background: #F5F6F7;
 }
 
 .container {
@@ -329,13 +329,6 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 5px 5px 7px #f0f0f0,
-    -5px -5px 7px #ffffff;
-}
-
-.voice-btn-hover {
-  box-shadow: inset 3px 3px 4px #f7f5f5,
-    inset -3px -3px 4px #ffffff;
 }
 
 .input-btn {

@@ -239,6 +239,27 @@
 					"id": -1,
 					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
 					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
 					"scene": null
 				}
 			]

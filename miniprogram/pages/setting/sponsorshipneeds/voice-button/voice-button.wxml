@@ -1,0 +1,3 @@
+<view catchtouchstart="streamRecord" catchtouchend="endStreamRecord" data-conf="{{button}}" class="voice" hover-class="voice-hover"  hover-stay-time="150">
+	<image class="voice-button" src="https://weather.ioslide.com/aichat/aichatcustomVoiceBtn.png"></image>
+</view>

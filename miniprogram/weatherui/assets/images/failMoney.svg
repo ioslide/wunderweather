@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+	<path d="M2 22h60M10 9l9 13L32 9M19 22l13 33m13-33L32 55" stroke-width="2" stroke-miterlimit="10" stroke="#ffffff" fill="none" data-name="layer2"></path>
+	<path d="M32 55L2 22l8-13h44l8 13-30 33z" stroke-width="2" stroke-miterlimit="10" stroke="#ffffff" fill="none" data-name="layer1"></path>
+	<path d="M54 9l-9 13L32 9" stroke-width="2" stroke-miterlimit="10" stroke="#ffffff" fill="none" data-name="layer2"></path>
+</svg>

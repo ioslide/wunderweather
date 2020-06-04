@@ -65,7 +65,32 @@ const dateLater = (dates, later) =>{
   dateObj.week = show_day[day];
   return dateObj;
 }
+
+const formatTime = date => {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+}
+
+function recordTime(date) {
+
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+
+  return [month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
+}
+
 module.exports = {
+  formatTime: formatTime,
+  recordTime: recordTime,
   formatDate: formatDate,
   formatDateClear:formatDateClear,
   getDates: getDates,

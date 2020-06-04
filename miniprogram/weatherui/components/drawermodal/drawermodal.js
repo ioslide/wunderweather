@@ -109,6 +109,11 @@ create.Component(store, {
         url: '../setting/setting'
       });
     },
+    navSponsorshipneeds(){
+      wx.navigateTo({
+        url: '../setting/sponsorshipneeds/sponsorshipneeds'
+      });
+    },
     navAbout() {
       wx.navigateTo({
         url: '../setting/about/about'
