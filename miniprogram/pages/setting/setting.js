@@ -27,6 +27,9 @@ create(store, {
   indexHeadImageRadioChange:function(e){
     log('[indexHeadImageRadioChange]', e.detail.value )
     const t = this
+    let
+    pages = getCurrentPages(),
+    prevPage = pages[pages.length - 2];
     let indexHeadImageValue = e.detail.value.toString(),
       indexHeadImage = {
         indexHeadImageBing:false,
@@ -36,10 +39,12 @@ create(store, {
     if(indexHeadImageValue == 'Bing'){
       indexHeadImage['indexHeadImageBing'] = true
       app.saveData('hasCusImage', false)
+      prevPage.getBingImage()
     }
     else if(indexHeadImageValue == 'NASA'){
       indexHeadImage['indexHeadImageNASA'] = true
       app.saveData('hasCusImage', false)
+      prevPage.getNASAImage()
     }
     else{
       indexHeadImage['indexHeadImageCus'] = true

@@ -327,30 +327,49 @@
 				</block>
 
 				<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
-					<view class="square-100" style="background-image: url('{{nasaImage}}');background-size: cover;background-position: 50% 99%;" mode="aspectFill" bindtap="navChange" data-cur="nasa">
-						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
-							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
+					<view class="flex square-100 align-center justify-center">
+						<image id="NASAImage" class="square-100" src="{{NASAImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+							<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+								<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
 
-							</block>
-							<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
+								</block>
+								<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
 
+								</block>
 							</block>
-						</block>
+						</image>
+						<view class="absolute left-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<image bindtap="navChange" data-cur="NASALists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								</view>
+							</view>
+						</view>
+						<view class="absolute right-0 bottom-0">
+							<view class="flex justify-left align-end">
+								<view class="flex padding-left-10 padding-bottom-10">
+									<image bindtap="navPreNASA" data-index="{{NASAIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{NASAIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+								<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
+									<image bindtap="navNextNASA" data-index="{{NASAIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{NASAIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								</view>
+							</view>
+						</view>
 					</view>
 				</block>
 
@@ -402,7 +421,7 @@
 		<view class="text-left text-grey text-df">{{curDetailTime}}</view>
 	</view>
 
-	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;" bindtap="openSnackBar">
+	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
 		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
 			{{forecastData.address}}·{{forecastData.realtime.skyconCN}}
 		</view>

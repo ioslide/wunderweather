@@ -98,6 +98,8 @@ create(store, {
     authScreen: false,
     bingImage: "",
     bingImageLists:null,
+    NASAImage: "",
+    NASAImageLists : null,
     src: null,
     visible: false,
     size: {
@@ -210,7 +212,7 @@ create(store, {
   onReady() {
     const t = this
     // t.setRefreshWeatherInterval()
-    t.getBingImage()
+    t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() : log(t.store.data.indexHeadImageValue)
     t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
   },
@@ -625,6 +627,7 @@ create(store, {
             await refreshOrInitChart(canRefreshChart)
             await t.loadingProgress(false)
             await t.checkNetWorkType()
+            await t.data.forecastData.alarmInfo !== [] ? t.openSnackBar() : ''
           }catch{
             
           }
@@ -835,6 +838,7 @@ create(store, {
             alertType: y[w].code.slice(0, 2),
             content: y[w].description,
             source: y[w].source,
+            icon:transWeatherName.WeatherWarningIcon[y[w].code.slice(0, 2)],
             levelName: transWeatherName.WeatherWarningLevel[y[w].code.slice(2, 4)],
             typeName: transWeatherName.WeatherWarning[y[w].code.slice(0, 2)]
           });
@@ -871,6 +875,7 @@ create(store, {
         //   probability:a.minutely.probability
         // }
       });
+      log('alertContentData[0]',alertContentData[0])
     }
     setTimelyWeather(a)
   },
@@ -1061,6 +1066,32 @@ create(store, {
       }
     });
   },
+  getNASAImage(){
+    log('[getNASAImage]')
+    const t = this
+    wx.request({
+      url: 'https://www.nasachina.cn/wp-json/wp/v2/posts?per_page=8&orderby=date&order=desc&page=1&categories=1',
+      header: {
+        "content-type": "application/json"
+      },
+      success: res => {
+        log('[requestNASA]', res.data)
+        let NASAImageLists = res.data
+        let NASAImage = NASAImageLists[0].post_thumbnail_image_624
+        t.setData({
+          NASAIndex : 0,
+          NASAImage: NASAImage,
+          NASAImageLists : NASAImageLists
+        })
+      },
+      fail: err => {
+        log('requestBing', err)
+        t.setData({
+          'NASAImage': '../../weatherui/assets/images/headbackground.jpg'
+        })
+      }
+    });
+  },
   onStartAccelerometer(){
     wx.startAccelerometer({
       interval: "ui"
@@ -1183,7 +1214,7 @@ create(store, {
     const transX = (steps) => {
       log('[transX] =>', steps)
       let stepAction = wx.createAnimation({
-        duration: 1200,
+        duration: 700,
         timingFunction: 'ease-in-out',
         delay: 0
       });
@@ -2325,10 +2356,8 @@ create(store, {
         }else{
           bingIndex += 1 
         }
-        let copyrightlink = 'https://bing.ioslide.com' + t.data.bingImageLists[bingIndex].copyrightlink
         let bingImage = 'https://cn.bing.com' + t.data.bingImageLists[bingIndex].url
         t.setData({
-          copyrightlink:copyrightlink,
           bingIndex : bingIndex,
           bingImage: bingImage
         })
@@ -2362,6 +2391,53 @@ create(store, {
           { opacity: 0, ease:'ease-in',backgroundColor: '#F5F6F7' },
           { opacity: 0.5, ease:'ease-in',backgroundColor: '#F5F6F7'},
           { opacity: 1, ease:'ease-out',backgroundColor: '#F5F6F7' },
+          ], 350)
+    }.bind(this))  
+  },
+  navNextNASA(){
+    const t = this
+    this.animate('#NASAImage', [
+      { opacity: 1.0, ease:'ease-in' },
+      { opacity: 0.0, ease:'ease-out' },
+      ], 350, function () {
+        let NASAIndex = t.data.NASAIndex
+        if(t.data.NASAIndex == 7){
+          NASAIndex = 0
+        }else{
+          NASAIndex += 1 
+        }
+        let NASAImage = t.data.NASAImageLists[NASAIndex].post_thumbnail_image_624
+        t.setData({
+          NASAIndex : NASAIndex,
+          NASAImage: NASAImage
+        })
+        this.animate('#NASAImage', [
+          { opacity: 0, ease:'ease-in' },
+          { opacity: 1, ease:'ease-out' },
+          ], 350)
+    }.bind(this))  
+  },
+  navPreNASA(){
+    const t = this
+    this.animate('#NASAImage', [
+      { opacity: 1.0, ease:'ease-in'},
+      { opacity: 0.0, ease:'ease-out'},
+      ], 350, function () {
+        let NASAIndex = t.data.NASAIndex
+        if(t.data.NASAIndex == 0){
+          NASAIndex = 7
+        }else{
+          NASAIndex -= 1 
+        }
+        let NASAImage = t.data.NASAImageLists[NASAIndex].post_thumbnail_image_624
+        log(NASAImage)
+        t.setData({
+          NASAIndex : NASAIndex,
+          NASAImage: NASAImage
+        })
+        this.animate('#NASAImage', [
+          { opacity: 0, ease:'ease-in'},
+          { opacity: 1, ease:'ease-out'},
           ], 350)
     }.bind(this))  
   },
@@ -2458,12 +2534,17 @@ create(store, {
     }
   },
   openSnackBar(){
-    this.data.snackBar.open({
-        message:'天气预警'+this.data.snackBarLength++,
+    const t = this
+    let alarmInfo = t.data.forecastData.alarmInfo[0]
+    let alarmIcon = config.cosApiHost + "/weather/icon/lineIcon/" + alarmInfo.icon + '-white.svg'
+    log(alarmIcon)
+    t.data.snackBar.open({
+        message: alarmInfo.typeName + alarmInfo.levelName + '预警',
         buttonText:'关闭',
-        buttonTextColor:'red',
-        color:'lightblue',
-        messageColor:'black',
+        icon: alarmIcon,
+        buttonTextColor:'#ffffff',
+        color:'#323232',
+        messageColor:'#ffffff',
         closeOnButtonClick:true,
         onButtonClick:() => {
             console.log('点击button');

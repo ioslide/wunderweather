@@ -392,11 +392,11 @@
 						<sc-radio label="{{$.languageValue == 'zh_CN'?'自定义':'Customize'}}" value="customize" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageCus}}"></sc-radio>
 					</label>
 				</view>
-				<!-- <view class="cu-item">
+				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="NASA" value="NASA" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageNASA}}"></sc-radio>
 					</label>
-				</view> -->
+				</view>
 			</view>
 		</sc-radio-group>
 		<view class="cu-bar justify-end" style="background: #2D2D2D;">

@@ -12,7 +12,7 @@
 			<view class="tui-chat-center">星期五 12:09</view>
 			<view class="tui-chat-left">
 				<image src="{{item.avatar}}" class="tui-user-pic tui-right"></image>
-				<view class="tui-chatbox tui-chatbox-left">{{item.msg}}<br />
+				<view class="tui-chatbox tui-chatbox-left">{{item.name}}:{{item.msg}}<br />
 					<view style="color:#C8C8C8;font-size；18rpx">赞助金额: {{item.price}}元 · 需求人数: {{item.index}}</view>
 				</view>
 			</view>

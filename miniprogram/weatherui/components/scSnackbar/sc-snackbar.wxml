@@ -1,4 +1,14 @@
 <view class="sc-class sc-snackBar {{show?'sc-snackBarShow':''}}" style="background-color: {{options.color}}" bind:tab="_snackBar">
-	<view class="snackBar-content" style="color: {{options.messageColor}}">{{options.message}}</view>
-	<sc-button wx:if="{{options.buttonText}}" ripple="{{false}}" bind:tap="_btnTap" style="color: {{options.buttonTextColor}}" sc-class="sc-btn sc-button-class">{{options.buttonText}}</sc-button>
+	<view class="snackBar-content" style="color: {{options.messageColor}}">
+		{{options.message}}
+	</view>
+		<view class="image-content">
+		<view class="snackBar-content-image">
+			<image style="width:30px;height:30px" mode="widthFix" src="{{options.icon}}"></image>
+		</view>
+		<view class="snackBar-content-close" wx:if="{{options.buttonText}}" ripple="{{false}}" bind:tap="_btnTap">
+			<image src="https://weather.ioslide.com/weather/closeAlarm.svg" style="width:30px;height:30px" mode="widthFix"></image>
+		</view>
+	</view>
+	<!-- <sc-button wx:if="{{options.buttonText}}" ripple="{{false}}" bind:tap="_btnTap" style="color: {{options.buttonTextColor}}" sc-class="sc-btn sc-button-class">{{options.buttonText}}</sc-button> -->
 </view>

@@ -79,4 +79,22 @@ exports.default = {
     "15": "森林火灾",
     "16": "雷⾬大风"
   },
+  WeatherWarningIcon : {
+    "01": "WIND-icon",
+    "02": "HEAVY_RAIN-icon",
+    "03": "HEAVY_SNOW-icon",
+    "04": "MODERATE_SNOW-icon",
+    "05": "WIND-icon",
+    "06": "DUST-icon",
+    "07": "CLEAR_DAY-icon",
+    "08": "CLEAR_DAY-icon",
+    "09": "THUNDER_SHOWER-icon",
+    "10": "HAIL-icon",
+    "11": "SNOW-icon",
+    "12": "FOG-icon",
+    "13": "FOG-icon",
+    "14": "LIGHT_SNOW-icon",
+    "15": "FIRE-icon",
+    "16": "THUNDER_SHOWER-icon"
+  }
 }

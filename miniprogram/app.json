@@ -6,7 +6,6 @@
     "pages/daily/daily",
     "pages/hourly/hourly",
     "pages/moon/moon",
-    "pages/nasa/nasa",
     "pages/promode/promode",
     "pages/setting/setting",
     "pages/setting/pro/pro",
@@ -16,7 +15,8 @@
     "pages/setting/about/about",
     "pages/rain/rain",
     "pages/radar/radar",
-    "pages/setting/log/log"
+    "pages/setting/log/log",
+    "pages/NASALists/NASALists"
   ],
   "window": {
     "navigationStyle": "custom",
@@ -69,8 +69,8 @@
     "sc-snackbar": "/weatherui/components/scSnackbar/sc-snackbar",
     "sc-button": "/weatherui/components/scButton/sc-button",
     "circleButton": "/weatherui/components/circleButton/circleButton",
-    "sc-checkbox":"/weatherui/components/scCheckbox/sc-checkbox",
-    "sc-checkbox-group":"/weatherui/components/scCheckboxGroup/sc-checkbox-group"
+    "sc-checkbox": "/weatherui/components/scCheckbox/sc-checkbox",
+    "sc-checkbox-group": "/weatherui/components/scCheckboxGroup/sc-checkbox-group"
   },
   "subPackages": [
     {
