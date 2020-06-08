@@ -28,22 +28,16 @@ create(store, {
     let pages = getCurrentPages();
     let currPage = pages[pages.length - 2]
     log(currPage)
-    let bingImageLists = currPage.data.bingImageLists
+    let headImageData = currPage.getHeadImageData()
+    log('[headImageData]',headImageData)
     t.setData({
-      bingImageLists:bingImageLists
+      bingImageLists:headImageData.bingImageLists
     })
-    log('[bingImageLists]',bingImageLists)
   },
   onShow() {
     const t = this
   },
   BackPage: function () {
-    // let
-    // pages = getCurrentPages(),
-    // prevPage = pages[pages.length - 2];
-    // prevPage.setData({
-    //   isBackFromBing: true
-    // })
     wx.navigateBack({
       delta: 1
     });

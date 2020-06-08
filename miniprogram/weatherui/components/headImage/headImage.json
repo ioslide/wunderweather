@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "drawerModalHeadImage": "/weatherui/components/drawermodal/drawermodal"
+  }
+}

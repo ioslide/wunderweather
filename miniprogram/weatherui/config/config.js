@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: !0
 });
-
 exports.default = {
   weatherApiHost: "https://api.caiyunapp.com",
   weatherApiVersion: "v2.5",

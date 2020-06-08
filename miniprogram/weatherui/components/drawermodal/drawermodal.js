@@ -32,7 +32,10 @@ create.Component(store, {
       value: null,
       observer: function () {
         const t = this
-        log('[drawerModalName]',t.properties.drawerModalName)
+        log('[drawerModalName]',t.properties.drawerModalName,t.data.drawerModalName)
+        t.setData({
+          drawerModalName:t.properties.drawerModalName
+        })
         if (t.properties.drawerModalName == "DrawerModalL") {
           t.setData({
             historyCityList: wx.getStorageSync('historyCityList')

@@ -1,0 +1,45 @@
+@import "/weatherui/assets/wxss/main.wxss";
+.headBackground {
+  background: #333333;
+  filter: blur(20px);
+  position: relative;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 300px;
+  display: flex;
+  border-radius: 0;
+  align-items: flex-end;
+  /* transition: all 0.3s ease-in-out; */
+  overflow: hidden;
+}
+
+@keyframes imageSharpen {
+  0% {
+    filter: blur(20px);
+  }
+
+  100% {
+    filter: blur(0px);
+  }
+}
+
+.imageBlurloaded {
+  transform: scale(1);
+  filter: blur(20px);
+  animation: imageSharpen 0.8s both;
+  animation-delay: 0s;
+  -webkit-animation-delay: 0s;
+}
+
+
+.headImageIcon-RightBottom {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.headImageIcon-Center {
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}

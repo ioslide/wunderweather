@@ -1,0 +1,9 @@
+						<view class="blurText blur-preloader-loading v-preloader__item">
+							<text class="blurText blur-text-letter blur-text-letter_0 v-preloader__item">W</text>
+							<text class="blurText blur-text-letter blur-text-letter_1 v-preloader__item">E</text>
+							<text class="blurText blur-text-letter blur-text-letter_2 v-preloader__item">A</text>
+							<text class="blurText blur-text-letter blur-text-letter_3 v-preloader__item">T</text>
+							<text class="blurText blur-text-letter blur-text-letter_4 v-preloader__item">H</text>
+							<text class="blurText blur-text-letter blur-text-letter_5 v-preloader__item">E</text>
+							<text class="blurText blur-text-letter blur-text-letter_6 v-preloader__item">R</text>
+						</view>

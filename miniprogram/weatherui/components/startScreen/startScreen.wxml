@@ -1,0 +1,246 @@
+<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px" catchtouchmove="true">
+	<block wx:if="{{$.startScreen == 'auth'}}">
+		<view class="authScreenStep" style="left:0">
+			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view class="absolute left-0 bottom--30">
+					<image id="leaf" src="https://teaimg.ioslide.com/weather/leaf3.png" style="left:{{windowWidth/2+80}}px;transform:rotate3d(0,0,1,45deg) scale(1)" class="square-200" mode="widthFix"></image>
+				</view>
+				<view>
+					<view class="flex justify-center padding-15 align-center" id="firstStepLogo">
+						<image class="square-150" mode="aspectFit" src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
+					</view>
+					<view class="flex justify-center padding-15 align-center">
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+					</view>
+					<view class="flex justify-center align-center">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+					<view class="flex justify-center align-center margin-top-50" bindtap="authScreenNext" id="firstStepButton" data-target="authFirstStep">
+						<!-- <button class="authFirstStepButton">开始</button> -->
+						<sc-button sc-class="sc-outlined-btn" flat round>开始</sc-button>
+					</view>
+				</view>
+				<view class="flex justify-center align-center fixed bottom-30">
+					<view class="flex justify-center align-center margin-top-30">
+						<blurText/>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">你好</text>
+					</view>
+					<view id="authScreenStepContent" class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authSecondScreenLocation.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">地点</view>
+									<view class="text-gray text-d flex justify-between">用来确定天气预报所在的地点</view>
+								</view>
+							</view>
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authSecondScreenSave.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">存储</view>
+									<view class="text-gray text-d flex justify-between">用来本地化存储用户个性化设置</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="authScreenNextCell" bindtap="authScreenNext" data-target="authSecondStep">
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenRight.svg" flat circle></sc-button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth*2}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">位置</text>
+					</view>
+					<view class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1 line-hight-30">获取更精准的位置信息以提供更加精确的天气预报服务，可随时更改授权</text>
+					</view>
+					<!-- <view class="flex justify-center align-center margin-top-75">
+						<view>
+							<view class="flex justify-center align-center " bindtap="autoGetLocation">
+								<view class="authFirstStepButton">自动定位</view>
+							</view>
+						</view>
+					</view>
+					<view class="flex justify-center align-center margin-top-25">
+						<view>
+							<view class="flex justify-center align-center" bindtap="getNewLocationByManual">
+								<view class="authFirstStepButton">手动选取位置</view>
+							</view>
+						</view>
+					</view> -->
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<!-- <view class="cu-item" bindtap="autoGetLocation"> -->
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenAutolocation.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">自动定位</view>
+									<view class="text-gray text-d flex justify-between">Automatic positioning</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="" bind:change="switchChange" themeValue="{{$.themeValue}}" data-target="getLocationByAuto"></sc-switch>
+							</view>
+							<view class="cu-item">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenManuallocationn.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">手动选取位置</view>
+									<view class="text-gray text-d flex justify-between">Select location manually</view>
+								</view>
+								<sc-switch class="sc-switch" name="switch" checked="{{isManualGetNewLocation}}" themeValue="{{$.themeValue}}" bind:change="switchChange" data-target="getNewLocationByManual"></sc-switch>
+							</view>
+						</view>
+					</view>
+					<view class="authScreenPreCell" bindtap="authScreenBack" data-target="authSecondStep">
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenLeft.svg" flat circle></sc-button>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="authScreenStep" style="left:{{windowWidth*3}}px	">
+			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view style="margin-top:{{StatusBar*4}}px;width:100%">
+					<view class="flex justify-left padding-15 align-center">
+						<text class="text-4a5568 text-xxxl font-weight-300">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">最后</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">最後</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">At last</block>
+						</text>
+					</view>
+					<view class="flex justify-left align-center padding-left-15">
+						<text class="text-4a5568 text-lg letter-spacing-1">
+								<block wx:if="{{$.languageValue == 'zh_CN'}}">还有一些设置你需要核对</block>
+								<block wx:if="{{$.languageValue == 'zh_TW'}}">還有一些設置你需要核對</block>
+								<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Some settings need to check</block>
+						</text>
+					</view>
+					<view class="flex margin-top-50">
+						<view class="cu-list menu-avatar" style="width:100%">
+							<view class="cu-item" bindtap="_showDrawerModal" data-target="themeRadio">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenTheme.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">选择你最喜欢的外观</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">選擇你最喜歡的外觀</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Choose your favorite theme</block>
+									</view>
+								</view>
+							</view>
+							<!-- https://weather.ioslide.com/weather/authScreenTemperature.svg); -->
+							<view class="cu-item" bindtap="_showDrawerModal" data-target="unit">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenDistance.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">SI/metric/imperial</view>
+								</view>
+							</view>
+							<view class="cu-item" bindtap="_showDrawerModal" data-target="language">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenLanguage.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">中文/英文</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Chinese / English</block>
+									</view>
+								</view>
+							</view>
+							<view class="cu-item" bindtap="_showDrawerModal" data-target="icon">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">图标</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">圖標</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Icon</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">4种不同风格的精美图标</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">4種不同風格的精美圖標</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">4 different styles of exquisite icons</block>
+									</view>
+								</view>
+							</view>
+							<!-- <view class="cu-item" bindtap="openDatePicker">
+								<view class="cu-avatar m" style="background-image:url(https://weather.ioslide.com/weather/authScreenSub.svg);">
+								</view>
+								<view class="content flex-sub">
+									<view class="text-lg text-4a5568">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅设置</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱設置</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscription settings</block>
+									</view>
+									<view class="text-gray text-d flex justify-between">
+										<block wx:if="{{$.languageValue == 'zh_CN'}}">订阅即将出行的日期，并勾选持续订阅</block>
+										<block wx:if="{{$.languageValue == 'zh_TW'}}">訂閱即將出行的日期，並勾選持續訂閱</block>
+										<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Subscribe to weather for upcoming travel dates</block>
+									</view>
+								</view>
+							</view> -->
+						</view>
+					</view>
+					<view class="authScreenNextCell" bindtap="onAuthFinalScreen">
+						<sc-button sc-class="sc-outlined-btn" icon="https://weather.ioslide.com/weather/authScreenRight.svg" flat circle></sc-button>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+	<block wx:if="{{$.startScreen == 'poetry'}}">
+		<view class="flex justify-center align-center" style="height: 100%;">
+			<view class="flex">
+				<text animation="{{guideScreenTextAni}}" style="opacity:0" class="{{$.themeValue == 'light'?'text-grey':'text-white'}} poetry font-family-wencangshufang">{{poetry}}</text>
+			</view>
+		</view>
+	</block>
+	<block wx:if="{{$.startScreen == 'default'}}">
+		<view class="authScreenStep" style="left:0">
+			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
+				<view>
+					<view class="flex justify-center padding-15 align-center" bindtap="checkLocationAuth">
+						<image class="square-150" mode="aspectFit" src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
+					</view>
+					<view class="flex justify-center padding-15 align-center">
+						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+					</view>
+					<view class="flex justify-center align-center">
+						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+					</view>
+				</view>
+			</view>
+		</view>
+	</block>
+</view>

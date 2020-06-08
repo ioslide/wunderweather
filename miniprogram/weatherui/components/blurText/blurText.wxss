@@ -1,0 +1,127 @@
+
+
+.blurText {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.blur-text-letter {
+  display: inline-block;
+}
+
+.blur-preloader-loading {
+  position: relative;
+}
+
+::-webkit-input-placeholder {
+  color: #000;
+}
+
+::-moz-placeholder {
+  color: #000;
+}
+
+:-moz-placeholder {
+  color: #000;
+}
+
+:-ms-input-placeholder {
+  color: #000;
+}
+
+.blur-preloader-loading {
+  font-size: 1rem;
+  letter-spacing: .3em;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #4a5568;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-transition: .5s;
+  transition: .5s;
+  -webkit-transition-timing-function: cubic-bezier(.25, .1, .25, 1);
+  transition-timing-function: cubic-bezier(.25, .1, .25, 1);
+  -webkit-transition-delay: 0s;
+  transition-delay: 0s;
+}
+
+.blur-preloader-loading text {
+  margin: 0 0;
+}
+
+.blur-preloader-loading text.blur-text-letter_0 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s 0s infinite linear alternate;
+  animation: blur-text 1.5s 0s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_1 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s .2s infinite linear alternate;
+  animation: blur-text 1.5s .2s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_2 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s .4s infinite linear alternate;
+  animation: blur-text 1.5s .4s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_3 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s .6s infinite linear alternate;
+  animation: blur-text 1.5s .6s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_4 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s .8s infinite linear alternate;
+  animation: blur-text 1.5s .8s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_5 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s 1s infinite linear alternate;
+  animation: blur-text 1.5s 1s infinite linear alternate;
+}
+
+.blur-preloader-loading text.blur-text-letter_6 {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+  -webkit-animation: blur-text 1.5s 1.2s infinite linear alternate;
+  animation: blur-text 1.5s 1.2s infinite linear alternate;
+}
+
+@-webkit-keyframes blur-text {
+  0% {
+    -webkit-filter: blur(0);
+    filter: blur(0);
+  }
+
+  100% {
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes blur-text {
+  0% {
+    -webkit-filter: blur(0);
+    filter: blur(0);
+  }
+
+  100% {
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
+  }
+}

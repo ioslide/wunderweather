@@ -21,7 +21,9 @@ const formatDateClear = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
-  return [year, month, day].map(formatNumber).join('')
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  return [year, month, day,hours,minutes].map(formatNumber).join('')
 }
 var t = "".concat("/data/%E7%A6%8F%E5%88%A9/100/");
 

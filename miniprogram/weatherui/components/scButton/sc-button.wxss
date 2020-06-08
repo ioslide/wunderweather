@@ -249,7 +249,17 @@
   width: 35px;
   border-radius: 50%;  
 }
-
+.sc-button-flat-round {
+  text-align: center;
+  line-height: 40px;
+  border-radius: 30px;
+  height: 40px;
+  width: 130px;
+  color: #4a5568;
+  background: #E4F1FF!important;
+  /* margin-top: 50px; */
+  font-size: 16px;
+}
 
 .sc-btn-fab {
   width: 112rpx;

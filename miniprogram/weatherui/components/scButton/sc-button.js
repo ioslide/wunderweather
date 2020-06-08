@@ -68,6 +68,10 @@ Component({
       type: Boolean,
       value: !1
     },
+    round: {
+      type: Boolean,
+      value: !1
+    },
     raised: {
       type: Boolean,
       value: !1
@@ -78,7 +82,7 @@ Component({
     },
     icon:{
       type:String,
-      value:'null'
+      value: 'null'
     }
   },
   data: {

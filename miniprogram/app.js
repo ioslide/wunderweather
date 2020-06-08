@@ -12,6 +12,7 @@ const config = require('weatherui/config/config.js')
 App({
   isReady: !1,
   isError: !1,
+  qrImageURL:"",
   globalData: {
     latitude:659,
     longitude:949,
@@ -47,6 +48,7 @@ App({
     t.getSystemInfo()
     t.loadFontFace()
     t.getWxContext()
+    t.getQRCode()
     //t.dataPrePull()
   },
   initChatRobot(charRobotBar){
@@ -363,6 +365,49 @@ App({
     } else {
       return false;
     }
+  },
+  getQRCode(){
+      const t = this
+    const formatImg = (base64Img) =>{
+      let fsm = wx.getFileSystemManager()
+      let FILE_BASE_NAME = 'weatherLogo'
+      let buffer = wx.base64ToArrayBuffer(base64Img);
+      const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
+      fsm.writeFile({
+        filePath,
+        data: buffer,
+        encoding: 'binary',
+        success: res => {
+          log(`[writeFile] => qrImageURL =>`, filePath)
+          t.globalData.qrImageURL = filePath
+        },
+        fail: err => {
+          log(`[writeFile] => fail => ${err}`)
+          return (new Error('ERROR_BASE64SRC_WRITE'));
+        },
+      });
+    }
+      const base64ImgStorage = wx.getStorageSync('qrCodeBase64')
+      if (base64ImgStorage) {
+        t.globalData.qrImageURL = formatImg(base64ImgStorage)
+        console.log(`[get wxacode] from storage ID`)
+      } else {
+        wx.cloud.callFunction({
+          name: 'openapi',
+          data: {
+            action: 'getWXACode',
+          },
+          success: res => {
+            log(`[getWXACode] =>`, res)
+            let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
+            formatImg(base64Img)
+            t.saveData('qrCodeBase64', base64Img)
+          },
+          fail: err => {
+            log(`[getWXACode] => ${err}`)
+          }
+        })
+      }
   },
     // 权限询问
     getRecordAuth: function() {

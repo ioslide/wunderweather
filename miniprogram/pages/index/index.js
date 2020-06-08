@@ -14,7 +14,6 @@ const chooseLocation = requirePlugin('chooseLocation');
 const scui = require('../../weatherui/sc-ui');
 const util = require('../../utils/util.js')
 const sunCalc = require('../../utils/sunCalc.js')
-const poetry = require('../../utils/poetry.js')
 const config = require('../../weatherui/config/config.js').default
 const transWeatherName = require('../../weatherui/assets/lib/transWeatherName/transWeatherName.js').default
 const qqMapWX = new(require("../../weatherui/assets/lib/qqMapWX/qqMapWX.js"))({
@@ -56,7 +55,9 @@ create(store, {
       height: 250
     },
     showAirQuatityRadar:false,
+    canIntervalRainRadarPlay:true,
     drawerModalName:null,
+    timeLineInterval:'',
     snackBarLength:0,
     x: 0,
     y: 0,
@@ -65,6 +66,8 @@ create(store, {
     latitude: "",
     longitude: "",
     datePicker: {},
+    radarTimeLineIndexNum:[],
+    radarTimeLineImage:"https://weather.ioslide.com/weather/timeLinePlay.svg",
     StatusBar: globalData.StatusBar,
     CustomBar: globalData.CustomBar,
     Custom: globalData.Custom,
@@ -81,11 +84,11 @@ create(store, {
     isManualGetNewLocation:false,
     rainChartName:'小时',
     isChangeSetting: false,
-    hasCusImage: false,
     networkType: 'none',
     imageBase64: '',
     qrImageURL: '',
     updateSunsetTime: null,
+    radarTimeLinePosition:1,
     sunrise: "06:00",
     sunset: "19:34",
     painting: {},
@@ -100,14 +103,18 @@ create(store, {
     bingImageLists:null,
     NASAImage: "",
     NASAImageLists : null,
+    manualLocationData: wx.getStorageSync('manualLocationData') || [],
     src: null,
     visible: false,
     size: {
       width: 400,
       height: 300
     },
+    radarMapSetting : {},
+    radarMapImageType : 'rain',
+    radarMapScale : 7,
+    drawerModalName:null,
     cropSizePercent: 0.9,
-    manualLocationData: wx.getStorageSync('manualLocationData') || [],
     forecastData: {
       hourlyKeypoint: "",
       // minutelyKeypoint: "",
@@ -134,7 +141,6 @@ create(store, {
       'style',
       'themeValue',
       'startScreen',
-      'indexHeadImageValue',
       'refreshfrequencyValue',
       'languageValue',
       'language',
@@ -163,21 +169,11 @@ create(store, {
     const t = this
     // t.onStartAccelerometer()
     const location = chooseLocation.getLocation();
-    let hasCusImage = wx.getStorageSync('hasCusImage') || false
-    if (hasCusImage == true) {
-      let cusImageFileID = wx.getStorageSync('cusImageFileID')
-      if (cusImageFileID) {
-        t.setData({
-          cusImage: cusImageFileID,
-          hasCusImage: true
-        })
-        log('hasCusImage,cusImage')
-      }
-    }
+    log('[location]',location)
     if (location == null) {
       log('[location == null]')
-      t.setData({
-        isManualGetNewLocation:false
+      t.selectComponent('#startScreen').setData({
+        'isManualGetNewLocation' : false
       })
     }
     if (location !== null) {
@@ -192,7 +188,7 @@ create(store, {
       globalData.latitude = location.latitude
       globalData.longitude = location.longitude
       //auth状态手动获取经纬度后先不请求数据
-      t.store.data.startScreen == 'auth' ? t.authScreenNext('canNavToFinalScreen') :
+      t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen')  :
       t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
         'modalName': null
       })) :
@@ -211,10 +207,49 @@ create(store, {
   },
   onReady() {
     const t = this
-    // t.setRefreshWeatherInterval()
-    t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() : log(t.store.data.indexHeadImageValue)
     t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
+    t.setRadarTimeLineIndex()
+    t.setRadarMapSetting()
+    t.radarMapCtx = wx.createMapContext('radarMap')
+  },
+  setRadarMapSetting(){
+    const t = this
+    let layerStyle = t.store.data.themeValue == 'light' ? 3 : 2
+    let setting = {
+      skew: 0,
+      rotate: 0,
+      showLocation: false,
+      showScale: false,
+      subKey: 'BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D',
+      layerStyle: layerStyle,
+      enableZoom: true,
+      enableScroll: false,
+      enableRotate: false,
+      showCompass: false,
+      enable3D: false,
+      enableOverlooking: false,
+      enableSatellite: false, //卫星图
+      enableTraffic: false,
+    }
+    log('setRadarMapSetting',setting)
+    t.setData({
+      radarMapSetting : setting
+    })
+  },
+  changeRadarMapType(){
+    const t = this
+    if(t.data.radarMapImageType == 'aqi'){
+      t.setData({
+        radarMapScale : 7,
+        radarMapImageType : 'rain'
+      })
+    }else{
+      t.setData({
+        radarMapScale : 3,
+        radarMapImageType : 'aqi'
+      })
+    }
   },
   loadDataFromStorage() {
     log('[loadDataFromStorage]')
@@ -254,9 +289,9 @@ create(store, {
         t.setData({
           'canBlurRoot': true
         })
-        await t.screenFadeIn()
+        await t.selectComponent('#startScreen').screenFadeIn()
         await getHistoryCityData()
-        await t.screenFadeOut()
+        await t.selectComponent('#startScreen').screenFadeOut()
         await t.setData({
           'canBlurRoot': false
         })
@@ -267,126 +302,7 @@ create(store, {
   loadDataFromNet() {
     const t = this
     log('[loadDataFromNet]', t.store.data.startScreen)
-    t.store.data.startScreen == 'auth' ? t.screenFadeIn() : (t.screenFadeIn(),t.chooseGetLocationType())
-  },
-  screenFadeIn() {
-    const t = this
-    var windowWidth = t.data.windowWidth
-    log('[screenFadeIn]', t.store.data.startScreen)
-    const poetryScreenFadeIn = () => {
-      log('[poetryScreenFadeIn]')
-      let poetry_storage = wx.getStorageSync('poetry_storage') || [{
-        content: '春眠不觉晓'
-      }]
-      t.setData({
-        poetry: poetry_storage[0].content
-      })
-      let poetryTextAction = wx.createAnimation({
-        duration: 1300,
-        timingFunction: 'ease-in-out',
-        delay: 0,
-      });
-      poetryTextAction.opacity(1).step()
-      t.setData({
-        guideScreenTextAni: poetryTextAction.export()
-      })
-    }
-    const authScreenFadeIn = () => {
-      log('[authScreenFadeIn]')
-      let authScreenFadeIn = wx.createAnimation({
-        duration: 1000,
-        timingFunction: 'ease-in-out',
-        delay: 0,
-      });
-      authScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
-      t.setData({
-        logoScreenAni: authScreenFadeIn.export(),
-      })
-    }
-    const defaultScreenFadeIn = () => {
-      log('[defaultScreenFadeIn]')
-      let defaultScreenFadeIn = wx.createAnimation({
-        duration: 1000,
-        timingFunction: 'ease-in-out',
-        delay: 0,
-      });
-      defaultScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
-      t.setData({
-        logoScreenAni: defaultScreenFadeIn.export(),
-      })
-    }
-    t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() : t.store.data.startScreen == 'auth' ? authScreenFadeIn() : t.store.data.startScreen == 'default' ? defaultScreenFadeIn() : warn('[startScreen]')
-    // t.onIntersectionObserver()
-  },
-  screenFadeOut() {
-    const t = this
-    log('[screenFadeOut]', t.store.data.startScreen)
-    const poetryScreenFadeOut = () => {
-      let poetryScreenAction = wx.createAnimation({
-        duration: 1600,
-        timingFunction: 'ease-in-out',
-        delay: 1200,
-      });
-      poetryScreenAction.opacity(0).step()
-      t.setData({
-          defaultScreenAni: poetryScreenAction.export()
-        }),
-        setTimeout(() => {
-          t.setData({
-            headBackgroundAni: true,
-            authScreen: true
-          })
-        }, 3000)
-    }
-    const defaultScreenFadeOut = () => {
-      let defaultScreenAction = wx.createAnimation({
-        duration: 1600,
-        timingFunction: 'ease-in-out',
-        delay: 700,
-      });
-      defaultScreenAction.opacity(0).step()
-      t.setData({
-          defaultScreenAni: defaultScreenAction.export(),
-        }),
-        setTimeout(() => {
-          t.setData({
-            headBackgroundAni: true,
-            authScreen: true
-          })
-        }, 2200)
-    }
-    const authScreenFadeOut = () => {
-      let authScreenAction = wx.createAnimation({
-        duration: 1400,
-        timingFunction: 'ease-in-out',
-        delay: 100,
-      });
-      authScreenAction.translate3d(-t.data.windowWidth * 3, 0, 0).opacity(0).step()
-      t.setData({
-        defaultScreenAni: authScreenAction.export(),
-      }),
-      setTimeout(() => {
-        t.setData({
-          headBackgroundAni: true,
-          authScreen: true
-        })
-      }, 1600)
-    }
-
-    const screenFadeOut = (screenFadeOutType) => {
-        screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
-          t.store.data.startScreen = 'poetry'
-        }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-    }
-    (async () => {
-      await screenFadeOut(t.store.data.startScreen)
-      await t.onIntersectionObserver()
-      await t.getMoonPhaseList()
-      await t.onGetWXACode()
-      await t.getPoetry()
-      await t.setRefreshWeatherInterval()
-
-    })()
+    t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').screenFadeIn() : (t.selectComponent('#startScreen').screenFadeIn(),t.chooseGetLocationType())
   },
   checkNetWorkType() {
     const t = this
@@ -433,7 +349,6 @@ create(store, {
         'forecastData.address': manualData.address
       }),
       await t.getWeatherData(false)
-      await t.screenFadeOut()
       await changeStorage()
     })()
   },
@@ -451,7 +366,6 @@ create(store, {
         'forecastData.address': historyCityData.address
       }),
       await t.getWeatherData(false)
-      await t.screenFadeOut()
       await changeStorage()
     })()
   },
@@ -482,7 +396,7 @@ create(store, {
               log(`[reverseGeocoder] = > ${err}`)
             }
           })
-          await t.store.data.startScreen !== 'auth' ? t.getWeatherData(false) : t.authScreenNext('canNavToFinalScreen')
+          await t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen') : t.getWeatherData(false) 
         })(res)
         log(`[getLocationByAuto] =>`, res)
       },
@@ -576,10 +490,15 @@ create(store, {
         await changeStorage()
       })()
   },
+  _getWeatherData(e){
+    if(e.detail.canRefreshChart == false){
+      this.getWeatherData(false)
+    }
+  },
   getWeatherData(canRefreshChart) {
     const t = this
     let apiHost = config.weatherApiHost + "/" + config.weatherApiVersion + "/" + config.weatherApiToken + "/" + t.data.longitude + "," + t.data.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
-    log('[getWeatherData] => apiHost', apiHost)
+    log('[getWeatherData] => apiHost', apiHost,'[canRefreshChart]',canRefreshChart)
     wx.request({
       url: apiHost,
       success: a => {
@@ -619,7 +538,7 @@ create(store, {
               'canBlurRoot': true
             })
             await t.formatWeatherData(weatherData)
-            await t.screenFadeOut()
+            await t.selectComponent('#startScreen').screenFadeOut()
             await t.setData({
               'canBlurRoot': false
             })
@@ -689,7 +608,7 @@ create(store, {
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
-          icon: config.cosApiHost + "/weather/icon/",
+          icon: config.cosApiHost + "/weather/icon/flatIcon",
           backgroundBg:backgroundBg,
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
@@ -1036,62 +955,6 @@ create(store, {
     })
     log(`[moonPhaseLists] =>`, moonPhaseLists)
   },
-  getBingImage() {
-    log('[getBingImage]')
-    const t = this
-    wx.request({
-      url: config.bingApiHost + '/HPImageArchive.aspx?format=js&idx=0&n=30&nc=1589441449314&pid=hp',
-      header: {
-        "content-type": "application/json"
-      },
-      success: res => {
-        log('[requestBing]', res.data.images)
-        let bingImageLists = res.data.images
-        let copyrightlink = 'https://bing.ioslide.com' + bingImageLists[0].copyrightlink
-        let bingImage = 'https://cn.bing.com' + bingImageLists[0].url
-        let enddate = bingImageLists[0].enddate
-        log('[copyrightlink]',copyrightlink)
-        t.setData({
-          copyrightlink:copyrightlink,
-          bingIndex : 0,
-          bingImage: bingImage,
-          bingImageLists : bingImageLists
-        })
-      },
-      fail: err => {
-        log('requestBing', err)
-        t.setData({
-          'bingImage': '../../weatherui/assets/images/headbackground.jpg'
-        })
-      }
-    });
-  },
-  getNASAImage(){
-    log('[getNASAImage]')
-    const t = this
-    wx.request({
-      url: 'https://www.nasachina.cn/wp-json/wp/v2/posts?per_page=8&orderby=date&order=desc&page=1&categories=1',
-      header: {
-        "content-type": "application/json"
-      },
-      success: res => {
-        log('[requestNASA]', res.data)
-        let NASAImageLists = res.data
-        let NASAImage = NASAImageLists[0].post_thumbnail_image_624
-        t.setData({
-          NASAIndex : 0,
-          NASAImage: NASAImage,
-          NASAImageLists : NASAImageLists
-        })
-      },
-      fail: err => {
-        log('requestBing', err)
-        t.setData({
-          'NASAImage': '../../weatherui/assets/images/headbackground.jpg'
-        })
-      }
-    });
-  },
   onStartAccelerometer(){
     wx.startAccelerometer({
       interval: "ui"
@@ -1114,169 +977,6 @@ create(store, {
         }))
     });
   },
-  onAuthFinalScreen() {
-      log('[onAuthFinalScreen]')
-    const t = this
-    const windowWidth = t.data.windowWidth
-    const authFinalStepLeaf = () =>{
-      t.animate('#leaf', [
-        { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' },
-        { translate3d: [windowWidth * 2.7,250,0],rotate3d: [0,0,-1,45],scale:[0.7],ease:'ease-in-out' }
-      ], 1000)
-    }
-    (async () => {
-      await wx.showToast({
-        title: 'Loading',
-        mask:true,
-        icon:'loading'
-      })
-      await t.getWeatherData(false)
-      await authFinalStepLeaf()
-      await wx.hideToast()
-      // await t.screenFadeOut()
-    })()
-  },
-  authScreenNext(e) {
-    log('[authScreenNext]', e)
-    const t = this
-    let windowWidth = t.data.windowWidth
-    let windowHeight = t.data.windowHeight
-    const authFirstStepLeaf = () =>{
-      wx.createSelectorQuery().select('#authScreenStepContent').boundingClientRect(function(rect){
-        t.animate('#leaf', [
-          { translate3d: [0,0,0], rotate3d: [0,0,1,45],scale:[1],ease:'ease-in-out' },
-          { translate3d: [windowWidth,-rect.top,0],rotate3d: [0,10,-1,45],scale:[0.3],ease:'ease-in-out'  },
-        ], 1000)
-      }).exec()
-    }
-    const authSecondStepLeaf = () =>{
-      wx.createSelectorQuery().select('#authScreenStepContent').boundingClientRect(function(rect){
-        t.animate('#leaf', [
-          { translate3d: [windowWidth,-rect.top,0],rotate3d: [0,10,-1,45],scale:[0.3],ease:'ease-in-out'},
-          { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' }
-        ], 1000)
-      }).exec()
-    }
-    const checkLocationAuth = () => {
-      log('[authScreenNext] => checkLocationAuth')
-      wx.getSetting({
-        success: res => {
-          log(`[authSetting] =>`, res)
-          if (res.authSetting['scope.userLocation']) {
-            transX(windowWidth * 2)
-            authSecondStepLeaf()
-            app.saveData('hasUserLocation', true)
-            app.changeStorage('startScreen', 'poetry')
-            log('[hasUserLocation]')
-          }
-          if (!res.authSetting['scope.userLocation']) {
-            wx.authorize({
-              scope: 'scope.userLocation',
-              success: res => {
-                log('[scope.userLocation] =>', res)
-                transX(windowWidth * 2)
-                authSecondStepLeaf()
-                app.saveData('hasUserLocation', true)
-                app.changeStorage('startScreen', 'poetry')
-              },
-              fail: err => {
-                log(`check = > [wx.authorize] =>`, err)
-                wx.showModal({
-                  title: '是否授权以下应用权限',
-                  content: '地理位置',
-                  confirmText: "确认",
-                  cancelText: "取消",
-                  success: res => {
-                    if (res.confirm) {
-                      wx.openSetting({
-                        success: res => {
-                          log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
-                          if (res.authSetting['scope.userLocation'] == true) {
-                            transX(windowWidth * 2)
-                            authSecondStepLeaf()
-                            app.saveData('hasUserLocation', true)
-                            app.changeStorage('startScreen', 'poetry')
-                            log('[scope.userLocation] success')
-                          }
-                        }
-                      });
-                    } else {
-                      log('[scope.userLocation] fail')
-                    }
-                  }
-                });
-              }
-            })
-          }
-        }
-      })
-    }
-    const transX = (steps) => {
-      log('[transX] =>', steps)
-      let stepAction = wx.createAnimation({
-        duration: 700,
-        timingFunction: 'ease-in-out',
-        delay: 0
-      });
-      stepAction.translate3d(-steps, 0, 0).step()
-      t.setData({
-        defaultScreenAni: stepAction.export(),
-      })
-    }
-    if (e == 'canNavToFinalScreen') {
-      transX(windowWidth * 3), log('[authFinalStep]')
-    } else {
-      let detailDarget = e.currentTarget.dataset.target
-      detailDarget == 'authFirstStep' ? (transX(windowWidth), authFirstStepLeaf(),log('[authFirstStep]')) : 
-      detailDarget == 'authSecondStep' ? (checkLocationAuth(), log('[authSecondStep]')) : 
-      detailDarget == 'authThirdStep' ? (transX(windowWidth * 3), log('[authThirdStep]')) : 
-      detailDarget == 'authFourthStep' ? (transX(windowWidth * 3), log('[authFourthStep]')) : 
-      (warn("transX"))
-    }
-  },
-  authScreenBack(e) {
-    log('[authScreenBack]')
-    const t = this
-    const transX = (steps) => {
-      const t = this
-      let authFirstStep = wx.createAnimation({
-        duration: 800,
-        timingFunction: 'ease-in-out',
-        delay: 0
-      });
-      authFirstStep.translate3d(-steps, 0, 0).step()
-      t.setData({
-        defaultScreenAni: authFirstStep.export(),
-      })
-    }
-    e.currentTarget.dataset.target == 'authFirstStep' ? (transX(t.data.windowWidth), log('[backAuthFirstStep]')) : e.currentTarget.dataset.target == 'authSecondStep' ? (transX(t.data.windowWidth), log('[backAuthSecondStep]')) : e.currentTarget.dataset.target == 'authThirdStep' ? (transX(t.data.windowWidth * 2), log('[backAuthThirdStep]')) : e.currentTarget.dataset.target == 'authFourthStep' ? (transX(t.data.windowWidth * 2), log('[backAuthFourthStep]')) : warn('[backStep]')
-  },
-  getPoetry() {
-    // async getPoetry() {
-    const t = this
-    poetry.load(
-    result => {
-      let temp = wx.getStorageSync('poetry_storage') || [{
-          content: '春眠不觉晓，处处闻啼鸟'
-        }],
-        poetryData = []
-      if (temp.length > 6) {
-        poetryData = temp.slice(0, 5)
-      } else {
-        poetryData = temp
-      }
-      log(`[getPoetry] => poetryData =>`, poetryData)
-      result.data.content = result.data.content.substring(0, result.data.content.lastIndexOf('。'))
-      poetryData.unshift(result.data)
-      app.saveData("poetry_storage", [...new Set(poetryData)])
-    })
-  },
-  switchChange(e) {
-    log('[switchChange]',e.currentTarget.dataset.target)
-    const t = this
-    e.currentTarget.dataset.target == 'getNewLocationByManual' ? t.getNewLocationByManual() : 
-    e.currentTarget.dataset.target == 'getLocationByAuto' ? t.getLocationByAuto() : error("switchChange")
-  },
   showModal(e) {
     log('[showModal]', e.currentTarget.dataset.target)
     const t = this
@@ -1291,6 +991,13 @@ create(store, {
     const t = this
     t.setData({
       drawerModalName: e.currentTarget.dataset.target
+    })
+  },
+  _showDrawerModal(e){
+    const t = this
+    log(e)
+    t.setData({
+      drawerModalName: e.detail.drawerModalName
     })
   },
   hideDrawerModal(e){
@@ -1400,7 +1107,7 @@ create(store, {
         clear: true,
         views: [{
             type: 'image',
-            url: t.data.bingImage,
+            url: t.data.bingImage || 'https://weather.ioslide.com/weather/weatherlogo.png',
             top: 0,
             left: 0,
             width: 300,
@@ -1430,7 +1137,7 @@ create(store, {
           },
           {
             type: 'image',
-            url: t.data.qrImageURL, //二维码
+            url: globalData.qrImageURL, //二维码
             top: 270,
             left: 120,
             width: 65,
@@ -1614,8 +1321,8 @@ create(store, {
               'forecastData.rainRadar.longitude':  t.data.longitude
             })
           }
-          let rainRadarImg = result.data.images[result.data.images.length - 1][0]
-          let source = result.data.images[result.data.images.length - 1]
+          let rainRadarImg = result.data.images[0][0]
+          let source = result.data.images[0]
           let rainRadarPosition = source[2]
           //Today
           const reduceRainRadarImages = () => {
@@ -1672,7 +1379,7 @@ create(store, {
         url: aqiRadarApiHost,
         success: (result) => {
           log('[reqAqiRadar]', result.data.images)
-          let aqiRadarImg = result.data.images[result.data.images.length - 1][0]
+          let aqiRadarImg = result.data.images[0][0]
           t.setData({
             'forecastData.aqiRadar.coverImage': aqiRadarImg,
             'forecastData.aqiRadar.images': result.data.images
@@ -1690,8 +1397,79 @@ create(store, {
       await reqAqiRadar()
     })()
   },
+  
+  setRadarTimeLineIndex(){
+    const t = this
+    let timeCounts = 7  , radarTimeLineIndexNum = []
+    for(let i = 0 ;i<= timeCounts;i++){
+      var curTime = new Date();
+      var nextTime = util.formatHourTime(new Date(curTime.setMinutes(curTime.getMinutes() + i * 15)))
+      radarTimeLineIndexNum.push(nextTime)
+    }
+      log('radarTimeLineIndexNum',radarTimeLineIndexNum)
+      t.setData({
+        radarTimeLineIndexNum : radarTimeLineIndexNum
+      })
+  },
+  intervalRainRadar(options){
+    const t = this
+    let e = 0
+    var rainRadarImageslength = t.data.forecastData.rainRadar.images.length
+    var radarTimeLineIndexAni = wx.createAnimation({
+      duration: 200 * rainRadarImageslength,
+      timingFunction: 'ease-in-out',
+      delay: 0
+    });
+    var radarTimeLineIndexAniBreak = wx.createAnimation({
+      duration: 1,
+      timingFunction: 'ease-in-out',
+      delay: 0
+    });
+    if(t.data.radarTimeLineImage == 'https://weather.ioslide.com/weather/timeLinePlay.svg'){
+      t.setData({
+        radarTimeLineImage : 'https://weather.ioslide.com/weather/timeLinePause.svg'
+      })
+    }else{
+      t.setData({
+        radarTimeLineImage : 'https://weather.ioslide.com/weather/timeLinePlay.svg'
+      })
+    }
+    if(t.data.canIntervalRainRadarPlay == true){
+      radarTimeLineIndexAni.translate3d(t.data.windowWidth, 0, 0).step()
+      t.setData({
+        canIntervalRainRadarPlay:!t.data.canIntervalRainRadarPlay,
+        radarTimeLineIndex: radarTimeLineIndexAni.export()
+      })
+      t.data.timeLineInterval = setInterval(() => {
+        t.setData({
+          radarTimeLinePosition:e,
+          'forecastData.rainRadar.coverImage':t.data.forecastData.rainRadar.images[e].image
+        })
+        log(t.data.forecastData.rainRadar.images[e].image)
+        e = e + 1
+        if(e == rainRadarImageslength){
+          clearInterval(t.data.timeLineInterval)
+          radarTimeLineIndexAniBreak.translate3d(0, 0, 0).step()
+          t.setData({
+            canIntervalRainRadarPlay:!t.data.canIntervalRainRadarPlay,
+            radarTimeLineImage : 'https://weather.ioslide.com/weather/timeLinePlay.svg',
+            radarTimeLineIndex: radarTimeLineIndexAniBreak.export()
+          })
+        }
+      }, 200);
+    }else{
+      clearInterval(t.data.timeLineInterval)
+      log(options.currentTarget.dataset.position)
+      radarTimeLineIndexAni.translate3d(t.data.windowWidth/rainRadarImageslength * options.currentTarget.dataset.position, 0, 0).step()
+      t.setData({
+        canIntervalRainRadarPlay:!t.data.canIntervalRainRadarPlay,
+        radarTimeLineIndex: radarTimeLineIndexAni.export(),
+        'forecastData.rainRadar.coverImage':t.data.forecastData.rainRadar.images[options.currentTarget.dataset.position].image
+      })
+    }
+  },
   onIntersectionObserver() {
-    // log('[onIntersectionObserver]')
+    log('[onIntersectionObserver]')
     const t = this
     var ani = wx.createAnimation({
       duration: 700,
@@ -1725,7 +1503,6 @@ create(store, {
         // log('[refreshSunset] => end')
       }
     })
-
     wx.createIntersectionObserver().relativeToViewport().observe('#temperatureObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[temperatureObserver] => start')
@@ -1768,6 +1545,7 @@ create(store, {
       if (res.boundingClientRect.top > 0) {
         log('[radarObserver] => start')
         t.reqRadar()
+      
         ani.opacity(1).step()
         t.setData({
           radarObserverAni: ani.export()
@@ -1784,12 +1562,7 @@ create(store, {
         t.setData({
           fourthObserverAni: ani.export()
         })
-        // (async () => {
-        //   await t.getMoonPhaseList()
-        //   await t.setData({
-        //     fourthObserverAni: ani.export()
-        //   })
-        // })()
+        t.getMoonPhaseList()
       }
       if (res.boundingClientRect.top < 0) {
         // log('[fourthObserver] => end')
@@ -1968,73 +1741,14 @@ create(store, {
     }
     event()
   },
-  updateComponnet: function () {
-    var src = this.data.src ? this.data.src : this.data.bingImage; //裁剪图片不存在时，使用default图片，注意加载时的相对路径
-    this.setData({
-      visible: true,
-      src: src,
-      borderColor: "#0BFF00",
-      cropSizePercent: 0.7,
-      size: {
-        width: 300,
-        height: 300
-      }
-    })
+  getBingImage(){
+    this.selectComponent('#headImage').getBingImage()
   },
-  chooseCropImage(e) {
-    let self = this;
-    log('[chooseCropImage]',e)
-    let type = e.detail.type
-    wx.chooseImage({
-      count: 1,
-      sizeType: ["compressed"],
-      sourceType: [type],
-      success(res) {
-        console.log(res)
-        const tempFilePaths = res.tempFiles[0].path
-        self.setData({
-          visible: true,
-          src: tempFilePaths,
-        })
-      },
-      fail(err) {
-        console.log(err)
-      }
-    });
+  getHeadImageData(){
+    return this.selectComponent('#headImage').data
   },
-  cropCallback(event) {
-    const t = this
-    log('[cropCallback]', event);
-    const cloudUpload = (p, n) => {
-      wx.cloud.uploadFile({
-        cloudPath: 'cusImage/' + n,
-        filePath: p,
-      }).then(res => {
-        log('[uploadFile]', res)
-        t.setData({
-          visible: false,
-          cusImage: event.detail.resultSrc,
-          hasCusImage: true,
-          modalName: null
-        })
-        app.saveData('hasCusImage', true)
-        app.saveData('cusImageFileID', res.fileID)
-        console.log(res.fileID)
-      }).catch(error => {
-        log(error)
-      })
-    }
-    let fileName = util.formatDateClear(new Date()).concat(globalData.openid)
-    cloudUpload(event.detail.resultSrc, fileName)
-  },
-  uploadCallback(event) {
-    log('[uploadCallback]', event);
-  },
-  closeCallback(event) {
-    log('[closeCallback]', event);
-    this.setData({
-      visible: false,
-    });
+  getNASAImage(){
+    this.selectComponent('#headImage').getNASAImage()
   },
   onDev() {
     const t = this
@@ -2342,105 +2056,6 @@ create(store, {
     
     return radarChart
   },
-  navNextBing(){
-    // https://cn.bing.com/ImageResolution.aspx?w=375&h=667
-    // https://cn.bing.com/th?id=OHR.LofotenIslands_ZH-CN0114482586_480x800.jpg&rf=LaDigue_1920x1080.jpg&pid=hp
-    const t = this
-    this.animate('#bingImage', [
-      { opacity: 1.0, ease:'ease-in' },
-      { opacity: 0.0, ease:'ease-out' },
-      ], 350, function () {
-        let bingIndex = t.data.bingIndex
-        if(t.data.bingIndex == 7){
-          bingIndex = 0
-        }else{
-          bingIndex += 1 
-        }
-        let bingImage = 'https://cn.bing.com' + t.data.bingImageLists[bingIndex].url
-        t.setData({
-          bingIndex : bingIndex,
-          bingImage: bingImage
-        })
-        this.animate('#bingImage', [
-          { opacity: 0, ease:'ease-in' },
-          { opacity: 1, ease:'ease-out' },
-          ], 350)
-    }.bind(this))  
-  },
-  navPreBing(){
-    const t = this
-    this.animate('#bingImage', [
-      { opacity: 1.0, ease:'ease-in',backgroundColor: '#F5F6F7' },
-      { opacity: 0.5, ease:'ease-in',backgroundColor: '#F5F6F7'},
-      { opacity: 0.0, ease:'ease-out',backgroundColor: '#F5F6F7' },
-      ], 350, function () {
-        let bingIndex = t.data.bingIndex
-        if(t.data.bingIndex == 0){
-          bingIndex = 7
-        }else{
-          bingIndex -= 1 
-        }
-        let copyrightlink = 'https://bing.ioslide.com' + t.data.bingImageLists[bingIndex].copyrightlink
-        let bingImage = 'https://cn.bing.com' + t.data.bingImageLists[bingIndex].url
-        t.setData({
-          copyrightlink:copyrightlink,
-          bingIndex : bingIndex,
-          bingImage: bingImage
-        })
-        this.animate('#bingImage', [
-          { opacity: 0, ease:'ease-in',backgroundColor: '#F5F6F7' },
-          { opacity: 0.5, ease:'ease-in',backgroundColor: '#F5F6F7'},
-          { opacity: 1, ease:'ease-out',backgroundColor: '#F5F6F7' },
-          ], 350)
-    }.bind(this))  
-  },
-  navNextNASA(){
-    const t = this
-    this.animate('#NASAImage', [
-      { opacity: 1.0, ease:'ease-in' },
-      { opacity: 0.0, ease:'ease-out' },
-      ], 350, function () {
-        let NASAIndex = t.data.NASAIndex
-        if(t.data.NASAIndex == 7){
-          NASAIndex = 0
-        }else{
-          NASAIndex += 1 
-        }
-        let NASAImage = t.data.NASAImageLists[NASAIndex].post_thumbnail_image_624
-        t.setData({
-          NASAIndex : NASAIndex,
-          NASAImage: NASAImage
-        })
-        this.animate('#NASAImage', [
-          { opacity: 0, ease:'ease-in' },
-          { opacity: 1, ease:'ease-out' },
-          ], 350)
-    }.bind(this))  
-  },
-  navPreNASA(){
-    const t = this
-    this.animate('#NASAImage', [
-      { opacity: 1.0, ease:'ease-in'},
-      { opacity: 0.0, ease:'ease-out'},
-      ], 350, function () {
-        let NASAIndex = t.data.NASAIndex
-        if(t.data.NASAIndex == 0){
-          NASAIndex = 7
-        }else{
-          NASAIndex -= 1 
-        }
-        let NASAImage = t.data.NASAImageLists[NASAIndex].post_thumbnail_image_624
-        log(NASAImage)
-        t.setData({
-          NASAIndex : NASAIndex,
-          NASAImage: NASAImage
-        })
-        this.animate('#NASAImage', [
-          { opacity: 0, ease:'ease-in'},
-          { opacity: 1, ease:'ease-out'},
-          ], 350)
-    }.bind(this))  
-  },
   setTemperatureImage(e){
     this.setData({
       temperatureImage:e.detail.temperatureImage,
@@ -2532,6 +2147,74 @@ create(store, {
     }else{
       loadingComponent.stopLoading();
     }
+  },
+  updateComponnet: function () {
+    var src = this.data.src ? this.data.src : this.data.bingImage; //裁剪图片不存在时，使用default图片，注意加载时的相对路径
+    this.setData({
+      visible: true,
+      src: src,
+      borderColor: "#0BFF00",
+      cropSizePercent: 0.7,
+      size: {
+        width: 300,
+        height: 300
+      }
+    })
+  },
+  chooseCropImage(e) {
+    let self = this;
+    log('[chooseCropImage]',e)
+    let type = e.detail.type
+    wx.chooseImage({
+      count: 1,
+      sizeType: ["compressed"],
+      sourceType: [type],
+      success(res) {
+        console.log(res)
+        const tempFilePaths = res.tempFiles[0].path
+        self.setData({
+          visible: true,
+          src: tempFilePaths,
+        })
+      },
+      fail(err) {
+        console.log(err)
+      }
+    });
+  },
+  uploadCallback(event) {
+    log('[uploadCallback]', event);
+  },
+  closeCallback(event) {
+    log('[closeCallback]', event);
+    this.setData({
+      visible: false,
+    });
+  },
+  cropCallback(event) {
+    const t = this
+    log('[cropCallback]', event);
+    t.setData({
+      visible: false,
+      modalName: null
+    })
+    const setCusImage = t.selectComponent('#headImage');
+    setCusImage.setCusImage({'cusImage': event.detail.resultSrc,'hasCusImageFileID': true})
+    const cloudUpload = (p, n) => {
+      wx.cloud.uploadFile({
+        cloudPath: 'cusImage/' + n,
+        filePath: p,
+      }).then(res => {
+        log('[uploadFile]', res)
+        app.saveData('hasCusImageFileID', true)
+        app.saveData('cusImageFileID', res.fileID)
+      }).catch(error => {
+        log(error)
+      })
+    }
+    let fileName = util.formatDateClear(new Date()).concat(globalData.openid)
+    log('filename',fileName,util.formatDateClear(new Date()))
+    cloudUpload(event.detail.resultSrc, fileName)
   },
   openSnackBar(){
     const t = this

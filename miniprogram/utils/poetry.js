@@ -1,7 +1,3 @@
-/**
- * 今日诗词V2 Mini-Program-SDK 1.0
- * https://www.jinrishici.com
- */
 let waitingQueue = []
 let lock = false
 const load = callback => {

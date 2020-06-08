@@ -55,20 +55,31 @@ create.Component(store,{
       type: "parent"
     }
   },
-  attached: function () {
-    const t = this
-    let e = this.properties
-    // style = t.store.data.style
-    // console.log(e.switchTarget,style[e.switchTarget],t.store.data.style)
-    this.setData({
-      themeValue: e.themeValue,
-      switch: e.switch,
-      cellHeight:e.cellHeight,
-      subheader1Padding:e.subheader1Padding,
-      subbottomPadding:e.subbottomPadding
-      // switchTarget: e.switchTarget
-      // checked: style[e.switchTarget]
-    })
+  lifetimes: {
+    attached: function () {
+      const t = this
+      let e = t.properties
+      // style = t.store.data.style
+      // console.log(e.switchTarget,style[e.switchTarget],t.store.data.style)
+      t.setData({
+        themeValue: e.themeValue,
+        switch: e.switch,
+        cellHeight:e.cellHeight,
+        subheader1Padding:e.subheader1Padding,
+        subbottomPadding:e.subbottomPadding
+        // switchTarget: e.switchTarget
+        // checked: style[e.switchTarget]
+      })
+    },
+    moved: function () { },
+    detached: function () { },
+  },
+  pageLifetimes: {
+    show: function () { 
+      log(this.data)
+    },
+    hide: function () { },
+    resize: function () { },
   },
   externalClasses: ["sc-class", "left-icon", "right-icon"],
   methods: {

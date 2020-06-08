@@ -1,0 +1,73 @@
+@import "/weatherui/assets/wxss/main.wxss";
+.authScreen-dark {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+  outline: 0;
+  background-color: #2b2b2b;
+}
+
+.authScreenStep {
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.poetry {
+  height: 100%;
+  width: 30px;
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 2px;
+  writing-mode: vertical-lr;
+}
+
+.authScreen-light {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 200;
+  outline: 0;
+  background-color: #F5F6F7;
+}
+.authFirstStepButton {
+  text-align: center;
+  line-height: 40px;
+  border-radius: 30px;
+  height: 40px;
+  width: 130px;
+  color: #4a5568;
+  background: #E4F1FF;
+  /* margin-top: 50px; */
+  font-size: 16px;
+}
+.authScreenNextCell {
+  position: absolute;
+  right: 25px;
+  bottom: 40px;
+  width: 35px;
+  height: 35px;
+}
+
+.authScreenPreCell {
+  position: absolute;
+  left: 25px;
+  bottom: 40px;
+  width: 35px;
+  height: 35px;
+}
+.none {
+  display: none !important;
+  z-index: -1 !important;
+}
+
+.display-none {
+  display: none !important;
+}
+
+

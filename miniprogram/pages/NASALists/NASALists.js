@@ -28,11 +28,11 @@ create(store, {
     let pages = getCurrentPages();
     let currPage = pages[pages.length - 2]
     log(currPage)
-    let NASAImageLists = currPage.data.NASAImageLists
+    let headImageData = currPage.getHeadImageData()
+    log('[headImageData]',headImageData)
     t.setData({
-      NASAImageLists:NASAImageLists
+      NASAImageLists:headImageData.NASAImageLists
     })
-    log('[NASAImageLists]',NASAImageLists)
   },
   onShow() {
     const t = this
