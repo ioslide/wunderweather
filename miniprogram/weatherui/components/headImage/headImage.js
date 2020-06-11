@@ -7,7 +7,17 @@ import store from '../../../store/index'
 
 create.Component(store,{
   properties: {
-
+    canloadHeadImage:{
+      type: String,
+      observer: function () {
+        const t = this
+        log('[indexHeadImageValue]',t.store.data.indexHeadImageValue)
+        t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : 
+        t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  
+        t.store.data.indexHeadImageValue == 'customize' ?  t.getCustomizeImage(): 
+        t.store.data.indexHeadImageValue == 'weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
+      }
+    }
   },
   data: {
     windowWidth: globalData.windowWidth,
@@ -16,11 +26,11 @@ create.Component(store,{
     ]
   },
   lifetimes: {
-    attached: function () {
-      const t = this
-      log('[indexHeadImageValue]',t.store.data.indexHeadImageValue)
-      t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  t.store.data.indexHeadImageValue == 'customize' ?  t.getCustomizeImage(): log(t.store.data.indexHeadImageValue)
-    },
+    // attached: function () {
+    //   const t = this
+    //   log('[indexHeadImageValue]',t.store.data.indexHeadImageValue)
+    //   t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  t.store.data.indexHeadImageValue == 'customize' ?  t.getCustomizeImage(): t.store.data.indexHeadImageValue == 'weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
+    // },
     moved: function () { },
     detached: function () { },
   },
@@ -104,6 +114,35 @@ create.Component(store,{
           })
         }
       });
+    },
+    getWeatherImage(){
+        let pages = getCurrentPages()
+        let prevPage = pages[pages.length - 1];
+        log('[getWeatherImage]',prevPage.data.weatherKeyWord)
+        const t = this
+        wx.request({
+          url: 'https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ prevPage.data.weatherKeyWord +'&searchType=photo&page=1&size=20&type=json&avatarSize=a1&resourceType=0%2C2',
+          header: {
+            "content-type": "application/json"
+          },
+          success: res => {
+            log('[requestWeather]', res.data.data)
+            let weatherImageLists = res.data.data
+            let weatherImage = weatherImageLists[0].url.p4
+            t.setData({
+              weatherIndex : 0,
+              weatherImage: weatherImage,
+              weatherImageLists : weatherImageLists,
+              headBackgroundAni: true
+            })
+          },
+          fail: err => {
+            log('requestBing', err)
+            t.setData({
+              'weatherImage': '../../weatherui/assets/images/headbackground.jpg'
+            })
+          }
+        });
     },
     navChange(e) {
       log(`[navChange] => ${e.currentTarget.dataset.cur}`)
@@ -225,6 +264,53 @@ create.Component(store,{
             NASAImage: NASAImage
           })
           this.animate('#NASAImage', [
+            { opacity: 0, ease:'ease-in'},
+            { opacity: 1, ease:'ease-out'},
+            ], 350)
+      }.bind(this))  
+    },
+    navNextWeather(){
+      const t = this
+      this.animate('#weatherImage', [
+        { opacity: 1.0, ease:'ease-in' },
+        { opacity: 0.0, ease:'ease-out' },
+        ], 350, function () {
+          let weatherIndex = t.data.weatherIndex
+          if(t.data.weatherIndex == 7){
+            weatherIndex = 0
+          }else{
+            weatherIndex += 1 
+          }
+          let weatherImage = t.data.weatherImageLists[weatherIndex].url.p4
+          t.setData({
+            weatherIndex : weatherIndex,
+            weatherImage: weatherImage
+          })
+          this.animate('#weatherImage', [
+            { opacity: 0, ease:'ease-in' },
+            { opacity: 1, ease:'ease-out' },
+            ], 350)
+      }.bind(this))  
+    },
+    navPreWeather(){
+      const t = this
+      this.animate('#weatherImage', [
+        { opacity: 1.0, ease:'ease-in'},
+        { opacity: 0.0, ease:'ease-out'},
+        ], 350, function () {
+          let weatherIndex = t.data.weatherIndex
+          if(t.data.weatherIndex == 0){
+            weatherIndex = 7
+          }else{
+            weatherIndex -= 1 
+          }
+          let weatherImage = t.data.weatherImageLists[weatherIndex].url.p4
+          log(weatherImage)
+          t.setData({
+            weatherIndex : weatherIndex,
+            weatherImage: weatherImage
+          })
+          this.animate('#weatherImage', [
             { opacity: 0, ease:'ease-in'},
             { opacity: 1, ease:'ease-out'},
             ], 350)

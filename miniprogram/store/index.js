@@ -5,10 +5,11 @@ const setStoreage = () =>{
   $$ = {
     getLocationMethod:'auto',
     language: {
-      languageChecked_zh_TW: false,
       languageChecked_zh_CN: true,
+      languageChecked_zh_TW: false,
       languageChecked_en_US: false,
-      languageChecked_en_GB: false
+      languageChecked_en_GB: false,
+      languageChecked_ja: false
     },
     languageValue: 'zh_CN',
     refreshfrequency: {

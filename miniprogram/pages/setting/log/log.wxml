@@ -8,7 +8,7 @@
 		<tui-time-axis>
 			<tui-timeaxis-item>
 				<view slot="node" class="tui-node">
-					<image mode="widthFix" class="square-20" src="https://weather.ioslide.com/weather/todo.svg"></image>
+					<image mode="widthFix" class="square-20" style="{{$.themeValue == 'light'? '#010101':'#F4F5F6'}}" src="https://weather.ioslide.com/weather/todo.svg"></image>
 				</view>
 				<view slot="content">
 					<view class="tui-content-log tui-log-gray">
@@ -26,7 +26,7 @@
 			</tui-timeaxis-item>
 			<tui-timeaxis-item>
 				<view slot="node" class="tui-node">
-					<image mode="widthFix" class="square-20" src="https://weather.ioslide.com/weather/bug.svg"></image>
+					<image mode="widthFix" class="square-20" style="{{$.themeValue == 'light'? '#010101':'#F4F5F6'}}" src="https://weather.ioslide.com/weather/bug.svg"></image>
 				</view>
 				<view slot="content">
 					<view class="tui-content-log tui-log-gray">

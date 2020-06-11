@@ -15,7 +15,7 @@
 <view class="root {{drawerModalName == 'DrawerModalR' || drawerModalName == 'DrawerModalB' || drawerModalName == 'DrawerModalL' ||  canBlurRoot == true ? 'rootBlur':'rootUnBlur'}} {{networkType == 'none'? 'networkType-rootUnBlur':''}} ">
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-5 justify-center margin-5" style="min-height:280px">
-			<headImage bind:_showDrawerModal="_showDrawerModal" id="headImage"></headImage>
+			<headImage bind:_showDrawerModal="_showDrawerModal" id="headImage" canloadHeadImage="{{canloadHeadImage}}" ></headImage>
 			<block wx:if="{{networkType == 'none' || networkType == 'unknown' || networkType == undefined}}">
 				<view class="networkType" bindtap="refreshLocation">
 					<view class="networkType-button">
@@ -74,11 +74,12 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">详情</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">詳情</block>
+																																													<block wx:if="{{$.languageValue == 'ja'}}">細部</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Details</block>
 				</text>
 			</view>
 			<view class="barRightIcon margin-right-0" bindtap="changeAirQuatityView" style="width: 50px;height: 30px;">
-				<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+				<image class="square-20" src="https://weather.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
 			</view>
 		</view>
 		<view class="{{$.themeValue == 'light'?'padding-5':'padding-15'}}" id="firstObserver" animation="{{firstObserverAni}}" style="min-height:260px">
@@ -112,6 +113,7 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来7天</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來7天</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">次の7日間</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Daily</block>
 				</text>
 			</view>
@@ -148,11 +150,12 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">降水·{{rainChartName}}</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">降水·{{rainChartName}}</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">降水量・{{rainChartName}}</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Rain·{{rainChartName}}</block>
 				</text>
 			</view>
 			<view class="barRightIcon margin-right-0" bindtap="changeRainChartData" style="width: 50px;height: 30px;">
-				<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+				<image class="square-20" src="https://weather.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
 			</view>
 		</view>
 		<view class="flex opacity-0" animation="{{rainObserverAni}}" style="min-height:200px">
@@ -168,6 +171,7 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">空气污染质量指数</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">空氣污染質量指數</block>
+															<block wx:if="{{$.languageValue == 'ja'}}">大気汚染品質指数</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Air Quality Index</block>
 				</text>
 			</view>
@@ -243,6 +247,7 @@
 					<text class="text-sm text-grey" decode="{{true}}">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">优</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">優</block>
+																				<block wx:if="{{$.languageValue == 'ja'}}">優秀な</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Good</block>
 					</text>
 				</view>
@@ -250,6 +255,7 @@
 					<text class="text-sm text-grey letter-spacing-1" decode="{{true}}">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">严重污染</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">嚴重污染</block>
+																									<block wx:if="{{$.languageValue == 'ja'}}">深刻な汚染</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Hazardous</block>
 					</text>
 				</view>
@@ -263,6 +269,7 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}}  text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">日照</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">日照</block>
+																														<block wx:if="{{$.languageValue == 'ja'}}">日が当たる</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sun</block>
 				</text>
 			</view>
@@ -298,37 +305,43 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">雷达</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">雷達</block>
+																														<block wx:if="{{$.languageValue == 'ja'}}">レーダー</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
 				</text>
 			</view>
-			<!-- <view class="barRightIcon margin-right-0" bindtap="changeRadarMapType" style="width: 54px;height: 30px;"> -->
-						<view class="barRightIcon margin-right-0" style="width: 54px;height: 30px;">
-				<image class="square-20" src="https://teaimg.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+			<view class="barRightIcon margin-right-0" bindtap="changeRadarMapType" style="width: 54px;height: 30px;">
+				<image class="square-20" src="https://weather.ioslide.com/weather/radarSatellite.svg" mode="widthFix"></image>
 			</view>
 		</view>
 		<view class="flex padding-15 opacity-0" animation="{{radarObserverAni}}" style="width:100%">
-			<map id="radarMap" setting="{{radarMapSetting}}" latitude="{{forecastData.rainRadar.latitude}}" longitude="{{forecastData.rainRadar.longitude}}" scale="{{radarMapScale}}" style="width: 100%; height: 250px;">
+			<map wx:if="{{radarMapImageType == 'rain'}}" subKey='BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D' layer-style="{{$.themeValue == 'light' ? '3' : '2'}}" id="radarMap" markers="{{radarMapMarkers}}" setting="{{radarMapSetting}}" latitude="{{radarMapLatitude}}" longitude="{{radarMapLongitude}}" scale="{{radarMapScale}}" style="width: 100%; height: 250px;">
 				<view style="width: 100%; height: 250px;">
-					<image src="{{radarMapImageType == 'rain' ? forecastData.rainRadar.coverImage : forecastData.aqiRadar.coverImage}}" mode="widthFix" style="width:{{radarMapImageType == 'rain' ? windowWidth-30 : 493}}px;height:{{windowWidth-30}}px;position:absolute;left:-60px;top:-79px;">
+					<image src="{{forecastData.rainRadar.coverImage}}" mode="widthFix" style="width:{{radarMapImageType == 'rain' ? windowWidth-30 : 493}}px;height:{{windowWidth-30}}px;position:absolute;left:0px;top:-{{(windowWidth-280)/2}}px;">
 					</image>
 				</view>
 			</map>
+			<!-- <map wx:if="{{radarMapImageType == 'aqi'}}" id="radarMap" markers="{{radarMapMarkers}}" setting="{{radarMapSetting}}" latitude="{{radarMapLatitude}}" longitude="{{radarMapLongitude}}" scale="{{radarMapScale}}" style="width: 100%; height: 250px;">
+				<view style="width: 100%; height: 250px;">
+					<image src="{{forecastData.aqiRadar.coverImage}}" mode="widthFix" style="width:{{radarMapImageType == 'rain' ? windowWidth-30 : 493}}px;height:{{windowWidth-30}}px;position:absolute;left:-60px;top:-79px;">
+					</image>
+				</view>
+			</map> -->
 		</view>
 		<view class="flex opacity-0" animation="{{radarObserverAni}}" style="height:44px;width:100%">
 			<view class="radarTimeLine-bottom">
 				<view class="radarTimeLine-playbar {{$.themeValue == 'light' ? 'radarTimeLine-playbar-shadow-light' : 'radarTimeLine-playbar-shadow-dark'}}">
 					<view class="radarTimeLine-timewrapper">
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}}  padding-lr-5 text-grey " style="width: 12.5%">{{radarTimeLineIndexNum[0]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[1]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[2]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[3]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[4]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[5]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[6]}}</view>
-						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} padding-lr-5 text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[7]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}}  text-grey " style="width: 12.5%">{{radarTimeLineIndexNum[0]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[1]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[2]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[3]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[4]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[5]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[6]}}</view>
+						<view class="{{$.themeValue == 'light' ? 'radarTimeLine-item-light' : 'radarTimeLine-item-dark'}} text-grey" style="width: 12.5%">{{radarTimeLineIndexNum[7]}}</view>
 						<view class="radarTimeLine-timeblock" id="radarTimeLineIndex" animation="{{radarTimeLineIndex}}" style="transform: translate3d(0px, 0px, 0px);"></view>
 					</view>
-					<view class="radarTimeLine-playicon margin-left-5" data-position="{{radarTimeLinePosition}}"  bindtap="intervalRainRadar">
+					<view class="radarTimeLine-playicon margin-left-5" data-position="{{radarTimeLinePosition}}" bindtap="intervalRainRadar">
 						<image class="square-30" mode="aspectFit" src="{{radarTimeLineImage}}"></image>
 					</view>
 				</view>
@@ -342,6 +355,7 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">月相</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">月相</block>
+																																			<block wx:if="{{$.languageValue == 'ja'}}">月の姿</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
 				</text>
 			</view>
@@ -360,11 +374,13 @@
 								<text class="margin-top-5 text-sm text-grey padding-top-15">
 								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseName_zh_CN}}</block>
 								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
+																																											<block wx:if="{{$.languageValue == 'ja'}}">{{item.moonPhaseName_ja}}</block>
 								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_en_US_en_GB}}</block>
 								</text>
 								<text class="margin-top-10 text-sm {{$.themeValue == 'light'?'moon-text-c9d7e6cc':'moon-text-grey'}}">
 								<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseDate_zh_CN}}</block>
 								<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseDate_zh_TW}}</block>
+								<block wx:if="{{$.languageValue == 'ja'}}">{{item.moonPhaseDate_ja}}</block>
 								<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseDate_en_US_en_GB}}</block>
 								</text>
 							</view>
@@ -381,6 +397,7 @@
 				<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}} text-df">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">风速</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">風速</block>
+													<block wx:if="{{$.languageValue == 'ja'}}">風速</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Wind</block>
 				</text>
 			</view>

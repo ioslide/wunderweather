@@ -103,24 +103,47 @@
 				</view>
 			</block>
 
-			<block wx:if="{{$.indexHeadImageValue == 'Weather'}}">
+			<block wx:if="{{$.indexHeadImageValue == 'weather'}}">
 				<view class="flex square-100 align-center justify-center">
-					<image id="bingImage" class="square-100" src="{{bingImage}}" catchtouchmove="touchmove" style="background-size: cover;transform:translate({{x}}px,{{y}}px);background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+					<image id="weatherImage" class="square-100" src="{{weatherImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
+						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">
+							<block wx:if="{{forecastData.realtime.skyconCN == '雨'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '雪'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴天'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '晴夜'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '风'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '阴' ||forecastData.realtime.skyconCN == '多云'}}">
+
+							</block>
+							<block wx:if="{{forecastData.realtime.skyconCN == '雾霾沙尘'}}">
+
+							</block>
+						</block>
 					</image>
 					<view class="absolute left-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								<image bindtap="navChange" data-cur="weatherLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
 							</view>
 						</view>
 					</view>
 					<view class="absolute right-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navPreBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<image bindtap="navPreWeather" data-index="{{weatherIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{weatherIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
 							</view>
 							<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
-								<image bindtap="navNextBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<image bindtap="navNextWeather" data-index="{{weatherIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{weatherIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
 							</view>
 						</view>
 					</view>

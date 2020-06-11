@@ -10,6 +10,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页图片</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁圖片</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">ホーム画像</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Index Image</block>
 				</text>
 				<view slot="action">
@@ -23,6 +24,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气特效</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">天氣特效</block>
+										<block wx:if="{{$.languageValue == 'ja'}}">天気の影響</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Weather effects</block>
 				</text>
 				<view slot="action">
@@ -36,6 +38,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">详情列表</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">詳情列表</block>
+															<block wx:if="{{$.languageValue == 'ja'}}">詳細一覧</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Detail list</block>
 				</text>
 				<view slot="action">
@@ -48,6 +51,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来24小时</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來24小時</block>
+																				<block wx:if="{{$.languageValue == 'ja'}}">次の24時間</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">The next 24 hours</block>
 				</text>
 				<view slot="action">
@@ -60,6 +64,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">未来7天</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">未來7天</block>
+																									<block wx:if="{{$.languageValue == 'ja'}}">次の7日間</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Next 7 days</block>
 				</text>
 				<view slot="action">
@@ -72,6 +77,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">空气质量指数</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">空氣質量指數</block>
+																														<block wx:if="{{$.languageValue == 'ja'}}">大気質指標</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Air quality index</block>
 				</text>
 				<view slot="action">
@@ -84,6 +90,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">降水</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">降水</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">降水量</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Precipitation</block>
 				</text>
 				<view slot="action">
@@ -96,6 +103,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">日照轨迹</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">日照軌跡</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">サンシャイントラック</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sunshine track</block>
 				</text>
 				<view slot="action">
@@ -108,6 +116,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">月相</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">月相</block>
+										<block wx:if="{{$.languageValue == 'ja'}}">月相</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Lunar phase</block>
 				</text>
 				<view slot="action">
@@ -120,6 +129,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">风速</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">風速</block>
+															<block wx:if="{{$.languageValue == 'ja'}}">風速</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Wind speed</block>
 				</text>
 				<view slot="action">
@@ -132,6 +142,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">雷达</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">雷達</block>
+																				<block wx:if="{{$.languageValue == 'ja'}}">レーダー</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Radar</block>
 				</text>
 				<view slot="action">
@@ -144,6 +155,7 @@
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">屏幕常亮</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">屏幕常亮</block>
+																									<block wx:if="{{$.languageValue == 'ja'}}">画面は常にオンです</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Keep screen on</block>
 				</text>
 				<view slot="action">

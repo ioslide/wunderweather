@@ -163,6 +163,7 @@ Component({
       this.data.dialog._close()
     },
     _submit: function () {
+      console.log(this.data.selectDateObject)
       var t = this.data.selectDateObject,
         e = t.years,
         a = t.months,

@@ -46,6 +46,11 @@ create(store, {
       app.saveData('hasCusImage', false)
       prevPage.getNASAImage()
     }
+    else if(indexHeadImageValue == 'weather'){
+      indexHeadImage['indexHeadImageWeather'] = true
+      app.saveData('hasCusImage', false)
+      prevPage.getWeatherImage()
+    }
     else{
       indexHeadImage['indexHeadImageCus'] = true
       app.saveData('hasCusImage', true)
@@ -201,7 +206,8 @@ create(store, {
         languageChecked_zh_TW: false,
         languageChecked_zh_CN: false,
         languageChecked_en_US: false,
-        languageChecked_en_GB: false
+        languageChecked_en_GB: false,
+        languageChecked_ja: false
       },
       languageValue = e.detail.value.toString()
     log('[languageValue] =>', e.detail.value.toString())
@@ -220,6 +226,10 @@ create(store, {
     else if (e.detail.value == 'en_GB') {
       language['languageChecked_en_GB'] = true
       log('[language] =>', 'languageChecked_en_GB = true')
+    }
+    else if (e.detail.value == 'ja') {
+      language['languageChecked_ja'] = true
+      log('[language] =>', 'languageChecked_ja = true')
     }
     t.store.data.language = language
     t.store.data.languageValue = languageValue
@@ -340,21 +350,9 @@ create(store, {
   },
   onDev() {
     const t = this
-    let title = '',content = ''
-    if(t.store.data.languageValue == 'zh_TW'){
-      title = '沒錢開發中'
-      content = '不要期待'
-    }else if(t.store.data.languageValue == 'zh_CN'){
-      title = '没钱开发中'
-      content = '不要期待'
-    }else{
-      title = "No money"
-      content = 'Do not expect'
-    }
     wx.showModal({
-      title: title,
-      content: content,
-      success(res) {}
+      title: t.store.data.languageValue == 'zh_TW' ?'功能暫未開放':t.store.data.languageValue == 'zh_CN'?'功能暂未开放':t.store.data.languageValue == 'ja'?'関数はまだ開いていません':'Function not open yet',
+      content: t.store.data.languageValue == 'zh_TW' ?'敬請期待':t.store.data.languageValue == 'zh_CN'?'敬请期待':t.store.data.languageValue == 'ja'?'乞うご期待':'Do not expect'
     })
   },
   onGetWeRunData() {

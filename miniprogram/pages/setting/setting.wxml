@@ -10,12 +10,14 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">テーマ</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
 			</text>
 			<text class="text-Abc" slot="subbottom">
 				<block wx:if="{{$.languageValue == 'zh_CN'}}">黑夜/明亮</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">黑夜/明亮</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Dark/Light</block></text>
+				<block wx:if="{{$.languageValue == 'zh_TW'}}">黑夜/明亮</block>
+									<block wx:if="{{$.languageValue == 'ja'}}">夜/明るい</block>
+				<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Dark/Light</block></text>
 		</sc-cell>
 	</view>
 
@@ -31,11 +33,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">样式</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">樣式</block>
+						<block wx:if="{{$.languageValue == 'ja'}}">スタイル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Features</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页样式</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁樣式</block>
+											<block wx:if="{{$.languageValue == 'ja'}}">ホームスタイル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Style Set</block>
 			</text>
 		</sc-cell>
@@ -46,6 +50,7 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">图标</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">圖標</block>
+																<block wx:if="{{$.languageValue == 'ja'}}">アイコン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Icon Set</block>
 			</text>
 			<text class="text-Abc" slot="subbottom">{{$.iconValue}}
@@ -58,6 +63,7 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">単位系</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
 			</text>
 			<text class="text-Abc" slot="subbottom">{{$.unitValue}}</text>
@@ -69,11 +75,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气源</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">天氣源</block>
+																										<block wx:if="{{$.languageValue == 'ja'}}">天気情報源</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Data Source</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">彩云天气/WeatherBit/Aqicn/Aeris</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">彩雲天氣/WeatherBit/Aqicn/Aeris</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">Caiyun/WeatherBit/Aqicn/Aeris</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Caiyun/WeatherBit/Aqicn/Aeris</block>
 			</text>
 		</sc-cell>
@@ -84,11 +92,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">预警</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">預警</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">天気予報</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Notification</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">天气预警，出行预警</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">天氣預警，出行預警</block>
+										<block wx:if="{{$.languageValue == 'ja'}}">気象警報</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Daily notification / On-going notification</block>
 			</text>
 		</sc-cell>
@@ -99,11 +109,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">刷新频率</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">刷新頻率</block>
+						<block wx:if="{{$.languageValue == 'ja'}}">リフレッシュレート</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Update Frequency</block>
 			</text>
 			<text slot="subbottom">
 			<block wx:if="{{$.languageValue == 'zh_CN'}}">{{$.refreshfrequencyValue}}分钟</block>
 			<block wx:if="{{$.languageValue == 'zh_TW'}}">{{$.refreshfrequencyValue}}分鐘</block>
+									<block wx:if="{{$.languageValue == 'ja'}}">{{$.refreshfrequencyValue}}分</block>
 			<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">{{$.refreshfrequencyValue}} minutes</block>
 			</text>
 		</sc-cell>
@@ -114,12 +126,15 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">语言设置</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">語言設置</block>
+														<block wx:if="{{$.languageValue == 'ja'}}">言語設定</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US'}}">Language</block>
 			</text>
 			<text slot="subbottom">
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">中文/英文</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">中文/英文</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Chinese/English</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">中文简体</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">中文簡體</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">日本語</block>
+					<block wx:if="{{$.languageValue == 'en_GB'}}">British English</block>
+					<block wx:if="{{$.languageValue == 'en_US' }}">American English</block>
 			</text>
 		</sc-cell>
 	</view>
@@ -129,11 +144,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">封面</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">封面</block>
+										<block wx:if="{{$.languageValue == 'ja'}}">カバー</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Index Image</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页封面设置</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁封面設置</block>
+															<block wx:if="{{$.languageValue == 'ja'}}">家のカバーの設定</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Home cover settings</block>
 			</text>
 		</sc-cell>
@@ -144,11 +161,13 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">关于</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">關於</block>
+										<block wx:if="{{$.languageValue == 'ja'}}">オン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">About</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">版本</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">版本</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">バージョン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Version </block>1.4.10
 			</text>
 		</sc-cell>
@@ -159,20 +178,23 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">提需求</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">提需求</block>
+																				<block wx:if="{{$.languageValue == 'ja'}}">需要に言及</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Function demand</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">赞助提需求</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">贊助提需求</block>
+																									<block wx:if="{{$.languageValue == 'ja'}}">スポンサーシップの必要性</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sponsorship needs</block>
 			</text>
 		</sc-cell>
 	</view>
-		<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="log">
+	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="log">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">开发日志</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">開發日誌</block>
+																														<block wx:if="{{$.languageValue == 'ja'}}">開発ログ</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Development log</block>
 			</text>
 		</sc-cell>
@@ -186,6 +208,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">图标</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">圖標</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">アイコン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Icon</block>
 				</button>
 			</view>
@@ -220,6 +243,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -234,6 +258,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">主题</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">主題</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">テーマ</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Theme</block>
 				</button>
 			</view>
@@ -247,12 +272,12 @@
 				</view> -->
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="light" value="light" checked="{{$.theme.themeChecked_light}}" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'明亮':$.languageValue == 'zh_TW'?'明亮':$.languageValue == 'ja'?'明るい':'Light'}}" value="light" checked="{{$.theme.themeChecked_light}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="dark" value="dark" checked="{{$.theme.themeChecked_dark}}" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'黑夜':$.languageValue == 'zh_TW'?'黑夜':$.languageValue == 'ja'?'闇':'Dark'}}" value="dark" checked="{{$.theme.themeChecked_dark}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -262,6 +287,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -276,6 +302,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">刷新频率</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">刷新頻率</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">リフレッシュレート</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Update Frequency</block>
 				</button>
 			</view>
@@ -290,22 +317,22 @@
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="5 mins" checked="{{$.refreshfrequency.refreshfrequencyChecked_5}}" value="5" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'5 分钟':$.languageValue == 'zh_TW'?'5 分鐘':$.languageValue == 'ja'?'5 分':'5 mins'}}" checked="{{$.refreshfrequency.refreshfrequencyChecked_5}}" value="5" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="10 mins" checked="{{$.refreshfrequency.refreshfrequencyChecked_10}}" value="10" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'10 分钟':$.languageValue == 'zh_TW'?'10 分鐘':$.languageValue == 'ja'?'10 分':'10 mins'}}" checked="{{$.refreshfrequency.refreshfrequencyChecked_10}}" value="10" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="30 mins" checked="{{$.refreshfrequency.refreshfrequencyChecked_30}}" value="30" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'30 分钟':$.languageValue == 'zh_TW'?'30 分鐘':$.languageValue == 'ja'?'30 分':'30 mins'}}" checked="{{$.refreshfrequency.refreshfrequencyChecked_30}}" value="30" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="60 mins" checked="{{$.refreshfrequency.refreshfrequencyChecked_60}}" value="60" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'60 分钟':$.languageValue == 'zh_TW'?'60 分鐘':$.languageValue == 'ja'?'60 分':'60 mins'}}" checked="{{$.refreshfrequency.refreshfrequencyChecked_60}}" value="60" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -315,6 +342,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -329,6 +357,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">系统语言</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">系統語言</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">システム言語</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">System language</block>
 				</button>
 			</view>
@@ -343,6 +372,11 @@
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="British English" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="日本語" value="ja" style="width:100%;" checked="{{$.language.languageChecked_ja}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
@@ -362,6 +396,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -376,6 +411,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">封面图</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">封面圖</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">カバー</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cover picture</block>
 				</button>
 			</view>
@@ -389,12 +425,17 @@
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="{{$.languageValue == 'zh_CN'?'自定义':'Customize'}}" value="customize" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageCus}}"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'自定义':$.languageValue == 'zh_TW'?'自定義':$.languageValue == 'ja'?'カスタマイズ':'Customize'}}" value="customize" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageCus}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="NASA" value="NASA" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageNASA}}"></sc-radio>
+					</label>
+				</view>
+				<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'跟随天气':$.languageValue == 'zh_TW'?'跟隨天氣':$.languageValue == 'ja'?'攪拌随天気体':'Weather'}}" value="weather" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageWeather}}"></sc-radio>
 					</label>
 				</view>
 			</view>
@@ -404,6 +445,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -417,6 +459,7 @@
 				<button class="cu-btn text-lg text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">单位制</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">單位制</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">単位系</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Units</block>
 				</button>
 			</view>
@@ -445,6 +488,7 @@
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 			</view>
@@ -469,11 +513,13 @@
 				<button class="cu-btn line-black " bindtap="hideModal" style="border-radius: 0px;">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">取消</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">キャンセル</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Cancel</block>
 				</button>
 				<button class="cu-btn bg-black margin-left" bindtap="onGetWeRunData" style="border-radius: 1px;">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">确定</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">確定</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">決める</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">OK</block>
 				</button>
 			</view>

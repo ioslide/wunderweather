@@ -18,7 +18,6 @@ create.Component(store, {
       'themeValue',
       'languageValue',
       'startScreen',
-      'languageValue',
       'language',
       'unit',
       'unitValue',
@@ -130,14 +129,14 @@ create.Component(store, {
     onDev() {
       const t = this
       wx.showModal({
-        title: t.store.data.languageValue == 'zh_TW' ? '沒錢開發中' : t.store.data.languageValue == 'zh_CN' ? '没钱开发中' : 'No money',
-        content: t.store.data.languageValue == 'zh_TW' ? '不要期待' : t.store.data.languageValue == 'zh_CN' ? '不要期待' : 'Do not expect'
+        title: t.store.data.languageValue == 'zh_TW' ?'功能暫未開放':t.store.data.languageValue == 'zh_CN'?'功能暂未开放':t.store.data.languageValue == 'ja'?'関数はまだ開いていません':'Function not open yet',
+        content: t.store.data.languageValue == 'zh_TW' ?'敬請期待':t.store.data.languageValue == 'zh_CN'?'敬请期待':t.store.data.languageValue == 'ja'?'乞うご期待':'Do not expect'
       })
     },
     onLive(){
       const t = this
       wx.showToast({
-        title: t.store.data.languageValue == 'zh_TW' ? '還未開播' : t.store.data.languageValue == 'zh_CN' ? '还未开播' : 'Not yet broadcast'
+        title: t.store.data.languageValue == 'zh_TW' ? '還未開播' : t.store.data.languageValue == 'zh_CN' ? '还未开播'  : t.store.data.languageValue == 'ja' ? 'まだ放送されていません' :  'Not yet broadcast'
       })
       wx.cloud.callFunction({
         name: 'getLiveRoomLists',
@@ -296,12 +295,14 @@ create.Component(store, {
           languageChecked_zh_TW: false,
           languageChecked_zh_CN: false,
           languageChecked_en_US: false,
-          languageChecked_en_GB: false
+          languageChecked_en_GB: false,
+          languageChecked_ja: false
         }
         var languageValue = e.detail.value.toString()
         log('[languageValue] =>', e.detail.value.toString())
         e.detail.value == 'zh_TW' ? (language['languageChecked_zh_TW'] = true) :
         e.detail.value == 'zh_CN' ? (language['languageChecked_zh_CN'] = true) :
+        e.detail.value == 'ja' ? (language['languageChecked_ja'] = true) :
         e.detail.value == 'en_US' ? (language['languageChecked_en_US'] = true) : (language['languageChecked_en_GB'] = true)
         t.store.data.languageValue = languageValue
         t.store.data.language = language
