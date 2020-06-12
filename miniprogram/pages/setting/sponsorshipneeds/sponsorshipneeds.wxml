@@ -1,19 +1,19 @@
 <page-meta background-color="#F5F6F7" scroll-duration="1000" bindresize="pageResize" bindscrolldone="pageScrollDone" page-style="background:#F5F6F7">
 	<navigation-bar color-animation-duration="2000" color-animation-timing-func="easeIn" />
 </page-meta>
-<sc-capsule isBack="{{true}}" themeValue="light" contentText="赞助需求排行榜"></sc-capsule>
+<sc-capsule isBack="{{true}}" themeValue="light" contentText="{{$.languageValue == 'zh_CN'?'赞助需求排行榜':$.languageValue == 'zh_TW'?'贊助需求排行榜':$.languageValue == 'ja'?'協賛需要ランキング':'List of sponsorship needs'}}"></sc-capsule>
 <view class="container">
 
 	<!--tabbar-->
 	<view class="tui-chat-content">
 		<tui-loadmore visible="{{loadding}}" index="3" type="primary" text=""></tui-loadmore>
-		<view class="tui-chat-center margin-bottom-20">截止 2020-06-03</view>
+		<view class="tui-chat-center margin-bottom-20">{{$.languageValue == 'zh_CN'?'截止目前':$.languageValue == 'zh_TW'?'截止目前':$.languageValue == 'ja'?'いまのところ':'Up to now'}}</view>
 		<view wx:for="{{msgLists}}" wx:key="index">
-			<view class="tui-chat-center">星期五 12:09</view>
+			<view class="tui-chat-center">{{item.time}}</view>
 			<view class="tui-chat-left">
 				<image src="{{item.avatar}}" class="tui-user-pic tui-right"></image>
 				<view class="tui-chatbox tui-chatbox-left">{{item.name}}:{{item.msg}}<br />
-					<view style="color:#C8C8C8;font-size；18rpx">赞助金额: {{item.price}}元 · 需求人数: {{item.index}}</view>
+					<view style="color:#C8C8C8;font-size；18rpx">{{$.languageValue == 'zh_CN'?'赞助金额':$.languageValue == 'zh_TW'?'贊助金額':$.languageValue == 'ja'?'協賛金額':'Sponsorship amount'}}: {{item.price}}{{$.languageValue == 'zh_CN'?'元 · 需求人数':$.languageValue == 'zh_TW'?'元·需求人數':$.languageValue == 'ja'?'￥·要求する':'Yuan · number of people in need'}} : {{item.index}}</view>
 				</view>
 			</view>
 		</view>

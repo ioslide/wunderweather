@@ -10,7 +10,7 @@
 			<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'zh_TW'}}">
 				<text slot="subheader1">{{item.weather}}, {{item.windDirect}}</text>
 			</block>
-			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">
+			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB' || $.languageValue == 'ja'}}">
 				<text class="text-abc" slot="subheader1">{{item.weatherEN}} , {{item.windDirect}}</text>
 			</block>
 			<text slot="subbottom">{{item.min}}° / {{item.max}}°</text>

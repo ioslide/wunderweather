@@ -235,18 +235,18 @@
 
 .sc-button-flat {
   background-color: #010101;
-  text-align: left;
-  padding-left: 20px;
-  height: 50px;
-  line-height: 50px
+  text-align: center;
+  /* padding-left: 20px; */
+  /* height: 50px; */
+  /* line-height: 50px */
 }
 
 .sc-button-flat-circle {
   text-align: center;
-  height: 35px;
+  /* height: 35px; */
   border:none;
-  line-height: 35px;
-  width: 35px;
+  /* line-height: 35px; */
+  /* width: 35px; */
   border-radius: 50%;  
 }
 .sc-button-flat-round {

@@ -656,9 +656,9 @@ create(store, {
       }
       var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
       app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
-        let randomBgIndex = _.random(0,result.data.data.length)
+        log('[500px]',result.data.data)
+        let randomBgIndex = _.random(0,result.data.data.length-1)
         let backgroundBg = result.data.data[randomBgIndex].url.p4
-        log('[backgroundBg]',backgroundBg,keyword)
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
@@ -774,8 +774,10 @@ create(store, {
           let tweek = ''
           if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
             tweek = "星期" + "天一二三四五六".charAt(l)
-          } else if (that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB' || that.store.data.languageValue == 'ja') {
+          } else if (that.store.data.languageValue == 'en_US' || that.store.data.languageValue == 'en_GB') {
             tweek = ["Mon.", "Tues.", "Wed.", "Thur.", "Fri.", "Sat.", "Sun."][l]
+          }else if (that.store.data.languageValue == 'ja') {
+            tweek = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'][l]
           }
           // log('[tweek]',tweek)
           return tweek
@@ -1015,11 +1017,21 @@ create(store, {
         // log('[getMoonName]',r)
         let zh_CN = '新月'
         let zh_TW = '新月'
+        let ja = '新月'
         let en_US_en_GB = 'New Moon'
-        return r <= 0.055 ? (zh_CN = '新月', zh_TW = '新月', en_US_en_GB = 'New Moon') : 0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月', en_US_en_GB = 'Waxing Crescent') : 0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月', en_US_en_GB = 'First Quarter') : 0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月', en_US_en_GB = 'Waxing Gibbous') : 0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月', en_US_en_GB = 'Full Moon') : 0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月', en_US_en_GB = 'Waning Gibbous') : 0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月', en_US_en_GB = 'Last Quarter') : 0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent') : r > 1 && (zh_CN = '丽月', zh_TW = '丽月', en_US_en_GB = 'Li Yue'), {
+        return r <= 0.055 ? (zh_CN = '新月', zh_TW = '新月', en_US_en_GB = 'New Moon',ja= '新月') : 
+        0.055 < r && r <= 0.245 ? (zh_CN = '峨眉月', zh_TW = '峨眉月', en_US_en_GB = 'Waxing Crescent' ,ja= '峨眉の月') : 
+        0.245 < r && r <= 0.255 ? (zh_CN = '上弦月', zh_TW = '上弦月', en_US_en_GB = 'First Quarter',ja= '上弦の月') : 
+        0.255 < r && r <= 0.495 ? (zh_CN = '盈凸月', zh_TW = '盈凸月', en_US_en_GB = 'Waxing Gibbous',ja= '満ちる月') :
+         0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月', en_US_en_GB = 'Full Moon',ja= 'ゆんゆう') :
+          0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月', en_US_en_GB = 'Waning Gibbous',ja= 'マイナス凸月') : 
+          0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月', en_US_en_GB = 'Last Quarter',ja= '下弦の月') : 
+          0.755 < r && r <= 1 ? (zh_CN = '1', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent',ja= '三日月') : 
+          r > 1 && (zh_CN = '丽月', zh_TW = '丽月', en_US_en_GB = 'Li Yue',ja= '丽月'), {
           zh_CN: zh_CN,
           en_US_en_GB: en_US_en_GB,
-          zh_TW: zh_TW
+          zh_TW: zh_TW,
+          ja:ja
         }
       }
       let moonListsTime = []
@@ -1212,7 +1224,7 @@ create(store, {
         clear: true,
         views: [{
             type: 'image',
-            url: this.selectComponent('#headImage').data.bingImage || this.selectComponent('#headImage').data.NASAImage || 'https://weather.ioslide.com/weather/defaultHeadImage.png',
+            url: this.selectComponent('#headImage').data.bingImage || this.selectComponent('#headImage').data.NASAImage || this.selectComponent('#headImage').data.weatherImage || 'https://weather.ioslide.com/weather/defaultHeadImage.png',
             top: 0,
             left: 0,
             width: 300,

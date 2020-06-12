@@ -10,9 +10,10 @@
 			<text slot="subheader1">
 				<block wx:if="{{$.languageValue == 'zh_CN'}}">体感温度: {{item.temp}}</block>
 				<block wx:if="{{$.languageValue == 'zh_TW'}}">體感溫度: {{item.temp}}</block>
+								<block wx:if="{{$.languageValue == 'ja'}}">体性感覚温度: {{item.temp}}</block>
 				<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">Feels Like: {{item.temp}}</block>
 			</text>
-			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">
+			<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB' || $.languageValue == 'ja'}}">
 				<text class="text-abc" slot="subbottom">{{item.weatherEN}}·{{item.wind}}</text>
 			</block>
 			<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'zh_TW'}}">

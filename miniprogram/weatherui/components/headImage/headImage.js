@@ -4,6 +4,7 @@ const globalData = getApp().globalData
 const config = require('../../../weatherui/config/config.js').default
 import create from '../../../utils/create'
 import store from '../../../store/index'
+import _ from '../../../utils/lodash.min.js';
 
 create.Component(store,{
   properties: {
@@ -128,7 +129,8 @@ create.Component(store,{
           success: res => {
             log('[requestWeather]', res.data.data)
             let weatherImageLists = res.data.data
-            let weatherImage = weatherImageLists[0].url.p4
+            let weatherIndex = _.random(0,res.data.data.length-1)
+            let weatherImage = weatherImageLists[weatherIndex].url.p4
             t.setData({
               weatherIndex : 0,
               weatherImage: weatherImage,

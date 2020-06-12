@@ -10,7 +10,7 @@
 				<view class="{{$.themeValue == 'light'?'item-text-light':'item-text-dark'}}">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">设置中心</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">設置中心</block>
-					<block wx:if="{{$.languageValue == 'ja'}}">セッティングセンター</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">設定</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Setting</block>
 				</view>
 			</view>
@@ -137,7 +137,7 @@
 				<view class="{{$.themeValue == 'light'?'item-text-light':'item-text-dark'}}">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">OpenAi</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">OpenAi</block>
-																																													<block wx:if="{{$.languageValue == 'ja'}}">OpenAi</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">OpenAi</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">OpenAi</block>
 				</view>
 			</view>
@@ -300,6 +300,11 @@
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
 						<sc-radio label="British English" value="en_GB" style="width:100%;" checked="{{$.language.languageChecked_en_GB}}"></sc-radio>
+					</label>
+				</view>
+								<view class="cu-item">
+					<label class="flex justify-left align-center flex-sub">
+						<sc-radio label="日本語" value="ja" style="width:100%;" checked="{{$.language.languageChecked_ja}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">

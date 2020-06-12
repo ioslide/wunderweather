@@ -312,7 +312,7 @@
 			<view class="cu-list menu text-left" style="width: 100%;background: #2D2D2D;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="1 min" checked="{{$.refreshfrequency.refreshfrequencyChecked_1}}" value="1" style="width:100%;"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'1 分钟':$.languageValue == 'zh_TW'?'1 分鐘':$.languageValue == 'ja'?'1 分':'1 min'}}" checked="{{$.refreshfrequency.refreshfrequencyChecked_1}}" value="1" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
@@ -430,7 +430,7 @@
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="NASA" value="NASA" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageNASA}}"></sc-radio>
+						<sc-radio label="{{$.languageValue == 'zh_CN'?'NASA每日一图':$.languageValue == 'zh_TW'?'NASA每日一圖':$.languageValue == 'ja'?'NASA毎日一図':'NASA Daily Map'}}" value="NASA" style="width:100%;" checked="{{$.indexHeadImage.indexHeadImageNASA}}"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">

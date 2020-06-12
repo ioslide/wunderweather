@@ -10,11 +10,13 @@
 			<text slot="subheader">
 				<block wx:if="{{$.languageValue == 'zh_CN'}}">{{item.moonPhaseDate_zh_CN}}</block>
 				<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseDate_zh_TW}}</block>
+				<block wx:if="{{$.languageValue == 'ja'}}">{{item.moonPhaseDate_ja}}</block>
 				<block wx:if="{{$.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseDate_en_US_en_GB}}</block>
 			</text>
 			<text slot="subheader1">
 				<block wx:if="{{$.languageValue == 'zh_CN' || $.languageValue == 'en_US' || $.languageValue == 'en_GB'}}">{{item.moonPhaseName_zh_CN}}</block>
 				<block wx:if="{{$.languageValue == 'zh_TW'}}">{{item.moonPhaseName_zh_TW}}</block>
+				<block wx:if="{{$.languageValue == 'ja'}}">{{item.moonPhaseName_ja}}</block>
 			</text>
 			<text slot="subbottom">{{item.moonPhaseName_en_US_en_GB}}</text>
 			<view slot="iconimageright">

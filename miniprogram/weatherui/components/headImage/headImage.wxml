@@ -37,10 +37,10 @@
 					<view class="absolute right-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navPreBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navPreBing" data-index="{{bingIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 							<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
-								<image bindtap="navNextBing" data-index="{{bingIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navNextBing" data-index="{{bingIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 						</view>
 					</view>
@@ -93,10 +93,10 @@
 					<view class="absolute right-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navPreNASA" data-index="{{NASAIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{NASAIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navPreNASA" data-index="{{NASAIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 							<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
-								<image bindtap="navNextNASA" data-index="{{NASAIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{NASAIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navNextNASA" data-index="{{NASAIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 						</view>
 					</view>
@@ -140,10 +140,10 @@
 					<view class="absolute right-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navPreWeather" data-index="{{weatherIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingLeft.svg" style="{{weatherIndex == 0 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navPreWeather" data-index="{{weatherIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingLeft.svg" style="{{bingIndex == 0 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 							<view class="flex padding-left-10 padding-bottom-10 padding-right-10">
-								<image bindtap="navNextWeather" data-index="{{weatherIndex}}" class="square-30" mode="aspectFit" src="https://weather.ioslide.com/weather/bingRight.svg" style="{{weatherIndex == 7 ? 'opacity:0.4':'opacity:1'}}"></image>
+								<sc-button bindtap="navNextWeather" data-index="{{weatherIndex}}" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingRight.svg" style="{{bingIndex == 7 ? 'opacity:0.4':'opacity:1'}}" flat circle></sc-button>
 							</view>
 						</view>
 					</view>
