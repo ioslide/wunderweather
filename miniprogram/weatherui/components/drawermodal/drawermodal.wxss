@@ -8,7 +8,7 @@
     -1px -1px 1px 0px rgba(255, 255, 255, 0.3),
     1px 1px 1px 0px rgba(206, 206, 206, 0.15),
     9px 9px 9px 0 rgba(206, 206, 206, 0.3);
-  padding: 12px;
+  padding: 0;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   -ms-border-radius: 20px;
@@ -18,8 +18,8 @@
 .soft-button-dark {
   border-radius: 20px;
   border: none;
-  background: #4B4B4B;
-  padding: 12px;
+  background: rgba(49, 49, 49, 0.58);
+  padding: 0;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   -ms-border-radius: 20px;

@@ -123,7 +123,7 @@ create.Component(store,{
             t.setData({
               authScreen: true
             })
-          }, 2600)
+          }, 2200)
       }
       const defaultScreenFadeOut = () => {
         let defaultScreenAction = wx.createAnimation({
@@ -139,7 +139,7 @@ create.Component(store,{
             t.setData({
               authScreen: true
             })
-          }, 2600)
+          }, 2200)
       }
       const authScreenFadeOut = () => {
         let authScreenAction = wx.createAnimation({
@@ -183,14 +183,8 @@ create.Component(store,{
         let eventDetail = {
           canRefreshChart: false
         }
-        await wx.showToast({
-          title: 'Loading',
-          mask:true,
-          icon:'loading'
-        })
         await t.triggerEvent('_getWeatherData',eventDetail)
         await authFinalStepLeaf()
-        await wx.hideToast()
         // await t.screenFadeOut()
       })()
   },

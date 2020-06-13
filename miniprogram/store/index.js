@@ -91,6 +91,7 @@ export default {
     getLocationMethod:$$.getLocationMethod,
     startScreen: $$.startScreen,
     style: $$.style,
+    getWeatherDataAgain:$$.getWeatherDataAgain,
     proMode:$$.proMode,
     indexHeadImage:$$.indexHeadImage,
     indexHeadImageValue:$$.indexHeadImageValue,

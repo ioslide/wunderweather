@@ -133,11 +133,15 @@ create(store, {
       rainRadar: {
         coverImage: "",
         forecastImages: {},
-        images: {}
+        images: [
+          '','','','','','','','','','','','','','','','','','','','','',''
+        ]
       },
       aqiRadar: {
         coverImage: "",
-        images: {}
+        images: [
+          '','','','','','','','','','','','','','','','','','','','','',''
+        ]
       },
       minutely: {},
       hourly: {},
@@ -216,15 +220,19 @@ create(store, {
       app.changeStorage('getLocationMethod', 'manual')
     }
     if(t.store.data.getWeatherDataAgain == true){
-      t.getWeatherData(false)
+      t.getWeatherData(true)
     }
   },
   onReady() {
     const t = this
+    const onReadyEvnet = async () => {
+      await t.setRadarTimeLineIndex()
+      await t.setRadarMapSetting()
+      await t.getMoonPhaseList()
+    }
+    onReadyEvnet()
     t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
-    t.setRadarTimeLineIndex()
-    t.setRadarMapSetting()
     t.radarMapCtx = wx.createMapContext('radarMap')
     t.setData({
       rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
@@ -578,12 +586,7 @@ create(store, {
             log('[refreshChartData]')
           }
           log('[canRefreshChart] => ', canRefreshChart)
-          if (canRefreshChart == true) {
-            refreshChart()
-          }
-          if (canRefreshChart == false) {
-            initChart()
-          }
+          canRefreshChart == 'true' ? refreshChart() : initChart()
         }
         (async (weatherData, canRefreshChart) => {
           try{
@@ -885,7 +888,21 @@ create(store, {
     log('[refreshTime]', refreshTime)
     setInterval(() => {
       log('[setRefreshWeatherInterval] => setInterval()', refreshTime)
-      t.getWeatherData(true)
+      log(`[setRefreshWeatherInterval]`, t.store.data.startScreen)
+      let time = util.formatDate(new Date())
+      let date = util.getDates(7, time)
+      app.saveData("lastRefreshTime", date[0].time)
+      if (t.store.data.startScreen !== 'auth') {
+          (async () => {
+            await t.setData({
+              'canBlurRoot': true
+            })
+            await t.getWeatherData(true)
+            await t.setData({
+              'canBlurRoot': false
+            })
+          })()
+      }
     }, refreshTime);
   },
   setAqiColor(a) {
@@ -1026,7 +1043,7 @@ create(store, {
          0.495 < r && r <= 0.51 ? (zh_CN = '满月', zh_TW = '滿月', en_US_en_GB = 'Full Moon',ja= 'ゆんゆう') :
           0.51 < r && r <= 0.745 ? (zh_CN = '亏凸月', zh_TW = '虧凸月', en_US_en_GB = 'Waning Gibbous',ja= 'マイナス凸月') : 
           0.745 < r && r <= 0.755 ? (zh_CN = '下弦月', zh_TW = '下弦月', en_US_en_GB = 'Last Quarter',ja= '下弦の月') : 
-          0.755 < r && r <= 1 ? (zh_CN = '1', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent',ja= '三日月') : 
+          0.755 < r && r <= 1 ? (zh_CN = '残月', zh_TW = '殘月', en_US_en_GB = 'Waning Crescent',ja= '三日月') : 
           r > 1 && (zh_CN = '丽月', zh_TW = '丽月', en_US_en_GB = 'Li Yue',ja= '丽月'), {
           zh_CN: zh_CN,
           en_US_en_GB: en_US_en_GB,
@@ -1683,7 +1700,6 @@ create(store, {
         t.setData({
           fourthObserverAni: ani.export()
         })
-        t.getMoonPhaseList()
       }
       if (res.boundingClientRect.top < 0) {
         // log('[fourthObserver] => end')
@@ -1850,10 +1866,23 @@ create(store, {
     })
   },
   refreshLocation() {
-    console.log('[refreshLocation]')
-    const t = this
     //自动获取系统定位的location,请求数据
-    t.getLocationByAuto()
+    const t = this
+    log(`[refreshLocation]`, t.store.data.startScreen)
+    let time = util.formatDate(new Date())
+    let date = util.getDates(7, time)
+    app.saveData("lastRefreshTime", date[0].time)
+    if (t.store.data.startScreen !== 'auth') {
+        (async () => {
+          await t.setData({
+            'canBlurRoot': true
+          })
+          await t.getWeatherData(true)
+          await t.setData({
+            'canBlurRoot': false
+          })
+        })()
+    }
     app.changeStorage('getLocationMethod', 'auto')
   },
   scrollTo(viewId) {
@@ -2318,7 +2347,7 @@ create(store, {
         buttonText:'关闭',
         icon: alarmIcon,
         buttonTextColor:'#ffffff',
-        color:'#323232',
+        color:'rgba(50, 50, 50, 1);',
         messageColor:'#ffffff',
         closeOnButtonClick:true,
         onButtonClick:() => {

@@ -57,7 +57,6 @@ create(store, {
   },
   showModal(e) {
     var t = this
-    console.log(wx.getStorageSync('NASAImageLists')[e.currentTarget.dataset.order])
     t.setData({
       // modalImage: wx.getStorageSync('NASAImageLists')[e.currentTarget.dataset.order],
       currDay: e.currentTarget.dataset.order,

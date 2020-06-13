@@ -4129,7 +4129,7 @@ scroll-view.cu-steps .cu-item {
 }
 
 .padding-bottom-10 {
-	padding-bottom: 10px;
+	padding-bottom: 10px!important;
 }
 
 .padding-bottom-15 {
@@ -5131,7 +5131,10 @@ scroll-view.cu-steps .cu-item {
 	height: 50px;
 	width: 50px
 }
-
+.square-55 {
+	height: 55px;
+	width: 55px
+}
 .square-60 {
 	height: 60px;
 	width: 60px

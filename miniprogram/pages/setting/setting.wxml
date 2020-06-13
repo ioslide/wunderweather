@@ -238,7 +238,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
@@ -282,7 +282,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
@@ -337,7 +337,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
@@ -391,7 +391,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
@@ -440,7 +440,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>
@@ -483,7 +483,7 @@
 				</view>
 			</view>
 		</sc-radio-group>
-		<view class="cu-bar justify-end" style="background: #2D2D2D;">
+		<view class="cu-bar justify-end padding-bottom-10" style="background: #2D2D2D;">
 			<view class="action">
 				<button class="cu-btn text-lg margin-left-xs text-white" bindtap="hideModal" style="background: #2D2D2D;border-radius:0px;color:#FEBE54">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">取消</block>

@@ -249,6 +249,16 @@
   /* width: 35px; */
   border-radius: 50%;  
 }
+.sc-button-flat-square {
+  border-radius: 20px;
+  border: none;
+  padding: 12px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  
+}
 .sc-button-flat-round {
   text-align: center;
   line-height: 40px;

@@ -16,7 +16,7 @@
 	<block wx:if="{{$.style.imageSwitchChange == true}}">
 		<view class="flex padding-5 justify-center margin-5" style="min-height:280px">
 			<headImage bind:_showDrawerModal="_showDrawerModal" id="headImage" canloadHeadImage="{{canloadHeadImage}}"></headImage>
-			<block wx:if="{{networkType == 'none' || networkType == 'unknown' || networkType == undefined}}">
+			<!-- <block wx:if="{{networkType == 'none' || networkType == 'unknown' || networkType == undefined}}">
 				<view class="networkType" bindtap="refreshLocation">
 					<view class="networkType-button">
 						<image class="{{refreshLocation == true ? 'refreshLocationAni':''}} square-30 margin-left-15" mode="aspectFit" src="../../weatherui/assets/images/weather/refresh.svg"></image>
@@ -24,7 +24,7 @@
 					<view class="text-df text-left text-white padding-left-10 padding-top-7">离线模式</view>
 					<view class="text-df text-left text-white padding-left-10 padding-top-5">上次更新时间:{{lastRefreshTime}}</view>
 				</view>
-			</block>
+			</block> -->
 		</view>
 	</block>
 
@@ -88,7 +88,8 @@
 					<view id="airQuatityItem" class="grid col-3 margin-bottom-15 text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="service" wx:if="{{item&&index<8}}" wx:for="{{forecastData.serviceData}}" wx:key="index">
 							<view class="{{$.themeValue == 'light'?'item-inner-light':'item-inner-dark'}}">
-								<image class="square-28" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+								<image class="square-28" mode="aspectFit" src="https://weather.ioslide.com/weather/service/{{item.type}}{{$.themeValue == 'light'?'-light':''}}.svg"></image> 
+								<!-- todo iconType -->
 								<text class="margin-top-5 text-sm {{$.themeValue == 'light'?'text-c9d7e6cc':'text-grey'}}">{{item.name}}</text>
 								<text class="margin-top-10 {{$.themeValue == 'light'?'cell-col-light':'cell-col-dark'}}">{{item.desc}}</text>
 							</view>
@@ -475,13 +476,13 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class="tapRightDrawerModal {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}" bindtap="showDrawerModal" data-target="DrawerModalR">
-	<image src="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" mode="widthFix"></image>
+<view class="tapRightDrawerModal {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}"  style="{{$.themeValue == 'light' ? 'background-color: #ffffff' : ''}};border-radius: 50%;" >
+	<sc-button bindtap="showDrawerModal" data-target="DrawerModalR" sc-class="square-35" icon="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" flat circle></sc-button>
 </view>
 
 <block wx:if="{{$.getLocationMethod == 'manual' || $.getLocationMethod == 'historyCity'}}">
-	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}} {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}" bindtap="refreshLocation">
-		<image src="https://weather.ioslide.com/weather/relocation.svg" mode="widthFix"></image>
+	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}} {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}" style="{{$.themeValue == 'light' ? 'background-color: #ffffff' : ''}};border-radius: 50%;">
+			<sc-button bindtap="refreshLocation" data-target="DrawerModalR" sc-class="square-35" icon="https://weather.ioslide.com/weather/relocation.svg" flat circle></sc-button>
 	</view>
 </block>
 

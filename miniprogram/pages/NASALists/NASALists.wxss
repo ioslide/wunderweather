@@ -180,7 +180,6 @@ page {
       filter: blur(0px);
   }
 }
-
 .bg-shadeTop {
   background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.01));
   color: var(--white);

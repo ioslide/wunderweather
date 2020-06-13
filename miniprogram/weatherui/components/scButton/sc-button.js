@@ -68,6 +68,10 @@ Component({
       type: Boolean,
       value: !1
     },
+    square:{
+      type: Boolean,
+      value: !1
+    },
     round: {
       type: Boolean,
       value: !1
