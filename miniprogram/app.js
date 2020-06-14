@@ -56,6 +56,7 @@ App({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
       navHeight: charRobotBar, 
       textToSpeech: true,
+      guideList: ["成都市的天气", "北京市的天气", "深圳市的天气"],
       welcome: '你好，我是小O',
       history: true,
       historySize: 60,
@@ -76,7 +77,7 @@ App({
   loadFontFace() {
     wx.loadFontFace({
       family: 'wencangshufang',
-      source: 'url("https://teaimg.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
+      source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
       success: res => {
         log('[loadFontFace]', res)
       }

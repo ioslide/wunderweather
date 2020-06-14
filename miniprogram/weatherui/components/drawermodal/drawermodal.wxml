@@ -185,15 +185,15 @@
 				</view>
 			</block>
 			<block wx:if="{{drawerModalName=='DrawerModalHeadImage'}}">
-				<view style="width:33.33%" bindtap="chooseCropImage" data-type="album">
+				<view style="width:46%" bindtap="chooseCropImage" data-type="album">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/album1.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">相册</view>
 				</view>
-				<view style="width:33.33%">
+				<!-- <view style="width:33.33%">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/imageAlbum.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">图库</view>
-				</view>
-				<view style="width:33.33%" bindtap="chooseCropImage" data-type="camera">
+				</view> -->
+				<view style="width:46%" bindtap="chooseCropImage" data-type="camera">
 					<image mode="widthFix" src="https://weather.ioslide.com/weather/camera1.svg" style="height:30px;width:30px"></image>
 					<view style="color:#010101">拍摄</view>
 				</view>

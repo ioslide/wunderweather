@@ -167,6 +167,7 @@ create.Component(store, {
       const t = this
       let pages = getCurrentPages()
       let curCityData = e.currentTarget.dataset.city
+      log('[curCityData]',curCityData)
       let prevPage = pages[pages.length - 1];
       app.globalData.latitude = curCityData.latitude,
       app.globalData.longitude = curCityData.longitude
@@ -178,7 +179,7 @@ create.Component(store, {
         await prevPage.setData({
           'latitude': curCityData.latitude,
           'longitude': curCityData.longitude,
-          'forecastData.city': curCityData.city,
+          'forecastData.city': curCityData.city || curCityData.address || curCityData.name,
           'forecastData.address': curCityData.address
       })
         await prevPage.getWeatherData(true)

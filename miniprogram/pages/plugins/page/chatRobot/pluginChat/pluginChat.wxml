@@ -1,4 +1,4 @@
-	<sc-capsule isBack="{{true}}" isFixd="{{true}}" themeValue="{{$.themeValue}}" bind:showModalListener="showModalListener">
+	<sc-capsule isBack="{{true}}" isFixd="{{true}}" themeValue="light" bind:showModalListener="showModalListener">
 	</sc-capsule>
 	<view class="container">
 		<view style="background:#F7FBFC" class="cu-custom">

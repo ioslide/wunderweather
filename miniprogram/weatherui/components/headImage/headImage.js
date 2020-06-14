@@ -69,10 +69,13 @@ create.Component(store,{
         },
         success: res => {
           log('[requestBing]', res.data.images)
-          let bingImageLists = res.data.images
+          var bingImageLists = res.data.images
           let copyrightlink = 'https://bing.ioslide.com' + bingImageLists[0].copyrightlink
+          for(let i = 0;i<bingImageLists.length;i++){
+            bingImageLists[i].url = bingImageLists[i].url.replace("1920x1080","900x540")
+          }
+          log('[bingImageLists]',bingImageLists)
           let bingImage = 'https://cn.bing.com' + bingImageLists[0].url
-          log('[copyrightlink]',copyrightlink)
           t.setData({
             copyrightlink:copyrightlink,
             bingIndex : 0,
@@ -100,7 +103,7 @@ create.Component(store,{
         success: res => {
           log('[requestNASA]', res.data)
           let NASAImageLists = res.data
-          let NASAImage = NASAImageLists[0].post_thumbnail_image_624
+          let NASAImage = NASAImageLists[0].post_large_image
           t.setData({
             NASAIndex : 0,
             NASAImage: NASAImage,

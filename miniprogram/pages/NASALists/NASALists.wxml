@@ -7,7 +7,7 @@
 <view class="cu-card case margin-5" wx:for="{{NASAImageLists}}" wx:key="index">
 	<view class="cu-item shadow" bindtap="showModal" data-target="Image" data-order="{{index}}" style="background: none;">
 		<view class="image">
-			<image class="blurloaded bingImage" bindchange="swipeEnd" src="{{item.post_thumbnail_image_624}}" lazy-load='true' mode="widthFix"></image>
+			<image class="blurloaded bingImage" bindchange="swipeEnd" src="{{item.post_large_image}}" lazy-load='true' mode="aspectFill"></image>
 			<view class="cu-tag tag" style="background: rgba(0, 0, 0, 0.384);color: #fff;border-bottom-left-radius: 10px;border-top-right-radius: 5px;">{{item.post_date}}</view>
 			<view class="cu-bar padding-bottom-10 {{$.themeValue == 'light'?'bg-shadeBottom-light':'bg-shadeBottom-dark'}}">
 				<text class="text-cut">{{item.previous_post_title}}</text>

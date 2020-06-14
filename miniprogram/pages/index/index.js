@@ -96,12 +96,11 @@ create(store, {
     canBlurRoot: false,
     isHourlyRainChart:true,
     isManualGetNewLocation:false,
-    rainChartName:'小时',
+    rainChartName:'',
     isChangeSetting: false,
     networkType: 'none',
     imageBase64: '',
     qrImageURL: '',
-    updateSunsetTime: null,
     radarTimeLinePosition:1,
     sunrise: "06:00",
     sunset: "19:34",
@@ -184,6 +183,9 @@ create(store, {
   onShow() {
     const t = this
     // t.onStartAccelerometer()
+    t.setData({
+      rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
+    })
     const location = chooseLocation.getLocation();
     log('[location]',location)
     if (location == null) {
@@ -196,7 +198,7 @@ create(store, {
       log(`[chooseLocation.getLocation()] =>`, location)
       t.setData({
         isManualGetNewLocation:true,
-        'forecastData.city': location.city,
+        'forecastData.city': location.city || location.name,
         'forecastData.address': location.name,
         'longitude': location.longitude,
         'latitude': location.latitude,
@@ -234,9 +236,6 @@ create(store, {
     t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
     t.radarMapCtx = wx.createMapContext('radarMap')
-    t.setData({
-      rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
-    })
   },
   setRadarMapSetting(){
     const t = this
@@ -316,7 +315,7 @@ create(store, {
             success: res => {
               log('[historyCityList]', res.data)
               t.setData({
-                'forecastData.city': res.data[1].city,
+                'forecastData.city': res.data[1].city || res.data[1].address,
                 'forecastData.address': res.data[1].address,
                 'latitude': res.data[1].latitude,
                 'longitude': res.data[1].longitude,
@@ -765,14 +764,6 @@ create(store, {
         if (chartsMargin < 0) {
           chartsMargin = ~~(d.temperature[f].min) + 20
         }
-        // if (f == 0) {
-        //   that.setData({ 
-        //     'updateSunsetTime': d.astro[f].date,
-        //     'sunrise': d.astro[f].sunrise.time,
-        //     'sunset': d.astro[f].sunset.time,
-        //     'refreshSunset': true
-        //   })
-        // }
         const getWeek = (l) => {
           let tweek = ''
           if (that.store.data.languageValue == 'zh_CN' || that.store.data.languageValue == 'zh_TW') {
@@ -927,11 +918,11 @@ create(store, {
     const self = this,
       zh_CN = () => {
         let d = '暂无描述'
-        return a = 0 ? (d = "暂无描述") : a <= 50 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
+        return a = 0 ? (d = "暂无描述") : a <= 50 && a>0 ? (d = "令人满意的空气质量") : 51 <= a && a <= 100 ? (d = "可以接受的空气质量") : 101 <= a && a <= 150 ? (d = "敏感人群可能会感到不适") : 151 <= a && a <= 200 ? (d = "一般人群应避免户外活动") : 201 <= a && a <= 300 ? (d = "健康预警：一般人群可能会出现不适应症状") : a > 300 && (d = "紧急情况下的健康预警"), d;
       },
       ja = () => {
         let d = '説明なし'
-        return a = 0 ? (d = "説明なし") : a <= 50 ? (d = "十分な空気質") : 
+        return a = 0 ? (d = "説明なし") : a <= 50 && a>0 ? (d = "十分な空気質") : 
         51 <= a && a <= 100 ? (d = "許容できる空気の質") : 
         101 <= a && a <= 150 ? (d = "敏感な人は気分が悪いかもしれません") : 
         151 <= a && a <= 200 ? (d = "一般住民は野外活動を避けるべきです") : 
@@ -940,11 +931,11 @@ create(store, {
       },
       zh_TW = () => {
         let d = '暫無描述'
-        return a = 0 ? (d = "暫無描述") : a <= 50 ? (d = "令人滿意的空氣質量") : 51 <= a && a <= 100 ? (d = "可以接受的空氣質量") : 101 <= a && a <= 150 ? (d = "敏感人群可能會感到不適") : 151 <= a && a <= 200 ? (d = "一般人群應避免戶外活動") : 201 <= a && a <= 300 ? (d = "健康預警：一般人群可能會出現不適應症狀") : a > 300 && (d = "緊急情況: 健康預警"), d;
+        return a = 0 ? (d = "暫無描述") : a <= 50 && a>0 ? (d = "令人滿意的空氣質量") : 51 <= a && a <= 100 ? (d = "可以接受的空氣質量") : 101 <= a && a <= 150 ? (d = "敏感人群可能會感到不適") : 151 <= a && a <= 200 ? (d = "一般人群應避免戶外活動") : 201 <= a && a <= 300 ? (d = "健康預警：一般人群可能會出現不適應症狀") : a > 300 && (d = "緊急情況: 健康預警"), d;
       },
       en_US_en_GB = () => {
         let d = 'No description'
-        return a = 0 ? (d = "No description") : a <= 50 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
+        return a = 0 ? (d = "No description") : a <= 50 && a>0 ? (d = "Satisfactory air quality") : 51 <= a && a <= 100 ? (d = "Acceptable air quality") : 101 <= a && a <= 150 ? (d = "Sensitive people may feel unwell") : 151 <= a && a <= 200 ? (d = "The general population should avoid outdoor activities") : 201 <= a && a <= 300 ? (d = "Health alert: general population may experience symptoms of maladjustment") : a > 300 && (d = "Health alert in emergencies"), d;
       }
     return self.store.data.languageValue == 'zh_CN' ? zh_CN() : self.store.data.languageValue == 'ja' ? ja() : self.store.data.languageValue == 'zh_TW' ? zh_TW() : self.store.data.languageValue == 'en_US' || self.store.data.languageValue == 'en_GB' ? en_US_en_GB() : warn('[getAqiDescription]')
   },
@@ -1119,7 +1110,7 @@ create(store, {
         modalName: modalName
       })
     }
-    e.currentTarget.dataset.target == 'DrawerModalB' ? (t.onGetWXACode(), setData(e.currentTarget.dataset.target)) : e.currentTarget.dataset.target == 'shareImage' ? (t.eventDraw(), setData(e.currentTarget.dataset.target)) : setData(e.currentTarget.dataset.target)
+    e.currentTarget.dataset.target == 'shareImage' ? (t.eventDraw(), setData(e.currentTarget.dataset.target)) : setData(e.currentTarget.dataset.target)
   },
   showDrawerModal(e){
     const t = this
@@ -1156,7 +1147,7 @@ create(store, {
         drawerModalName: drawerModalName
       })
     }
-    e.detail == 'DrawerModalB' ? (t.onGetWXACode(), setData(e.detail)) : e.detail == 'shareImage' ? (t.eventDraw(), setData(e.detail)) : setData(e.detail)
+    e.detail == 'shareImage' ? (t.eventDraw(), setData(e.detail)) : setData(e.detail)
   },
   hideModal(e) {
     log('[hideModal]')
@@ -1614,7 +1605,17 @@ create(store, {
       timingFunction: 'ease-in-out',
       delay: 500,
     });
-    wx.createIntersectionObserver().relativeToViewport().observe('#firstObserver', (res) => {
+    var firstObserver = wx.createIntersectionObserver()
+    var refreshSunset = wx.createIntersectionObserver()
+    var temperatureObserver = wx.createIntersectionObserver()
+    var thirdObserver = wx.createIntersectionObserver()
+    var rainObserver = wx.createIntersectionObserver()
+    var radarObserver = wx.createIntersectionObserver()
+    var fourthObserver = wx.createIntersectionObserver()
+    var fifthObserver = wx.createIntersectionObserver()
+    var sixthObserver = wx.createIntersectionObserver()
+
+    firstObserver.relativeToViewport().observe('#firstObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[firstObserver] => start')
         ani.opacity(1).step()
@@ -1626,12 +1627,11 @@ create(store, {
         // log('[firstObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#refreshSunset', (res) => {
+    refreshSunset.relativeToViewport().observe('#refreshSunset', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[refreshSunset] => start')
         ani.opacity(1).step()
         t.setData({
-          'updateSunsetTime': t.data.forecastData.daily[0].astro.date,
           'sunrise': t.data.forecastData.daily[0].astro.sunrise,
           'sunset': t.data.forecastData.daily[0].astro.sunset,
           'refreshSunset': true
@@ -1641,7 +1641,7 @@ create(store, {
         // log('[refreshSunset] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#temperatureObserver', (res) => {
+    temperatureObserver.relativeToViewport().observe('#temperatureObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[temperatureObserver] => start')
         ani.opacity(1).step()
@@ -1653,7 +1653,7 @@ create(store, {
         // log('[temperatureObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#thirdObserver', (res) => {
+    thirdObserver.relativeToViewport().observe('#thirdObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[thirdObserver] => start')
         ani.opacity(1).step()
@@ -1665,7 +1665,7 @@ create(store, {
         // log('[thirdObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#rainObserver', (res) => {
+    rainObserver.relativeToViewport().observe('#rainObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[rainObserver] => start')
         ani.opacity(1).step()
@@ -1677,13 +1677,10 @@ create(store, {
         // log('[rainObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport({
-      top: 10
-    }).observe('#radarObserver', (res) => {
+    radarObserver.relativeToViewport({top: 10}).observe('#radarObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[radarObserver] => start')
         t.reqRadar()
-      
         ani.opacity(1).step()
         t.setData({
           radarObserverAni: ani.export()
@@ -1693,8 +1690,8 @@ create(store, {
         // log('[radarObserver] => end')
       }
     })
-    var fourthObserver = wx.createIntersectionObserver()
     fourthObserver.relativeToViewport().observe('#fourthObserver', (res) => {
+      log('[fourthObserver] => start')
       if (res.boundingClientRect.top > 0) {
         ani.opacity(1).step()
         t.setData({
@@ -1702,23 +1699,22 @@ create(store, {
         })
       }
       if (res.boundingClientRect.top < 0) {
-        // log('[fourthObserver] => end')
+        
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#fifthObserver', (res) => {
+    fifthObserver.relativeToViewport().observe('#fifthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[fifthObserver] => start')
-        fourthObserver.disconnect()
         ani.opacity(1).step()
         t.setData({
           fifthObserverAni: ani.export()
         })
       }
       if (res.boundingClientRect.top < 0) {
-        // log('[fifthObserver] => end')
+        log('[fifthObserver] => end')
       }
     })
-    wx.createIntersectionObserver().relativeToViewport().observe('#sixthObserver', (res) => {
+    sixthObserver.relativeToViewport().observe('#sixthObserver', (res) => {
       if (res.boundingClientRect.top > 0) {
         log('[sixthObserver] => start')
         ani.opacity(1).step()
@@ -1726,9 +1722,18 @@ create(store, {
           sixthObserverAni: ani.export()
         })
         wx.createIntersectionObserver().disconnect()
+        sixthObserver.disconnect()
+        fifthObserver.disconnect()
+        fourthObserver.disconnect()
+        radarObserver.disconnect()
+        rainObserver.disconnect()
+        thirdObserver.disconnect()
+        temperatureObserver.disconnect()
+        refreshSunset.disconnect()
+        firstObserver.disconnect()
       }
       if (res.boundingClientRect.top < 0) {
-        // log('[sixthObserver] => end')
+        log('[sixthObserver] => end')
       }
     })
   },
@@ -1739,56 +1744,6 @@ create(store, {
       path: "/pages/index/index",
       imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
     };
-  },
-  onGetWXACode() {
-    const t = this
-    const base64ImgStorage = wx.getStorageSync('qrCodeBase64')
-    if (base64ImgStorage) {
-      t.setData({
-        qrImageURL: t.formatImg(base64ImgStorage)
-      })
-      console.log(`[get wxacode] from storage ID`)
-    } else {
-      wx.cloud.callFunction({
-        name: 'openapi',
-        data: {
-          action: 'getWXACode',
-        },
-        success: res => {
-          log(`[getWXACode] =>`, res)
-          // let buffer = res.result.wxacodeResult.buffer
-          // let base64Img = wx.arrayBufferToBase64(buffer).replace(/[\r\n]/g, "")
-          let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
-          t.formatImg(base64Img)
-          app.saveData('qrCodeBase64', base64Img)
-        },
-        fail: err => {
-          log(`[getWXACode] => ${err}`)
-        }
-      })
-    }
-  },
-  formatImg(base64Img) {
-    const t = this
-    let fsm = wx.getFileSystemManager()
-    let FILE_BASE_NAME = 'weatherLogo'
-    let buffer = wx.base64ToArrayBuffer(base64Img);
-    const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
-    fsm.writeFile({
-      filePath,
-      data: buffer,
-      encoding: 'binary',
-      success: res => {
-        log(`[writeFile] => qrImageURL =>`, filePath)
-        t.setData({
-          qrImageURL: filePath,
-        })
-      },
-      fail: err => {
-        log(`[writeFile] => fail => ${err}`)
-        return (new Error('ERROR_BASE64SRC_WRITE'));
-      },
-    });
   },
   themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)

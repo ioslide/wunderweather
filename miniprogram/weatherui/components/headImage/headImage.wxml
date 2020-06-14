@@ -29,8 +29,7 @@
 					<view class="absolute left-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<!-- <image bindtap="navCopyrightlink" data-cur="bingDetail" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image> -->
-								<image bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								<sc-button bindtap="navChange" data-cur="bingLists" data-copyrightlink="{{copyrightlink}}" style="transform: rotate(180deg);" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingDetail.svg" flat ></sc-button>
 							</view>
 						</view>
 					</view>
@@ -51,11 +50,10 @@
 				<view class="flex square-100 align-center justify-center">
 					<image class="square-100" style="background-size: cover;" mode="aspectFill" src="{{cusImage}}"></image>
 					<view class="padding-15 {{hasCusImageFileID == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="_showDrawerModal" data-target="DrawerModalHeadImage">
-						<image class="square-40" mode="aspectFit" src="https://weather.ioslide.com/weather/camera.svg"></image>
+							<sc-button sc-class="square-40" icon="https://weather.ioslide.com/weather/camera.svg" flat circle></sc-button>
 					</view>
 				</view>
 			</block>
-
 			<block wx:if="{{$.indexHeadImageValue == 'NASA'}}">
 				<view class="flex square-100 align-center justify-center">
 					<image id="NASAImage" class="square-100" src="{{NASAImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
@@ -86,7 +84,7 @@
 					<view class="absolute left-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navChange" data-cur="NASALists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+									<sc-button bindtap="navChange" data-cur="NASALists" data-copyrightlink="{{copyrightlink}}" style="transform: rotate(180deg);" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingDetail.svg" flat ></sc-button>
 							</view>
 						</view>
 					</view>
@@ -102,7 +100,6 @@
 					</view>
 				</view>
 			</block>
-
 			<block wx:if="{{$.indexHeadImageValue == 'weather'}}">
 				<view class="flex square-100 align-center justify-center">
 					<image id="weatherImage" class="square-100" src="{{weatherImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
@@ -133,7 +130,7 @@
 					<view class="absolute left-0 bottom-0">
 						<view class="flex justify-left align-end">
 							<view class="flex padding-left-10 padding-bottom-10">
-								<image bindtap="navChange" data-cur="weatherLists" data-copyrightlink="{{copyrightlink}}" class="square-30" style="transform: rotate(180deg);" mode="aspectFit" src="https://weather.ioslide.com/weather/bingDetail.svg"></image>
+								<sc-button bindtap="navChange" data-cur="weatherLists" data-copyrightlink="{{copyrightlink}}" style="transform: rotate(180deg);" sc-class="square-30" icon="https://weather.ioslide.com/weather/bingDetail.svg" flat ></sc-button>
 							</view>
 						</view>
 					</view>
