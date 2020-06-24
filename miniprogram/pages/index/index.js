@@ -1,7 +1,7 @@
 
-let temperatureChart = null
-let rainChart = null
-let radarChart = null
+var temperatureChart = null
+var rainChart = null
+var radarChart = null
 const app = getApp()
 const globalData = getApp().globalData
 // const AUTH_MODE = 'fingerPrint'
@@ -164,12 +164,14 @@ create(store, {
       'getLocationMethod',
       'getWeatherDataAgain',
       'icon',
-      'iconValue'
+      'iconValue',
+      'warningValue'
     ]
   },
   onLoad(a) {
     log('[onLoad]')
     const t = this
+    t.data.snackBar = scui.SnackBar("#snackbar");
     const handler = function (evt) {
       log('[' + evt + ']' + '=>', evt)
     }
@@ -221,9 +223,10 @@ create(store, {
       app.saveData('manualLocationData', location)
       app.changeStorage('getLocationMethod', 'manual')
     }
-    if(t.store.data.getWeatherDataAgain == true){
-      t.getWeatherData(true)
-    }
+    // if(t.store.data.getWeatherDataAgain == true){
+    //   t.getWeatherData(true)
+    //   t.store.data.getWeatherDataAgain == false
+    // }
   },
   onReady() {
     const t = this
@@ -233,7 +236,6 @@ create(store, {
       await t.getMoonPhaseList()
     }
     onReadyEvnet()
-    t.data.snackBar = scui.SnackBar("#snackbar");
     t.data.datePicker = scui.DatePicker("#datepicker")
     t.radarMapCtx = wx.createMapContext('radarMap')
   },
@@ -552,14 +554,13 @@ create(store, {
       })()
   },
   _getWeatherData(e){
-    if(e.detail.canRefreshChart == false){
-      this.getWeatherData(false)
-    }
+      log('[_getWeatherData]',e.detail.canRefreshChart)
+      this.getWeatherData(e.detail.canRefreshChart)
   },
   getWeatherData(canRefreshChart) {
     const t = this
     let apiHost = config.weatherApiHost + "/" + config.weatherApiVersion + "/" + config.weatherApiToken + "/" + t.data.longitude + "," + t.data.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
-    log('[getWeatherData] => apiHost', apiHost,'[canRefreshChart]',canRefreshChart)
+    log('[getWeatherData] => apiHost', apiHost)
     wx.request({
       url: apiHost,
       success: a => {
@@ -575,17 +576,22 @@ create(store, {
             radarChartComponent.lazyInitRadarChart(t.initRadarChart);
           }
           const refreshChart = () => {
-            let temperatureChartData = t.getTemperatureChartData().chartData
-            let rainChartData= t.getHourlyRainChartData()
-            let radarChartData= t.getRadarChartData()
-            rainChart.changeData(rainChartData)
-            radarChart.changeData(radarChartData)
-            temperatureChart.changeData(temperatureChartData)
+            const getdata = async () =>{
+              let temperatureChartData = await t.getTemperatureChartData().chartData
+              let rainChartData= await t.getHourlyRainChartData()
+              let radarChartData= await t.getRadarChartData()
+              return {temperatureChartData : temperatureChartData,rainChartData :rainChartData,radarChartData:radarChartData}
+            }
+            getdata().then(result =>{
+              rainChart.changeData(result.rainChartData)
+              radarChart.changeData(result.radarChartData)
+              temperatureChart.changeData(result.temperatureChartData)
+            })
             temperatureChart.guide().clear();
             log('[refreshChartData]')
           }
           log('[canRefreshChart] => ', canRefreshChart)
-          canRefreshChart == 'true' ? refreshChart() : initChart()
+          canRefreshChart == true ? refreshChart() : initChart()
         }
         (async (weatherData, canRefreshChart) => {
           try{
@@ -602,7 +608,8 @@ create(store, {
             await refreshOrInitChart(canRefreshChart)
             await t.loadingProgress(false)
             await t.checkNetWorkType()
-            await t.data.forecastData.alarmInfo !== [] ? t.openSnackBar() : ''
+            await t.openSnackBar()
+            // await (t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true') ? t.openSnackBar() : ''
           }catch{
             
           }
@@ -672,7 +679,6 @@ create(store, {
           latitude: that.data.latitude,
           longitude: that.data.longitude
         }
-
         let historyCityList = reduceHistoryCityData(data)
         that.setData({
           'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon],
@@ -681,7 +687,25 @@ create(store, {
         })
         app.saveData("historyCityList", historyCityList)
       }).catch((err) => {
-        console.log(err);
+        log(err);
+        let data = {
+          address: that.data.forecastData.address,
+          city: that.data.forecastData.city,
+          icon: config.cosApiHost + "/weather/icon/flatIcon",
+          backgroundBg:'../../weatherui/assets/images/headbackground.jpg',
+          nowTemp: ~~(realtimeTemperature),
+          skycon: realtime.skycon,
+          skyconCN: transWeatherName.weatherSkycon[realtimeSkycon],
+          latitude: that.data.latitude,
+          longitude: that.data.longitude
+        }
+        let historyCityList = reduceHistoryCityData(data)
+        that.setData({
+          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon],
+          'canloadHeadImage':true,
+          'historyCityList': historyCityList
+        })
+        app.saveData("historyCityList", historyCityList)
       })
       return realtimeData
     }
@@ -714,30 +738,37 @@ create(store, {
     }
     const service = (dailyData) => {
       let d = dailyData
+      let themeValue = that.store.data.themeValue == 'light' ? '-light' : ''
       var serviceData = [{
         desc: ~~(d.temperature[0].avg) + '°',
         name: that.store.data.languageValue == 'zh_CN' ? "体感温度" : that.store.data.languageValue == 'zh_TW' ? "體感溫度" : that.store.data.languageValue == 'ja' ? "体性感覚温度" : "Feels Like",
-        type: "sw-temperature"
+        type: "sw-temperature",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-temperature" + themeValue+ '.svg'
       }, {
         desc: ~~(d.humidity[0].avg * 100) + "%",
         name: that.store.data.languageValue == 'zh_CN' ? "湿度" : that.store.data.languageValue == 'zh_TW' ? "濕度" : that.store.data.languageValue == 'ja' ? "湿度": "Humidity",
-        type: "sw-humidity"
+        type: "sw-humidity",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-humidity" + themeValue + '.svg'
       }, {
         desc: ~~(d.life_index.ultraviolet[0].index),
         name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数"  : that.store.data.languageValue == 'ja' ? "UV指数" : "UV index",
-        type: "sw-ultraviolet"
+        type: "sw-ultraviolet",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-ultraviolet" + themeValue + '.svg'
       }, {
         desc: d.visibility[0].avg + "km",
         name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : that.store.data.languageValue == 'ja' ? "可視性": "Visibility",
-        type: "sw-visibility"
+        type: "sw-visibility",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-visibility" + themeValue+ '.svg'
       }, {
         desc: d.cloudrate[0].avg,
         name: that.store.data.languageValue == 'zh_CN' ? "云量" : that.store.data.languageValue == 'zh_TW' ? "雲量" : that.store.data.languageValue == 'ja' ? "曇り": "Cloudiness",
-        type: "sw-cloudrate"
+        type: "sw-cloudrate",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-cloudrate" + themeValue+ '.svg'
       }, {
         desc: ~~(d.pressure[0].avg) + "mb",
         name: that.store.data.languageValue == 'zh_CN' ? "气压" : that.store.data.languageValue == 'zh_TW' ? "氣壓" : that.store.data.languageValue == 'ja' ? "空気圧" : "Pressure",
-        type: "sw-pressure"
+        type: "sw-pressure",
+        icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-pressure" + themeValue + '.svg'
       }]
       return serviceData
     }
@@ -1386,16 +1417,16 @@ create(store, {
     this.data.datePicker.open();
   },
   pickerOpen() {
-    console.log(`picker opening`);
+    log(`picker opening`);
   },
   pickerClose() {
-    console.log(`picker closing`);
+    log(`picker closing`);
   },
   pickerOpened() {
-    console.log(`picker opened`);
+    log(`picker opened`);
   },
   pickerClosed() {
-    console.log(`picker closed`);
+    log(`picker closed`);
   },
   eventHandle(e) {
     log('[official-account] =>', e)
@@ -2246,7 +2277,7 @@ create(store, {
       sizeType: ["compressed"],
       sourceType: [type],
       success(res) {
-        console.log(res)
+        log(res)
         const tempFilePaths = res.tempFiles[0].path
         self.setData({
           visible: true,
@@ -2254,7 +2285,7 @@ create(store, {
         })
       },
       fail(err) {
-        console.log(err)
+        log(err)
       }
     });
   },
@@ -2293,33 +2324,36 @@ create(store, {
     cloudUpload(event.detail.resultSrc, fileName)
   },
   openSnackBar(){
+    log('[openSnackBar]')
     const t = this
     let alarmInfo = t.data.forecastData.alarmInfo[0]
     let alarmIcon = config.cosApiHost + "/weather/icon/lineIcon/" + alarmInfo.icon + '-white.svg'
-    log(alarmIcon)
+    log(alarmIcon,alarmInfo)
+    if(t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true'){
     t.data.snackBar.open({
-        message: alarmInfo.typeName + alarmInfo.levelName + '预警',
-        buttonText:'关闭',
-        icon: alarmIcon,
-        buttonTextColor:'#ffffff',
-        color:'rgba(50, 50, 50, 1);',
-        messageColor:'#ffffff',
-        closeOnButtonClick:true,
-        onButtonClick:() => {
-            console.log('点击button');
-        },
-        onOpen:() => {
-            console.log('snackBar打开中');
-        },
-        onOpened(){
-            console.log('snackBar已打开');
-        },
-        onClose(){
-            console.log('snackBar关闭中');
-        },
-        onClosed(){
-            console.log('snackBar已关闭');
-        }
-    });
+      message: alarmInfo.typeName + alarmInfo.levelName + '预警',
+      buttonText:'关闭',
+      icon: alarmIcon,
+      buttonTextColor:'#ffffff',
+      color:'rgba(50, 50, 50, 1);',
+      messageColor:'#ffffff',
+      closeOnButtonClick:true,
+      onButtonClick:() => {
+          log('点击button');
+      },
+      onOpen:() => {
+          log('snackBar打开中');
+      },
+      onOpened(){
+          log('snackBar已打开');
+      },
+      onClose(){
+          log('snackBar关闭中');
+      },
+      onClosed(){
+          log('snackBar已关闭');
+      }
+  });
+    }
 }
 });

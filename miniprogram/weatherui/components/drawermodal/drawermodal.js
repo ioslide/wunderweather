@@ -176,13 +176,17 @@ create.Component(store, {
         t.store.data.getLocationMethod = 'historyCity'
       }
       (async () => {
+        
+        let eventDetail = {
+          canRefreshChart: true
+        }
         await prevPage.setData({
           'latitude': curCityData.latitude,
           'longitude': curCityData.longitude,
           'forecastData.city': curCityData.city || curCityData.address || curCityData.name,
           'forecastData.address': curCityData.address
       })
-        await prevPage.getWeatherData(true)
+        await t.triggerEvent('_getWeatherData',eventDetail)
         await changeStorage()
         await t.hideDrawerModal()
       })()

@@ -35,6 +35,39 @@
   outline: 0;
   background-color: #F5F6F7;
 }
+.rootBlur {
+  overflow: hidden;
+  animation: sharpen 0.8s both;
+  animation-delay: 0s;
+  -webkit-animation-delay: 0s;
+}
+.rootUnBlur {
+  overflow: hidden;
+  animation: revSharpen 0.8s both;
+  animation-delay: 0s;
+  filter: blur(0);
+  -webkit-animation-delay: 0s;
+}
+@keyframes revSharpen {
+  0% {
+    filter: blur(8px);
+  }
+
+  100% {
+    filter: blur(0);
+  }
+}
+
+@keyframes sharpen {
+  0% {
+    filter: blur(0px);
+  }
+
+  100% {
+    filter: blur(8px);
+  }
+}
+
 .authFirstStepButton {
   text-align: center;
   line-height: 40px;

@@ -64,19 +64,28 @@ create.Component(store,{
       var windowWidth = t.data.windowWidth
       log('[screenFadeIn]', t.store.data.startScreen)
       const poetryScreenFadeIn = () => {
-        log('[poetryScreenFadeIn]')
-        let poetry_storage = wx.getStorageSync('poetry_storage') || [{
-          content: '春眠不觉晓'
-        }]
-        let poetryTextAction = wx.createAnimation({
-          duration: 1300,
-          timingFunction: 'ease-in-out',
-          delay: 0,
-        });
-        poetryTextAction.opacity(1).step()
-        t.setData({
-          poetry: poetry_storage[0].content,
-          guideScreenTextAni: poetryTextAction.export()
+        wx.loadFontFace({
+          family: 'wencangshufang',
+          source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
+          success: res => {
+            log('[loadFontFace]', res)
+          },
+          complete: res =>{
+            log('[poetryScreenFadeIn]')
+            let poetry_storage = wx.getStorageSync('poetry_storage') || [{
+              content: '春眠不觉晓'
+            }]
+            let poetryTextAction = wx.createAnimation({
+              duration: 1300,
+              timingFunction: 'ease-in-out',
+              delay: 0,
+            });
+            poetryTextAction.opacity(1).step()
+            t.setData({
+              poetry: poetry_storage[0].content,
+              guideScreenTextAni: poetryTextAction.export()
+            })
+          }
         })
       }
       const authScreenFadeIn = () => {
@@ -183,9 +192,15 @@ create.Component(store,{
         let eventDetail = {
           canRefreshChart: false
         }
+        await wx.showLoading({
+          title: t.store.data.languageValue == 'zh_TW' ? '加载中':t.store.data.languageValue == 'zh_CN'? '加载中':t.store.data.languageValue == 'ja'? '読み込み中':'Loading'
+        })
         await t.triggerEvent('_getWeatherData',eventDetail)
         await authFinalStepLeaf()
         // await t.screenFadeOut()
+        await wx.hideLoading({
+          complete: (res) => {},
+        })
       })()
   },
   _showDrawerModal(e){

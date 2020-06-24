@@ -11,6 +11,9 @@ exports.main = async (event, context) => {
     case 'getSponsorshipMsg': {
       return getSponsorshipMsg(event)
     }
+    case 'updateSponsorshipIndex': {
+      return updateSponsorshipIndex(event)
+    }
     default: {
       return getSponsorshipMsg(event)
     }
@@ -29,7 +32,19 @@ exports.main = async (event, context) => {
   }
   async function getSponsorshipMsg(event) {
     const db = cloud.database();
-    let result = await db.collection("sponsorshipMsg").get();
+    let result = await db.collection("sponsorshipMsg").orderBy('price','desc').get();
     console.log(result)
     return result;
+  }
+  async function updateSponsorshipIndex(event) {
+    const db = cloud.database();
+    const _ = db.command
+    console.log(event)
+    let result = db.collection('sponsorshipMsg').doc(event.id)
+      result.update({
+        data: {
+          index: _.inc(1)
+        }
+      });
+    return result
   }

@@ -17,9 +17,9 @@ create(store, {
       'indexHeadImage',
       'language',
       'languageValue',
-      'getWeatherDataAgain',
       'iconValue',
-      'icon'
+      'icon',
+      'warningValue'
     ]
   },
   onLoad(e) {
@@ -88,8 +88,15 @@ create(store, {
       app.changeStorage('themeValue', themeValue)
       app.changeStorage('theme', theme)
     }
+    const getWeatherData = () =>{
+      let
+      pages = getCurrentPages(),
+      prevPage = pages[pages.length - 2];
+      prevPage.getWeatherData(false)
+    }
     async function change(){
       await modalName()
+      await getWeatherData()
       await storeChange()
     }
     change()
@@ -116,11 +123,37 @@ create(store, {
       app.changeStorage('iconValue', iconValue)
       app.changeStorage('icon', icon)
     }
+    const getWeatherData = () =>{
+      let
+      pages = getCurrentPages(),
+      prevPage = pages[pages.length - 2];
+      prevPage.getWeatherData(false)
+    }
+    (async () => {
+      await modalName()
+      await storeChange()
+      await getWeatherData()
+    })()
+
+    
+  },
+  warningRadioChange(e) {
+    log('[iconRadioChange]', e.detail.value)
+    const t = this
+    const modalName = () =>{
+      t.setData({
+        modalName: null
+      })
+    }
+    const storeChange = () =>{
+      let warningValue = e.detail.value.toString()
+      t.store.data.warningValue = warningValue
+      app.changeStorage('warningValue', warningValue)
+    }
     (async () => {
       await modalName()
       await storeChange()
     })()
-    t.store.data.getWeatherDataAgain = true
   },
   refreshfrequencyRadioChange:function(e){
     log('[refreshfrequencyRadioChange]', e.detail.value )

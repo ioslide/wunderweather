@@ -1,4 +1,4 @@
-<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px" catchtouchmove="true">
+<view class="{{$.themeValue == 'light'?'authScreen-light':'authScreen-dark'}} {{canBlurStartScreen == true ? 'rootBlur':'rootUnBlur'}} {{authScreen == true ?'none' :''}}" animation="{{defaultScreenAni}}" style="z-index:9999;width:{{$.startScreen == 'auth' ? windowWidth*4 : windowWidth}}px" catchtouchmove="true">
 	<block wx:if="{{$.startScreen == 'auth'}}">
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">

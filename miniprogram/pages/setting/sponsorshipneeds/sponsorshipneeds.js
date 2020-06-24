@@ -7,6 +7,7 @@ const manager = plugin.getRecordRecognitionManager()
 const util = require('../../../utils/util.js')
 create(store, {
   data: {
+    hasFabulous:false,
     dialogList: [],
     priceLists:[0.01,1,5,6.66,8.88,10,18.88,16.66,28.88,50,66,88,100],
     StatusBar: app.globalData.StatusBar,
@@ -107,6 +108,48 @@ create(store, {
       })
     }
   },
+  updateSponsorshipStar(e){
+    log('[getSponsorshipMsg]',e)
+    const t = this
+    var msgListsData = arrayLookup(t.data.msgLists,'_id',e.currentTarget.dataset.id,'index');
+    function arrayLookup(data,key,value,targetKey){
+        var targetValue = "";
+        var targetIndex = 0
+        for (var i = 0; i < data.length; i++) {
+            if(data[i][key]==value){
+                targetValue = data[i][targetKey];
+                targetIndex = i
+                break;
+            }
+        }
+        return {targetValue,targetIndex};
+    }
+    let msgListsIndex = `msgLists[${msgListsData.targetIndex}].index`;
+    let msgListsHasFabulous = `msgLists[${msgListsData.targetIndex}].hasFabulous`;
+
+    let hasFabulous = t.data.msgLists[msgListsData.targetIndex].hasFabulous
+    log(hasFabulous)
+    if(hasFabulous == false){
+      t.setData({
+        [msgListsIndex] : msgListsData.targetValue + 1,
+        [msgListsHasFabulous] : true
+      })
+      let cloudData = {
+        action: 'updateSponsorshipIndex',
+        id : e.currentTarget.dataset.id
+      }
+      wx.cloud.callFunction({
+        name: 'onSponsorship',
+        data: cloudData,
+        success: res => {
+  
+        },
+        fail: err => {
+          log(err)
+        }
+      })
+    }
+  },
   getSponsorshipMsg(){
     log('[getSponsorshipMsg]')
     const t = this
@@ -118,9 +161,17 @@ create(store, {
       data: cloudData,
       success: res => {
         log(res)
-        t.setData({
-          msgLists:res.result.data
-        })
+        for (var i = 0; i < res.result.data.length; i++) {
+          let obj = res.result.data
+          obj[i]['hasFabulous'] = false
+          log(obj)
+          t.setData({
+            msgLists:obj
+          })
+      }
+        // t.setData({
+        //   msgLists:res.result.data
+        // })
       },
       fail: err => {
         log(err)

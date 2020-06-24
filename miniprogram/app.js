@@ -75,13 +75,13 @@ App({
     return this.globalData.difference;
   },
   loadFontFace() {
-    wx.loadFontFace({
-      family: 'wencangshufang',
-      source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-      success: res => {
-        log('[loadFontFace]', res)
-      }
-    })
+    // wx.loadFontFace({
+    //   family: 'wencangshufang',
+    //   source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
+    //   success: res => {
+    //     log('[loadFontFace]', res)
+    //   }
+    // })
   },
   dataPrePull() {
     const t = this

@@ -33,6 +33,7 @@ const setStoreage = () =>{
     },
     unitValue:'metric',
     startScreen: 'auth',
+    warningValue:false,
     style: {
       imageSwitchChange: true,
       weatherAniSwitchChange: true,
@@ -61,8 +62,7 @@ const setStoreage = () =>{
       colorIcon:false,
       solidIcon:false,
       flatIcon:true
-    },
-    getWeatherDataAgain : false
+    }
   }
   wx.setStorage({
     data: $$,
@@ -91,7 +91,6 @@ export default {
     getLocationMethod:$$.getLocationMethod,
     startScreen: $$.startScreen,
     style: $$.style,
-    getWeatherDataAgain:$$.getWeatherDataAgain || false,
     proMode:$$.proMode,
     indexHeadImage:$$.indexHeadImage,
     indexHeadImageValue:$$.indexHeadImageValue,
@@ -104,6 +103,7 @@ export default {
     temperatureUnit: $$.temperatureUnit,
     temperatureUnitValue: $$.temperatureUnitValue,
     unit:$$.unit,
+    warningValue:$$.warningValue,
     iconValue:$$.iconValue,
     icon:$$.icon,
     unitValue:$$.unitValue,
