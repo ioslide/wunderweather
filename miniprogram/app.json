@@ -39,12 +39,16 @@
       "version": "1.0.4",
       "provider": "wx76a9a06e5b4e693e"
     },
+    "live-player-plugin": {
+      "version": "1.1.1",
+      "provider": "wx2b03c6e691cd7370"
+  },
     "zhixiaoyun": {
       "version": "3.9.0",
       "provider": "wxc6b86e382a1e3294"
     },
     "chatRobot": {
-      "version": "1.1.17",
+      "version": "1.1.23",
       "provider": "wx8c631f7e9f2465e1"
     },
     "WechatSI": {
@@ -76,31 +80,38 @@
   },
   "subPackages": [
     {
-      "root": "pages/plugins/",
+      "root": "pages/plugins/page/chatRobot/",
       "name": "chatRobot",
       "pages": [
-        "page/chatRobot/pluginChat/pluginChat",
-        "page/chatRobot/customWelcomeCard/customWelcomeCard",
-        "page/chatRobot/base/base",
-        "page/chatRobot/blast-detail/blast-detail",
-        "page/chatRobot/costomImageMessage/costomImageMessage",
-        "page/chatRobot/customGuideCard/customGuideCard",
-        "page/chatRobot/customh5Message/customh5Message",
-        "page/chatRobot/customMiniprogramMessage/customMiniprogramMessage",
-        "page/chatRobot/customoperateCard/customoperateCard",
-        "page/chatRobot/customQuery/customQuery",
-        "page/chatRobot/customQueryMessage/customQueryMessage",
-        "page/chatRobot/customTextMessage/customTextMessage",
-        "page/chatRobot/customUnsupportedMessage/customUnsupportedMessage",
-        "page/chatRobot/home/home",
-        "page/chatRobot/index/index",
-        "page/chatRobot/nlpSemantics/nlpSemantics",
-        "page/chatRobot/noUI/noUI",
-        "page/chatRobot/pure/pure",
-        "page/chatRobot/webviewPage/webviewPage",
-        "page/chatRobot/welcomeCard/welcomeCard"
+        "pluginChat/pluginChat",
+        "customWelcomeCard/customWelcomeCard",
+        "base/base",
+        "blast-detail/blast-detail",
+        "costomImageMessage/costomImageMessage",
+        "customGuideCard/customGuideCard",
+        "customh5Message/customh5Message",
+        "customMiniprogramMessage/customMiniprogramMessage",
+        "customoperateCard/customoperateCard",
+        "customQuery/customQuery",
+        "customQueryMessage/customQueryMessage",
+        "customTextMessage/customTextMessage",
+        "customUnsupportedMessage/customUnsupportedMessage",
+        "home/home",
+        "index/index",
+        "nlpSemantics/nlpSemantics",
+        "noUI/noUI",
+        "pure/pure",
+        "webviewPage/webviewPage",
+        "welcomeCard/welcomeCard"
       ]
-    }
+    },
+    {
+      "root": "pages/plugins/page/live/",
+      "name": "live-player-plugin",
+      "pages": [
+        "live"
+      ]
+  }
   ],
   "preloadRule": {
     "pages/index/index": {

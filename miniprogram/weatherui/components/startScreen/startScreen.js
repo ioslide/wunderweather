@@ -59,149 +59,140 @@ create.Component(store,{
 
   },
   methods: {
-    screenFadeIn() {
-      const t = this
-      var windowWidth = t.data.windowWidth
-      log('[screenFadeIn]', t.store.data.startScreen)
-      const poetryScreenFadeIn = () => {
-        wx.loadFontFace({
-          family: 'wencangshufang',
-          source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-          success: res => {
-            log('[loadFontFace]', res)
-          },
-          complete: res =>{
-            log('[poetryScreenFadeIn]')
-            let poetry_storage = wx.getStorageSync('poetry_storage') || [{
-              content: '春眠不觉晓'
-            }]
-            let poetryTextAction = wx.createAnimation({
-              duration: 1300,
-              timingFunction: 'ease-in-out',
-              delay: 0,
-            });
-            poetryTextAction.opacity(1).step()
-            t.setData({
-              poetry: poetry_storage[0].content,
-              guideScreenTextAni: poetryTextAction.export()
-            })
-          }
-        })
-      }
-      const authScreenFadeIn = () => {
-        log('[authScreenFadeIn]')
-        let authScreenFadeIn = wx.createAnimation({
-          duration: 1000,
-          timingFunction: 'ease-in-out',
-          delay: 0,
-        });
-        authScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
-        t.setData({
-          logoScreenAni: authScreenFadeIn.export(),
-        })
-      }
-      const defaultScreenFadeIn = () => {
-        log('[defaultScreenFadeIn]')
-        let defaultScreenFadeIn = wx.createAnimation({
-          duration: 1000,
-          timingFunction: 'ease-in-out',
-          delay: 0,
-        });
-        defaultScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
-        t.setData({
-          logoScreenAni: defaultScreenFadeIn.export(),
-        })
-      }
-      t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() : t.store.data.startScreen == 'auth' ? authScreenFadeIn() : t.store.data.startScreen == 'default' ? defaultScreenFadeIn() : warn('[startScreen]')
-      // t.onIntersectionObserver()
-    },
-    screenFadeOut() {
-      const t = this
-      log('[screenFadeOut]', t.store.data.startScreen)
-      const poetryScreenFadeOut = () => {
-        let poetryScreenAction = wx.createAnimation({
-          duration: 1600,
-          timingFunction: 'ease-in-out',
-          delay: 200,
-        });
-        poetryScreenAction.opacity(0).step()
-        t.setData({
-            defaultScreenAni: poetryScreenAction.export()
-          }),
-          setTimeout(() => {
-            t.setData({
-              authScreen: true
-            })
-          }, 2200)
-      }
-      const defaultScreenFadeOut = () => {
-        let defaultScreenAction = wx.createAnimation({
-          duration: 1600,
-          timingFunction: 'ease-in-out',
-          delay: 200,
-        });
-        defaultScreenAction.opacity(0).step()
-        t.setData({
-            defaultScreenAni: defaultScreenAction.export(),
-          }),
-          setTimeout(() => {
-            t.setData({
-              authScreen: true
-            })
-          }, 2200)
-      }
-      const authScreenFadeOut = () => {
-        let authScreenAction = wx.createAnimation({
-          duration: 1600,
-          timingFunction: 'ease-in-out',
-          delay: 100,
-        });
-        authScreenAction.translate3d(-t.data.windowWidth * 3, 0, 0).opacity(0).step()
-        t.setData({
-          defaultScreenAni: authScreenAction.export(),
+  screenFadeIn() {
+    const t = this
+    var windowWidth = t.data.windowWidth
+    log('[screenFadeIn]', t.store.data.startScreen)
+    const poetryScreenFadeIn = () => {
+      log('[poetryScreenFadeIn]')
+      let poetry_storage = wx.getStorageSync('poetry_storage') || [{
+        content: '春眠不觉晓'
+      }]
+      let poetryTextAction = wx.createAnimation({
+        duration: 1300,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      poetryTextAction.opacity(1).step()
+      t.setData({
+        poetry: poetry_storage[0].content,
+        guideScreenTextAni: poetryTextAction.export()
+      })
+    }
+    const authScreenFadeIn = () => {
+      log('[authScreenFadeIn]')
+      let authScreenFadeIn = wx.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      authScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
+      t.setData({
+        logoScreenAni: authScreenFadeIn.export(),
+      })
+    }
+    const defaultScreenFadeIn = () => {
+      log('[defaultScreenFadeIn]')
+      let defaultScreenFadeIn = wx.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease-in-out',
+        delay: 0,
+      });
+      defaultScreenFadeIn.opacity(1).translate3d(0, '10px', 0).step()
+      t.setData({
+        logoScreenAni: defaultScreenFadeIn.export(),
+      })
+    }
+    t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() : t.store.data.startScreen == 'auth' ? authScreenFadeIn() : t.store.data.startScreen == 'default' ? defaultScreenFadeIn() : warn('[startScreen]')
+    // t.onIntersectionObserver()
+  },
+  screenFadeOut() {
+    const t = this
+    log('[screenFadeOut]', t.store.data.startScreen)
+    const poetryScreenFadeOut = () => {
+      let poetryScreenAction = wx.createAnimation({
+        duration: 1600,
+        timingFunction: 'ease-in-out',
+        delay: 200,
+      });
+      poetryScreenAction.opacity(0).step()
+      t.setData({
+          defaultScreenAni: poetryScreenAction.export()
         }),
         setTimeout(() => {
           t.setData({
             authScreen: true
           })
         }, 2200)
-      }
-      const screenFadeOut = (screenFadeOutType) => {
-          screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
-            t.store.data.startScreen = 'poetry'
-          }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-      }
-      (async () => {
-        await screenFadeOut(t.store.data.startScreen)
-        await t.triggerEvent('onIntersectionObserver')
-        await t.getPoetry()
-        await t.triggerEvent('setRefreshWeatherInterval')
-      })()
-    },
-    onAuthFinalScreen() {
-      log('[onAuthFinalScreen]')
-      const t = this
-      const windowWidth = t.data.windowWidth
-      const authFinalStepLeaf = () =>{
-        t.animate('#leaf', [
-          { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' },
-          { translate3d: [windowWidth * 2.7,250,0],rotate3d: [0,0,-1,45],scale:[0.7],ease:'ease-in-out' }
-        ], 1000)
-      }
-      (async () => {
-        let eventDetail = {
-          canRefreshChart: false
-        }
-        await wx.showLoading({
-          title: t.store.data.languageValue == 'zh_TW' ? '加载中':t.store.data.languageValue == 'zh_CN'? '加载中':t.store.data.languageValue == 'ja'? '読み込み中':'Loading'
+    }
+    const defaultScreenFadeOut = () => {
+      let defaultScreenAction = wx.createAnimation({
+        duration: 1600,
+        timingFunction: 'ease-in-out',
+        delay: 200,
+      });
+      defaultScreenAction.opacity(0).step()
+      t.setData({
+          defaultScreenAni: defaultScreenAction.export(),
+        }),
+        setTimeout(() => {
+          t.setData({
+            authScreen: true
+          })
+        }, 2200)
+    }
+    const authScreenFadeOut = () => {
+      let authScreenAction = wx.createAnimation({
+        duration: 1600,
+        timingFunction: 'ease-in-out',
+        delay: 100,
+      });
+      authScreenAction.translate3d(-t.data.windowWidth * 3, 0, 0).opacity(0).step()
+      t.setData({
+        defaultScreenAni: authScreenAction.export(),
+      }),
+      setTimeout(() => {
+        t.setData({
+          authScreen: true
         })
-        await t.triggerEvent('_getWeatherData',eventDetail)
-        await authFinalStepLeaf()
-        // await t.screenFadeOut()
-        await wx.hideLoading({
-          complete: (res) => {},
-        })
-      })()
+      }, 2200)
+    }
+    const screenFadeOut = (screenFadeOutType) => {
+        screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
+          t.store.data.startScreen = 'poetry'
+        }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
+    }
+    (async () => {
+      await screenFadeOut(t.store.data.startScreen)
+      await t.triggerEvent('onIntersectionObserver')
+      await t.getPoetry()
+      await t.triggerEvent('setRefreshWeatherInterval')
+    })()
+  },
+  onAuthFinalScreen() {
+    log('[onAuthFinalScreen]')
+    const t = this
+    const windowWidth = t.data.windowWidth
+    const authFinalStepLeaf = () =>{
+      t.animate('#leaf', [
+        { translate3d: [windowWidth * 2,0,0],rotate3d: [0,0,0.6,45],scale:[0.7],ease:'ease-in-out' },
+        { translate3d: [windowWidth * 2.7,250,0],rotate3d: [0,0,-1,45],scale:[0.7],ease:'ease-in-out' }
+      ], 1000)
+    }
+    (async () => {
+      let eventDetail = {
+        canRefreshChart: false
+      }
+      await wx.showLoading({
+        title: t.store.data.languageValue == 'zh_TW' ? '加载中':t.store.data.languageValue == 'zh_CN'? '加载中':t.store.data.languageValue == 'ja'? '読み込み中':'Loading'
+      })
+      await t.triggerEvent('_getWeatherData',eventDetail)
+      await authFinalStepLeaf()
+      // await t.screenFadeOut()
+      await wx.hideLoading({
+        complete: (res) => {},
+      })
+    })()
   },
   _showDrawerModal(e){
     log('[_showDrawerModal]',e.currentTarget.dataset.target)
@@ -354,6 +345,12 @@ create.Component(store,{
     const t = this
     e.currentTarget.dataset.target == 'getNewLocationByManual' ? t.triggerEvent('getNewLocationByManual') : 
     e.currentTarget.dataset.target == 'getLocationByAuto' ? t.triggerEvent('getLocationByAuto'): error("switchChange")
+    wx.showToast({
+      title: 'Loading',
+      icon: 'loading',
+      duration: 1000,
+      mask:true
+    })
   }
   }
 })

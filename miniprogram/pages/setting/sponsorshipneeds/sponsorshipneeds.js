@@ -9,7 +9,7 @@ create(store, {
   data: {
     hasFabulous:false,
     dialogList: [],
-    priceLists:[0.01,1,5,6.66,8.88,10,18.88,16.66,28.88,50,66,88,100],
+    priceLists:[0.01,1,5,6.66,8.88,10,18.88,16.66,28.88,50,66,88,188,288,520,666,888],
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
@@ -41,7 +41,6 @@ create(store, {
   },
   onLoad: function (options) {
     const t = this
-    t.getHistory()
     t.initRecord()
     app.getRecordAuth()
     wx.onKeyboardHeightChange(res => {
@@ -553,32 +552,6 @@ streamRecordEnd: function(e) {
     } catch (e) {
 
       console.error("setStorageSync setHistory failed")
-    }
-  },
-
-  /**
-   * 得到历史记录
-   */
-  getHistory: function() {
-    try {
-      let history = wx.getStorageSync('history')
-      if (history) {
-          let len = history.length;
-          let lastId = this.data.lastId
-          if(len > 0) {
-            lastId = history[len-1].id || -1;
-          }
-          this.setData({
-            dialogList: history,
-            lastId: lastId,
-          })
-      }
-
-    } catch (e) {
-      // Do something when catch error
-      this.setData({
-        dialogList: []
-      })
     }
   },
 bindPickerPriceChange: function (e) {

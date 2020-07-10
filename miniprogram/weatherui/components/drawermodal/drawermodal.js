@@ -135,14 +135,11 @@ create.Component(store, {
     },
     onLive(){
       const t = this
-      wx.showToast({
-        title: t.store.data.languageValue == 'zh_TW' ? '還未開播' : t.store.data.languageValue == 'zh_CN' ? '还未开播'  : t.store.data.languageValue == 'ja' ? 'まだ放送されていません' :  'Not yet broadcast'
-      })
       wx.cloud.callFunction({
         name: 'getLiveRoomLists',
         success: res => {
           log(res)
-          let roomId = [3]
+          let roomId = [5]
           let customParams = encodeURIComponent(JSON.stringify({ path: 'pages/index/index', pid: 1 }))
           wx.navigateTo({
               url: `plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=${roomId}&custom_params=${customParams}`
@@ -150,6 +147,9 @@ create.Component(store, {
         },
         fail: err => {
           log(err)
+          wx.showToast({
+            title: t.store.data.languageValue == 'zh_TW' ? '還未開播' : t.store.data.languageValue == 'zh_CN' ? '还未开播'  : t.store.data.languageValue == 'ja' ? 'まだ放送されていません' :  'Not yet broadcast'
+          })
         }
       })
 

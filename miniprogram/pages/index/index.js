@@ -431,13 +431,13 @@ create(store, {
     wx.getLocation({
       success: res => {
         (async (res) =>{
+        t.setData({
+          'latitude': res.latitude,
+          'longitude': res.longitude,
+          'radarMapLatitude' : res.latitude,
+          'radarMapLongitude' :res.longitude
+        })
           log('[getLocationByAuto]',res)
-          await t.setData({
-            'latitude': res.latitude,
-            'longitude': res.longitude,
-            'radarMapLatitude' : res.latitude,
-            'radarMapLongitude' :res.longitude
-          })
           qqMapWX.reverseGeocoder({
             location: {
               latitude: res.latitude,
@@ -452,10 +452,14 @@ create(store, {
               })
             },
             fail: err => {
+              t.setData({
+                'forecastData.city': '成都市',
+                'forecastData.address': '春熙路'
+              })
               log(`[reverseGeocoder] = > ${err}`)
             }
           })
-          await t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen') : t.getWeatherData(false) 
+          await t.store.data.startScreen == 'auth' ? (t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen'),wx.hideToast()) : t.getWeatherData(false) 
         })(res)
         log(`[getLocationByAuto] =>`, res)
       },
@@ -475,7 +479,7 @@ create(store, {
                       success: res => {
                         (async (res) =>{
                           log('[getLocationByAuto]',res)
-                          await t.setData({
+                          t.setData({
                             'latitude': res.latitude,
                             'longitude': res.longitude,
                             'radarMapLatitude' : res.latitude,
@@ -525,6 +529,7 @@ create(store, {
     let locationKey = config.locationKey
     const appReferer = '奇妙天气-小程序';
     const locationCategory = '奇妙天气,XHY';
+    wx.hideToast()
     wx.navigateTo({
       url: 'plugin://chooseLocation/index?key=' + locationKey + '&referer=' + appReferer + '&category=' + locationCategory
     });
@@ -751,12 +756,12 @@ create(store, {
         icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-humidity" + themeValue + '.svg'
       }, {
         desc: ~~(d.life_index.ultraviolet[0].index),
-        name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数"  : that.store.data.languageValue == 'ja' ? "UV指数" : "UV index",
+        name: that.store.data.languageValue == 'zh_CN' ? "紫外线指数" : that.store.data.languageValue == 'zh_TW' ? "紫外线指数"  : that.store.data.languageValue == 'ja' ? "SPF" : "UV index",
         type: "sw-ultraviolet",
         icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-ultraviolet" + themeValue + '.svg'
       }, {
         desc: d.visibility[0].avg + "km",
-        name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : that.store.data.languageValue == 'ja' ? "可視性": "Visibility",
+        name: that.store.data.languageValue == 'zh_CN' ? "能见度" : that.store.data.languageValue == 'zh_TW' ? "能见度" : that.store.data.languageValue == 'ja' ? "視認性": "Visibility",
         type: "sw-visibility",
         icon: config.cosApiHost + "/weather/service/"+ that.store.data.iconValue +"/sw-visibility" + themeValue+ '.svg'
       }, {

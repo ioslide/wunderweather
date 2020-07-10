@@ -12,11 +12,11 @@
 			<view class="flex justify-center align-center text-xxxl margin-top-10 {{$.themeValue == 'light'?'text-grey':'text-white'}} " style="font-family: 'Lato', sans-serif;font-weight:300">
 				<block wx:if="{{$.languageValue == 'zh_CN'}}">奇妙天气</block>
 				<block wx:if="{{$.languageValue == 'zh_TW'}}">奇妙天氣</block>
-								<block wx:if="{{$.languageValue == 'ja'}}">奇妙な天気</block>
+				<block wx:if="{{$.languageValue == 'ja'}}">奇妙な天気</block>
 				<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">WunderWeather</block>
 			</view>
 			<view class="flex justify-center align-center margin-top-15 {{$.themeValue == 'light'?'text-grey':'text-white'}} " style="font-family: 'Lato', sans-serif;">
-				1.4.10</view>
+				2.1.6</view>
 		</view>
 	</view>
 

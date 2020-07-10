@@ -13,7 +13,7 @@
 			<view class="tui-chat-left">
 				<image src="{{item.avatar}}" class="tui-user-pic tui-right"></image>
 				<view class="tui-chatbox tui-chatbox-left">{{item.name}}:{{item.msg}}<br />
-					<view class="margin-top-5 text-df" bindtap="updateSponsorshipStar" data-id="{{item._id}}">{{$.languageValue == 'zh_CN'?'赞助金额':$.languageValue == 'zh_TW'?'贊助金額':$.languageValue == 'ja'?'協賛金額':'Sponsorship amount'}}: {{item.price}}{{$.languageValue == 'zh_CN'?'元 · ':$.languageValue == 'zh_TW'?'元 · ':$.languageValue == 'ja'?'￥ · ':'Yuan · '}}<text style="{{item.hasFabulous == false ? 'color:#C8C8C8;':'color:#84ECF8;'}}">{{$.languageValue == 'zh_CN'?'需求人数':$.languageValue == 'zh_TW'?'需求人數':$.languageValue == 'ja'?'要求する':'number of people in need'}} : {{item.index}}</text></view>
+					<view class="margin-top-5 text-df" style="color:#C8C8C8" bindtap="updateSponsorshipStar" data-id="{{item._id}}">{{$.languageValue == 'zh_CN'?'赞助金额':$.languageValue == 'zh_TW'?'贊助金額':$.languageValue == 'ja'?'協賛金額':'Sponsorship amount'}}: {{item.price}}{{$.languageValue == 'zh_CN'?'元 · ':$.languageValue == 'zh_TW'?'元 · ':$.languageValue == 'ja'?'￥ · ':'Yuan · '}}<text style="{{item.hasFabulous == false ? 'color:#C8C8C8;':'color:#84ECF8;'}}">{{$.languageValue == 'zh_CN'?'需求人数':$.languageValue == 'zh_TW'?'需求人數':$.languageValue == 'ja'?'要求する':'number of people in need'}} : {{item.index}}</text></view>
 				</view>
 			</view>
 		</view>

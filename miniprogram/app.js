@@ -51,13 +51,14 @@ App({
     t.getQRCode()
     //t.dataPrePull()
   },
-  initChatRobot(charRobotBar){
+  initChatRobot(context,chatnavHeight){
     chatRobot.init({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
-      navHeight: charRobotBar, 
+      openid: context.openid,
+      navHeight: chatnavHeight, 
       textToSpeech: true,
       guideList: ["成都市的天气", "北京市的天气", "深圳市的天气"],
-      welcome: '你好，我是小O',
+      welcome: '你好，我是天气助手小O',
       history: true,
       historySize: 60,
       background: "#F5F6F7",
@@ -75,13 +76,16 @@ App({
     return this.globalData.difference;
   },
   loadFontFace() {
-    // wx.loadFontFace({
-    //   family: 'wencangshufang',
-    //   source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-    //   success: res => {
-    //     log('[loadFontFace]', res)
-    //   }
-    // })
+    wx.loadFontFace({
+      family: 'wencangshufang',
+      source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
+      success: res => {
+        log('[loadFontFace]', res)
+      },
+      complete: res =>{
+
+      }
+    })
   },
   dataPrePull() {
     const t = this
@@ -157,7 +161,15 @@ App({
         t.checkVersion(e.SDKVersion)
         log('[globalData]', t.globalData)
 
-        t.initChatRobot(t.globalData.charRobotBar)
+        const awaitinitChatRobot = async () => {
+          await t.getWxContext()
+          return t.getWxContext()
+        }
+        awaitinitChatRobot().then( val =>{
+          log('val',val,(tt ? 44 : 48) + e.statusBarHeight)
+          t.initChatRobot(val,(tt ? 44 : 48) + e.statusBarHeight)
+        })
+        t
       },
       fail: function (e) {
         t.isError = !0, wx.showModal({
@@ -174,6 +186,7 @@ App({
     if(hasWxContext == true){
       let wxContext = wx.getStorageSync('wxContext')
       t.globalData.openid = wxContext.openid
+      return wxContext
     }else{
       wx.cloud.callFunction({
         name: "openapi",
@@ -191,13 +204,13 @@ App({
           data: true,
           key: 'hasWxContext',
         })
+        return  res.result
       }).catch(console.error), wx.login({
         success: function (e) {
           console.log("login ", e);
         }
       })
     }
-
   },
   initCloud() {
     wx.cloud.init({

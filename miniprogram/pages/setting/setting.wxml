@@ -217,23 +217,23 @@
 			<view class="cu-list menu text-left" style="width: 100%;background: #2D2D2D;">
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Line" value="lineIcon" checked="{{$.icon.lineIcon}}" iconValue="lineIcon" style="width:100%;">
+						<sc-radio label="Line" value="lineIcon" checked="{{$.icon.lineIcon}}" style="width:100%;">
 						</sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Solid" value="solidIcon" checked="{{$.icon.solidIcon}}" iconValue="solidIcon" style="width:100%;"></sc-radio>
+						<sc-radio label="Solid" value="solidIcon" checked="{{$.icon.solidIcon}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Color" value="colorIcon" checked="{{$.icon.colorIcon}}" iconValue="colorIcon" style="width:100%;"></sc-radio>
+						<sc-radio label="Color" value="colorIcon" checked="{{$.icon.colorIcon}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 				<view class="cu-item">
 					<label class="flex justify-left align-center flex-sub">
-						<sc-radio label="Flat" value="flatIcon" checked="{{$.icon.flatIcon}}" iconValue="flatIcon" style="width:100%;"></sc-radio>
+						<sc-radio label="Flat" value="flatIcon" checked="{{$.icon.flatIcon}}" style="width:100%;"></sc-radio>
 					</label>
 				</view>
 			</view>
