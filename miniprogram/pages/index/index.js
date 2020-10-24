@@ -651,7 +651,7 @@ create(store, {
       let realtimeAqiColor = that.setAqiColor(realtime.aqi)
       let realtimeData = {
         nowTemp: ~~(realtimeTemperature),
-        skyconCN: transWeatherName.weatherSkycon[realtimeSkycon],
+        skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
         wind: realtimeWind,
         humidity: that.getHumidity(parseInt(100 * realtime.humidity)),
         airQuality: realtimeAirquality,
@@ -680,7 +680,7 @@ create(store, {
           backgroundBg:backgroundBg,
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
-          skyconCN: transWeatherName.weatherSkycon[realtimeSkycon],
+          skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
           latitude: that.data.latitude,
           longitude: that.data.longitude
         }
@@ -700,7 +700,7 @@ create(store, {
           backgroundBg:'../../weatherui/assets/images/headbackground.jpg',
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
-          skyconCN: transWeatherName.weatherSkycon[realtimeSkycon],
+          skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
           latitude: that.data.latitude,
           longitude: that.data.longitude
         }
@@ -730,7 +730,7 @@ create(store, {
         let c = n + r;
         hourlyReduce.push({
           time: c % 24 + ".00",
-          weather: transWeatherName.weatherSkycon[t.skycon[n].value],
+          weather: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[t.skycon[n].value] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[t.skycon[n].value] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[t.skycon[n].value] : transWeatherName.weatherSkyconEN[t.skycon[n].value],
           weatherEN: t.skycon[n].value.replace(/_/g, ' '),
           iconPath: config.cosApiHost + "/weather/icon/"+ that.store.data.iconValue +"/" + t.skycon[n].value + "-icon",
           temp: ~~(t.temperature[n].value) + '°',
@@ -814,7 +814,7 @@ create(store, {
         }
         dailyReduce.push({
           date: getWeek(l),
-          weather: transWeatherName.weatherSkycon[d.skycon[f].value],
+          weather:that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[d.skycon[f].value] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[d.skycon[f].value] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[d.skycon[f].value] : transWeatherName.weatherSkyconEN[d.skycon[f].value],
           weatherEN: d.skycon[f].value.replace(/_/g, ' '),
           iconPath: config.cosApiHost + "/weather/icon/"+ that.store.data.iconValue + "/" + d.skycon[f].value + "-icon",
           min: ~~(d.temperature[f].min),
@@ -1416,6 +1416,9 @@ create(store, {
           }
         }
       },
+      fail: result =>{
+        log(result)
+      }
     });
   },
   openDatePicker() {
@@ -1781,6 +1784,15 @@ create(store, {
       imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
     };
   },
+  onShareTimeline: function () {
+		return {
+	      title: '奇妙天气',
+	      query: {
+	        key: '奇妙天气'
+	      },
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
+	    }
+	},
   themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this

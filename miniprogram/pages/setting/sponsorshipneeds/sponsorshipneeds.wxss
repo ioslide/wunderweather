@@ -21,6 +21,7 @@ page {
   justify-content: space-between;
   padding-bottom: env(safe-area-inset-bottom);
   z-index: 998;
+  opacity: 0.5;
 }
 
 .tui-operation {
@@ -105,6 +106,7 @@ page {
 /*chatbox*/
 .tui-chat-content {
   width: 100%;
+  margin-bottom: 100px;
 }
 
 .tui-chatbox {
@@ -157,6 +159,7 @@ page {
   display: flex;
   align-items: flex-start;
   padding-top: 36rpx;
+  padding-bottom: 0px;
 }
 
 .tui-user-pic {

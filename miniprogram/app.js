@@ -30,8 +30,11 @@ App({
     openid: ''
   },
   onShow() {},
-  onPageNotFound: function () {
+  onPageNotFound() {
     log('onPageNotFound')
+  },
+  onThemeChange(e){
+    log('onThemeChange',e)
   },
   onLaunch() {
     log('[onLaunch]')

@@ -17,7 +17,7 @@ create.Component(store,{
         windowWidth: n.globalData.windowWidth,
         navigationHeight: n.globalData.navigationHeight,
         menuInfo: n.globalData.menuInfo,
-        display: !1,
+        display: true,
         use:[
             'themeValue',
             'languageValue'
@@ -46,14 +46,14 @@ create.Component(store,{
                 key: "star",
                 success: function(a) {
                     a.data ? t.setData({
-                        display: !1
+                        display: true
                     }) : t.setData({
-                        display: !0
+                        display: false
                     });
                 },
                 fail: function(a) {
                     t.setData({
-                        display: !0
+                        display: true
                     });
                 }
             });
@@ -62,7 +62,7 @@ create.Component(store,{
             var a = this;
             t.setStorage("star", !0).then(function(t) {
                 a.setData({
-                    display: !1
+                    display: false
                 });
             });
         }

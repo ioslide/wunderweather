@@ -1,5 +1,5 @@
 <view class='container'>
-    <image class="answerimage" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+    <image class="answerimage" src="https://weather.ioslide.com/aichat/home.png"></image>
     <view class="content" bindtap="reserve">
       <view class="top">
         <view class="minipro_title">{{msg.data.title}}</view>

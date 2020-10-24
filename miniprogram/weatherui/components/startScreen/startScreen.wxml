@@ -3,7 +3,7 @@
 		<view class="authScreenStep" style="left:0">
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
 				<view class="absolute left-0 bottom--30">
-					<image id="leaf" lazy-load="true"	src="https://teaimg.ioslide.com/weather/leaf3.png" style="left:{{windowWidth/2+80}}px;transform:rotate3d(0,0,1,45deg) scale(1)" class="square-200" mode="widthFix"></image>
+					<image id="leaf" lazy-load="true"	src="https://weather.ioslide.com/weather/leaf3.png" style="left:{{windowWidth/2+80}}px;transform:rotate3d(0,0,1,45deg) scale(1)" class="square-200" mode="widthFix"></image>
 				</view>
 				<view>
 					<view class="flex justify-center padding-15 align-center" id="firstStepLogo">
@@ -243,10 +243,18 @@
 						<image class="square-150" mode="aspectFit" lazy-load="true"	src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
-						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+						<text wx:if="{{$.languageValue == 'zh_CN'}}" class="text-4a5568 text-xl font-weight-300">你好</text>
+						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="text-4a5568 text-xl font-weight-300">你好</text>
+						<text wx:if="{{$.languageValue == 'ja'}}" class="text-4a5568 text-xl font-weight-300">こんにちは</text>
+						<text wx:if="{{$.languageValue == 'en_GB'}}" class="text-4a5568 text-xl font-weight-300">Hello</text>
 					</view>
 					<view class="flex justify-center align-center">
-						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+											<text wx:if="{{$.languageValue == 'zh_CN'}}" class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="text-4a5568 text-lg letter-spacing-1">歡迎使用奇妙天氣</text>
+						<text wx:if="{{$.languageValue == 'ja'}}" class="text-4a5568 text-lg letter-spacing-1">欢迎使用奇妙天エアー</text>
+						<text wx:if="{{$.languageValue == 'en_GB'}}" class="text-4a5568 text-lg letter-spacing-1">Welcome to wunder Weather</text>
+
+						<text class="text-4a5568 text-lg letter-spacing-1"></text>
 					</view>
 				</view>
 			</view>

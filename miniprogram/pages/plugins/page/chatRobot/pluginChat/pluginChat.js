@@ -116,7 +116,7 @@ create(store, {
       return t.from, {
         title: this.data.title,
         path: "/pages/pluginChat/pluginChat?data=" + this.data.title + "&&guideList=" + a,
-        imageUrl:"https://teaimg.ioslide.com/weather/onShareAppMessage.png"
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
       };
     }
     if ("预订火车票" === this.data.title) {
@@ -124,13 +124,13 @@ create(store, {
       return t.from, {
         title: this.data.title,
         path: "/pages/pluginChat/pluginChat?data=" + this.data.title + "&&guideList=" + e,
-        imageUrl:"https://teaimg.ioslide.com/weather/onShareAppMessage.png"
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
       };
     }
     return t.from, {
       title: "奇妙天气",
       path: "/pages/home/home",
-      imageUrl:"https://teaimg.ioslide.com/weather/onShareAppMessage.png"
+      imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
     };
   },
   open: function () {

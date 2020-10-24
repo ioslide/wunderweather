@@ -4,7 +4,7 @@
             <view class="">
                 <block wx:for="{{list}}" wx:key="item">
                     <view class="text">
-                        <image class="header" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+                        <image class="header" src="https://weather.ioslide.com/aichat/home.png"></image>
                         <view class="leftView">
         {{item}}
       </view>
@@ -14,7 +14,7 @@
         </block>
         <block wx:else>
             <view class="text">
-                <image class="header" src="https://teaimg.ioslide.com/aichat/home.png"></image>
+                <image class="header" src="https://weather.ioslide.com/aichat/home.png"></image>
                 <view class="leftView">
                     <text>{{msg.content}}</text>
                 </view>

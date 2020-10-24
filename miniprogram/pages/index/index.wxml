@@ -38,7 +38,7 @@
 		<view class="text-left text-grey text-df">{{curDetailTime}}</view>
 	</view>
 
-	<view class="flex padding-left-15 padding-tb-3"  style="min-height:20px;">
+	<view class="flex padding-left-15 padding-tb-3" style="min-height:20px;">
 		<view class="text-left text-xxl {{$.themeValue == 'light'?'text-4a5568':'text-white'}}">
 			{{forecastData.address}}·{{forecastData.realtime.skyconCN}}
 		</view>
@@ -51,7 +51,6 @@
 	<view class="flex padding-left-15" style="min-height:20px;">
 		<view class="text-left text-grey text-s padding-top-10">{{forecastData.hourlyKeypoint}}</view>
 	</view>
-
 	<block wx:if="{{$.style.hourlySwitchChange == true}}">
 		<view class="margin-top-25" bindtap="navChange" data-cur="hourly" style="min-height:180px;">
 			<scroll-view scroll-with-animation="true" scroll-x="true" scroll-y="false">
@@ -88,7 +87,7 @@
 					<view id="airQuatityItem" class="grid col-3 margin-bottom-15 text-center" style="width:100%">
 						<view class="" data-index="{{index}}" data-src="{{item.type}}" data-type="service" wx:if="{{item&&index<8}}" wx:for="{{forecastData.serviceData}}" wx:key="index">
 							<view class="{{$.themeValue == 'light'?'item-inner-light':'item-inner-dark'}}">
-								<image class="square-28" mode="aspectFit" src="{{item.icon}}"></image> 
+								<image class="square-28" mode="aspectFit" src="{{item.icon}}"></image>
 								<!-- todo iconType -->
 								<text class="margin-top-5 text-sm {{$.themeValue == 'light'?'text-c9d7e6cc':'text-grey'}}">{{item.name}}</text>
 								<text class="margin-top-10 {{$.themeValue == 'light'?'cell-col-light':'cell-col-dark'}}">{{item.desc}}</text>
@@ -137,6 +136,7 @@
 					<view class="flex align-end">
 						<view class="flex-sub text-center">
 							<image class="square-30 margin-top-10 margin-bottom-10 text-sm" src="{{item.iconPath}}{{$.themeValue == 'light'?'-light':''}}.svg"></image>
+							<!-- <view class="daily-date text-sm text-grey">{{item.weather}}</view> -->
 							<view class="daily-date text-sm text-grey">{{item.date}}</view>
 						</view>
 					</view>
@@ -476,13 +476,13 @@
 
 <view class='navSlideButton justify-center align-center' bindtouchstart='touchStart' bindtouchmove='touchMove' bindtouchend='touchEndLess' data-target="DrawerModalR" catchtouchmove="ture"></view>
 
-<view class="tapRightDrawerModal {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}"  style="{{$.themeValue == 'light' ? 'background-color: #ffffff' : ''}};border-radius: 50%;" >
+<view class="tapRightDrawerModal {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}" style="{{$.themeValue == 'light' ? 'background-color: #ffffff' : ''}};border-radius: 50%;">
 	<sc-button bindtap="showDrawerModal" data-target="DrawerModalR" sc-class="square-35" icon="https://weather.ioslide.com/weather/drawerRightModalIcon.svg" flat circle></sc-button>
 </view>
 
 <block wx:if="{{$.getLocationMethod == 'manual' || $.getLocationMethod == 'historyCity'}}">
 	<view class="refreshLocationIcon {{canBlurRoot == true ? 'refreshLocationAni-0': ''}} {{drawerModalName=='DrawerModalL' || drawerModalName =='DrawerModalR' ? 'capsuleFadeOut':'capsuleFadeIn'}}" style="{{$.themeValue == 'light' ? 'background-color: #ffffff' : ''}};border-radius: 50%;">
-			<sc-button bindtap="refreshLocation" data-target="DrawerModalR" sc-class="square-35" icon="https://weather.ioslide.com/weather/relocation.svg" flat circle></sc-button>
+		<sc-button bindtap="refreshLocation" data-target="DrawerModalR" sc-class="square-35" icon="https://weather.ioslide.com/weather/relocation.svg" flat circle></sc-button>
 	</view>
 </block>
 

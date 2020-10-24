@@ -42,13 +42,23 @@ create(store, {
       delta: 1
     });
   },
-  onShareAppMessage: function (a) {
+  onShareAppMessage(a) {
+    const t = this
     return {
       title: '奇妙天气',
-      imageUrl: 'https://weather.ioslide.com/shareimg.png',
-      path: "/pages/index/index"
+      path: "/pages/index/index",
+      imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
     };
   },
+  onShareTimeline: function () {
+		return {
+	      title: '奇妙天气',
+	      query: {
+	        key: '奇妙天气'
+	      },
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
+	    }
+	},
   showModal(e) {
     var t = this
     t.setData({

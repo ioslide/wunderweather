@@ -101,6 +101,15 @@ create(store, {
     }
     change()
   },
+  onShareTimeline: function () {
+		return {
+	      title: '奇妙天气',
+	      query: {
+	        key: '奇妙天气'
+	      },
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
+	    }
+	},
   iconRadioChange(e) {
     log('[iconRadioChange]', e.detail.value)
     const t = this

@@ -1,269 +1,274 @@
 {
-	"description": "项目配置文件",
-	"packOptions": {
-		"ignore": []
-	},
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"enhance": true,
-		"postcss": true,
-		"preloadBackgroundData": true,
-		"minified": true,
-		"newFeature": true,
-		"coverView": true,
-		"nodeModules": true,
-		"autoAudits": false,
-		"showShadowRootInWxmlPanel": true,
-		"scopeDataCheck": true,
-		"uglifyFileName": false,
-		"checkInvalidKey": true,
-		"checkSiteMap": true,
-		"uploadWithSourceMap": true,
-		"babelSetting": {
-			"ignore": [],
-			"disablePlugins": [],
-			"outputPath": ""
-		},
-		"useIsolateContext": true,
-		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": false
-	},
-	"compileType": "miniprogram",
-	"libVersion": "2.9.3",
-	"appid": "wx7b4bbc2d9c538e84",
-	"projectname": "%E5%A5%87%E5%A6%99%E5%A4%A9%E6%B0%94v2",
-	"miniprogramRoot": "miniprogram/",
-	"cloudfunctionRoot": "cloudfunctions/",
-	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-	"watchOptions": {
-		"ignore": []
-	},
-	"debugOptions": {
-		"hidedInDevtools": []
-	},
-	"scripts": {},
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
-	"condition": {
-		"search": {
-			"current": -1,
-			"list": []
-		},
-		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
-			"current": -1,
-			"list": []
-		},
-		"game": {
-			"list": []
-		},
-		"gamePlugin": {
-			"current": -1,
-			"list": []
-		},
-		"miniprogram": {
-			"current": 0,
-			"list": [
-				{
-					"id": 7,
-					"name": "模拟更新",
-					"pathName": "pages/index/index",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "扫描小程序码",
-					"pathName": "pages/index/index",
-					"query": "",
-					"scene": 1047
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/about/about",
-					"pathName": "pages/setting/about/about",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/customstyle/customstyle",
-					"pathName": "pages/setting/customstyle/customstyle",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/setting",
-					"pathName": "pages/setting/setting",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/bingimagelist/bingimagelist",
-					"pathName": "pages/bingimagelist/bingimagelist",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/nasaimagelist/nasaimagelist",
-					"pathName": "pages/nasaimagelist/nasaimagelist",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/customstyle/customstyle",
-					"pathName": "pages/setting/customstyle/customstyle",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/hourweather/hourweather",
-					"pathName": "pages/hourweather/hourweather",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/about/about",
-					"pathName": "pages/setting/about/about",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/index/index",
-					"pathName": "pages/index/index",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/bing/bing",
-					"pathName": "pages/bing/bing",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/wechatsi/wechatsi",
-					"pathName": "pages/wechatsi/wechatsi",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
-					"pathName": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
-					"pathName": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/log/log",
-					"pathName": "pages/setting/log/log",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/log/log",
-					"pathName": "pages/setting/log/log",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/log/log",
-					"pathName": "pages/setting/log/log",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/log/log",
-					"pathName": "pages/setting/log/log",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"query": "",
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
-					"scene": null
-				}
-			]
-		}
-	}
+  "description": "项目配置文件",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "preloadBackgroundData": true,
+    "minified": true,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": true,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": []
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.9.4",
+  "appid": "wx7b4bbc2d9c538e84",
+  "projectname": "%E5%A5%87%E5%A6%99%E5%A4%A9%E6%B0%94v2",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+  "watchOptions": {
+    "ignore": []
+  },
+  "debugOptions": {
+    "hidedInDevtools": []
+  },
+  "scripts": {},
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "plugin": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": 0,
+      "list": [
+        {
+          "id": 7,
+          "name": "模拟更新",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "扫描小程序码",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": 1047
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/about/about",
+          "pathName": "pages/setting/about/about",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/customstyle/customstyle",
+          "pathName": "pages/setting/customstyle/customstyle",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/setting",
+          "pathName": "pages/setting/setting",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/bingimagelist/bingimagelist",
+          "pathName": "pages/bingimagelist/bingimagelist",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/nasaimagelist/nasaimagelist",
+          "pathName": "pages/nasaimagelist/nasaimagelist",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/customstyle/customstyle",
+          "pathName": "pages/setting/customstyle/customstyle",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/hourweather/hourweather",
+          "pathName": "pages/hourweather/hourweather",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/about/about",
+          "pathName": "pages/setting/about/about",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/index/index",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/bing/bing",
+          "pathName": "pages/bing/bing",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/wechatsi/wechatsi",
+          "pathName": "pages/wechatsi/wechatsi",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
+          "pathName": "page/plugins/pages/chatRobot/pluginChat/pluginChat",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
+          "pathName": "pages/plugins/page/chatRobot/pluginChat/pluginChat",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/log/log",
+          "pathName": "pages/setting/log/log",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/log/log",
+          "pathName": "pages/setting/log/log",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/log/log",
+          "pathName": "pages/setting/log/log",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/log/log",
+          "pathName": "pages/setting/log/log",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "pathName": "pages/setting/sponsorshipneeds/sponsorshipneeds",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

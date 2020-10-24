@@ -56,11 +56,21 @@ Page({
   onReachBottom: function () {
 
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+  onShareAppMessage(a) {
+    const t = this
+    return {
+      title: '奇妙天气',
+      path: "/pages/index/index",
+      imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
+    };
+  },
+  onShareTimeline: function () {
+		return {
+	      title: '奇妙天气',
+	      query: {
+	        key: '奇妙天气'
+	      },
+        imageUrl:"https://weather.ioslide.com/weather/onShareAppMessage.png"
+	    }
+	},
 })
