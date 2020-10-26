@@ -15,8 +15,8 @@ create.Component(store,{
         log('[indexHeadImageValue]',t.store.data.indexHeadImageValue)
         t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : 
         t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  
-        t.store.data.indexHeadImageValue == 'customize' ?  t.getCustomizeImage(): 
-        t.store.data.indexHeadImageValue == 'weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
+        t.store.data.indexHeadImageValue == 'Customize' ?  t.getCustomizeImage(): 
+        t.store.data.indexHeadImageValue == 'Weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
       }
     }
   },
@@ -30,7 +30,7 @@ create.Component(store,{
     // attached: function () {
     //   const t = this
     //   log('[indexHeadImageValue]',t.store.data.indexHeadImageValue)
-    //   t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  t.store.data.indexHeadImageValue == 'customize' ?  t.getCustomizeImage(): t.store.data.indexHeadImageValue == 'weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
+    //   t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  t.store.data.indexHeadImageValue == 'Customize' ?  t.getCustomizeImage(): t.store.data.indexHeadImageValue == 'weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
     // },
     moved: function () { },
     detached: function () { },

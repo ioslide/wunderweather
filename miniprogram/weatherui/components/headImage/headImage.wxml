@@ -46,7 +46,7 @@
 				</view>
 			</block>
 
-			<block wx:if="{{$.indexHeadImageValue == 'customize'}}">
+			<block wx:if="{{$.indexHeadImageValue == 'Customize'}}">
 				<view class="flex square-100 align-center justify-center">
 					<image class="square-100" style="background-size: cover;" mode="aspectFill" src="{{cusImage}}"></image>
 					<view class="padding-15 {{hasCusImageFileID == true ?'headImageIcon-RightBottom':'headImageIcon-Center'}}" bindtap="_showDrawerModal" data-target="DrawerModalHeadImage">
@@ -100,7 +100,7 @@
 					</view>
 				</view>
 			</block>
-			<block wx:if="{{$.indexHeadImageValue == 'weather'}}">
+			<block wx:if="{{$.indexHeadImageValue == 'Weather'}}">
 				<view class="flex square-100 align-center justify-center">
 					<image id="weatherImage" class="square-100" src="{{weatherImage}}" catchtouchmove="touchmove" style="background-size: cover;background: no-repeat left center;position: relative;transition: .3s ease all;" mode="aspectFill">
 						<block wx:if="{{$.style.weatherAniSwitchChange == true}}">

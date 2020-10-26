@@ -34,7 +34,8 @@ create(store, {
       indexHeadImage = {
         indexHeadImageBing:false,
         indexHeadImageNASA:false,
-        indexHeadImageCus:false
+        indexHeadImageCustomize:false,
+        indexHeadImageWeather:false
       }
     if(indexHeadImageValue == 'Bing'){
       indexHeadImage['indexHeadImageBing'] = true
@@ -46,13 +47,13 @@ create(store, {
       app.saveData('hasCusImage', false)
       prevPage.getNASAImage()
     }
-    else if(indexHeadImageValue == 'weather'){
+    else if(indexHeadImageValue == 'Weather'){
       indexHeadImage['indexHeadImageWeather'] = true
       app.saveData('hasCusImage', false)
       prevPage.getWeatherImage()
     }
-    else{
-      indexHeadImage['indexHeadImageCus'] = true
+    else if(indexHeadImageValue == 'Customize'){
+      indexHeadImage['indexHeadImageCustomize'] = true
       app.saveData('hasCusImage', true)
     }
     t.setData({

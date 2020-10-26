@@ -53,7 +53,7 @@ const setStoreage = () =>{
       indexHeadImageBing:true,
       indexHeadImageNASA:false,
       indexHeadImageWeather:false,
-      indexHeadImageCus:false
+      indexHeadImageCustomize:false
     },
     indexHeadImageValue:'Bing',
     iconValue : 'flatIcon',
