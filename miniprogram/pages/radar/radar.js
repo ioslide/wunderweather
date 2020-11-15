@@ -15,7 +15,12 @@ create(store, {
     // rm /www/wwwroot/earth.weather.ioslide.com/data/gfs/current/current-wind-surface-level-gfs-0.5.epak -f;wget -P /www/wwwroot/earth.weather.ioslide.com/data/gfs/current/ https://gaia.nullschool.net/data/gfs/current/current-wind-surface-level-gfs-0.5.epak
     
     // https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=-242.82,42.39,1719/loc=113.797,43.518
-    let radarSrc = 'https://earth.weather.ioslide.com/#current/wind/surface/level/orthographic=-242.82,42.39,1719/loc=' + options.longitude + ',' + options.latitude
+    let radarSrc = ''
+    if(t.store.data.themeValue == 'light'){
+      radarSrc = 'https://map.weather.ioslide.com/index-light.html#' + options.longitude + ',' + options.latitude
+    }else{
+      radarSrc = 'https://map.weather.ioslide.com/index.html#' + options.longitude + ',' + options.latitude
+    }
     log('[radarSrc]',radarSrc)
     t.setData({
       radarSrc : radarSrc

@@ -1419,7 +1419,7 @@ button::after {
 .radarTimeLine-item-dark :nth-last-child(2) {
   border-right: 1px solid rgba(82, 82, 82, 0.788);
 }
-.radarTimeLine-timeblock {
+.radarTimeLine-timeblock-light {
   position: absolute;
   top: 0;
   left: 0;
@@ -1430,4 +1430,16 @@ button::after {
   background-image: -webkit-gradient(linear, left top, right top, from(#fff), to(rgba(51, 136, 255, 0.6)));
   background-image: -webkit-linear-gradient(left, #fff, rgba(51, 136, 255, 0.6));
   background-image: linear-gradient(90deg, #fff, rgba(51, 136, 255, 0.6));
+}
+.radarTimeLine-timeblock-dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  opacity: .2;
+  margin-left: -30px;
+  background-image: -webkit-gradient(linear, left top, right top, from(#fff), to(rgba(255, 255, 255, 0.6)));
+  background-image: -webkit-linear-gradient(left, #fff, rgba(255, 255, 255, 0));
+  background-image: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0))
 }

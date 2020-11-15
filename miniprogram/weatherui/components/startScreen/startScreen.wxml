@@ -10,10 +10,10 @@
 						<image class="square-150" mode="aspectFit" lazy-load="true"	src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
-						<text class="text-4a5568 text-xl font-weight-300">你好</text>
+						<text class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}}  text-xl font-weight-300">你好</text>
 					</view>
 					<view class="flex justify-center align-center">
-						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+						<text class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}}  text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
 					</view>
 					<view class="flex justify-center align-center margin-top-50" bindtap="authScreenNext" id="firstStepButton" data-target="authFirstStep">
 						<!-- <button class="authFirstStepButton">开始</button> -->
@@ -31,10 +31,10 @@
 			<view class="flex justify-left padding-15" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
 				<view style="margin-top:{{StatusBar*4}}px;width:100%">
 					<view class="flex justify-left padding-15 align-center">
-						<text class="text-4a5568 text-xxxl font-weight-300">你好</text>
+						<text class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xxxl font-weight-300">你好</text>
 					</view>
 					<view id="authScreenStepContent" class="flex justify-left align-center padding-left-15">
-						<text class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+						<text class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
 					</view>
 					<view class="flex margin-top-50">
 						<view class="cu-list menu-avatar" style="width:100%">
@@ -243,18 +243,17 @@
 						<image class="square-150" mode="aspectFit" lazy-load="true"	src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
-						<text wx:if="{{$.languageValue == 'zh_CN'}}" class="text-4a5568 text-xl font-weight-300">你好</text>
-						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="text-4a5568 text-xl font-weight-300">你好</text>
-						<text wx:if="{{$.languageValue == 'ja'}}" class="text-4a5568 text-xl font-weight-300">こんにちは</text>
-						<text wx:if="{{$.languageValue == 'en_GB'}}" class="text-4a5568 text-xl font-weight-300">Hello</text>
+						<text wx:if="{{$.languageValue == 'zh_CN'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xl font-weight-300">你好</text>
+						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xl font-weight-300">你好</text>
+						<text wx:if="{{$.languageValue == 'ja'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xl font-weight-300">こんにちは</text>
+						<text wx:if="{{$.languageValue == 'en_GB'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xl font-weight-300">Hello</text>
 					</view>
 					<view class="flex justify-center align-center">
-											<text wx:if="{{$.languageValue == 'zh_CN'}}" class="text-4a5568 text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
-						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="text-4a5568 text-lg letter-spacing-1">歡迎使用奇妙天氣</text>
-						<text wx:if="{{$.languageValue == 'ja'}}" class="text-4a5568 text-lg letter-spacing-1">欢迎使用奇妙天エアー</text>
-						<text wx:if="{{$.languageValue == 'en_GB'}}" class="text-4a5568 text-lg letter-spacing-1">Welcome to wunder Weather</text>
-
-						<text class="text-4a5568 text-lg letter-spacing-1"></text>
+						<text wx:if="{{$.languageValue == 'zh_CN'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1">欢迎使用 奇妙天气</text>
+						<text wx:if="{{$.languageValue == 'zh_TW'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1">歡迎使用奇妙天氣</text>
+						<text wx:if="{{$.languageValue == 'ja'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1">欢迎使用奇妙天エアー</text>
+						<text wx:if="{{$.languageValue == 'en_GB'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1">Welcome to wunder Weather</text>
+						<text class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-lg letter-spacing-1"></text>
 					</view>
 				</view>
 			</view>

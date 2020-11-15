@@ -5,6 +5,7 @@ const config = require('../../../weatherui/config/config.js').default
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import _ from '../../../utils/lodash.min.js';
+const transWeatherName = require('../../../weatherui/assets/lib/transWeatherName/transWeatherName.js').default
 
 create.Component(store,{
   properties: {
@@ -119,36 +120,126 @@ create.Component(store,{
         }
       });
     },
+
     getWeatherImage(){
-        let pages = getCurrentPages()
-        let prevPage = pages[pages.length - 1];
-        log('[getWeatherImage]',prevPage.data.weatherKeyWord)
-        const t = this
-        wx.request({
-          url: 'https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ prevPage.data.weatherKeyWord +'&searchType=photo&page=1&size=20&type=json&avatarSize=a1&resourceType=0%2C2',
-          header: {
-            "content-type": "application/json"
-          },
-          success: res => {
-            log('[requestWeather]', res.data.data)
-            let weatherImageLists = res.data.data
-            let weatherIndex = _.random(0,res.data.data.length-1)
-            let weatherImage = weatherImageLists[weatherIndex].url.p4
-            t.setData({
-              weatherIndex : 0,
-              weatherImage: weatherImage,
-              weatherImageLists : weatherImageLists,
-              headBackgroundAni: true
-            })
-          },
-          fail: err => {
-            log('requestBing', err)
-            t.setData({
-              'weatherImage': '../../weatherui/assets/images/headbackground.jpg'
-            })
-          }
-        });
-    },
+      log('[getWeatherImage]')
+      const t = this
+      // cloud://wunderweather-nwepb.7775-wunderweather-nwepb-1301867770/weatherImage/afternoon/clear-day/1.png
+      let pages = getCurrentPages()
+      let prevPage = pages[0];
+      log('prevPage',getCurrentPages())
+      let realtimeSkycon = prevPage.data.forecastData.realtime.skycon
+      let weatherFileNameList = []
+      let sunrise = prevPage.data.sunrise.replace(':', '')
+      let sunset = prevPage.data.sunset.replace(':', '')
+      var nnn = new Date();
+      var hhh = nnn.getHours();
+      var mm = nnn.getMinutes();
+      let nowTime = hhh + '' + mm
+      log('[sunrise,sunset,nowTime]',sunrise,sunset,nowTime)
+      let timeGroupName = 'afternoon'
+      if(nowTime >= sunrise &&  nowTime <= '1000'){
+        timeGroupName = 'early_morning'
+      }else if(nowTime>1000 && nowTime<=1200){
+        timeGroupName = 'late_morning' 
+      }else if(nowTime>1200 && nowTime<=1800){
+        timeGroupName = 'afternoon'
+      }else if(nowTime>1800 && nowTime<=2100){
+        timeGroupName = 'early_evening'
+      }else if(nowTime>2100 && nowTime<=2400){
+        timeGroupName = 'late_evening'
+      }else if(nowTime>400 && nowTime<= sunrise){
+        timeGroupName = 'early_morning'
+      }
+
+      var weatherImageGroupLength = {
+        afternoon :{
+          'clear-day' : 110,
+          'cloudy' : 154,
+          'fog':67,
+          'hail':8,
+          'partly-cloudy-day' : 162,
+          'rain' : 133,
+          'sleet':4,
+          'snow':187,
+          'thunderstorm':31,
+          'tornado':3,
+          'wind':20
+        },
+        early_morning :{
+          'clear-day' : 81,
+          'cloudy' : 73,
+          'fog':80,
+          'hail':5,
+          'partly-cloudy-day' : 110,
+          'rain' : 26,
+          'sleet':4,
+          'snow':84,
+          'thunderstorm':30,
+          'tornado':3,
+          'wind':9
+        },
+        late_morning :{
+          'clear-day' : 90,
+          'cloudy' : 155,
+          'fog':73,
+          'hail':8,
+          'partly-cloudy-day' : 154,
+          'rain' : 107,
+          'sleet':4,
+          'snow':176,
+          'thunderstorm':31,
+          'tornado':3,
+          'wind':17
+        },
+        late_evening :{
+          'clear-day' : 334,
+          'cloudy' : 118,
+          'fog':53,
+          'hail':2,
+          'partly-cloudy-day' : 217,
+          'rain' : 132,
+          'sleet':2,
+          'snow':58,
+          'thunderstorm':32,
+          'tornado':3,
+          'wind':6
+        },
+        early_evening :{
+          'clear-day' : 38,
+          'cloudy' : 74,
+          'fog':47,
+          'hail':4,
+          'partly-cloudy-day' : 85,
+          'rain' : 31,
+          'sleet':3,
+          'snow':39,
+          'thunderstorm':31,
+          'tornado':3,
+          'wind':7
+        },
+      }
+      
+      let weatherKeyWord =  transWeatherName.weatherImageKeyWord[realtimeSkycon]
+      let weatherKeyWordGroupImageNum = weatherImageGroupLength[timeGroupName][weatherKeyWord]
+      const getTempWeatherFileNameList = () => {
+      for (let i=1;i<9;i++ )
+        {
+            weatherFileNameList[i-1] = ' https://7775-wunderweather-nwepb-1301867770.tcb.qcloud.la/weatherImage/'+ timeGroupName + '/' + weatherKeyWord + '/' + _.random(0,weatherKeyWordGroupImageNum) + '.png'
+        }
+      }
+    (async () => {
+      await getTempWeatherFileNameList()
+      await t.setData({
+        weatherIndex : 0,
+        weatherImage: weatherFileNameList[0],
+        weatherImageLists : weatherFileNameList,
+        headBackgroundAni: true
+      })
+    })()
+    log('[weatherFileNameList]',weatherFileNameList[0])
+    log('[weatherKeyWord]',weatherKeyWord,weatherKeyWordGroupImageNum)
+  },
     navChange(e) {
       log(`[navChange] => ${e.currentTarget.dataset.cur}`)
       const cur = e.currentTarget.dataset.cur
@@ -281,12 +372,12 @@ create.Component(store,{
         { opacity: 0.0, ease:'ease-out' },
         ], 350, function () {
           let weatherIndex = t.data.weatherIndex
-          if(t.data.weatherIndex == 7){
+          if(t.data.weatherIndex == t.data.weatherImageLists.length-1){
             weatherIndex = 0
           }else{
             weatherIndex += 1 
           }
-          let weatherImage = t.data.weatherImageLists[weatherIndex].url.p4
+          let weatherImage = t.data.weatherImageLists[weatherIndex]
           t.setData({
             weatherIndex : weatherIndex,
             weatherImage: weatherImage
@@ -299,17 +390,19 @@ create.Component(store,{
     },
     navPreWeather(){
       const t = this
+
       this.animate('#weatherImage', [
         { opacity: 1.0, ease:'ease-in'},
         { opacity: 0.0, ease:'ease-out'},
         ], 350, function () {
           let weatherIndex = t.data.weatherIndex
           if(t.data.weatherIndex == 0){
-            weatherIndex = 7
+            weatherIndex = t.data.weatherImageLists.length-1
           }else{
-            weatherIndex -= 1 
+            weatherIndex -= 1
           }
-          let weatherImage = t.data.weatherImageLists[weatherIndex].url.p4
+          console.log(t.data.weatherImageLists[weatherIndex])
+          let weatherImage = t.data.weatherImageLists[weatherIndex]
           log(weatherImage)
           t.setData({
             weatherIndex : weatherIndex,

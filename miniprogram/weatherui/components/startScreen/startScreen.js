@@ -44,7 +44,6 @@ create.Component(store, {
   },
   pageLifetimes: {
     show: function () {
-      log(this.data)
       let pages = getCurrentPages()
       let prevPage = pages[pages.length - 1];
       let data = prevPage.data

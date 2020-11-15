@@ -109,14 +109,14 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">刷新频率</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">刷新頻率</block>
-						<block wx:if="{{$.languageValue == 'ja'}}">リフレッシュレート</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">リフレッシュレート</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Update Frequency</block>
 			</text>
 			<text slot="subbottom">
-			<block wx:if="{{$.languageValue == 'zh_CN'}}">{{$.refreshfrequencyValue}}分钟</block>
-			<block wx:if="{{$.languageValue == 'zh_TW'}}">{{$.refreshfrequencyValue}}分鐘</block>
-			<block wx:if="{{$.languageValue == 'ja'}}">{{$.refreshfrequencyValue}}分</block>
-			<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">{{$.refreshfrequencyValue}} minutes</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">{{$.refreshfrequencyValue}}分钟</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">{{$.refreshfrequencyValue}}分鐘</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">{{$.refreshfrequencyValue}}分</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">{{$.refreshfrequencyValue}} minutes</block>
 			</text>
 		</sc-cell>
 	</view>
@@ -181,7 +181,7 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">关于</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">關於</block>
-										<block wx:if="{{$.languageValue == 'ja'}}">オン</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">オン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">About</block>
 			</text>
 			<text slot="subbottom">
@@ -198,18 +198,18 @@
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">提需求</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">提需求</block>
-																				<block wx:if="{{$.languageValue == 'ja'}}">需要に言及</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">需要に言及</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Function demand</block>
 			</text>
 			<text slot="subbottom">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">赞助提需求</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">贊助提需求</block>
-																									<block wx:if="{{$.languageValue == 'ja'}}">スポンサーシップの必要性</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">スポンサーシップの必要性</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sponsorship needs</block>
 			</text>
 		</sc-cell>
 	</view>
-	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="log">
+	<!-- <view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="log">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">开发日志</block>
@@ -218,7 +218,7 @@
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Development log</block>
 			</text>
 		</sc-cell>
-	</view>
+	</view> -->
 </view>
 
 <view catchtouchmove="return" class="cu-modal {{modalName=='iconRadio'?'show':''}}" bindtap="hideModal">

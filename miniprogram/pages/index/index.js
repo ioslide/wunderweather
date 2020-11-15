@@ -169,7 +169,7 @@ create(store, {
     ]
   },
   onLoad(a) {
-    log('[onLoad]')
+    // log('[onLoad]')
     const t = this
     t.data.snackBar = scui.SnackBar("#snackbar");
     const handler = function (evt) {
@@ -191,7 +191,6 @@ create(store, {
     const location = chooseLocation.getLocation();
     log('[location]',location)
     if (location == null) {
-      log('[location == null]')
       t.selectComponent('#startScreen').setData({
         'isManualGetNewLocation' : false
       })
@@ -256,7 +255,7 @@ create(store, {
       enableSatellite: false, //卫星图
       enableTraffic: false,
     }
-    log('setRadarMapSetting',setting)
+    // log('[setRadarMapSetting]',setting)
     t.setData({
       radarMapSetting : setting
     })
@@ -560,7 +559,8 @@ create(store, {
   },
   _getWeatherData(e){
       log('[_getWeatherData]',e.detail.canRefreshChart)
-      this.getWeatherData(e.detail.canRefreshChart)
+      const t = this
+      t.getWeatherData(e.detail.canRefreshChart)
   },
   getWeatherData(canRefreshChart) {
     const t = this
@@ -614,6 +614,7 @@ create(store, {
             await t.loadingProgress(false)
             await t.checkNetWorkType()
             await t.openSnackBar()
+            await t.getWeatherImage()
             // await (t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true') ? t.openSnackBar() : ''
           }catch{
             
@@ -651,6 +652,7 @@ create(store, {
       let realtimeAqiColor = that.setAqiColor(realtime.aqi)
       let realtimeData = {
         nowTemp: ~~(realtimeTemperature),
+        skycon: realtime.skycon,
         skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
         wind: realtimeWind,
         humidity: that.getHumidity(parseInt(100 * realtime.humidity)),
@@ -907,7 +909,17 @@ create(store, {
       });
       log('alertContentData[0]',alertContentData[0])
     }
-    setTimelyWeather(a)
+    
+    const getWeatherImage = () => {
+      if(that.store.data.indexHeadImageValue == 'Weather'){
+        that.selectComponent('#headImage').getWeatherImage()
+      }
+    }
+    (async () => {
+      await setTimelyWeather(a)
+      await getWeatherImage()
+    })()
+    
   },
   setRefreshWeatherInterval() {
     const t = this
@@ -1114,7 +1126,7 @@ create(store, {
     t.setData({
       moonPhaseLists: moonPhaseLists
     })
-    log(`[moonPhaseLists] =>`, moonPhaseLists)
+    // log(`[moonPhaseLists] =>`, moonPhaseLists)
   },
   onStartAccelerometer(){
     wx.startAccelerometer({
@@ -1199,6 +1211,16 @@ create(store, {
     wx.navigateTo({
       url: '../' + cur + '/' + cur
     });
+  },
+  navRadar() {
+    // appid:'wx673e7d2fe4e6a413',  //订阅号
+    // appid:'wx7b4bbc2d9c538e84', //服务号
+    log('[navRadar]', app.globalData.appid)
+    const t = this
+    log('[navigateTo]')
+    wx.navigateTo({
+      url: '../radar/radar?latitude=' + app.globalData.latitude + "&longitude=" + app.globalData.longitude
+    })
   },
   navCopyrightlink(e){
     log('[navCopyrightlink]')
@@ -1574,7 +1596,7 @@ create(store, {
       var nextTime = util.formatHourTime(new Date(curTime.setMinutes(curTime.getMinutes() + i * 15)))
       radarTimeLineIndexNum.push(nextTime)
     }
-      log('radarTimeLineIndexNum',radarTimeLineIndexNum)
+      // log('[radarTimeLineIndexNum]',radarTimeLineIndexNum)
       t.setData({
         radarTimeLineIndexNum : radarTimeLineIndexNum
       })
@@ -1689,7 +1711,6 @@ create(store, {
         })
       }
       if (res.boundingClientRect.top < 0) {
-        // log('[temperatureObserver] => end')
       }
     })
     thirdObserver.relativeToViewport().observe('#thirdObserver', (res) => {
@@ -1859,7 +1880,7 @@ create(store, {
     this.selectComponent('#headImage').getNASAImage()
   },
   getWeatherImage(){
-    this.selectComponent('#headImage').getWeatherImage()
+      this.selectComponent('#headImage').getWeatherImage()
   },
   onDev() {
     const t = this

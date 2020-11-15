@@ -37,12 +37,10 @@ App({
     log('onThemeChange',e)
   },
   onLaunch() {
-    log('[onLaunch]')
     const t = this
     wx.onMemoryWarning(function () {
       warn('[onMemoryWarningReceive]')
     })
-    log('[initCloud]')
     t.initCloud()
     // log(xhy)
     // t.initChatRobot()
@@ -145,7 +143,7 @@ App({
           width: 87
         })
         var o = RegExp("^.*iPhone X.*$");
-        log('getSystemInfo',e)
+        // log('[getSystemInfo]',e)
         e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
           t.globalData.StatusBar = e.statusBarHeight;
         t.globalData.barHeight = e.statusBarHeight,
@@ -168,9 +166,9 @@ App({
           await t.getWxContext()
           return t.getWxContext()
         }
-        awaitinitChatRobot().then( val =>{
-          log('val',val,(tt ? 44 : 48) + e.statusBarHeight)
-          t.initChatRobot(val,(tt ? 44 : 48) + e.statusBarHeight)
+        awaitinitChatRobot().then( context =>{
+          log('[context]',context,'[chatnavHeight]',(tt ? 44 : 48) + e.statusBarHeight)
+          t.initChatRobot(context,(tt ? 44 : 48) + e.statusBarHeight)
         })
         t
       },
@@ -222,7 +220,7 @@ App({
     wx.cloud ? wx.cloud.init({
       traceUser: !0
     }) : console.error("请使用 2.2.3 或以上的基础库以使用云能力");
-    log('[initCloud]')
+    // log('[initCloud]')
   },
   updateManager() {
     const updateManager = wx.getUpdateManager()
