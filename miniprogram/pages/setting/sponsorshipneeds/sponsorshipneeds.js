@@ -254,70 +254,6 @@ bindgetUserInfo(e){
     })
   }
 },
-pay(payData) {
-  log(payData)
-  var that = this;
-  const payment = payData.payment//这里注意，上一个函数的result中直接整合了这里要用的参数，直接展开即可使用
-  wx.requestPayment({
-    ...payment, //。。。是展开变量的语法 
-    success(res) {
-      console.log('pay success', res)
-      wx.showToast({
-        title: 'Loading',
-        icon: 'loading',
-        duration: 1000,
-        mask:true
-      })
-      let cloudData = {
-        action: 'uploadSponsorshipMsg',
-        msg:e.detail.value,
-        index:1,
-        name:t.data.userInfo.nickName,
-        avatar: t.data.userInfo.avatarUrl,
-        price:t.data.price,
-        time: util.formatDate(new Date())
-      }
-      wx.cloud.callFunction({
-        name: 'onSponsorship',
-        data: cloudData,
-        success: res => {
-          log(res)
-           wx.hideToast()
-           wx.showToast({
-              title: '感谢',
-              icon: 'success',
-              duration: 1000,
-              mask:true
-            })
-            setTimeout(() => {
-              t.getSponsorshipMsg()
-            }, 600);
-            t.setData({
-              inputText: ""
-          });
-        },
-        fail: err => {
-          log(err)
-        }
-      })
-    },
-    fail(res) {
-      console.error('pay fail', res)
-      wx.showToast({
-        title: '支付失败',
-        icon: 'success',
-        image: '../../../weatherui/assets/images/failMoney.svg',
-        duration: 1000,
-        success: function (res) {
-  
-        },
-        fail: function (res) {
-          console.log(res);
-        }
-      });
-    }
-  })
-},
 uuid(len, radix) {
   var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
   var uuid = [],
@@ -339,48 +275,7 @@ uuid(len, radix) {
   }
   return uuid
 },
-_callQuestionPay(body, subMchId, payVal) {
-  wx.cloud
-    .callFunction({
-      name: 'pay',
-      data: {
-        body,
-        outTradeNoTo : Math.floor((Math.random() * 1000) + 1) + "1371" + new Date().getTime(), // 商品订单号不能重复
-        subMchId, // 子商户号,微信支付商户号,必填
-        payVal, // 这里必须整数,不能是小数,而且类型是number,否则就会报错
-      },
-    })
-    .then((res) => {
-      const payment = res.result.payment;
-      wx.requestPayment({
-        ...payment,
-        success: (res) => {
-          console.log('支付成功', res);
-        },
-        fail: (err) => {
-          console.error('支付失败', err);
-          wx.showToast({
-            title: '支付失败',
-            icon: 'success',
-            image: '../../../weatherui/assets/images/failMoney.svg',
-            duration: 1000,
-            success: function (res) {
-      
-            },
-            fail: function (res) {
-              console.log(res);
-            }
-          });
-        }
-      });
-      console.log(res);
-      console.log(payment); // 里面包含appId,nonceStr,package,paySign,signType,timeStamp这些支付参数
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-},
-formSubmit: function (e) {
+bindconfirmInput: function (e) {
   log(e)
   const t = this
   if(t.data.inputText == '请输入' || t.data.inputText == '' || t.data.inputText == null){ 
@@ -397,122 +292,203 @@ formSubmit: function (e) {
     });
     return 
   }
-  let money = 0.01
-  const subMchId = '1586719541'; 
-  const body = '解锁探秘';
-  const inputPayVal = money * 100;
-  t._callQuestionPay(body, subMchId, inputPayVal);
 
-},
-bindconfirmInput: function(e) {
-    log(e)
-    const t = this
-    let params = {
-      totalCost: t.data.price ,
-      merchandiseDescription: '奇妙天气'
-    }
-    if(t.data.inputText == '请输入' || t.data.inputText == '' || t.data.inputText == null){ 
-      wx.showToast({
-        title: '请输入',
-        image: '../../../weatherui/assets/images/pleaseWrite.svg',
-        duration: 1000,
-        success: function (res) {
-  
-        },
-        fail: function (res) {
-          console.log(res);
-        }
-      });
-      return 
-    }
-
-    wx.BaaS.pay(params).then(res => {
-      console.log('微信支付流水号', res.transaction_no)
-      wx.showToast({
-        title: 'Loading',
-        icon: 'loading',
-        duration: 1000,
-        mask:true
-      })
-      let cloudData = {
-        action: 'uploadSponsorshipMsg',
-        msg:e.detail.value,
-        index:1,
-        name:t.data.userInfo.nickName,
-        avatar: t.data.userInfo.avatarUrl,
-        price:t.data.price,
-        time: util.formatDate(new Date())
-      }
-      wx.cloud.callFunction({
-        name: 'onSponsorship',
-        data: cloudData,
-        success: res => {
-          log(res)
-           wx.hideToast()
-           wx.showToast({
-              title: '感谢',
-              icon: 'success',
+  let money = t.data.price * 100 
+  let inputMoney = money.toFixed()
+  wx.cloud.callFunction({
+      name: 'pay',
+      data: {
+        body:"奇妙天气",
+        orderid: Math.floor((Math.random() * 1000) + 1) + "1371" + new Date().getTime(),
+        money: inputMoney
+      },
+      success(res) {
+        let payment = res.result;
+        wx.requestPayment({
+          ...payment,
+          success: (res) => {
+            wx.showToast({
+              title: 'Loading',
+              icon: 'loading',
               duration: 1000,
               mask:true
             })
-            setTimeout(() => {
-              t.getSponsorshipMsg()
-            }, 600);
-            t.setData({
-              inputText: ""
-          });
-        },
-        fail: err => {
-          log(err)
-        }
-      })
+            let cloudData = {
+              action: 'uploadSponsorshipMsg',
+              msg:e.detail.value,
+              index:1,
+              name:t.data.userInfo.nickName,
+              avatar: t.data.userInfo.avatarUrl,
+              price:t.data.price,
+              time: util.formatDate(new Date())
+            }
+            wx.cloud.callFunction({
+              name: 'onSponsorship',
+              data: cloudData,
+              success: res => {
+                log(res)
+                 wx.hideToast()
+                 wx.showToast({
+                    title: '感谢',
+                    icon: 'success',
+                    duration: 1000,
+                    mask:true
+                  })
+                  setTimeout(() => {
+                    t.getSponsorshipMsg()
+                  }, 600);
+                  t.setData({
+                    inputText: ""
+                });
+              },
+              fail: err => {
+                log(err)
+              }
+            })
+          },
+          fail: (err) => {
+            console.log('支付失败', err);
+            wx.showToast({
+              title: '支付失败',
+              icon: 'success',
+              image: '../../../weatherui/assets/images/failMoney.svg',
+              duration: 1000,
+              success: function (res) {
+        
+              },
+              fail: function (res) {
+                console.log(res);
+              }
+            });
+          }
+        });
+      },
+      fail(res) {
+        wx.showToast({
+          title: '支付失败',
+          icon: 'success',
+          image: '../../../weatherui/assets/images/failMoney.svg',
+          duration: 1000,
+          success: function (res) {
+    
+          },
+          fail: function (res) {
+            console.log(res);
+          }
+        });
+      }
+    })
 
-      }, err => {
-        if (err.code === 603) {
-          console.log('用户尚未授权')
-          wx.showToast({
-            title: '支付失败',
-            icon: 'success',
-            image: '../../../weatherui/assets/images/failMoney.svg',
-            duration: 1000,
-            success: function (res) {
-      
-            },
-            fail: function (res) {
-              console.log(res);
-            }
-          });
-        } else if (err.code === 607) {
-          console.log('用户取消支付')
-          wx.showToast({
-            title: '支付失败',
-            icon: 'success',
-            image: '../../../weatherui/assets/images/failMoney.svg',
-            duration: 1000,
-            success: function (res) {
-      
-            },
-            fail: function (res) {
-              console.log(res);
-            }
-          });
-        } else if (err.code === 608){
-          console.log(err.message)
-          wx.showToast({
-            title: '支付失败',
-            icon: 'success',
-            image: '../../../weatherui/assets/images/failMoney.svg',
-            duration: 1000,
-            success: function (res) {
-      
-            },
-            fail: function (res) {
-              console.log(res);
-            }
-          });
-        }
-      })
 },
+// bindconfirmInput: function(e) {
+//     log(e)
+//     const t = this
+//     let params = {
+//       totalCost: t.data.price ,
+//       merchandiseDescription: '奇妙天气'
+//     }
+//     if(t.data.inputText == '请输入' || t.data.inputText == '' || t.data.inputText == null){ 
+//       wx.showToast({
+//         title: '请输入',
+//         image: '../../../weatherui/assets/images/pleaseWrite.svg',
+//         duration: 1000,
+//         success: function (res) {
+  
+//         },
+//         fail: function (res) {
+//           console.log(res);
+//         }
+//       });
+//       return 
+//     }
+
+//     wx.BaaS.pay(params).then(res => {
+//       console.log('微信支付流水号', res.transaction_no)
+//       wx.showToast({
+//         title: 'Loading',
+//         icon: 'loading',
+//         duration: 1000,
+//         mask:true
+//       })
+//       let cloudData = {
+//         action: 'uploadSponsorshipMsg',
+//         msg:e.detail.value,
+//         index:1,
+//         name:t.data.userInfo.nickName,
+//         avatar: t.data.userInfo.avatarUrl,
+//         price:t.data.price,
+//         time: util.formatDate(new Date())
+//       }
+//       wx.cloud.callFunction({
+//         name: 'onSponsorship',
+//         data: cloudData,
+//         success: res => {
+//           log(res)
+//            wx.hideToast()
+//            wx.showToast({
+//               title: '感谢',
+//               icon: 'success',
+//               duration: 1000,
+//               mask:true
+//             })
+//             setTimeout(() => {
+//               t.getSponsorshipMsg()
+//             }, 600);
+//             t.setData({
+//               inputText: ""
+//           });
+//         },
+//         fail: err => {
+//           log(err)
+//         }
+//       })
+
+//       }, err => {
+//         if (err.code === 603) {
+//           console.log('用户尚未授权')
+//           wx.showToast({
+//             title: '支付失败',
+//             icon: 'success',
+//             image: '../../../weatherui/assets/images/failMoney.svg',
+//             duration: 1000,
+//             success: function (res) {
+      
+//             },
+//             fail: function (res) {
+//               console.log(res);
+//             }
+//           });
+//         } else if (err.code === 607) {
+//           console.log('用户取消支付')
+//           wx.showToast({
+//             title: '支付失败',
+//             icon: 'success',
+//             image: '../../../weatherui/assets/images/failMoney.svg',
+//             duration: 1000,
+//             success: function (res) {
+      
+//             },
+//             fail: function (res) {
+//               console.log(res);
+//             }
+//           });
+//         } else if (err.code === 608){
+//           console.log(err.message)
+//           wx.showToast({
+//             title: '支付失败',
+//             icon: 'success',
+//             image: '../../../weatherui/assets/images/failMoney.svg',
+//             duration: 1000,
+//             success: function (res) {
+      
+//             },
+//             fail: function (res) {
+//               console.log(res);
+//             }
+//           });
+//         }
+//       })
+// },
 streamRecord: function(e) {
   const t = this
   wx.vibrateShort()

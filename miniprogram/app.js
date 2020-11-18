@@ -45,7 +45,7 @@ App({
     // log(xhy)
     // t.initChatRobot()
     t.updateManager()
-    t.initWxBass()
+    // t.initWxBass()
     t.getSystemInfo()
     t.loadFontFace()
     t.getWxContext()
@@ -121,12 +121,12 @@ App({
       }
     })
   },
-  initWxBass() {
-    wx.BaaS = requirePlugin('zhixiaoyun')
-    wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-    wx.BaaS.init(config.default.wxBassId)
-    wx.BaaS.auth.loginWithWechat() // 静默登录
-  },
+  // initWxBass() {
+  //   wx.BaaS = requirePlugin('zhixiaoyun')
+  //   wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
+  //   wx.BaaS.init(config.default.wxBassId)
+  //   wx.BaaS.auth.loginWithWechat() // 静默登录
+  // },
   getSystemInfo() {
     const t = this
     wx.getSystemInfo({

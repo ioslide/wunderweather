@@ -384,7 +384,6 @@ create(store, {
             icon: 'none',
             mask: true,
           })
-          log('[onLoad] => loadDataFromStorage()')
           t.loadDataFromStorage()
         }
       }
@@ -637,7 +636,6 @@ create(store, {
     })
   },
   formatWeatherData(a) {
-    log('[formatWeatherData]')
     const that = this;
     const realtime = (realtime) => {
       log(`[formatWeatherData] => [realtime]`, realtime)
@@ -931,7 +929,6 @@ create(store, {
       await setTimelyWeather(a)
       await getWeatherImage()
     })()
-    
   },
   setRefreshWeatherInterval() {
     const t = this
@@ -1379,7 +1376,21 @@ create(store, {
     let time = util.formatDate(submitValue)
     let date = util.getDates(7, time)
     let startTime = date[0].time
-    log('[submitStartTime] =>', startTime)
+    var nnn = new Date();
+    let month =  nnn.getMonth() + 1
+    let _nowTime = nnn.getFullYear() +'' + month +'' + nnn.getDate();
+    let _startTime = startTime.split('-').join('');
+    log('nowTime,startTime,submitValue',_nowTime,_startTime,submitValue)
+    if(_nowTime > _startTime) {
+      wx.showToast({
+        title: '不能选择过去时间,请重新选择',
+        duration: 1500,
+        icon: 'none',
+        mask: true,
+      })
+      return
+    }
+    log('[submitStartTime] =>', startTime,submitValue,date)
     const t = this
     const templateId = config.subTemplateId
     const subDailyWeatherCloudFn = () => {

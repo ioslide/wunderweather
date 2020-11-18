@@ -42,7 +42,7 @@
     "live-player-plugin": {
       "version": "1.2.0",
       "provider": "wx2b03c6e691cd7370"
-  },
+    },
     "zhixiaoyun": {
       "version": "3.14.3",
       "provider": "wxc6b86e382a1e3294"
@@ -111,7 +111,7 @@
       "pages": [
         "live"
       ]
-  }
+    }
   ],
   "preloadRule": {
     "pages/index/index": {

@@ -225,7 +225,7 @@ create.Component(store,{
       const getTempWeatherFileNameList = () => {
       for (let i=1;i<9;i++ )
         {
-            weatherFileNameList[i-1] = 'https://7775-wunderweather-nwepb-1301867770.tcb.qcloud.la/weatherImage/'+ timeGroupName + '/' + weatherKeyWord + '/' + _.random(1,weatherKeyWordGroupImageNum) + '.png'
+            weatherFileNameList[i-1] = 'https://weather.ioslide.com/weather/follow/weatherImage/'+ timeGroupName + '/' + weatherKeyWord + '/' + _.random(1,weatherKeyWordGroupImageNum) + '.png'
         }
       }
     (async () => {

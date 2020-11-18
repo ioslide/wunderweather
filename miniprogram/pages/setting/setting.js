@@ -8,6 +8,7 @@ create(store, {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
+    favored: !0,
     use: [
       'themeValue',
       'theme',
@@ -423,25 +424,180 @@ create(store, {
       modalName: null
     })
   },
-  
-  onGetUserInfo(e) {
-    console.log(e)
-    wx.cloud.callFunction({
-      name: 'openapi',
-      data: {
-        action: 'getOpenData',
-        openData: {
-          list: [
-            e.detail.cloudID,
-          ]
-        }
-      }
-    }).then(res => {
-      console.log('[onGetUserInfo] 调用成功：', res)
+  onGotUserInfo: function(e) {
+    log(e)
+    e.detail.userInfo ? this.loginNSubscribe(e) : wx.showToast({
+        title: "登录失败,请重试",
+        icon: "none",
+        duration: 2e3
+    });
+},
+loginNSubscribe(e){
+  const that =this
+  wx.login({
+    success: function(o) {
+        if (o.code) {
+            var n = o.code;
+            wx.getUserInfo({
+                success: function(o) {
+                    var c = o.userInfo;
+                    c.code = n, c.iv = o.iv, c.encryptedData = o.encryptedData, c.wechat_type = "wxapp"
+                    console.log('getUserInfo',c)
 
-      this.setData({
-        userInfoResult: JSON.stringify(res.result),
-      })
-    })
-  }
+                    // wx.request({
+                    //   url: "https://biz.caiyunapp.com/v1/tianqi/login",
+                    //     header: {
+                    //         "content-type": "application/json"
+                    //     },
+                    //     method: "POST",
+                    //     data: c,
+                    //     success: function(t) {
+                    //         app.saveData("cy_user", JSON.stringify(t.data.user)), app.saveData("cy_user_id", t.data.user.platform_id), 
+                    //         app.saveData("userInfo", c);
+
+                    //         that.setData({
+                    //             focused: !1
+                    //         }), that.subscribe({
+                    //             eveningRemindTime: that.data.eveningTime,
+                    //             weatherRemind: 1,
+                    //             morningRemindTime: that.data.morningTime,
+                    //             platform_id: that.data.userInfo.platform_id,
+                    //             lon: that.data.settingLon,
+                    //             timezone: "+08:00",
+                    //             lat: that.data.settingLat,
+                    //             address: that.data.settingLocation
+                    //         })
+                    //     },
+                    //     fail: function(e) {},
+                    //     complete: function(e) {}
+                    // });
+
+
+                    wx.cloud.callFunction({
+                      name: 'openapi',
+                      data: {
+                        action: 'getContext'
+                      }
+                    }).then(res => {
+                      console.log('[onGetUserInfo] 调用成功：', res)
+                    })
+
+                    // wx.request({
+                    //     url: "https://biz.caiyunapp.com/v1/tianqi/login",
+                    //     header: {
+                    //         "content-type": "application/json"
+                    //     },
+                    //     method: "POST",
+                    //     data: c,
+                    //     success: function(t) {
+                    //       app.saveData("cy_user", JSON.stringify(t.data.user)), app.saveData("cy_user_id", t.data.user.platform_id), 
+                    //       app.saveData("userInfo", c);
+                    //     },
+                    //     fail: function(e) {
+                    //     },
+                    //     complete: function(e) {
+                    //     }
+                    // });
+
+                }
+            });
+        } else wx.showToast({
+            title: "登录失败，请再次点击",
+            icon: "none",
+            duration: 2e3
+        });
+    }
+});
+},
+subscribe(){
+  wx.request({
+    url: "https://biz.caiyunapp.com/v1/tianqi/subscribe",
+    data: {
+      eveningRemindTime: e.data.eveningTime,
+      weatherRemind: 1,
+      morningRemindTime: e.data.morningTime,
+      platform_id: e.data.userInfo.platform_id,
+      lon: e.data.settingLon,
+      timezone: "+08:00",
+      lat: e.data.settingLat,
+      address: e.data.settingLocation
+  },
+    method: 'post',
+    success: (result) => {
+      log(result)
+    },
+    fail: (res) => {
+      log(res)
+    },
+    complete: (res) => {
+      log(res)
+    },
+  })
+},
+getSubscribe: function(e, t) {
+  a({
+      url: "/tianqi/subscribe?platform_id=" + e,
+      method: "get",
+      complete: function(e) {
+          t(e.data);
+          console.log(e)
+      },
+      fail: function(e) {}
+  });
+},
+cancelSub: function() {
+  var e = this;
+  wx.showModal({
+      title: "确认取消订阅?",
+      content: "取消后无法接受天气预报消息",
+      showCancel: !0,
+      cancelText: "点错了",
+      success: function(t) {
+          t.confirm && n.default.subscribe({
+              eveningRemindTime: e.data.eveningTime,
+              weatherRemind: 0,
+              morningRemindTime: e.data.morningTime,
+              platform_id: e.data.userInfo.platform_id,
+              lon: e.data.settingLon,
+              timezone: "+08:00",
+              lat: e.data.settingLat,
+              address: e.data.settingLocation
+          }, function(t) {
+              e.setData({
+                  subscribed: !1
+              }), wx.showModal({
+                  title: "已取消订阅",
+                  content: "将不再向您推送天气预报消息",
+                  showCancel: !1
+              });
+          });
+      }
+  });
+},
+reFail(t){
+  wx.request({
+    method: t.method || "GET",
+    url: t.url,
+    data: t.data || {},
+    header: {
+        "content-type": "application/json",
+        Authorization: e.default.getCache("cy_user_id") || "",
+        "Cy-User-Id": e.default.getCache("cy_user_id") || ""
+    },
+    success: function(e) {
+        t.success && t.success(e);
+    },
+    fail: function(e) {
+        t.fail && t.fail(e);
+    },
+    complete: function(e) {
+        t.complete && t.complete(e);
+    }
+});
+},
+onModalCancel: function() {
+  this.setData({
+      favored: !1
+  });
+},
 })

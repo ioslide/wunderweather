@@ -87,7 +87,7 @@ async function getContext(event) {
     openid: wxContext.OPENID,
     appid: wxContext.APPID,
     unionid: wxContext.UNIONID,
-    env: wxContext.ENV,
+    env: wxContext.ENV
   }
 }
 
