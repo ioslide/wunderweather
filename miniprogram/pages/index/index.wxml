@@ -316,7 +316,7 @@
 			</view>
 		</view>
 		<view class="flex padding-15 opacity-0" animation="{{radarObserverAni}}" style="width:100%">
-			<map wx:if="{{radarMapImageType == 'rain'}}" subKey='BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D' layer-style="{{$.themeValue == 'light' ? '3' : '2'}}" id="radarMap" markers="{{radarMapMarkers}}" setting="{{radarMapSetting}}" latitude="{{radarMapLatitude}}" longitude="{{radarMapLongitude}}" scale="{{radarMapScale}}" style="width: 100%; height: 250px;">
+			<map wx:if="{{radarMapImageType == 'rain'}}" subKey='BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D' layer-style="{{$.themeValue == 'light' ? ' 3' : ' 2'}}" id="radarMap" markers="{{radarMapMarkers}}" setting="{{radarMapSetting}}" latitude="{{radarMapLatitude}}" longitude="{{radarMapLongitude}}" scale="{{radarMapScale}}" style="width: 100%; height: 250px;">
 				<view style="width: 100%; height: 250px;">
 					<image src="{{forecastData.rainRadar.coverImage}}" mode="widthFix" style="width:{{radarMapImageType == 'rain' ? windowWidth-30 : 493}}px;height:{{windowWidth-30}}px;position:absolute;left:0px;top:-{{(windowWidth-280)/2}}px;">
 					</image>
@@ -488,7 +488,7 @@
 </block>
 
 
-<sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
+<sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" subData="{{subData}}"  bind:closed="pickerClosed" bind:submit="datePickerSubmit"></sc-date-picker>
 
 <view class="cu-modal {{modalName=='shareImage'?'show':''}}" bindtap="hideModal" catchtouchmove="preventTouchMove">
 	<view class="shareImage-dialog margin-top-40" catchtap>
@@ -500,7 +500,7 @@
 				<sc-button style="width:100%" sc-class="sc-outlined-btn border-0 text-lg" flat>保存到本地</sc-button>
 			</view>
 		</view>
-		<view class="cu-bar" bindtap="hideModal">
+		<view class="cu-bar margin-top-20" bindtap="hideModal">
 			<view class="action margin-0 flex-sub solid-left"><text class="text-white cuIcon-close"></text>
 			</view>
 		</view>

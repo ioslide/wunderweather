@@ -50,12 +50,12 @@ const setStoreage = () =>{
     },
     proMode: false,
     indexHeadImage:{
-      indexHeadImageBing:true,
+      indexHeadImageBing:false,
       indexHeadImageNASA:false,
-      indexHeadImageWeather:false,
+      indexHeadImageWeather:true,
       indexHeadImageCustomize:false
     },
-    indexHeadImageValue:'Bing',
+    indexHeadImageValue:'Weather',
     iconValue : 'flatIcon',
     icon:{
       lineIcon:false,

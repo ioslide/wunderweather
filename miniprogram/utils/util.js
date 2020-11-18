@@ -1,19 +1,18 @@
-
 const formatDate = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
   return [year, month, day].map(formatNumber).join('-')
 }
-const YearMonthDayCN = (times) =>{
-  var dateTime= new Date(times);
-  var year=dateTime.getFullYear();
-  var month=dateTime.getMonth() + 1;
-  var day=dateTime.getDate();
-  month < 10 ? month='0'+month : month; 
-  hours < 10 ? hours='0'+hours : hours; 
-  minutes < 10 ? minutes='0'+minutes : minutes; 
-  second < 10 ? second='0'+second : second; 
+const YearMonthDayCN = (times) => {
+  var dateTime = new Date(times);
+  var year = dateTime.getFullYear();
+  var month = dateTime.getMonth() + 1;
+  var day = dateTime.getDate();
+  month < 10 ? month = '0' + month : month;
+  hours < 10 ? hours = '0' + hours : hours;
+  minutes < 10 ? minutes = '0' + minutes : minutes;
+  second < 10 ? second = '0' + second : second;
   let dateStr = year + '年' + month + '月' + day + '日'
   return dateStr;
 }
@@ -23,7 +22,7 @@ const formatDateClear = date => {
   const day = date.getDate()
   const hours = date.getHours()
   const minutes = date.getMinutes()
-  return [year, month, day,hours,minutes].map(formatNumber).join('')
+  return [year, month, day, hours, minutes].map(formatNumber).join('')
 }
 var t = "".concat("/data/%E7%A6%8F%E5%88%A9/100/");
 
@@ -31,7 +30,7 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
-const dateLater = (dates, later) =>{
+const dateLater = (dates, later) => {
   let dateObj = {};
   let show_day = new Array('周日', '周一', '周二', '周三', '周四', '周五', '周六');
   let date = new Date(dates);
@@ -52,20 +51,20 @@ const getDates = (days, todate) => {
   }
   return dateArry;
 }
-const formatHourTime = (date) =>{
-  var dateTime= new Date(date);
+const formatHourTime = (date) => {
+  var dateTime = new Date(date);
   var hours = dateTime.getHours()
   var minutes = date.getMinutes()
-  hours < 10 ? hours='0'+hours : hours; 
-  minutes < 10 ? minutes='0'+minutes : minutes; 
+  hours < 10 ? hours = '0' + hours : hours;
+  minutes < 10 ? minutes = '0' + minutes : minutes;
   let dateStr = hours + ':' + minutes
   return dateStr;
 }
-const formatMonthDay =(date)  =>{
+const formatMonthDay = (date) => {
   var day = date.getDate()
   var month = new Date().toDateString().split(" ")[1]
-  var md = month +" "+ day
-  return  md
+  var md = month + " " + day
+  return md
 }
 
 
@@ -91,13 +90,35 @@ function recordTime(date) {
   return [month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
+function uuid(len, radix) {
+  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  var uuid = [],
+    i;
+  radix = radix || chars.length;
+
+  if (len) {
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+  } else {
+    var r;
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+    uuid[14] = '4';
+    for (i = 0; i < 36; i++) {
+      if (!uuid[i]) {
+        r = 0 | Math.random() * 16;
+        uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+      }
+    }
+  }
+  return uuid
+}
 module.exports = {
+  uuid: uuid,
   formatTime: formatTime,
   recordTime: recordTime,
   formatDate: formatDate,
-  formatDateClear:formatDateClear,
+  formatDateClear: formatDateClear,
   getDates: getDates,
-  YearMonthDayCN:YearMonthDayCN,
+  YearMonthDayCN: YearMonthDayCN,
   formatHourTime: formatHourTime,
   formatMonthDay: formatMonthDay
 }

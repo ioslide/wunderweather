@@ -33,6 +33,18 @@ create(store, {
     opts:{
       lazyLoad: true
     },
+    subData:{
+      action: 'saveSubscribeMessage',
+      page: 'pages/index/index',
+      unit: '',
+      language: '',
+      city: '',
+      startTime: 'startTime',
+      latitude: '',
+      longitude: '',
+      templateId: '',
+      done: false
+    },
     temperatureChartConfig : {
       appendPadding:0,
       padding:[30,0,30,0],
@@ -614,7 +626,7 @@ create(store, {
             await t.loadingProgress(false)
             await t.checkNetWorkType()
             await t.openSnackBar()
-            await t.getWeatherImage()
+            // await t.getWeatherImage()
             // await (t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true') ? t.openSnackBar() : ''
           }catch{
             
@@ -1359,6 +1371,9 @@ create(store, {
       })
     }
   },
+  pickerOpened() {
+    log(`picker opened`);
+  },
   datePickerSubmit(e) {
     let submitValue = e.detail.value
     let time = util.formatDate(submitValue)
@@ -1380,6 +1395,10 @@ create(store, {
         templateId: templateId,
         done: false
       }
+      t.setData({
+        subData : cloudData
+      })
+      log(t.data.subData)
       wx.cloud.callFunction({
         name: 'openapi',
         data: cloudData,
@@ -1407,6 +1426,10 @@ create(store, {
         startTime: startTime,
         templateId: templateId
       }
+      t.setData({
+        subData : cloudData
+      })
+      log(t.data.subData)
       wx.cloud.callFunction({
         name: 'openapi',
         data: cloudData,
@@ -1439,6 +1462,12 @@ create(store, {
         }
       },
       fail: result =>{
+        wx.showToast({
+          title: '订阅失败，微信版本过低',
+          duration: 1500,
+          icon: 'none',
+          mask: true,
+        })
         log(result)
       }
     });
@@ -1452,9 +1481,7 @@ create(store, {
   pickerClose() {
     log(`picker closing`);
   },
-  pickerOpened() {
-    log(`picker opened`);
-  },
+
   pickerClosed() {
     log(`picker closed`);
   },
@@ -1664,7 +1691,7 @@ create(store, {
     var ani = wx.createAnimation({
       duration: 700,
       timingFunction: 'ease-in-out',
-      delay: 500,
+      delay: 300,
     });
     var firstObserver = wx.createIntersectionObserver()
     var refreshSunset = wx.createIntersectionObserver()

@@ -181,6 +181,7 @@ create.Component(store, {
           canRefreshChart: true
         }
         await prevPage.setData({
+          'canloadHeadImage': true,
           'latitude': curCityData.latitude,
           'longitude': curCityData.longitude,
           'forecastData.city': curCityData.city || curCityData.address || curCityData.name,

@@ -1,8 +1,14 @@
 "use strict";
+const util = require('../../../utils/util.js')
+const config = require('../../../weatherui/config/config.js').default
 var dayjs = require("../../assets/lib/day/day"),
   dialogCount = 0;
 Component({
-  properties: {},
+  properties: {
+    subData: {
+				type: Object
+			}
+  },
   data: {
     yearView: !1,
     dayList: [],
@@ -37,7 +43,10 @@ Component({
   },
   externalClasses: ["sc-class"],
   ready: function () {
+    const that = this 
+    console.log('subData',that.data.subData)
     this.setData({
+      subData : that.data.subData,
       dialogCount: dialogCount++
     }), this.data.dialog = this.selectComponent("#sc-date-picker-dialog-" + this.data.dialogCount)
   },
@@ -72,6 +81,7 @@ Component({
       return a
     },
     _change: function (t) {
+      const that = this 
       var e = this,
         a = t.detail.current,
         s = this.data.showDate.add(a - this.data.currentSwiperItemDateIndex, "months");
@@ -163,6 +173,8 @@ Component({
       this.data.dialog._close()
     },
     _submit: function () {
+      const that = this 
+      console.log('subData',that.data.subData)
       console.log(this.data.selectDateObject)
       var t = this.data.selectDateObject,
         e = t.years,
@@ -173,9 +185,89 @@ Component({
         o = t.seconds,
         r = t.milliseconds,
         d = dayjs();
-      d = d.set("year", e).set("month", a).set("date", s).set("hour", n).set("minute", i).set("second", o).set("millisecond", r), this.triggerEvent("submit", {
+      d = d.set("year", e).set("month", a).set("date", s).set("hour", n).set("minute", i).set("second", o).set("millisecond", r), 
+      this.triggerEvent("submit", {
         value: d.toDate()
-      }), this._close()
+      }), 
+      this._close()
+
+      // const templateId = config.subTemplateId
+      // let time = util.formatDate(d.toDate())
+      // let date = util.getDates(7, time)
+      // var startTime = date[0].time
+      // that.data.subData['startTime'] = startTime
+      // console.log('[subData] =>', that.data.subData)
+
+      // const subDailyWeatherCloudFn = () => {
+      //   that.setData({
+      //     subData : that.data.subData
+      //   })
+      //    console.log(that.data.subData)
+      //   wx.cloud.callFunction({
+      //     name: 'openapi',
+      //     data: cloudData,
+      //     success: res => {
+      //       wx.hideLoading({
+      //         success: () => {
+      //           wx.showToast({
+      //             title: '订阅成功',
+      //             icon: 'success',
+      //             duration: 1000,
+      //             mask: true
+      //           });
+      //         }
+      //       });
+      //       console.log(`[subDailyWeatherCloudFn] => OK =>`,res)
+      //     },
+      //     fail: err => {
+      //       console.log(`[subDailyWeatherCloudFn] => Fail => `,err)
+      //     }
+      //   })
+      // }
+      // const unSubDailyWeatherCloudFn = () => {
+      //   let subData = {
+      //     action: 'deleteSubscribeMessage',
+      //     startTime: startTime,
+      //     templateId: templateId
+      //   }
+      //   that.setData({
+      //     subData : subData
+      //   })
+      //   wx.cloud.callFunction({
+      //     name: 'openapi',
+      //     data: cloudData,
+      //     success: res => {
+      //       wx.showToast({
+      //         mask: true,
+      //         title: '取消订阅成功',
+      //         icon: 'success',
+      //         duration: 1000,
+      //       });
+      //       console.log(`[unSubDailyWeatherCloudFn] => Success => ${res}`)
+      //     },
+      //     fail: err => {
+      //       console.log(`[unSubDailyWeatherCloudFn] => Fail => ${err}`)
+      //     }
+      //   })
+      // }
+      // wx.requestSubscribeMessage({
+      //   tmplIds: [templateId],
+      //   success: res => {
+      //     if (res.errMsg === 'requestSubscribeMessage:ok') {
+      //       if (res[templateId] === 'accept') {
+      //         wx.showLoading({
+      //           title: 'Loading',
+      //         })
+      //         subDailyWeatherCloudFn()
+      //       } else {
+      //         unSubDailyWeatherCloudFn()
+      //       }
+      //     }
+      //   },
+      //   fail: result =>{
+      //     console.log(result)
+      //   }
+      // });
     },
     dialogOpen: function () {
       this.triggerEvent("open", {

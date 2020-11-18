@@ -44,8 +44,8 @@
 				</view>
 			</view>
 			<view class="sc-date-picker-action">
-				<sc-button sc-class="sc-btn" bind:tap="_close">取消</sc-button>
-				<sc-button sc-class="sc-btn" bind:tap="_submit">确定</sc-button>
+				<sc-button sc-class="sc-btn" bindtap="_close">取消</sc-button>
+				<sc-button sc-class="sc-btn" bindtap="_submit">确定</sc-button>
 			</view>
 		</view>
 	</view>
