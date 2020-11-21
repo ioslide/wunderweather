@@ -240,7 +240,7 @@
 			<view class="flex justify-center align-center" style="opacity:0;height: 100%;width:{{windowWidth}}px;" animation="{{logoScreenAni}}">
 				<view>
 					<view class="flex justify-center padding-15 align-center" bindtap="checkLocationAuth">
-						<image class="square-150" mode="aspectFit" lazy-load="true"	src="https://weather.ioslide.com/weather/weatherlogo.png"></image>
+						<image class="square-150" mode="aspectFit" lazy-load="true"	src="../../assets/images/weatherlogo.png"></image>
 					</view>
 					<view class="flex justify-center padding-15 align-center">
 						<text wx:if="{{$.languageValue == 'zh_CN'}}" class="{{$.themeValue == 'light'? 'text-4a5568' : 'text-white'}} text-xl font-weight-300">你好</text>

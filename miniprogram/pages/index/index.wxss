@@ -17,7 +17,10 @@
     opacity: 0;
   }
 }
-
+.cropCallBackFadeOut{
+  opacity: 0;
+  animation: fade-out 1s ease;
+}
 page {
   overflow: visible;
   background: #F5F6F7

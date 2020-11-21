@@ -69,6 +69,7 @@ create(store, {
       width: 250,
       height: 250
     },
+    cropCallBackFadeOut:false,
     enableSatellite:false,
     // radarMapMarkers: [{
     //   iconPath: "https://weather.ioslide.com/pm25_rt_as_20200606_16.png",
@@ -106,7 +107,7 @@ create(store, {
     refreshLocation: false,
     refreshRadar: false,
     canBlurRoot: false,
-    isHourlyRainChart:true,
+    isHourlyRainChart:false,
     isManualGetNewLocation:false,
     rainChartName:'',
     isChangeSetting: false,
@@ -189,6 +190,12 @@ create(store, {
     }
     store.onChange(handler)
     t.loadDataFromNet()
+    t.data.isHourlyRainChart == 'true'? 
+    t.setData({
+      rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
+    }) : t.setData({
+      rainChartName:t.store.data.languageValue == 'zh_TW' ? '天':t.store.data.languageValue == 'zh_CN'? '天':t.store.data.languageValue == 'ja'? '日':'Daily'
+    })
   },
   onHide(){
     log("[onHide]")
@@ -197,9 +204,9 @@ create(store, {
   onShow() {
     const t = this
     // t.onStartAccelerometer()
-    t.setData({
-      rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
-    })
+    // t.setData({
+    //   rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
+    // })
     const location = chooseLocation.getLocation();
     log('[location]',location)
     if (location == null) {
@@ -594,7 +601,7 @@ create(store, {
           const refreshChart = () => {
             const getdata = async () =>{
               let temperatureChartData = await t.getTemperatureChartData().chartData
-              let rainChartData= await t.getHourlyRainChartData()
+              let rainChartData= t.data.isHourlyRainChart == 'true'? await t.getHourlyRainChartData() : await t.getDailyRainChartData()
               let radarChartData= await t.getRadarChartData()
               return {temperatureChartData : temperatureChartData,rainChartData :rainChartData,radarChartData:radarChartData}
             }
@@ -1228,7 +1235,7 @@ create(store, {
     const t = this
     log('[navigateTo]')
     wx.navigateTo({
-      url: '../radar/radar?latitude=' + app.globalData.latitude + "&longitude=" + app.globalData.longitude
+      url: '../radar/radar?latitude=' + t.data.latitude + "&longitude=" + t.data.longitude
     })
   },
   navCopyrightlink(e){
@@ -2050,19 +2057,7 @@ create(store, {
       temperatureChart.render(),
       temperatureChart;
   },
-  getHourlyRainChartData(){
-    var chartData = []
-    var hourly = this.data.forecastData.hourly
-    for (var s = hourly, d = 0; d < 48; d++) {
-      var u = {
-        time: s[d].precipitation.datetime,
-        value: s[d].precipitation.value,
-      };
-      chartData.push(u);
-    }
-    // log('[getHourlyRainChartData rainWeather]',chartData)
-    return chartData  
-  },
+
   getRadarChartData(){
     const t = this
     const data = [{
@@ -2096,7 +2091,7 @@ create(store, {
     return data  
   },
   initRainChart(F2, config) {
-    let chartData = this.getHourlyRainChartData()
+    let chartData = this.getDailyRainChartData()
     // log('[initChartFuc]', chartData)
     rainChart = new F2.Chart(config);
     return rainChart.clear(), 
@@ -2308,6 +2303,19 @@ create(store, {
       rainChart.changeData(rainChartData)
     }
   },
+  getHourlyRainChartData(){
+    var chartData = []
+    var hourly = this.data.forecastData.hourly
+    for (var s = hourly, d = 0; d < 48; d++) {
+      var u = {
+        time: s[d].precipitation.datetime,
+        value: s[d].precipitation.value,
+      };
+      chartData.push(u);
+    }
+    // log('[getHourlyRainChartData rainWeather]',chartData)
+    return chartData  
+  },
   getDailyRainChartData(){
     const t = this
     var chartData = []
@@ -2335,6 +2343,7 @@ create(store, {
     var src = this.data.src ? this.data.src : 'https://weather.ioslide.com/weather/weatherlogo.png'; //裁剪图片不存在时，使用default图片，注意加载时的相对路径
     this.setData({
       visible: true,
+      cropCallBackFadeOut : false,
       src: src,
       borderColor: "#0BFF00",
       cropSizePercent: 0.7,
@@ -2357,6 +2366,7 @@ create(store, {
         const tempFilePaths = res.tempFiles[0].path
         self.setData({
           visible: true,
+          cropCallBackFadeOut: false,
           src: tempFilePaths,
         })
       },
@@ -2372,6 +2382,7 @@ create(store, {
     log('[closeCallback]', event);
     this.setData({
       visible: false,
+      cropCallBackFadeOut: true
     });
   },
   cropCallback(event) {
@@ -2388,9 +2399,14 @@ create(store, {
         app.saveData('hasCusImageFileID', true)
         app.saveData('cusImageFileID', res.fileID)
         t.setData({
-          visible: false,
+          cropCallBackFadeOut:true,
           modalName: null
         })
+        setTimeout(() => {
+          t.setData({
+            visible :false
+          })
+        }, 1100);
       }).catch(error => {
         log(error)
       })

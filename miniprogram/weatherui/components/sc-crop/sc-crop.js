@@ -4,6 +4,14 @@ const SystemInfo = wx.getSystemInfoSync(); //  系统信息
 
 Component({
   properties: {
+    cropCallBackFadeOut: {
+      type: String,
+      value: null,
+      observer: function () {
+        const t = this
+        console.log(t.data.cropCallBackFadeOut)
+      }
+    },
     src: { // 图片地址
       type: String,
       value: null
@@ -77,6 +85,7 @@ Component({
   },
 
   data: {
+    cropCallBackFadeOut: false,
     cropContentStyle: '', // 裁剪图片样式
     lineationWidth: 0, // 旋转刻度盘总宽度
     visibleSrc: '',

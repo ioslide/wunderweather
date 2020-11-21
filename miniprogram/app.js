@@ -14,8 +14,8 @@ App({
   isError: !1,
   qrImageURL:"",
   globalData: {
-    latitude:659,
-    longitude:949,
+    latitude:30.664,
+    longitude:104.016,
     appid: wx.getAccountInfoSync().miniProgram.appId,
     StatusBar: "",
     CustomBar: "",
