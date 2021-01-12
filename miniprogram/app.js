@@ -12,11 +12,9 @@ const config = require('weatherui/config/config.js')
 App({
   isReady: !1,
   isError: !1,
-  qrImageURL:"",
   globalData: {
     latitude:30.664,
     longitude:104.016,
-    appid: wx.getAccountInfoSync().miniProgram.appId,
     StatusBar: "",
     CustomBar: "",
     barHeight: "",
@@ -27,7 +25,8 @@ App({
     windowHeight:"",
     screenWidth:"",
     systemInfo: "",
-    openid: ''
+    openid: '',
+    unionid:''
   },
   onShow() {},
   onPageNotFound() {
@@ -41,21 +40,24 @@ App({
     wx.onMemoryWarning(function () {
       warn('[onMemoryWarningReceive]')
     })
+
     t.initCloud()
-    // log(xhy)
-    // t.initChatRobot()
     t.updateManager()
-    // t.initWxBass()
     t.getSystemInfo()
-    t.loadFontFace()
-    t.getWxContext()
-    t.getQRCode()
+    // t.loadFontFace()
+    warn('[请不要反编译我的小程序，谢谢，祝你发大财]')
+    warn('[请不要反编译我的小程序，谢谢，祝你发大财]')
+    warn('[请不要反编译我的小程序，谢谢，祝你发大财]')
+    warn('[请不要反编译我的小程序，谢谢，祝你发大财]')
+    warn('[请不要反编译我的小程序，谢谢，祝你发大财]')
+    
     //t.dataPrePull()
   },
-  initChatRobot(context,chatnavHeight){
+  initChatRobot(openid,chatnavHeight){
+    log('[initChatRobot openid]',openid)
     chatRobot.init({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
-      openid: context.openid,
+      openid: openid || '',
       navHeight: chatnavHeight, 
       textToSpeech: true,
       guideList: ["成都市的天气", "北京市的天气", "深圳市的天气"],
@@ -76,25 +78,26 @@ App({
   getData: function () {
     return this.globalData.difference;
   },
-  loadFontFace() {
-    wx.loadFontFace({
-      family: 'wencangshufang',
-      source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
-      success: res => {
-        log('[loadFontFace]', res)
-      },
-      complete: res =>{
+  // loadFontFace() {
+  //   let $$ = wx.getStorageSync('$$')
+  //   if($$.startScreen !== 'poetry') return
+  //   wx.loadFontFace({
+  //     family: 'wencangshufang',
+  //     source: 'url("https://weather.ioslide.com/weather/font/wencangshufang/WenCangShuFang-2.ttf")',
+  //     success: res => {
+  //       log('[loadFontFace]', res)
+  //     },
+  //     complete: res =>{
 
-      }
-    })
-  },
+  //     }
+  //   })
+  // },
   dataPrePull() {
     const t = this
     wx.getBackgroundFetchData({
       fetchType: 'periodic',
       success(res) {
         log('[getBackgroundFetchData] => periodic =>', res)
-        t.loadFontFace(res)
         wx.setStorage({
           data: res.fetchedData,
           key: 'dataPrePull',
@@ -111,22 +114,7 @@ App({
         log("[getBackgroundFetchData] => completed");
       }
     })
-    wx.setBackgroundFetchToken({
-      token: '19980313',
-      success: res => {
-        log('[setBackgroundFetchToken] => success =>', res)
-      },
-      fail: err => {
-        log('[setBackgroundFetchToken] => fail', err)
-      }
-    })
   },
-  // initWxBass() {
-  //   wx.BaaS = requirePlugin('zhixiaoyun')
-  //   wx.BaaS.wxExtend(wx.login, wx.getUserInfo, wx.requestPayment)
-  //   wx.BaaS.init(config.default.wxBassId)
-  //   wx.BaaS.auth.loginWithWechat() // 静默登录
-  // },
   getSystemInfo() {
     const t = this
     wx.getSystemInfo({
@@ -143,16 +131,17 @@ App({
           width: 87
         })
         var o = RegExp("^.*iPhone X.*$");
-        // log('[getSystemInfo]',e)
+        log('[getSystemInfo]',e)
         e.model.match(o) ? t.globalData.iphoneX = !0 : t.globalData.iphoneX = !1,
           t.globalData.StatusBar = e.statusBarHeight;
-        t.globalData.barHeight = e.statusBarHeight,
+          t.globalData.barHeight = e.statusBarHeight,
           t.globalData.navigationHeight = 2 * menuButtonInfo.top + menuButtonInfo.height - e.statusBarHeight + 3,
           t.globalData.windowWidth = e.windowWidth,
           t.globalData.windowHeight = e.windowHeight,
           t.globalData.screenWidth = e.screenWidth,
-          t.globalData.systemInfo = e,
+          // t.globalData.systemInfo = e,
           t.globalData.pixelRatio = e.pixelRatio
+          t.globalData.theme = e.theme
         if (menuButtonInfo) {
           t.globalData.Custom = menuButtonInfo;
           t.globalData.CustomBar = menuButtonInfo.bottom + menuButtonInfo.top - e.statusBarHeight;
@@ -161,32 +150,25 @@ App({
         }
         t.checkVersion(e.SDKVersion)
         log('[globalData]', t.globalData)
-
-        const awaitinitChatRobot = async () => {
-          await t.getWxContext()
-          return t.getWxContext()
-        }
-        awaitinitChatRobot().then( context =>{
-          log('[context]',context,'[chatnavHeight]',(tt ? 44 : 48) + e.statusBarHeight)
-          t.initChatRobot(context,(tt ? 44 : 48) + e.statusBarHeight)
-        })
-        t
+        t.getWxContext(e.statusBarHeight,tt)
       },
       fail: function (e) {
-        t.isError = !0, wx.showModal({
-          title: "错误",
-          content: "获取系统信息出错",
-          showCancel: !1
-        });
+        t.isError = !0
       }
     });
   },
-  getWxContext() {
+  getWxContext(statusBarHeight,tt) {
     const t = this
     let hasWxContext = wx.getStorageSync('hasWxContext') || false
     if(hasWxContext == true){
       let wxContext = wx.getStorageSync('wxContext')
       t.globalData.openid = wxContext.openid
+      t.globalData.unionid  = wxContext.unionid 
+      if(wxContext.unionid == '' || wxContext.unionid == 'undefined'){
+        wx.setStorageSync('haveUnionid', false)
+      }
+      t.initChatRobot(wxContext.openid,(tt ? 44 : 48) + statusBarHeight)
+      log('[wxContext]',wxContext)
       return wxContext
     }else{
       wx.cloud.callFunction({
@@ -195,8 +177,14 @@ App({
           action: 'getContext',
         },
       }).then(function (res) {
-        console.log(res.result)
+        log('[wxContext]',res.result)
         t.globalData.openid = res.result.openid
+        t.globalData.unionid  = res.result.unionid 
+        wx.setBackgroundFetchToken({
+          token: res.result.openid
+        })
+        t.dataPrePull()
+        t.initChatRobot(res.result.openid,(tt ? 44 : 48) + statusBarHeight)
         wx.setStorage({
           data: res.result,
           key: 'wxContext',
@@ -223,29 +211,33 @@ App({
     // log('[initCloud]')
   },
   updateManager() {
-    const updateManager = wx.getUpdateManager()
-    updateManager.onCheckForUpdate(function (res) {
-      log('[canUpdateManager] =>', res.hasUpdate)
-    })
-    updateManager.onUpdateReady(function () {
-      wx.showModal({
-        title: '更新提示',
-        content: '请更新以保证正常使用',
-        success: res => {
-          if (res.confirm) {
-            wx.clearStorage({
-              complete: (res) => {
-                log('call applyUpdate && restart', res)
-                updateManager.applyUpdate()
-              },
+    if (wx.canIUse('getUpdateManager')) {
+      const updateManager = wx.getUpdateManager()
+      updateManager.onCheckForUpdate(function (res) {
+        console.log('onCheckForUpdate', res)
+        if (res.hasUpdate) {
+          console.log('res.hasUpdate')
+          updateManager.onUpdateReady(function () {
+            wx.showModal({
+              title: '更新提示',
+              content: '新版本已准备好，立即重启应用？',
+              success: function (res) {
+                console.log('success', res)
+                if (res.confirm) {
+                  updateManager.applyUpdate()
+                }
+              }
             })
-          }
+          })
+          updateManager.onUpdateFailed(function () {
+            wx.showModal({
+              title: '新版本更新失败',
+              content: '请删除当前小程序，并重新搜索打开'
+            })
+          })
         }
       })
-    })
-    updateManager.onUpdateFailed(function () {
-      log('New vision download fail')
-    })
+    }
   },
   checkVersion(version) {
     const compareVersion = (v1, v2) => {
@@ -380,49 +372,6 @@ App({
     } else {
       return false;
     }
-  },
-  getQRCode(){
-      const t = this
-    const formatImg = (base64Img) =>{
-      let fsm = wx.getFileSystemManager()
-      let FILE_BASE_NAME = 'weatherLogo'
-      let buffer = wx.base64ToArrayBuffer(base64Img);
-      const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
-      fsm.writeFile({
-        filePath,
-        data: buffer,
-        encoding: 'binary',
-        success: res => {
-          log(`[writeFile] => qrImageURL =>`, filePath)
-          t.globalData.qrImageURL = filePath
-        },
-        fail: err => {
-          log(`[writeFile] => fail => ${err}`)
-          return (new Error('ERROR_BASE64SRC_WRITE'));
-        },
-      });
-    }
-      const base64ImgStorage = wx.getStorageSync('qrCodeBase64')
-      if (base64ImgStorage) {
-        t.globalData.qrImageURL = formatImg(base64ImgStorage)
-        console.log(`[get wxacode] from storage ID`)
-      } else {
-        wx.cloud.callFunction({
-          name: 'openapi',
-          data: {
-            action: 'getWXACode',
-          },
-          success: res => {
-            log(`[getWXACode] =>`, res)
-            let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
-            formatImg(base64Img)
-            t.saveData('qrCodeBase64', base64Img)
-          },
-          fail: err => {
-            log(`[getWXACode] => ${err}`)
-          }
-        })
-      }
   },
     // 权限询问
     getRecordAuth: function() {

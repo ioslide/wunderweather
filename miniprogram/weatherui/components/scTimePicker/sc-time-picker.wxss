@@ -5,7 +5,7 @@
   min-width: 128rpx;
   height: 72rpx;
   padding: 0 32rpx;
-  font-size: 28rpx;
+  font-size: 14px;
   border-radius: 4rpx;
   background-color: #fff
 }

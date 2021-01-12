@@ -7,13 +7,13 @@ Component({
   },
   methods: {
     startLoading(){
-      console.log('[startLoading]')
+      // console.log('[startLoading]')
       this.setData({
         canLoading : true
       })
     },
     stopLoading(){
-      console.log('[stopLoading]')
+      // console.log('[stopLoading]')
       setTimeout(() => {
         this.setData({
           canLoading : false

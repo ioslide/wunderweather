@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "sc-cell": "/weatherui/components/scCell/sc-cell",
+    "sc-switch": "/weatherui/components/scSwitch/sc-switch",
+    "sc-date-picker":"/weatherui/components/scDatePicker/sc-date-picker",
+    "sc-time-picker":"/weatherui/components/scTimePicker/sc-time-picker"
+  }
+}

@@ -1,0 +1,13 @@
+page{
+  overflow: visible;
+  background:#F5F6F7
+}
+.authButton{
+  position: fixed;
+  height: 100%;
+  width:100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  z-index: 10000;
+}

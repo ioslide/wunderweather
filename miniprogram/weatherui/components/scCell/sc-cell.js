@@ -76,7 +76,7 @@ create.Component(store,{
   },
   pageLifetimes: {
     show: function () { 
-      log(this.data)
+      // log(this.data)
     },
     hide: function () { },
     resize: function () { },

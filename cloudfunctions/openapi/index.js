@@ -17,14 +17,26 @@ exports.main = async (event, context) => {
     case 'getRunData': {
       return getRunData(event)
     }
-    case 'saveSubscribeMessage': {
-      return saveSubscribeMessage(event)
+    case 'subscribeWarning': {
+      return subscribeWarning(event)
+    }
+    case 'subscribeOnetimeDailyWeather': {
+      return subscribeOnetimeDailyWeather(event)
+    }
+    case 'subscribeLongtermDailyWeather': {
+      return subscribeLongtermDailyWeather(event)
     }
     case 'getContext': {
       return getContext(event)
     }
-    case 'deleteSubscribeMessage': {
-      return deleteSubscribeMessage(event)
+    case 'unSubscribeOneTimeDailyWeather': {
+      return unSubscribeOneTimeDailyWeather(event)
+    }
+    case 'unSubscribeLongTermDailyWeather': {
+      return unSubscribeLongTermDailyWeather(event)
+    }
+    case 'unSubscribeWarning': {
+      return unSubscribeWarning(event)
     }
     default: {
       return
@@ -68,35 +80,77 @@ async function getRunData(event) {
   return event
 }
 
-async function deleteSubscribeMessage(event) {
-  const { OPENID } = cloud.getWXContext();
+async function unSubscribeOneTimeDailyWeather(event) {
+  const db = cloud.database();
   const result = await db
-    .collection('sub_daily_weather_user')
+    .collection('mini-subscribe-user-daily')
     .where({
-      touser: OPENID,
-      startTime: event.startTime,
+      openid: event.openid,
       templateId: event.templateId
     })
     .remove();
   return result;
 }
+async function unSubscribeLongTermDailyWeather(event) {
+  const db = cloud.database();
+  const result = await db
+    .collection('oa-subscribe-user-daily')
+    .where({
+      openid: event.openid,
+      templateId: event.templateId
+    })
+    .remove();
+  return result;
+}
+async function subscribeWarning(event) {
+  const db = cloud.database();
+  const {OPENID} = cloud.getWXContext();
 
+  // 在云开发数据库中存储用户订阅的信息
+  const result = await db.collection('warning-subscribe-user').add({
+    data: {
+      ...event,
+      touser: OPENID
+    },
+  });
+  return result;
+}
+async function unSubscribeWarning(event) {
+  const db = cloud.database();
+  const result = await db
+    .collection('oa-subscribe-user-daily')
+    .where({
+      openid: event.openid,
+      templateId: event.templateId
+    })
+    .remove();
+  return result;
+}
 async function getContext(event) {
   const wxContext = cloud.getWXContext()
   return {
     openid: wxContext.OPENID,
     appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
-    env: wxContext.ENV
+    unionid: wxContext.UNIONID
   }
 }
 
-async function saveSubscribeMessage(event) {
+async function subscribeOnetimeDailyWeather(event) {
   const db = cloud.database();
   const {OPENID} = cloud.getWXContext();
 
-  // 在云开发数据库中存储用户订阅的信息
-  const result = await db.collection('sub_daily_weather_user').add({
+  const result = await db.collection('mini-subscribe-user-daily').add({
+    data: {
+      ...event,
+      touser: OPENID
+    },
+  });
+  return result;
+}
+async function subscribeLongtermDailyWeather(event) {
+  const db = cloud.database();
+  const {OPENID} = cloud.getWXContext();
+  const result = await db.collection('oa-subscribe-user-daily').add({
     data: {
       ...event,
       touser: OPENID

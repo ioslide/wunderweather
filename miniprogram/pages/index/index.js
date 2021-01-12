@@ -19,6 +19,8 @@ const transWeatherName = require('../../weatherui/assets/lib/transWeatherName/tr
 const qqMapWX = new(require("../../weatherui/assets/lib/qqMapWX/qqMapWX.js"))({
   key: config.locationKey
 })
+const dayjs = require('../../weatherui/assets/lib/day/day.js')
+import _ from '../../utils/lodash.min.js';
 
 // import base64src from '../../utils/base64src.js'
 // import vrequest from '../../utils/v-request.js'
@@ -26,7 +28,7 @@ const qqMapWX = new(require("../../weatherui/assets/lib/qqMapWX/qqMapWX.js"))({
 // import lazyFunction from "../../utils/lazyFunction"
 import create from '../../utils/create'
 import store from '../../store/index'
-import _ from '../../utils/lodash.min.js';
+
 
 create(store, {
   data: {
@@ -34,7 +36,7 @@ create(store, {
       lazyLoad: true
     },
     subData:{
-      action: 'saveSubscribeMessage',
+      action: 'saveOnetimeTemplateData',
       page: 'pages/index/index',
       unit: '',
       language: '',
@@ -59,9 +61,10 @@ create(store, {
       width: globalData.windowWidth,
       height: 200
     },
+    // loadHeadImage:false,
     weatherKeyWord:"云",
-    radarMapLatitude:0,
-    radarMapLongitude:0,
+    // radarMapLatitude:0,
+    // radarMapLongitude:0,
     radarChartConfig : {
       appendPadding:0,
       padding:30,
@@ -93,13 +96,14 @@ create(store, {
     latitude: "",
     longitude: "",
     datePicker: {},
+    timePicker: {},
     radarTimeLineIndexNum:[],
     radarTimeLineImage:"https://weather.ioslide.com/weather/timeLinePlay.svg",
-    StatusBar: globalData.StatusBar,
-    CustomBar: globalData.CustomBar,
-    Custom: globalData.Custom,
+    // StatusBar: globalData.StatusBar,
+    // CustomBar: globalData.CustomBar,
+    // Custom: globalData.Custom,
     windowWidth: globalData.windowWidth,
-    windowHeight: globalData.windowHeight,
+    // windowHeight: globalData.windowHeight,
     lastRefreshTime: '',
     // initChart: !1,
     // refreshChart: !1,
@@ -115,8 +119,9 @@ create(store, {
     imageBase64: '',
     qrImageURL: '',
     radarTimeLinePosition:1,
-    sunrise: "06:00",
-    sunset: "19:34",
+    // planetRise: "06:00",
+    // planetSet: "19:34",
+    planetName:'sun',
     painting: {},
     shareImage: '',
     touchS: [0, 0],
@@ -124,13 +129,13 @@ create(store, {
     curDetailTime: '',
     moonPhaseLists: [],
     historyCityList: [],
-    authScreen: false,
-    NASAImage: "",
-    NASAImageLists : null,
-    manualLocationData: wx.getStorageSync('manualLocationData') || [],
+    // authScreen: false,
+    // NASAImage: "",
+    // NASAImageLists : null,
+    // manualLocationData: wx.getStorageSync('manualLocationData') || [],
     src: null,
     visible: false,
-    size: {
+    cropSize: {
       width: 400,
       height: 300
     },
@@ -178,18 +183,50 @@ create(store, {
       'getWeatherDataAgain',
       'icon',
       'iconValue',
-      'warningValue'
+      'warningValue',
+      'subscribeType',
+      'longitude',
+      'latitude'
     ]
   },
   onLoad(a) {
-    // log('[onLoad]')
     const t = this
+
+    // t.selectComponent('#startScreen').screenFadeIn()
     t.data.snackBar = scui.SnackBar("#snackbar");
     const handler = function (evt) {
       log('[' + evt + ']' + '=>', evt)
     }
     store.onChange(handler)
-    t.loadDataFromNet()
+
+    wx.getNetworkType({
+      success: res => {
+        log(`[networkType] =>`, res.networkType)
+        var networkType = res.networkType
+        t.setData({
+          networkType: networkType
+        })
+        if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
+          wx.showToast({
+            title: '请检查你的网络连接',
+            duration: 1500,
+            icon: 'none',
+            mask: true,
+          })
+          return 
+        }
+      }
+    })
+
+    const selectLocationMethodType = () => {
+      t.store.data.getLocationMethod == 'manual' ? t.getLocationByManual() :
+      t.store.data.getLocationMethod == 'auto' ? t.getLocationByAuto() :
+      t.store.data.getLocationMethod == 'historyCity' ? t.getLocationByHistory() :
+      warn('[getLocationMethod]')
+    }
+
+    log('[startScreen  => selectLocationMethodType]', t.store.data.startScreen, '=>' ,t.store.data.getLocationMethod)
+    t.store.data.startScreen == 'auth' ?  '': selectLocationMethodType()
     t.data.isHourlyRainChart == 'true'? 
     t.setData({
       rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
@@ -201,6 +238,10 @@ create(store, {
     log("[onHide]")
     // wx.stopAccelerometer();
   },
+  onUnload () {
+    // 页面卸载时设置插件选点数据为null，防止再次进入页面，geLocation返回的是上次选点结果
+        chooseLocation.setLocation(null);
+    },
   onShow() {
     const t = this
     // t.onStartAccelerometer()
@@ -208,25 +249,24 @@ create(store, {
     //   rainChartName:t.store.data.languageValue == 'zh_TW' ? '小時':t.store.data.languageValue == 'zh_CN'? '小时':t.store.data.languageValue == 'ja'? '時間':'Hourly'
     // })
     const location = chooseLocation.getLocation();
-    log('[location]',location)
+    log('[isBackFromChooseNewLocation]',location)
     if (location == null) {
-      t.selectComponent('#startScreen').setData({
-        'isManualGetNewLocation' : false
-      })
+      if(t.store.data.startScreen == 'auth'){
+        t.selectComponent('#startScreen').setData({
+          'isManualGetNewLocation' : false
+        })
+      }
     }
     if (location !== null) {
       log(`[chooseLocation.getLocation()] =>`, location)
       t.setData({
         isManualGetNewLocation:true,
-        'forecastData.city': location.city || location.name,
-        'forecastData.address': location.name,
         'longitude': location.longitude,
-        'latitude': location.latitude,
-        'radarMapLatitude' : location.latitude,
-        'radarMapLongitude' :location.longitude
+        'latitude': location.latitude
       })
-      globalData.latitude = location.latitude
-      globalData.longitude = location.longitude
+      t.setCityNameORStreetName(location.latitude,location.longitude)
+      t.store.data.latitude = location.latitude
+      t.store.data.longitude = location.longitude
       //auth状态手动获取经纬度后先不请求数据
       t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen')  :
       t.store.data.startScreen == 'poetry' ? (t.getWeatherData(true), t.setData({
@@ -238,24 +278,68 @@ create(store, {
       log('[manualLocationData]', location)
       t.store.data.getLocationMethod = 'manual'
       //make sure location value != null
-      app.saveData('manualLocationData', location)
+      // app.saveData('manualLocationData', location)
       app.changeStorage('getLocationMethod', 'manual')
     }
-    // if(t.store.data.getWeatherDataAgain == true){
-    //   t.getWeatherData(true)
-    //   t.store.data.getWeatherDataAgain == false
-    // }
   },
   onReady() {
+    // log('[onReady]')
     const t = this
     const onReadyEvnet = async () => {
+      // log('[onReadyEvnet]')
       await t.setRadarTimeLineIndex()
-      await t.setRadarMapSetting()
+      // await t.setRadarMapSetting()
       await t.getMoonPhaseList()
+      await t.getQRCode()
     }
     onReadyEvnet()
     t.data.datePicker = scui.DatePicker("#datepicker")
-    t.radarMapCtx = wx.createMapContext('radarMap')
+    t.data.timePicker = scui.TimePicker("#timepicker")
+    // t.radarMapCtx = wx.createMapContext('radarMap')
+  },
+  getQRCode(){
+    // log('[getQRCode]')
+    const t = this
+    const formatImg = (base64Img) =>{
+      let fsm = wx.getFileSystemManager()
+      let FILE_BASE_NAME = 'weatherLogo'
+      let buffer = wx.base64ToArrayBuffer(base64Img);
+      const filePath = `${wx.env.USER_DATA_PATH}/${FILE_BASE_NAME}.jpg`;
+      fsm.writeFile({
+        filePath,
+        data: buffer,
+        encoding: 'binary',
+        success: res => {
+          log(`[writeFile] => qrImageURL =>`, filePath)
+          t.data.qrImageURL = filePath
+        },
+        fail: err => {
+          log(`[writeFile] => fail => ${err}`)
+          return (new Error('ERROR_BASE64SRC_WRITE'));
+        },
+      });
+    }
+    const base64ImgStorage = wx.getStorageSync('qrCodeBase64')
+    if (base64ImgStorage) {
+      t.data.qrImageURL = formatImg(base64ImgStorage)
+      console.log(`[get wxacode] from storage ID`,t.data.qrImageURL)
+    } else {
+      wx.cloud.callFunction({
+        name: 'openapi',
+        data: {
+          action: 'getWXACode',
+        },
+        success: res => {
+          log(`[get wxacode] from cloud`, res)
+          let base64Img = res.result.wxacodebase64.replace(/[\r\n]/g, "")
+          formatImg(base64Img)
+          app.saveData('qrCodeBase64', base64Img)
+        },
+        fail: err => {
+          log(`[getWXACode] => ${err}`)
+        }
+      })
+    }
   },
   setRadarMapSetting(){
     const t = this
@@ -267,11 +351,12 @@ create(store, {
       showScale: false,
       enableZoom: false,
       enableScroll: false,
+      layerStyle:layerStyle,
       enableRotate: false,
       showCompass: false,
       enable3D: false,
       enableOverlooking: false,
-      enableSatellite: false, //卫星图
+      enableSatellite: t.data.enableSatellite, //卫星图
       enableTraffic: false,
     }
     // log('[setRadarMapSetting]',setting)
@@ -280,8 +365,6 @@ create(store, {
     })
   },
   changeRadarMapType(){
-    // const t = this
-    // if(t.data.radarMapImageType == 'rain'){
       const t = this
       let layerStyle = t.store.data.themeValue == 'light' ? 3 : 2
       let setting = {
@@ -289,7 +372,6 @@ create(store, {
         rotate: 0,
         showLocation: false,
         showScale: false,
-        subKey: 'BGZBZ-ZL63G-JUDQM-ILFCW-THIO2-K2B4D',
         layerStyle: layerStyle,
         enableZoom: true,
         enableScroll: false,
@@ -305,105 +387,8 @@ create(store, {
         enableSatellite: !t.data.enableSatellite, 
         radarMapSetting : setting
       })
-      // t.setData({
-      //   radarMapScale : 7,
-      //   radarMapImageType : 'rain',
-      //   radarMapLatitude : t.data.latitude,
-      //   radarMapLongitude :t.data.longitude
-      // })
-    // }else{
-      // t.setData({
-      //   radarMapScale : 4,
-      //   radarMapImageType : 'aqi',
-      //   radarMapLatitude : (t.data.forecastData.aqiRadar.images[0][2][0] + t.data.forecastData.aqiRadar.images[0][2][2])/2,
-      //   radarMapLongitude : (t.data.forecastData.aqiRadar.images[0][2][1] + t.data.forecastData.aqiRadar.images[0][2][3])/2
-      // })
-    // }
   },
-  loadDataFromStorage() {
-    log('[loadDataFromStorage]')
-    const t = this
-    const getHistoryCityData = () => {
-        wx.getStorage({
-            key: "forecastData",
-            success: res => {
-              t.formatWeatherData(res.data);
-            }
-          }),
-          wx.getStorage({
-            key: "historyCityList",
-            success: res => {
-              log('[historyCityList]', res.data)
-              t.setData({
-                'forecastData.city': res.data[1].city || res.data[1].address,
-                'forecastData.address': res.data[1].address,
-                'latitude': res.data[1].latitude,
-                'longitude': res.data[1].longitude,
-                'radarMapLatitude' : res.data[1].latitude,
-                'radarMapLongitude' :res.data[1].longitude,
-                'forecastData.nowTemp': res.data[1].nowTemp
-              });
-              globalData.latitude = res.data[1].latitude
-              globalData.longitude = res.data[1].longitude
-            }
-          }),
-          wx.getStorage({
-            key: "lastRefreshTime",
-            success: res => {
-              t.setData({
-                'lastRefreshTime': res.data
-              });
-            }
-          })
-      }
-      (async () => {
-        t.setData({
-          'canBlurRoot': true
-        })
-        await t.selectComponent('#startScreen').screenFadeIn()
-        await getHistoryCityData()
-        await t.selectComponent('#startScreen').screenFadeOut()
-        await t.setData({
-          'canBlurRoot': false
-        })
-        await t.scrollToTop()
-        await t.checkNetWorkType()
-      })()
-  },
-  loadDataFromNet() {
-    const t = this
-    log('[loadDataFromNet]', t.store.data.startScreen)
-    t.store.data.startScreen == 'auth' ? t.selectComponent('#startScreen').screenFadeIn() : (t.selectComponent('#startScreen').screenFadeIn(),t.chooseGetLocationType())
-  },
-  checkNetWorkType() {
-    const t = this
-    wx.getNetworkType({
-      success: res => {
-        log(`[networkType] =>`, res.networkType)
-        var networkType = res.networkType
-        t.setData({
-          networkType: networkType
-        })
-        if (networkType == 'none' || networkType == '2g' || networkType == undefined) {
-          wx.showToast({
-            title: '请检查你的网络连接',
-            duration: 1500,
-            icon: 'none',
-            mask: true,
-          })
-          t.loadDataFromStorage()
-        }
-      }
-    })
-  },
-  chooseGetLocationType() {
-    const t = this
-    log('[chooseGetLocationType] =>', t.store.data.getLocationMethod)
-    t.store.data.getLocationMethod == 'manual' ? t.getLocationByManual() :
-      t.store.data.getLocationMethod == 'auto' ? t.getLocationByAuto() :
-      t.store.data.getLocationMethod == 'historyCity' ? t.getLocationByHistory() :
-      warn('[getLocationMethod]')
-  },
+
   getLocationByManual() {
     const t = this
     let manualData = wx.getStorageSync('historyCityList')[0]
@@ -415,13 +400,13 @@ create(store, {
       await t.setData({
         'latitude': manualData.latitude,
         'longitude': manualData.longitude,
-        'radarMapLatitude' : manualData.latitude,
-        'radarMapLongitude' :manualData.longitude,
         'forecastData.city': manualData.city,
         'forecastData.address': manualData.address
       }),
       await t.getWeatherData(false)
       await changeStorage()
+      t.store.data.latitude = manualData.latitude
+      t.store.data.longitude = manualData.longitude
     })()
   },
   getLocationByHistory() {
@@ -434,13 +419,13 @@ create(store, {
       await t.setData({
         'latitude': historyCityData.latitude,
         'longitude': historyCityData.longitude,
-        'radarMapLatitude' : historyCityData.latitude,
-        'radarMapLongitude' :historyCityData.longitude,
         'forecastData.city': historyCityData.city,
         'forecastData.address': historyCityData.address
       }),
       await t.getWeatherData(false)
       await changeStorage()
+      t.store.data.latitude = historyCityData.latitude
+      t.store.data.longitude = historyCityData.longitude
     })()
   },
   getLocationByAuto() {
@@ -448,37 +433,17 @@ create(store, {
     wx.getLocation({
       success: res => {
         (async (res) =>{
-        t.setData({
-          'latitude': res.latitude,
-          'longitude': res.longitude,
-          'radarMapLatitude' : res.latitude,
-          'radarMapLongitude' :res.longitude
-        })
-          log('[getLocationByAuto]',res)
-          qqMapWX.reverseGeocoder({
-            location: {
-              latitude: res.latitude,
-              longitude: res.longitude
-            },
-            success: res => {
-              log(`[reverseGeocoder]`, res)
-              let e = res.result.address_component;
-              t.setData({
-                'forecastData.city': e.district,
-                'forecastData.address': e.street
-              })
-            },
-            fail: err => {
-              t.setData({
-                'forecastData.city': '成都市',
-                'forecastData.address': '春熙路'
-              })
-              log(`[reverseGeocoder] = > ${err}`)
-            }
+          t.setData({
+            'latitude': res.latitude,
+            'longitude': res.longitude,
+            // 'radarMapLatitude' : res.latitude,
+            // 'radarMapLongitude' :res.longitude
           })
+          t.store.data.latitude = res.latitude
+          t.store.data.longitude = res.longitude
+          await t.setCityNameORStreetName(res.latitude,res.longitude)
           await t.store.data.startScreen == 'auth' ? (t.selectComponent('#startScreen').authScreenNext('canNavToFinalScreen'),wx.hideToast()) : t.getWeatherData(false) 
         })(res)
-        log(`[getLocationByAuto] =>`, res)
       },
       fail: err => {
         wx.showModal({
@@ -495,33 +460,17 @@ create(store, {
                     wx.getLocation({
                       success: res => {
                         (async (res) =>{
-                          log('[getLocationByAuto]',res)
                           t.setData({
                             'latitude': res.latitude,
                             'longitude': res.longitude,
-                            'radarMapLatitude' : res.latitude,
-                            'radarMapLongitude' :res.longitude
+                            // 'radarMapLatitude' : res.latitude,
+                            // 'radarMapLongitude' :res.longitude
                           })
-                          qqMapWX.reverseGeocoder({
-                            location: {
-                              latitude: res.latitude,
-                              longitude: res.longitude
-                            },
-                            success: res => {
-                              log(`[reverseGeocoder]`, res)
-                              let e = res.result.address_component;
-                              t.setData({
-                                'forecastData.city': e.district,
-                                'forecastData.address': e.street
-                              })
-                            },
-                            fail: err => {
-                              log(`[reverseGeocoder] = > ${err}`)
-                            }
-                          })
+                          t.store.data.latitude = res.latitude
+                          t.store.data.longitude = res.longitude
+                          await setCityNameORStreetName(res.latitude,res.longitude)
                           await t.store.data.startScreen !== 'auth' ?(t.getWeatherData(false)) : t.authScreenNext('canNavToFinalScreen')
                         })(res)
-                        log(`[getLocationByAuto] =>`, res)
                       },
                       fail: err => {
                         log(`[getLocation] => fail =>`,err)
@@ -558,14 +507,12 @@ create(store, {
     t.setData({
       'latitude': curCityData.latitude,
       'longitude': curCityData.longitude,
-      'radarMapLatitude' : curCityData.latitude,
-      'radarMapLongitude' :curCityData.longitude,
       'forecastData.city': curCityData.city,
       'forecastData.address': curCityData.address,
       'modalName': null
-    }),
-    globalData.latitude = curCityData.latitude,
-    globalData.longitude = curCityData.longitude
+    })
+    t.store.data.latitude = curCityData.latitude
+    t.store.data.longitude = curCityData.longitude
     const changeStorage = () => {
         app.changeStorage('getLocationMethod', 'historyCity')
         t.store.data.getLocationMethod = 'historyCity'
@@ -575,14 +522,46 @@ create(store, {
         await changeStorage()
       })()
   },
+  setCityNameORStreetName(latitude,longitude){
+    const t = this
+    qqMapWX.reverseGeocoder({
+      location: {
+        latitude: latitude,
+        longitude: longitude
+      },
+      success: res => {
+        log(`[reverseGeocoder]`, res)
+        let e = res.result;
+        t.setData({
+          'forecastData.city': e.address_component.city,
+          'forecastData.address': e.formatted_addresses.recommend
+        })
+      },
+      fail: err => {
+        log(`[reverseGeocoder] = > ${err}`)
+      }
+    })
+  },
   _getWeatherData(e){
       log('[_getWeatherData]',e.detail.canRefreshChart)
       const t = this
-      t.getWeatherData(e.detail.canRefreshChart)
+      const setGeo = (e) =>{
+        t.store.data.latitude = e.latitude
+        t.store.data.longitude = e.longitude
+      }
+      (async () => {
+        await setGeo(e.detail)
+        await t.setCityNameORStreetName(e.detail.latitude,e.detail.longitude)
+        await t.setData({
+          'canRefreshChart' : e.detail.canRefreshChart
+        })
+        await t.getWeatherData(e.detail.canRefreshChart)
+      })()
   },
   getWeatherData(canRefreshChart) {
     const t = this
-    let apiHost = config.weatherApiHost + "/" + config.weatherApiVersion + "/" + config.weatherApiToken + "/" + t.data.longitude + "," + t.data.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
+    log('[getWeatherData]',t.store.data.longitude , t.store.data.latitude)
+    let apiHost = config.weatherApiHost + "/" + config.weatherApiVersion + "/" + config.weatherApiToken + "/" + t.store.data.longitude + "," + t.store.data.latitude + "/weather.jsonp?lang=" + t.store.data.languageValue + "&dailysteps=30&hourlysteps=120&alert=true&unit=" + t.store.data.unitValue
     log('[getWeatherData] => apiHost', apiHost)
     wx.request({
       url: apiHost,
@@ -590,7 +569,7 @@ create(store, {
         let weatherData = a.data.result;
         const refreshOrInitChart = (canRefreshChart) => {
           const initChart = () => {
-            log('[initChart]')
+            // log('[initChart]')
             const temperatureChartComponent = t.selectComponent('#temperatureChart');
             temperatureChartComponent.lazyInitTemperatureChart(t.initTemperatureChart);
             const rainChartComponent = t.selectComponent('#rainChart');
@@ -614,13 +593,14 @@ create(store, {
             log('[refreshChartData]')
           }
           log('[canRefreshChart] => ', canRefreshChart)
-          canRefreshChart == true ? refreshChart() : initChart()
+          canRefreshChart == true ? (refreshChart(),t.getWeatherImage()) : initChart()
         }
         (async (weatherData, canRefreshChart) => {
           try{
             await t.loadingProgress(true)
             await t.setData({
-              'canBlurRoot': true
+              'canBlurRoot': true,
+              'refreshSunset':!t.data.refreshSunset
             })
             await t.formatWeatherData(weatherData)
             await t.selectComponent('#startScreen').screenFadeOut()
@@ -630,8 +610,8 @@ create(store, {
             await t.scrollTo('#top')
             await refreshOrInitChart(canRefreshChart)
             await t.loadingProgress(false)
-            await t.checkNetWorkType()
             await t.openSnackBar()
+            // await t.setRadarMapSetting()
             // await t.getWeatherImage()
             // await (t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true') ? t.openSnackBar() : ''
           }catch{
@@ -645,7 +625,6 @@ create(store, {
   formatWeatherData(a) {
     const that = this;
     const realtime = (realtime) => {
-      log(`[formatWeatherData] => [realtime]`, realtime)
       let realtimeTemperature = realtime.temperature
       let realtimeSkycon = realtime.skycon
       let realtimeWind = {
@@ -689,9 +668,9 @@ create(store, {
       }
       var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
       app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
-        log('[500px]',result.data.data)
+        log('[saveHistoryCityLists]',result.data.data)
         let randomBgIndex = _.random(0,result.data.data.length-1)
-        let backgroundBg = result.data.data[randomBgIndex].url.p4
+        let backgroundBg = result.data.data[randomBgIndex].url.p2
         let data = {
           address: that.data.forecastData.address,
           city: that.data.forecastData.city,
@@ -700,14 +679,12 @@ create(store, {
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
           skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
-          latitude: that.data.latitude,
-          longitude: that.data.longitude
+          latitude: that.store.data.latitude,
+          longitude: that.store.data.longitude
         }
         let historyCityList = reduceHistoryCityData(data)
         that.setData({
-          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon],
-          'canloadHeadImage':true,
-          'historyCityList': historyCityList
+          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
         })
         app.saveData("historyCityList", historyCityList)
       }).catch((err) => {
@@ -720,21 +697,18 @@ create(store, {
           nowTemp: ~~(realtimeTemperature),
           skycon: realtime.skycon,
           skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
-          latitude: that.data.latitude,
-          longitude: that.data.longitude
+          latitude: that.store.data.latitude,
+          longitude: that.store.data.longitude
         }
         let historyCityList = reduceHistoryCityData(data)
         that.setData({
-          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon],
-          'canloadHeadImage':true,
-          'historyCityList': historyCityList
+          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
         })
         app.saveData("historyCityList", historyCityList)
       })
       return realtimeData
     }
     // const minutely = () => {
-    //   log('[formatWeatherData] => [minutely]', a.minutely)
     //   that.setData({
     //     'forecastData.minutely': {
     //       precipitation: a.minutely.precipitation,
@@ -744,7 +718,6 @@ create(store, {
     //   })
     // }
     const hourly = (hourlyData) => {
-      log('[formatWeatherData] => [hourly]', hourlyData)
       for (var t = hourlyData, hourlyReduce = [], r = new Date().getHours(), n = 0; n < 48; n++) {
         let c = n + r;
         hourlyReduce.push({
@@ -797,7 +770,6 @@ create(store, {
       return serviceData
     }
     const daily = (dailyData) => {
-      log('[formatWeatherData] => [daily]', dailyData)
       for (var d = dailyData, dailyReduce = [], f = 0; f < 16; f++) {
         let l = new Date().getDay() + f;
         l %= 7;
@@ -843,8 +815,8 @@ create(store, {
           aqi: d.air_quality.aqi[f].avg.chn,
           astro: {
             date: d.astro[f].date,
-            sunrise: d.astro[f].sunrise.time,
-            sunset: d.astro[f].sunset.time
+            planetRise: d.astro[f].sunrise.time,
+            planetSet: d.astro[f].sunset.time
           },
           windLevel: that.getWindLevel(d.wind[f].avg.speed),
           windDirect: that.getWindDirect(d.wind[f].avg.direction),
@@ -909,6 +881,15 @@ create(store, {
       const serviceData = service(forecastData.daily)
       const alertContentData = alertContent(forecastData.alert.content)
       const curTime = setCurTime()
+      console.group(`%c  setTimelyWeather`, 'color:#e0c184; font-weight: bold', 'color:#f0a139; font-weight: bold')
+      console.log(`%c realtime`, 'color:#3d91cf; font-weight: bold', realtimeData)
+      console.log(`%c hourly`, 'color:#3d91cf; font-weight: bold', hourlyData)
+      console.log(`%c daily`, 'color:#3d91cf; font-weight: bold', dailyData)
+      console.log(`%c serviceData`, 'color:#3d91cf; font-weight: bold', serviceData)
+      console.log(`%c alertContentData`, 'color:#3d91cf; font-weight: bold', alertContentData[0])
+      console.log(`%c curTime`, 'color:#3d91cf; font-weight: bold', curTime)
+      console.groupEnd()
+
       that.setData({
         'forecastData.daily': dailyData,
         'forecastData.realtime': realtimeData,
@@ -924,23 +905,26 @@ create(store, {
         //   probability:a.minutely.probability
         // }
       });
-      log('alertContentData[0]',alertContentData[0])
     }
     
-    const getWeatherImage = () => {
-      if(that.store.data.indexHeadImageValue == 'Weather'){
-        that.selectComponent('#headImage').getWeatherImage()
-      }
-    }
+    // const getWeatherImage = () => {
+    //   if(that.store.data.indexHeadImageValue == 'Weather'){
+    //     that.selectComponent('#headImage').getWeatherImage()
+    //   }
+    // }
     (async () => {
       await setTimelyWeather(a)
-      await getWeatherImage()
+      // await getWeatherImage()
+      await that.setRadarMapSetting()
+      await that.setData({
+        'loadHeadImage':!that.data.loadHeadImage,
+      })
     })()
   },
   setRefreshWeatherInterval() {
     const t = this
     let refreshTime = t.store.data.refreshfrequencyValue * 60 * 1000
-    log('[refreshTime]', refreshTime)
+    log('[refreshWeatherDataTime]', refreshTime)
     setInterval(() => {
       log('[setRefreshWeatherInterval] => setInterval()', refreshTime)
       log(`[setRefreshWeatherInterval]`, t.store.data.startScreen)
@@ -1166,16 +1150,6 @@ create(store, {
         }))
     });
   },
-  showModal(e) {
-    log('[showModal]', e.currentTarget.dataset.target)
-    const t = this
-    const setData = (modalName) => {
-      t.setData({
-        modalName: modalName
-      })
-    }
-    e.currentTarget.dataset.target == 'shareImage' ? (t.eventDraw(), setData(e.currentTarget.dataset.target)) : setData(e.currentTarget.dataset.target)
-  },
   showDrawerModal(e){
     const t = this
     t.setData({
@@ -1211,7 +1185,8 @@ create(store, {
         drawerModalName: drawerModalName
       })
     }
-    e.detail == 'shareImage' ? (t.eventDraw(), setData(e.detail)) : setData(e.detail)
+    setData(e.detail)
+    // e.detail == 'shareImage' ? (t.eventDraw(), setData(e.detail)) : setData(e.detail)
   },
   hideModal(e) {
     log('[hideModal]')
@@ -1228,16 +1203,6 @@ create(store, {
       url: '../' + cur + '/' + cur
     });
   },
-  navRadar() {
-    // appid:'wx673e7d2fe4e6a413',  //订阅号
-    // appid:'wx7b4bbc2d9c538e84', //服务号
-    log('[navRadar]', app.globalData.appid)
-    const t = this
-    log('[navigateTo]')
-    wx.navigateTo({
-      url: '../radar/radar?latitude=' + t.data.latitude + "&longitude=" + t.data.longitude
-    })
-  },
   navCopyrightlink(e){
     log('[navCopyrightlink]')
     let cur = e.target.dataset.cur
@@ -1252,7 +1217,7 @@ create(store, {
     const t = this
     log('[navigateTo]')
     wx.navigateTo({
-      url: '../radar/radar?latitude=' + t.data.latitude + "&longitude=" + t.data.longitude
+      url: '../radar/radar?latitude=' + t.store.data.latitude + "&longitude=" + t.store.data.longitude
     })
   },
   navSetting() {
@@ -1336,7 +1301,7 @@ create(store, {
           },
           {
             type: 'image',
-            url: globalData.qrImageURL, //二维码
+            url: t.data.qrImageURL, //二维码
             top: 270,
             left: 120,
             width: 65,
@@ -1362,7 +1327,7 @@ create(store, {
   },
   eventGetImage(event) {
     const t = this
-    log(`[eventGetImage] => `, event)
+    log(`[eventGetImage] => `, event.detail.errMsg)
     wx.hideLoading()
     const {
       tempFilePath,
@@ -1378,57 +1343,88 @@ create(store, {
   pickerOpened() {
     log(`picker opened`);
   },
+  timePickerSubmit(e){
+    console.log(e);
+    const t = this
+    let pickTime = dayjs(e.detail.value.toString()).hour().toString() + dayjs(e.detail.value.toString()).minute().toString()
+    log(pickTime)
+    const templateId = 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk'
+    const subDailyWeatherCloudFn = () => {
+      let longtermData = {
+        action: 'saveLongtermTemplateData',
+        unit: t.store.data.unitValue,
+        language: t.store.data.languageValue,
+        city: t.data.forecastData.city,
+        startTime: pickTime,
+        latitude: t.store.data.latitude,
+        longitude: t.store.ata.longitude,
+        templateId: templateId,
+        done: false
+      }
+      wx.cloud.callFunction({
+        name: 'openapi',
+        data: longtermData,
+        success: res => {
+        },
+        fail: err => {}
+      })
+      t.hideModal()
+    }
+    subDailyWeatherCloudFn()
+},
   datePickerSubmit(e) {
+    const t = this
     let submitValue = e.detail.value
     let time = util.formatDate(submitValue)
     let date = util.getDates(7, time)
     let startTime = date[0].time
-    var nnn = new Date();
-    let month =  nnn.getMonth() + 1
-    let _nowTime = nnn.getFullYear() +'' + month +'' + nnn.getDate();
-    let _startTime = startTime.split('-').join('');
-    log('nowTime,startTime,submitValue',_nowTime,_startTime,submitValue)
-    if(_nowTime > _startTime) {
+    log('nowTime,startTime,submitValue',startTime,dayjs().isAfter(dayjs(startTime)) )
+    
+    if(dayjs().isAfter(dayjs(startTime)) == true) {
       wx.showToast({
-        title: '不能选择过去时间,请重新选择',
+        title: t.store.data.languageValue == 'zh_TW' ? '不能選擇過去時間,請重新選擇':t.store.data.languageValue == 'zh_CN'? '不能选择过去时间,请重新选择':t.store.data.languageValue == 'ja'? '「過去の時間を選択できません。もう一度選択してください」':'Cannot select the past time, please select again',
         duration: 1500,
         icon: 'none',
         mask: true,
       })
+      t.setData({
+        longTerm:false,
+        oneTime:false
+      })
       return
     }
-    log('[submitStartTime] =>', startTime,submitValue,date)
-    const t = this
-    const templateId = config.subTemplateId
+    const templateId = '4qBy3Pm6pqvOCP_RgX8MOhxYMwO36_YyxCkduHnsAbg'
     const subDailyWeatherCloudFn = () => {
-      let cloudData = {
-        action: 'saveSubscribeMessage',
+      let onetimeData = {
+        action: 'saveOnetimeTemplateData',
         page: 'pages/index/index',
         unit: t.store.data.unitValue,
         language: t.store.data.languageValue,
         city: t.data.forecastData.city,
         startTime: startTime,
-        latitude: t.data.latitude,
-        longitude: t.data.longitude,
+        latitude: t.store.data.latitude,
+        longitude: t.store.ata.longitude,
         templateId: templateId,
         done: false
       }
-      t.setData({
-        subData : cloudData
-      })
-      log(t.data.subData)
+      t.data.subData = onetimeData
       wx.cloud.callFunction({
         name: 'openapi',
-        data: cloudData,
+        data: onetimeData,
         success: res => {
           wx.hideLoading({
             success: () => {
               wx.showToast({
-                title: '订阅成功',
+                title: t.store.data.languageValue == 'zh_TW' ? '訂閱成功':t.store.data.languageValue == 'zh_CN'? '订阅成功':t.store.data.languageValue == 'ja'? '正常にサブスクライブしました':'Successfully subscribed',
                 icon: 'success',
                 duration: 1000,
                 mask: true
               });
+              t.hideModal()
+              t.setData({
+                longTerm:false,
+                oneTime:false
+              })
             }
           });
           log(`[subDailyWeatherCloudFn] => OK =>`,res)
@@ -1439,18 +1435,16 @@ create(store, {
       })
     }
     const unSubDailyWeatherCloudFn = () => {
-      let cloudData = {
+      let onetimeData = {
         action: 'deleteSubscribeMessage',
         startTime: startTime,
         templateId: templateId
       }
-      t.setData({
-        subData : cloudData
-      })
+      t.data.subData = onetimeData
       log(t.data.subData)
       wx.cloud.callFunction({
         name: 'openapi',
-        data: cloudData,
+        data: onetimeData,
         success: res => {
           wx.showToast({
             mask: true,
@@ -1490,18 +1484,51 @@ create(store, {
       }
     });
   },
-  openDatePicker() {
+  openDatePicker(){
+    log('[openDatePicker]')
     this.data.datePicker.open();
+  },
+  openTimePicker(){
+    log('[openTimePicker]')
+    this.data.timePicker.open();
+    this.setData({
+      longTerm:true
+    })
+    let subscribeType ={
+      longTerm : false,
+      oneTime: false
+    }
+    app.changeStorage('subscribeType', subscribeType)
+  },
+  openSubscribeRadioModal() {
+    // this.setData({
+    //   modalName: 'choseSubscribeType'
+    // })
+    wx.navigateTo({
+      url: '../subscribe/subscribe',
+    })
+  },  
+  subscribeTypeRadioChange(e){
+    const t = this
+    if(e.detail.value == 'longTerm'){
+      t.openTimePicker()
+    }else if(e.detail.value == 'oneTime'){
+      t.openDatePicker()
+    }
   },
   pickerOpen() {
     log(`picker opening`);
   },
   pickerClose() {
-    log(`picker closing`);
+    log(`picker closing`);    
   },
 
   pickerClosed() {
     log(`picker closed`);
+    this.setData({
+      longTerm:false,
+      oneTime:false
+    })
   },
   eventHandle(e) {
     log('[official-account] =>', e)
@@ -1540,19 +1567,15 @@ create(store, {
   reqRadar() {
     const t = this
     const reqRainRadar = () => {
-      let rainRadarApiHost = config.weatherApiHost + "/" + config.radarApiVersion + "/radar/fine_images?lat=" + t.data.latitude + "&lon=" + t.data.longitude + "&level=1&token=" + config.radarApiToken
+      let rainRadarApiHost = config.weatherApiHost + "/" + config.radarApiVersion + "/radar/fine_images?lat=" + t.store.data.latitude + "&lon=" + t.store.data.longitude + "&level=1&token=" + config.radarApiToken
       log('[reqRainRadar] => rainRadarApiHost', rainRadarApiHost)
       wx.request({
         url: rainRadarApiHost,
         success: (result) => {
           log('[rainRadarApiHost result]', result.data)
           if(result.data.status == 'failed'){
-            return t.setData({
-              'latitude': t.data.latitude,
-              'longitude':  t.data.longitude,
-              'radarMapLatitude' :t.data.latitude,
-              'radarMapLongitude' :t.data.longitude
-            })
+            warn([failed])
+            return
           }
           let rainRadarImg = result.data.images[0][0]
           let source = result.data.images[0]
@@ -1594,12 +1617,14 @@ create(store, {
             t.setData({
               'latitude': (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
               'longitude': (rainRadarPosition[1] + rainRadarPosition[3]) / 2,
-              'radarMapLatitude' : (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
-              'radarMapLongitude' :(rainRadarPosition[1] + rainRadarPosition[3]) / 2,
+              // 'radarMapLatitude' : (rainRadarPosition[0] + rainRadarPosition[2]) / 2,
+              // 'radarMapLongitude' :(rainRadarPosition[1] + rainRadarPosition[3]) / 2,
               'forecastData.rainRadar.coverImage': rainRadarImg,
               'forecastData.rainRadar.images': res.rainRadarImageData,
               'forecastData.rainRadar.forecastImages': res.rainRadarforecastImagesData
             })
+            t.store.data.latitude =  (rainRadarPosition[0] + rainRadarPosition[2]) / 2
+            t.store.data.longitude = (rainRadarPosition[1] + rainRadarPosition[3]) / 2
           })
         },
         fail: (res) => {
@@ -1608,7 +1633,7 @@ create(store, {
       })
     }
     const reqAqiRadar = () => {
-      let aqiRadarApiHost = config.weatherApiHost + "/" + config.radarApiVersion + "/aqi/images?token=" + config.radarApiToken + "&lon=" + t.data.longitude + "&lat=" + t.data.latitude
+      let aqiRadarApiHost = config.weatherApiHost + "/" + config.radarApiVersion + "/aqi/images?token=" + config.radarApiToken + "&lon=" + t.store.data.longitude + "&lat=" + t.store.data.latitude
       log('[reqAqiRadar] => aqiRadarApiHost', aqiRadarApiHost)
       wx.request({
         url: aqiRadarApiHost,
@@ -1670,7 +1695,7 @@ create(store, {
       })
     }
     if(t.data.canIntervalRainRadarPlay == true){
-      radarTimeLineIndexAni.translate3d(t.data.windowWidth-50, 0, 0).step()
+      radarTimeLineIndexAni.translate3d(globalData.windowWidth-50, 0, 0).step()
       t.setData({
         canIntervalRainRadarPlay:!t.data.canIntervalRainRadarPlay,
         radarTimeLineIndex: radarTimeLineIndexAni.export()
@@ -1695,7 +1720,7 @@ create(store, {
     }else{
       clearInterval(t.data.timeLineInterval)
       log(options.currentTarget.dataset.position)
-      radarTimeLineIndexAni.translate3d(t.data.windowWidth/rainRadarImageslength * options.currentTarget.dataset.position-50, 0, 0).step()
+      radarTimeLineIndexAni.translate3d(globalData.windowWidth/rainRadarImageslength * options.currentTarget.dataset.position-50, 0, 0).step()
       t.setData({
         canIntervalRainRadarPlay:!t.data.canIntervalRainRadarPlay,
         radarTimeLineIndex: radarTimeLineIndexAni.export(),
@@ -1704,143 +1729,50 @@ create(store, {
     }
   },
   onIntersectionObserver() {
-    log('[onIntersectionObserver]')
+    // log('[onIntersectionObserver]')
     const t = this
-    var ani = wx.createAnimation({
-      duration: 700,
-      timingFunction: 'ease-in-out',
-      delay: 300,
-    });
-    var firstObserver = wx.createIntersectionObserver()
-    var refreshSunset = wx.createIntersectionObserver()
-    var temperatureObserver = wx.createIntersectionObserver()
-    var thirdObserver = wx.createIntersectionObserver()
-    var rainObserver = wx.createIntersectionObserver()
-    var radarObserver = wx.createIntersectionObserver()
-    var fourthObserver = wx.createIntersectionObserver()
-    var fifthObserver = wx.createIntersectionObserver()
-    var sixthObserver = wx.createIntersectionObserver()
-
-    firstObserver.relativeToViewport().observe('#firstObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[firstObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          firstObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        // log('[firstObserver] => end')
-      }
-    })
-    refreshSunset.relativeToViewport().observe('#refreshSunset', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[refreshSunset] => start')
-        ani.opacity(1).step()
-        t.setData({
-          'sunrise': t.data.forecastData.daily[0].astro.sunrise,
-          'sunset': t.data.forecastData.daily[0].astro.sunset,
-          'refreshSunset': true
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        // log('[refreshSunset] => end')
-      }
-    })
-    temperatureObserver.relativeToViewport().observe('#temperatureObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[temperatureObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          temperatureObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-      }
-    })
-    thirdObserver.relativeToViewport().observe('#thirdObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[thirdObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          thirdObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        // log('[thirdObserver] => end')
-      }
-    })
-    rainObserver.relativeToViewport().observe('#rainObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[rainObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          rainObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        // log('[rainObserver] => end')
-      }
-    })
-    radarObserver.relativeToViewport({top: 10}).observe('#radarObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[radarObserver] => start')
-        t.reqRadar()
-        ani.opacity(1).step()
-        t.setData({
-          radarObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        // log('[radarObserver] => end')
-      }
-    })
-    fourthObserver.relativeToViewport().observe('#fourthObserver', (res) => {
-      log('[fourthObserver] => start')
-      if (res.boundingClientRect.top > 0) {
-        ani.opacity(1).step()
-        t.setData({
-          fourthObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        
-      }
-    })
-    fifthObserver.relativeToViewport().observe('#fifthObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[fifthObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          fifthObserverAni: ani.export()
-        })
-      }
-      if (res.boundingClientRect.top < 0) {
-        log('[fifthObserver] => end')
-      }
-    })
-    sixthObserver.relativeToViewport().observe('#sixthObserver', (res) => {
-      if (res.boundingClientRect.top > 0) {
-        log('[sixthObserver] => start')
-        ani.opacity(1).step()
-        t.setData({
-          sixthObserverAni: ani.export()
-        })
-        wx.createIntersectionObserver().disconnect()
-        sixthObserver.disconnect()
-        fifthObserver.disconnect()
-        fourthObserver.disconnect()
-        radarObserver.disconnect()
-        rainObserver.disconnect()
-        thirdObserver.disconnect()
-        temperatureObserver.disconnect()
-        refreshSunset.disconnect()
-        firstObserver.disconnect()
-      }
-      if (res.boundingClientRect.top < 0) {
-        log('[sixthObserver] => end')
-      }
-    })
+    let windowWidth = globalData.windowWidth*2/3
+    const aniStart = (item) =>{
+      this.animate(item, [
+        { opacity: 0.0},
+        { opacity: 1.0}
+        ], 1200, function () {
+          log('_aniStart',item)
+      }.bind(this))
+    }
+    const aniStop = (item) =>{
+      this.animate(item, [
+        { opacity: 1.0},
+        { opacity: 0.0}
+        ], 1200, function () {
+          // log('aniStop',item)
+      }.bind(this))
+    }
+    // const setSunSet = () =>{
+    //   log('_setSunSet')
+    //   t.setData({
+    //     'planetRise': t.data.forecastData.daily[0].astro.planetRise,
+    //     'planetSet': t.data.forecastData.daily[0].astro.planetSet,
+    //     'refreshSunset': !t.data.refreshSunset
+    //   })
+    // }
+    var observerGroup =['firstObserverAni','temperatureObserverAni','thirdObserverAni','rainObserverAni','radarObserverAni','fourthObserverAni','fifthObserverAni','sixthObserverAni']
+    observerGroup.forEach((item,index)=>{
+      let i = observerGroup[index]
+      i = wx.createIntersectionObserver()
+      item = ('.'+item).toString()
+      i.relativeToViewport({top:windowWidth}).observe(item, (res) => {
+        if (res.boundingClientRect.top > 0) {
+          aniStart(item),
+          item == '.firstObserverAni' ? t.reqRadar() : 'log(item)'
+          i.disconnect()
+        }else if (res.boundingClientRect.bottom <= 0) {
+          // log(res.boundingClientRect,item)
+          // aniStop(item)
+        }
+      })
+      // log(item,index,i)
+     })
   },
   onShareAppMessage(a) {
     const t = this
@@ -1946,10 +1878,11 @@ create(store, {
           await t.setData({
             'canBlurRoot': true
           })
-          await t.getWeatherData(true)
+          await t.getLocationByAuto()
           await t.setData({
             'canBlurRoot': false
           })
+          t.store.data.getLocationMethod = 'auto'
         })()
     }
     app.changeStorage('getLocationMethod', 'auto')
@@ -1974,7 +1907,7 @@ create(store, {
     query.exec((res) => {
       if (res[0] && res[1])
         wx.pageScrollTo({
-          scrollTop: res[0].top + res[1].scrollTop - t.data.windowHeight/3,
+          scrollTop: res[0].top + res[1].scrollTop - globalData.windowHeight/3,
           duration: 1200
         });
     });
@@ -2267,23 +2200,6 @@ create(store, {
       showAirQuatityRadar:!t.data.showAirQuatityRadar
     })
   },
-  get500pxImage(count,keyword){
-      return wx.request({
-        url: 'https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',
-        fail: (res) => {
-          log(res)
-        },
-        header: {
-          "content-type": "application/json"
-        },
-        method: 'GET',
-        success: (result) => {
-          let resultData = result.data.data[count-1]
-          log('[get500pxImage]',resultData)
-          return resultData
-        }
-      })
-  },
   changeRainChartData(){
     const t = this
     t.setData({
@@ -2331,7 +2247,7 @@ create(store, {
   },
   loadingProgress(canLoading){
     const t = this
-    log('[loadingProgress]',canLoading)
+    // log('[loadingProgress]',canLoading)
     const loadingComponent = t.selectComponent('#loading');
     if(canLoading == true){
       loadingComponent.startLoading();
@@ -2347,7 +2263,7 @@ create(store, {
       src: src,
       borderColor: "#0BFF00",
       cropSizePercent: 0.7,
-      size: {
+      cropSize: {
         width: 300,
         height: 300
       }
@@ -2416,36 +2332,36 @@ create(store, {
     cloudUpload(event.detail.resultSrc, fileName)
   },
   openSnackBar(){
-    log('[openSnackBar]')
     const t = this
-    let alarmInfo = t.data.forecastData.alarmInfo[0]
-    let alarmIcon = config.cosApiHost + "/weather/icon/lineIcon/" + alarmInfo.icon + '-white.svg'
-    log(alarmIcon,alarmInfo)
-    if(t.data.forecastData.alarmInfo.length == 1 && t.store.data.warningValue == 'true'){
-    t.data.snackBar.open({
-      message: alarmInfo.typeName + alarmInfo.levelName + '预警',
-      buttonText:'关闭',
-      icon: alarmIcon,
-      buttonTextColor:'#ffffff',
-      color:'rgba(50, 50, 50, 1);',
-      messageColor:'#ffffff',
-      closeOnButtonClick:true,
-      onButtonClick:() => {
-          log('点击button');
-      },
-      onOpen:() => {
-          log('snackBar打开中');
-      },
-      onOpened(){
-          log('snackBar已打开');
-      },
-      onClose(){
-          log('snackBar关闭中');
-      },
-      onClosed(){
-          log('snackBar已关闭');
-      }
-  });
+    let alarmInfo = t.data.forecastData.alarmInfo || [{'content':'none'}]
+    let alarmIcon = config.cosApiHost + "/weather/icon/lineIcon/" + alarmInfo[0].icon + '-white.svg'
+    log('[openSnackBar]',alarmIcon,alarmInfo[0])
+    if(alarmInfo[0].content !== 'none'){
+      // log('[openSnackBar OK]')
+      t.data.snackBar.open({
+          messageSource:alarmInfo[0].source + ":",
+          message:alarmInfo[0].levelName + '预警'  + '-' + alarmInfo[0].typeName,
+          buttonText:'关闭',
+          icon: alarmIcon,
+          buttonTextColor:'#ffffff',
+          messageColor:'#ffffff',
+          closeOnButtonClick:true,
+          onButtonClick:() => {
+              log('点击button');
+          },
+          onOpen:() => {
+              // log('snackBar打开中');
+          },
+          onOpened(){
+              // log('snackBar已打开');
+          },
+          onClose(){
+              // log('snackBar关闭中');
+          },
+          onClosed(){
+              // log('snackBar已关闭');
+          }
+      });
     }
 }
 });

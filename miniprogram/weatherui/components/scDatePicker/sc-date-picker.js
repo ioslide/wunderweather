@@ -172,6 +172,10 @@ Component({
     _close: function () {
       this.data.dialog._close()
     },
+    _cancel: function () {
+      this._close(),
+      this.triggerEvent("cancel")
+    },
     _submit: function () {
       const that = this 
       console.log('subData',that.data.subData)

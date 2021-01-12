@@ -31,26 +31,39 @@
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="navChange" data-cur="customstyle">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">样式</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">樣式</block>
-						<block wx:if="{{$.languageValue == 'ja'}}">スタイル</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Features</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">特殊设置</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">特殊設置</block>
+						<block wx:if="{{$.languageValue == 'ja'}}">特別な設定</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Special settings</block>
 			</text>
 			<text slot="subbottom">
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页样式</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁樣式</block>
-											<block wx:if="{{$.languageValue == 'ja'}}">ホームスタイル</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Style Set</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">首页样式/无障碍模式</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">首頁樣式/無障礙模式</block>
+				  <block wx:if="{{$.languageValue == 'ja'}}">ホームページスタイル/アクセシビリティモード</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Style/WAI</block>
 			</text>
 		</sc-cell>
 	</view>
+
+	<!-- <view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="iconRadio">
+		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
+			<text slot="subheader1">
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">障碍模式</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">障碍模式</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">障碍模式</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">障碍模式</block>
+			</text>
+			<text class="text-Abc" slot="subbottom">{{$.iconValue}}
+			</text>
+		</sc-cell>
+	</view> -->
 
 	<view class="flex {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}}" bindtap="showModal" data-target="iconRadio">
 		<sc-cell cellHeight="65" right-icon="iconfont icon-right" style="width:100%;" subheader1Padding="5" subbottomPadding="5" themeValue="{{$.themeValue}}">
 			<text slot="subheader1">
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">图标</block>
 					<block wx:if="{{$.languageValue == 'zh_TW'}}">圖標</block>
-																<block wx:if="{{$.languageValue == 'ja'}}">アイコン</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">アイコン</block>
 					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Icon Set</block>
 			</text>
 			<text class="text-Abc" slot="subbottom">{{$.iconValue}}
@@ -473,6 +486,7 @@
 		</view>
 	</view>
 </view>
+
 <view class="cu-modal {{modalName=='unit'?'show':''}}" bindtap="hideModal" catchtouchmove="return">
 	<view class="cu-dialog" catchtap>
 		<view class="cu-bar justify-start" style="background: #2D2D2D;">

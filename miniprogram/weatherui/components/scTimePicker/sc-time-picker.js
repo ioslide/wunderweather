@@ -270,6 +270,10 @@ Component({
     _close: function () {
       this.data.dialog._close()
     },
+    _cancel: function () {
+      this._close(),
+      this.triggerEvent("cancel")
+    },
     _submit: function () {
       var t = this.data.dateObject,
         e = t.years,
@@ -280,9 +284,12 @@ Component({
         s = t.seconds,
         u = t.milliseconds,
         r = dayjs();
-      r = r.set("year", e).set("month", i).set("date", a).set("hour", n).set("minute", o).set("second", s).set("millisecond", u), this.triggerEvent("submit", {
-        value: r.toDate()
-      }), this._close()
+        r = r.set("year", e).set("month", i).set("date", a).set("hour", n).set("minute", o).set("second", s).set("millisecond", u),
+        this.triggerEvent("submit", {
+          value: r.toDate()
+        }), 
+        this._close()
+        // this.data.dialog._close()
     },
     dialogOpen: function () {
       this.triggerEvent("open", {

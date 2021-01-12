@@ -35,8 +35,8 @@
 			</view>
 		</view>
 		<view class="sc-time-picker-action">
-			<sc-button sc-class="sc-btn" bind:tap="_close">取消</sc-button>
-			<sc-button sc-class="sc-btn" bind:tap="_submit">确定</sc-button>
+			<sc-button sc-class="sc-btn" bind:tap="_cancel">取消</sc-button>
+			<sc-button openType="contact" sendMessageCard="true" sc-class="sc-btn" bind:tap="_submit">确定</sc-button>
 		</view>
 	</view>
 </sc-dialog>

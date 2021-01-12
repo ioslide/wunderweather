@@ -3,7 +3,14 @@ let $$ = {}
 let hasUserLocation = wx.getStorageSync('hasUserLocation') || false
 const setStoreage = () =>{
   $$ = {
+    latitude:31.467735,
+    longitude:104.679276,
     getLocationMethod:'auto',
+    subscribeType:{
+      oneTime :false,
+      longTerm:false,
+      warning:false
+    },
     language: {
       languageChecked_zh_CN: true,
       languageChecked_zh_TW: false,
@@ -46,7 +53,8 @@ const setStoreage = () =>{
       moonSwitchChange: true,
       windSwitchChange: true,
       radarSwitchChange: true,
-      KeepScreenOnSwitchChange: true
+      KeepScreenOnSwitchChange: true,
+      WAI:false
     },
     proMode: false,
     indexHeadImage:{
@@ -88,6 +96,8 @@ hasUserLocationEvent(hasUserLocation)
 
 export default {
   data: {
+    latitude:$$.latitude,
+    longitude:$$.longitude,
     getLocationMethod:$$.getLocationMethod,
     startScreen: $$.startScreen,
     style: $$.style,
@@ -97,7 +107,7 @@ export default {
     refreshfrequency:$$.refreshfrequency,
     refreshfrequencyValue:$$.refreshfrequencyValue,
     theme: $$.theme,
-    themeValue: $$.themeValue,
+    themeValue:  $$.theme.themeChecked_auto == true && wx.getSystemInfoSync().theme == 'light' || $$.theme.themeChecked_light == true ? 'light' : 'dark',
     language:$$.language,
     languageValue:$$.languageValue,
     temperatureUnit: $$.temperatureUnit,
@@ -107,6 +117,7 @@ export default {
     iconValue:$$.iconValue,
     icon:$$.icon,
     unitValue:$$.unitValue,
+    subscribeType:$$.subscribeType
   },
   updateAll: true,
   debug: true

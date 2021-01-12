@@ -5,7 +5,7 @@ Component({
     show: !1,
     timer: null,
     defaultOption: {
-      timeout: 4e3,
+      timeout: 3000,
       position: "bottom",
       buttonText: "",
       buttonTextColor: "#90CAF9",
@@ -15,18 +15,24 @@ Component({
       onOpen: null,
       onOpened: null,
       onClose: null,
-      onClosed: null
+      onClosed: null,
+      windowWidth:''
     },
     snackBarStack: []
   },
-  ready: function () {},
+  ready: function () {
+    this.setData({
+      windowWidth:getApp().globalData.windowWidth
+    })
+  },
   relations: {},
   externalClasses: ["sc-class", "sc-button-class"],
   methods: {
     _open: function (t) {
       var n = JSON.parse(JSON.stringify(this.data.defaultOption)),
         o = Object.assign(n, t);
-      this.data.snackBarStack.push(o), this._openNext()
+      this.data.snackBarStack.push(o), 
+      this._openNext()
     },
     _close: function () {
       var t = this;
@@ -34,9 +40,12 @@ Component({
         show: !1
       });
       var n = this.data.options.onClose;
-      n && "function" == typeof n && n(), setTimeout(function () {
+      n && "function" == typeof n && n(), 
+      setTimeout(function () {
         var n = t.data.options.onClosed;
-        n && "function" == typeof n && n(), t.data.snackBarStack.shift(), t.data.snackBarStack.length > 0 && t._openNext()
+        n && "function" == typeof n && n(), 
+        t.data.snackBarStack.shift(),
+        t.data.snackBarStack.length > 0 && t._openNext()
       }, 300)
     },
     _openNext: function () {
@@ -52,9 +61,11 @@ Component({
         var a = this.data.options,
           e = a.onOpen,
           s = a.onOpened;
-        e && "function" == typeof e && e(), setTimeout(function () {
+        e && "function" == typeof e && e(), 
+        setTimeout(function () {
           s && "function" == typeof s && s()
-        }, 300), this.data.timer = setTimeout(function () {
+        }, 300), 
+        this.data.timer = setTimeout(function () {
           t._close()
         }, o.timeout)
       }

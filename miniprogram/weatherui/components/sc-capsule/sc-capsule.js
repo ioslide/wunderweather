@@ -28,8 +28,8 @@ Component({
   },
   data: {
     StatusBar: app.globalData.StatusBar,
-    CustomBar: app.globalData.CustomBar,
-    Custom: app.globalData.Custom
+    // CustomBar: app.globalData.CustomBar,
+    // Custom: app.globalData.Custom
   },
   pageLifetimes: {
     show: function() {

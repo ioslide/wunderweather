@@ -64,7 +64,7 @@ create.Component(store, {
       log('[screenFadeIn]', t.store.data.startScreen)
       const poetryScreenFadeIn = () => {
         log('[poetryScreenFadeIn]')
-        const LoadPoetryContent = () => {
+        const initPoetryContent = () => {
           let poetry_storage = wx.getStorageSync('poetry_storage') || [{
             content: '春眠不觉晓'
           }]
@@ -84,7 +84,7 @@ create.Component(store, {
           })
         }
         (async () => {
-          await LoadPoetryContent()
+          await initPoetryContent()
           await poetryContentFadeIn()
         })()
 
@@ -102,7 +102,6 @@ create.Component(store, {
         })
       }
       const defaultScreenFadeIn = () => {
-        log('[defaultScreenFadeIn]')
         let defaultScreenFadeIn = wx.createAnimation({
           duration: 1000,
           timingFunction: 'ease-in-out',
@@ -113,8 +112,7 @@ create.Component(store, {
           logoScreenAni: defaultScreenFadeIn.export(),
         })
       }
-      t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() : t.store.data.startScreen == 'auth' ? authScreenFadeIn() : t.store.data.startScreen == 'default' ? defaultScreenFadeIn() : warn('[startScreen]')
-      // t.onIntersectionObserver()
+     t.store.data.startScreen == 'default' ?  defaultScreenFadeIn() : t.store.data.startScreen == 'poetry' ? poetryScreenFadeIn() :  t.store.data.startScreen == 'auth' ? authScreenFadeIn() :  (authScreenFadeIn(),warn('[startScreen]'))
     },
     screenFadeOut() {
       const t = this
@@ -172,19 +170,21 @@ create.Component(store, {
             t.setData({
               authScreen: true
             })
+            t.store.data.startScreen = 'default'
+            app.changeStorage('startScreen', 'default')
           }, 2200)
       }
       const screenFadeOut = (screenFadeOutType) => {
-          screenFadeOutType == 'poetry' ? poetryScreenFadeOut() : screenFadeOutType == 'auth' ? (authScreenFadeOut(), setTimeout(() => {
-            t.store.data.startScreen = 'poetry'
-          }, 2500)) : screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
-        }
-        (async () => {
-          await screenFadeOut(t.store.data.startScreen)
-          await t.triggerEvent('onIntersectionObserver')
-          await t.triggerEvent('setRefreshWeatherInterval')
-          await t.resaveNextPoetryContent()
-        })()
+        screenFadeOutType == 'poetry' ? (poetryScreenFadeOut(),t.resaveNextPoetryContent()) : screenFadeOutType == 'auth' ? authScreenFadeOut(): screenFadeOutType == 'default' ? defaultScreenFadeOut() : warn('[startScreen]')
+      }
+      (async () => {
+        await screenFadeOut(t.store.data.startScreen)
+        await t.triggerEvent('onIntersectionObserver')
+        await t.triggerEvent('setRefreshWeatherInterval')
+      })()
+    },
+    openSubscribeRadioModal() {
+      this.triggerEvent('openSubscribeRadioModal')
     },
     onAuthFinalScreen() {
       log('[onAuthFinalScreen]')
@@ -206,13 +206,13 @@ create.Component(store, {
           ], 1000)
         }
         (async () => {
-          let eventDetail = {
-            canRefreshChart: false
-          }
+          // let eventDetail = {
+          //   canRefreshChart: false,
+          // }
           await wx.showLoading({
             title: t.store.data.languageValue == 'zh_TW' ? '加载中' : t.store.data.languageValue == 'zh_CN' ? '加载中' : t.store.data.languageValue == 'ja' ? '読み込み中' : 'Loading'
           })
-          await t.triggerEvent('_getWeatherData', eventDetail)
+          await t.triggerEvent('getWeatherData')
           await authFinalStepLeaf()
           // await t.screenFadeOut()
           await wx.hideLoading({
@@ -276,7 +276,7 @@ create.Component(store, {
               transX(windowWidth * 2)
               authSecondStepLeaf()
               app.saveData('hasUserLocation', true)
-              app.changeStorage('startScreen', 'default')
+              // app.changeStorage('startScreen', 'default')
               log('[hasUserLocation]')
             }
             if (!res.authSetting['scope.userLocation']) {
@@ -287,7 +287,7 @@ create.Component(store, {
                   transX(windowWidth * 2)
                   authSecondStepLeaf()
                   app.saveData('hasUserLocation', true)
-                  app.changeStorage('startScreen', 'default')
+                  // app.changeStorage('startScreen', 'default')
                 },
                 fail: err => {
                   log(`check = > [wx.authorize] =>`, err)
@@ -297,7 +297,8 @@ create.Component(store, {
                     confirmText: "确认",
                     cancelText: "取消",
                     success: res => {
-                      if (res.confirm) {
+                      if (res.confirm){
+                        log(res)
                         wx.openSetting({
                           success: res => {
                             log(`[wx.openSetting] =>`, res, res.authSetting['scope.userLocation'])
@@ -305,9 +306,12 @@ create.Component(store, {
                               transX(windowWidth * 2)
                               authSecondStepLeaf()
                               app.saveData('hasUserLocation', true)
-                              app.changeStorage('startScreen', 'default')
+                              // app.changeStorage('startScreen', 'default')
                               log('[scope.userLocation] success')
                             }
+                          },
+                          fail: err =>{
+                            log(err)
                           }
                         });
                       } else {
@@ -318,6 +322,9 @@ create.Component(store, {
                 }
               })
             }
+          },
+          fail: err => {
+            log(err)
           }
         })
       }

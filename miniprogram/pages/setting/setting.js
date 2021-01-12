@@ -28,9 +28,9 @@ create(store, {
   indexHeadImageRadioChange:function(e){
     log('[indexHeadImageRadioChange]', e.detail.value )
     const t = this
-    let
+    var
     pages = getCurrentPages(),
-    prevPage = pages[pages.length - 2];
+    prevPage = pages[0];
     let indexHeadImageValue = e.detail.value.toString(),
       indexHeadImage = {
         indexHeadImageBing:false,
@@ -68,6 +68,9 @@ create(store, {
   themeRadioChange(e) {
     log('[themeRadioChange]', e.detail.value)
     const t = this
+    var
+    pages = getCurrentPages(),
+    prevPage = pages[0];
     const modalName = () =>{
       t.setData({
         modalName: null
@@ -87,13 +90,12 @@ create(store, {
       }
       t.store.data.theme = theme
       t.store.data.themeValue = themeValue
+      
       app.changeStorage('themeValue', themeValue)
       app.changeStorage('theme', theme)
     }
     const getWeatherData = () =>{
-      let
-      pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
+      log('prevPage',prevPage)
       prevPage.getWeatherData(false)
     }
     async function change(){
@@ -135,9 +137,9 @@ create(store, {
       app.changeStorage('icon', icon)
     }
     const getWeatherData = () =>{
-      let
+      var
       pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
+      prevPage = pages[0];
       prevPage.getWeatherData(false)
     }
     (async () => {
@@ -226,9 +228,9 @@ create(store, {
       app.changeStorage('unit', unit)
     }
     const getWeatherData = () =>{
-      let
+      var
       pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
+      prevPage = pages[0];
       prevPage.getWeatherData(false)
     }
     async function change(){
@@ -281,9 +283,9 @@ create(store, {
     app.changeStorage('languageValue', languageValue)
     }
     const getWeatherData = () =>{
-      let
+      var
       pages = getCurrentPages(),
-      prevPage = pages[pages.length - 2];
+      prevPage = pages[0];
       prevPage.getWeatherData(false)
     }
     async function change (){
@@ -443,36 +445,6 @@ loginNSubscribe(e){
                     var c = o.userInfo;
                     c.code = n, c.iv = o.iv, c.encryptedData = o.encryptedData, c.wechat_type = "wxapp"
                     console.log('getUserInfo',c)
-
-                    // wx.request({
-                    //   url: "https://biz.caiyunapp.com/v1/tianqi/login",
-                    //     header: {
-                    //         "content-type": "application/json"
-                    //     },
-                    //     method: "POST",
-                    //     data: c,
-                    //     success: function(t) {
-                    //         app.saveData("cy_user", JSON.stringify(t.data.user)), app.saveData("cy_user_id", t.data.user.platform_id), 
-                    //         app.saveData("userInfo", c);
-
-                    //         that.setData({
-                    //             focused: !1
-                    //         }), that.subscribe({
-                    //             eveningRemindTime: that.data.eveningTime,
-                    //             weatherRemind: 1,
-                    //             morningRemindTime: that.data.morningTime,
-                    //             platform_id: that.data.userInfo.platform_id,
-                    //             lon: that.data.settingLon,
-                    //             timezone: "+08:00",
-                    //             lat: that.data.settingLat,
-                    //             address: that.data.settingLocation
-                    //         })
-                    //     },
-                    //     fail: function(e) {},
-                    //     complete: function(e) {}
-                    // });
-
-
                     wx.cloud.callFunction({
                       name: 'openapi',
                       data: {
@@ -481,24 +453,6 @@ loginNSubscribe(e){
                     }).then(res => {
                       console.log('[onGetUserInfo] 调用成功：', res)
                     })
-
-                    // wx.request({
-                    //     url: "https://biz.caiyunapp.com/v1/tianqi/login",
-                    //     header: {
-                    //         "content-type": "application/json"
-                    //     },
-                    //     method: "POST",
-                    //     data: c,
-                    //     success: function(t) {
-                    //       app.saveData("cy_user", JSON.stringify(t.data.user)), app.saveData("cy_user_id", t.data.user.platform_id), 
-                    //       app.saveData("userInfo", c);
-                    //     },
-                    //     fail: function(e) {
-                    //     },
-                    //     complete: function(e) {
-                    //     }
-                    // });
-
                 }
             });
         } else wx.showToast({

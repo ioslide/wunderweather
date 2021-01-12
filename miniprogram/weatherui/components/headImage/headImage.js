@@ -2,6 +2,9 @@ const log = console.log.bind(console)
 const app = getApp()
 const globalData = getApp().globalData
 const config = require('../../../weatherui/config/config.js').default
+const dayjs = require('../../../weatherui/assets/lib/day/day.js')
+const sunCalc = require('../../../utils/sunCalc.js')
+
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import _ from '../../../utils/lodash.min.js';
@@ -9,7 +12,7 @@ const transWeatherName = require('../../../weatherui/assets/lib/transWeatherName
 
 create.Component(store,{
   properties: {
-    canloadHeadImage:{
+    loadHeadImage:{
       type: String,
       observer: function () {
         const t = this
@@ -24,7 +27,9 @@ create.Component(store,{
   data: {
     windowWidth: globalData.windowWidth,
     use: [
-      'indexHeadImageValue'
+      'indexHeadImageValue',
+      'longitude',
+      'latitude'
     ]
   },
   lifetimes: {
@@ -61,7 +66,7 @@ create.Component(store,{
       })
     },
     getBingImage() {
-      log('[getBingImage]')
+      // log('[getBingImage]')
       const t = this
       wx.request({
         url: config.bingApiHost + '/HPImageArchive.aspx?format=js&idx=0&n=30&nc=1589441449314&pid=hp',
@@ -120,37 +125,95 @@ create.Component(store,{
         }
       });
     },
-
     getWeatherImage(){
-      log('[getWeatherImage]')
+      // log('[getWeatherImage]')
       const t = this
-      // cloud://wunderweather-nwepb.7775-wunderweather-nwepb-1301867770/weatherImage/afternoon/clear-day/1.png
-      let pages = getCurrentPages()
-      let prevPage = pages[0];
-      log('prevPage',getCurrentPages())
-      let realtimeSkycon = prevPage.data.forecastData.realtime.skycon
-      let weatherFileNameList = []
-      let sunrise = prevPage.data.sunrise.replace(':', '')
-      let sunset = prevPage.data.sunset.replace(':', '')
-      var nnn = new Date();
-      var hhh = nnn.getHours();
-      var mm = nnn.getMinutes();
-      let nowTime = hhh + '' + mm
-      log('[sunrise,sunset,nowTime]',sunrise,sunset,nowTime)
-      let timeGroupName = 'afternoon'
-      if(nowTime >= sunrise &&  nowTime <= '1000'){
-        timeGroupName = 'early_morning'
-      }else if(nowTime>1000 && nowTime<=1200){
-        timeGroupName = 'late_morning' 
-      }else if(nowTime>1200 && nowTime<=1800){
-        timeGroupName = 'afternoon'
-      }else if(nowTime>1800 && nowTime<=2100){
-        timeGroupName = 'early_evening'
-      }else if(nowTime>2100 && nowTime<=2400){
-        timeGroupName = 'late_evening'
-      }else if(nowTime>400 && nowTime<= sunrise){
-        timeGroupName = 'early_morning'
+      let timeProperty = sunCalc.getTimes(new Date(),t.store.data.latitude, t.store.data.longitude, 0)
+      log('timeProperty',timeProperty)
+      var compareDate = {
+          isDuringDate(beginDateStr, endDateStr) {
+              var curDate = new Date(),
+                  beginDate = new Date(beginDateStr),
+                  endDate = new Date(endDateStr);
+              if (curDate >= beginDate && curDate <= endDate) {
+                  return true;
+              }
+              return false;
+          },
+          isBetween (a,b) {
+            return dayjs(nowTime).isAfter(a) && dayjs(nowTime).isBefore(b) || dayjs(nowTime).isAfter(b) && dayjs(nowTime).isBefore(a)
+         }
       }
+
+      let intNight = dayjs(new Date()).format('YYYY-MM-DD')+ ' 00:00'
+      let int24Night = dayjs(new Date()).format('YYYY-MM-DD')+ ' 24:00'
+      let nightEnd = dayjs(timeProperty.nightEnd).format('YYYY-MM-DD HH:mm')
+      let nauticalDawn =dayjs(timeProperty.nauticalDawn).format('YYYY-MM-DD HH:mm')
+      let sunrise =dayjs(timeProperty.sunrise).format('YYYY-MM-DD HH:mm')
+      let sunriseEnd =dayjs(timeProperty.sunriseEnd).format('YYYY-MM-DD HH:mm') 
+      let goldenHourEnd = dayjs(timeProperty.goldenHourEnd).format('YYYY-MM-DD HH:mm')
+      let solarNoon = dayjs(timeProperty.solarNoon).format('YYYY-MM-DD HH:mm')
+      let goldenHour = dayjs(timeProperty.goldenHour).format('YYYY-MM-DD HH:mm')
+      let sunsetStart = dayjs(timeProperty.sunsetStart).format('YYYY-MM-DD HH:mm')
+      let sunset = dayjs(timeProperty.sunset).format('YYYY-MM-DD HH:mm')
+      let dusk = dayjs(timeProperty.dusk).format('YYYY-MM-DD HH:mm')
+      let nauticalDusk = dayjs(timeProperty.nauticalDusk).format('YYYY-MM-DD HH:mm')
+      let night = dayjs(timeProperty.night).format('YYYY-MM-DD HH:mm')
+      let nowTime = dayjs(new Date()).format('YYYY-MM-DD HH:mm')
+      // let nowTime = '2021-01-11 01:10'
+      let nadir = dayjs(timeProperty.nadir).format('YYYY-MM-DD HH:mm') 
+      var timeArr = [intNight,nightEnd,goldenHourEnd,solarNoon,night,int24Night]
+      var timeNameArr = ['late_evening','early_morning','late_morning','afternoon','early_evening']
+      var timeGroupName = 'afternoon'
+
+      timeArr.map(function (value, index, arr) {
+        if(index < arr.length-1){
+          compareDate.isBetween(arr[index],arr[index+1]) == true ? (timeGroupName = timeNameArr[index],log(`%c  timeGroupName`, 'color:#e0c184; font-weight: bold',timeNameArr[index])): timeGroupName ='afternoon'
+        }
+      })
+      
+
+      // console.group(`%c  time`, 'color:#e0c184; font-weight: bold')
+      // log('--------Now Time--------',nowTime)
+      // console.group(`%c  late_evening`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(intNight,nightEnd))
+      // log('timeProperty.intNight',intNight)
+      // log('timeProperty.nadir',nadir)  //午夜,看是在12点之前还是之后
+      // log('timeProperty.nightEnd',nightEnd)  //夜晚结束
+      // console.groupEnd()
+
+      // console.group(`%c  early_morning`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(nightEnd, goldenHourEnd))
+      // log('timeProperty.nightEnd',nightEnd)  //夜晚结束
+      // log('timeProperty.nauticalDawn',nauticalDawn)  //曙光开始
+      // log('timeProperty.sunrise',sunrise) //日出开始
+      // log('timeProperty.sunriseEnd',sunriseEnd) //日出结束
+      // log('timeProperty.goldenHourEnd',goldenHourEnd) //早晨黄金时间结束
+      // console.groupEnd()
+
+
+      // console.group(`%c  late_morning`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(goldenHourEnd, solarNoon))
+      // log('timeProperty.goldenHourEnd',goldenHourEnd) //早晨黄金时间结束
+      // log('timeProperty.solarNoon',solarNoon)  //正午
+      // console.groupEnd()
+
+      // console.group(`%c  afternoon`, 'color:#e0c184; font-weight: bold',compareDate.isBetween(solarNoon, night))
+      // log('timeProperty.solarNoon',solarNoon)  //正午
+      // log('timeProperty.goldenHour',goldenHour)  //黄金时间开始
+      // log('timeProperty.sunsetStart',sunsetStart) //日落开始
+      // log('timeProperty.sunset',sunset) //日落结束，黄昏开始
+      // log('timeProperty.dusk',dusk) 
+      // log('timeProperty.nauticalDusk',nauticalDusk) 
+      // log('timeProperty.night',night) //夜晚开始
+      // console.groupEnd()
+
+      // console.group(`%c  early_evening`, 'color:#e0c184; font-weight: bold',compareDate.isBetween(night, int24Night))
+      // log('timeProperty.night',night) //夜晚开始
+      // log('timeProperty.nadir',nadir)  //午夜
+      // log('timeProperty.int24Night',int24Night)
+      // console.groupEnd()
+      // console.groupEnd()
+
+      let prePageData = getCurrentPages()[0].data
+      let realtimeSkycon = prePageData.forecastData.realtime.skycon
 
       var weatherImageGroupLength = {
         afternoon :{
@@ -219,7 +282,7 @@ create.Component(store,{
           'wind':7
         },
       }
-      
+      let weatherFileNameList = []
       let weatherKeyWord =  transWeatherName.weatherImageKeyWord[realtimeSkycon]
       let weatherKeyWordGroupImageNum = weatherImageGroupLength[timeGroupName][weatherKeyWord]
       const getTempWeatherFileNameList = () => {
@@ -237,8 +300,6 @@ create.Component(store,{
         headBackgroundAni: true
       })
     })()
-    log('[weatherFileNameList]',weatherFileNameList[0])
-    log('[weatherKeyWord]',weatherKeyWord,weatherKeyWordGroupImageNum)
   },
     navChange(e) {
       log(`[navChange] => ${e.currentTarget.dataset.cur}`)

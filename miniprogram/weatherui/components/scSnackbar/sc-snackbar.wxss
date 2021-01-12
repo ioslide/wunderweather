@@ -1,4 +1,9 @@
+
 .sc-snackBar {
+  overflow:hidden;
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0,0,0);
   position: fixed;
   display: -webkit-box;
   display: -webkit-flex;
@@ -21,10 +26,11 @@
   align-items: center;
   -webkit-align-content: center;
   align-content: center;
-  background-color: #323232;
+  background-color: rgba(239, 46, 46, 0.322);
+  backdrop-filter: blur(10px);
   color: #fff;
   border-radius: 2rpx;
-  min-height: 96rpx;
+  min-height: 104rpx;
   max-height: 160rpx;
   bottom: 0;
   left: 0;
@@ -117,6 +123,8 @@
   position: absolute;
   width: 100%;
   top: 0;
+  bottom: 0;
+  right: 0;
   left: 0;
   display: -webkit-box;
   display: -webkit-flex;
@@ -147,4 +155,8 @@
   left: 0;
   right: 0; */
   z-index: 10002;
+}
+@keyframes showup {
+  0% {opacity:0;}
+  100% {opacity:0;}
 }

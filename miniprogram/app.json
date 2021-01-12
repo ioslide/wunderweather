@@ -17,12 +17,15 @@
     "pages/radar/radar",
     "pages/setting/log/log",
     "pages/NASALists/NASALists",
-    "pages/weatherLists/weatherLists"
+    "pages/weatherLists/weatherLists",
+    "pages/subscribe/subscribe",
+    "pages/subscribe/webview/webview"
   ],
   "window": {
     "navigationStyle": "custom",
     "onReachBottomDistance": 100
   },
+  "lazyCodeLoading": "requiredComponents",
   "networkTimeout": {
     "request": 20000,
     "connectSocket": 20000,
@@ -42,10 +45,6 @@
     "live-player-plugin": {
       "version": "1.2.0",
       "provider": "wx2b03c6e691cd7370"
-    },
-    "zhixiaoyun": {
-      "version": "3.14.3",
-      "provider": "wxc6b86e382a1e3294"
     },
     "chatRobot": {
       "version": "1.1.23",
@@ -78,6 +77,7 @@
     "sc-switch": "/weatherui/components/scSwitch/sc-switch",
     "blurText": "/weatherui/components/blurText/blurText"
   },
+  "darkmode":true,
   "subPackages": [
     {
       "root": "pages/plugins/page/chatRobot/",

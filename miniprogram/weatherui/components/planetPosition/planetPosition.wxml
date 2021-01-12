@@ -1,0 +1,61 @@
+<view class="fourthObserverAni cu-bar margin-top-50 solid-bottom " id='fourthObserver'>
+	<view class="action">
+		<text class="{{$.themeValue == 'light'?'text-grey':'text-white'}}  text-df">
+			<block wx:if="{{planetName == 'sun'}}">
+				<block wx:if="{{$.languageValue == 'zh_CN'}}">太阳</block>
+				<block wx:if="{{$.languageValue == 'zh_TW'}}">太陽</block>
+				<block wx:if="{{$.languageValue == 'ja'}}">太陽</block>
+				<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Sun</block>
+			</block>
+			<block wx:if="{{planetName == 'moon'}}">
+				<block wx:if="{{$.languageValue == 'zh_CN'}}">月球</block>
+				<block wx:if="{{$.languageValue == 'zh_TW'}}">月球</block>
+				<block wx:if="{{$.languageValue == 'ja'}}">月</block>
+				<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Moon</block>
+			</block>
+		</text>
+	</view>
+	<view class="barRightIcon margin-right-0" bindtap="changePlant" style="width: 50px;height: 30px;">
+		<image class="square-20" src="https://weather.ioslide.com/weather/aiqQualityChange.svg" mode="widthFix"></image>
+	</view>
+</view>
+<view
+	class="flex flex-wrap padding-lr-15 justify-center padding-bottom-0 margin-top-50 {{$.themeValue == 'light'?'border-bottom-f1f1f1':'border-bottom-1e1e1e'}} ">
+	<view class="flex-sub flex align-end justify-end">
+		<view class="{{$.themeValue == 'light'?'sunriseDot-light':'sunriseDot-dark'}}"></view>
+	</view>
+	<view class="flex-twice flex justify-center">
+		<view class="sunSetBox">
+			<view class="sunSetBg">
+				<view class="sunShadowBox">
+					<view class="{{$.themeValue == 'light'?'lightSunShadow':'darkSunShadow'}}">
+					</view>
+				</view>
+			</view>
+			<view id="planet" class="{{$.themeValue == 'light'?'lightSunRiseShadow':'darkSunRiseShadow'}}"
+				style="transform: translateY(100%) rotate({{rotateAangle}}deg);transform-origin: 50% 0%;;transition:1000ms linear 0ms;transition-property:transform;-webkit-transition:1000ms linear 0ms;-webkit-transform: translateY(100%) rotate({{rotateAangle}}deg);-webkit-transition-property:transform;">
+				<image wx:if="{{planetName == 'moon'}}"
+					src="{{$.themeValue == 'light'?'https://weather.ioslide.com/weather/moonRistSet-light.svg':'https://weather.ioslide.com/weather/moonRistSet-dark.svg'}}"
+					style="position: absolute;width: 22px;height: 22px;top: -10px;z-index: 6;left: -10px;"></image>
+				<image wx:if="{{planetName == 'sun'}}"
+					src="{{$.themeValue == 'light'?'https://weather.ioslide.com/weather/sunRistSet-light.svg':'https://weather.ioslide.com/weather/sunRistSet-dark.svg'}}"
+					style="position: absolute;width: 22px;height: 22px;top: -10px;z-index: 6;left: -10px;"></image>
+			</view>
+		</view>
+	</view>
+	<view class="flex-sub flex align-end justify-start">
+		<view class="{{$.themeValue == 'light'?'sunsetDot-light':'sunsetDot-dark'}}"></view>
+	</view>
+</view>
+<view
+	class="flex flex-wrap padding-15 justify-center margin-top-15 {{$.themeValue == 'light'?'text-grey':'sun-text-fc9f62'}}">
+	<view class="basis-xs flex align-start justify-end">
+		{{planetRise}}
+	</view>
+	<view class="basis-df flex justify-center">
+		{{planetInfo}}
+	</view>
+	<view class="basis-xs flex align-start justify-start">
+		{{planetSet}}
+	</view>
+</view>
