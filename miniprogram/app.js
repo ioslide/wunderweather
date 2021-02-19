@@ -57,7 +57,7 @@ App({
     log('[initChatRobot openid]',openid)
     chatRobot.init({
       appid: "WmlasdlPkVIUh9hvwdKaVA1CRCYSaX",
-      openid: openid || '',
+      openid: openid,
       navHeight: chatnavHeight, 
       textToSpeech: true,
       guideList: ["成都市的天气", "北京市的天气", "深圳市的天气"],
@@ -160,6 +160,7 @@ App({
   getWxContext(statusBarHeight,tt) {
     const t = this
     let hasWxContext = wx.getStorageSync('hasWxContext') || false
+    log('hasWxContext',hasWxContext)
     if(hasWxContext == true){
       let wxContext = wx.getStorageSync('wxContext')
       t.globalData.openid = wxContext.openid
@@ -373,7 +374,6 @@ App({
       return false;
     }
   },
-    // 权限询问
     getRecordAuth: function() {
       wx.getSetting({
         success(res) {
@@ -382,7 +382,6 @@ App({
             wx.authorize({
               scope: 'scope.record',
               success() {
-                  // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
                   console.log("succ auth")
               }, fail() {
                   console.log("fail auth")
@@ -406,11 +405,9 @@ App({
             header: {
             },
             success: function (res) {
-                //服务器返回数据
                 if (res.statusCode == 200) {
                     resolve(res);
                 } else {
-                    //返回错误提示信息
                     reject(res.data);
                 }
             },

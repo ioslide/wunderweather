@@ -239,7 +239,6 @@ create(store, {
     // wx.stopAccelerometer();
   },
   onUnload () {
-    // 页面卸载时设置插件选点数据为null，防止再次进入页面，geLocation返回的是上次选点结果
         chooseLocation.setLocation(null);
     },
   onShow() {
@@ -280,6 +279,7 @@ create(store, {
       //make sure location value != null
       // app.saveData('manualLocationData', location)
       app.changeStorage('getLocationMethod', 'manual')
+      chooseLocation.setLocation(null);
     }
   },
   onReady() {
@@ -291,6 +291,7 @@ create(store, {
       // await t.setRadarMapSetting()
       await t.getMoonPhaseList()
       await t.getQRCode()
+      await t.checkIsAccept()
     }
     onReadyEvnet()
     t.data.datePicker = scui.DatePicker("#datepicker")
@@ -666,46 +667,60 @@ create(store, {
           }, [])
         return historyCityList
       }
-      var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
-      app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
-        log('[saveHistoryCityLists]',result.data.data)
-        let randomBgIndex = _.random(0,result.data.data.length-1)
-        let backgroundBg = result.data.data[randomBgIndex].url.p2
-        let data = {
-          address: that.data.forecastData.address,
-          city: that.data.forecastData.city,
-          icon: config.cosApiHost + "/weather/icon/flatIcon",
-          backgroundBg:backgroundBg,
-          nowTemp: ~~(realtimeTemperature),
-          skycon: realtime.skycon,
-          skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
-          latitude: that.store.data.latitude,
-          longitude: that.store.data.longitude
-        }
-        let historyCityList = reduceHistoryCityData(data)
-        that.setData({
-          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
-        })
-        app.saveData("historyCityList", historyCityList)
-      }).catch((err) => {
-        log(err);
-        let data = {
-          address: that.data.forecastData.address,
-          city: that.data.forecastData.city,
-          icon: config.cosApiHost + "/weather/icon/flatIcon",
-          backgroundBg:'../../weatherui/assets/images/headbackground.jpg',
-          nowTemp: ~~(realtimeTemperature),
-          skycon: realtime.skycon,
-          skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
-          latitude: that.store.data.latitude,
-          longitude: that.store.data.longitude
-        }
-        let historyCityList = reduceHistoryCityData(data)
-        that.setData({
-          'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
-        })
-        app.saveData("historyCityList", historyCityList)
-      })
+      let data = {
+        address: that.data.forecastData.address,
+        city: that.data.forecastData.city,
+        icon: config.cosApiHost + "/weather/icon/flatIcon",
+        backgroundBg:that.selectComponent('#headImage').getWeatherImage(realtime.skycon),
+        nowTemp: ~~(realtimeTemperature),
+        skycon: realtime.skycon,
+        skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
+        latitude: that.store.data.latitude,
+        longitude: that.store.data.longitude
+      }
+      let historyCityList = reduceHistoryCityData(data)
+      app.saveData("historyCityList", historyCityList)
+      // var count = 20,keyword = transWeatherName.weatherKeyWord[realtimeSkycon]
+      // app.request('GET','https://500px.com.cn/community/searchv2?client_type=1&imgSize=p2%2Cp4&key='+ keyword +'&searchType=photo&page=1&size='+ count +'&type=json&avatarSize=a1&resourceType=0%2C2',{}).then((result) => {
+      //   log('[saveHistoryCityLists]',result.data.data)
+      //   let randomBgIndex = _.random(0,result.data.data.length-1)
+      //   let backgroundBg = result.data.data[randomBgIndex].url.p2
+      //   let data = {
+      //     address: that.data.forecastData.address,
+      //     city: that.data.forecastData.city,
+      //     icon: config.cosApiHost + "/weather/icon/flatIcon",
+      //     backgroundBg:that.selectComponent('#headImage').getWeatherImage(),
+      //     nowTemp: ~~(realtimeTemperature),
+      //     skycon: realtime.skycon,
+      //     skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
+      //     latitude: that.store.data.latitude,
+      //     longitude: that.store.data.longitude
+      //   }
+      //   let historyCityList = reduceHistoryCityData(data)
+      //   that.setData({
+      //     'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
+      //   })
+      //   app.saveData("historyCityList", historyCityList)
+      // }).catch((err) => {
+      //   log(err);
+      //   let data = {
+      //     address: that.data.forecastData.address,
+      //     city: that.data.forecastData.city,
+      //     icon: config.cosApiHost + "/weather/icon/flatIcon",
+      //     backgroundBg:'../../weatherui/assets/images/headbackground.jpg',
+      //     nowTemp: ~~(realtimeTemperature),
+      //     skycon: realtime.skycon,
+      //     skyconCN: that.store.data.languageValue == 'zh_TW' ? transWeatherName.weatherSkyconTW[realtimeSkycon] : that.store.data.languageValue == 'ja' ? transWeatherName.weatherSkyconJA[realtimeSkycon] :that.store.data.languageValue == 'zh_CN' ? transWeatherName.weatherSkyconCN[realtimeSkycon] : transWeatherName.weatherSkyconEN[realtimeSkycon],
+      //     latitude: that.store.data.latitude,
+      //     longitude: that.store.data.longitude
+      //   }
+      //   let historyCityList = reduceHistoryCityData(data)
+      //   that.data.historyCityList = historyCityList
+      //   that.setData({
+      //     'weatherKeyWord': transWeatherName.weatherKeyWord[realtimeSkycon]
+      //   })
+      //   app.saveData("historyCityList", historyCityList)
+      // })
       return realtimeData
     }
     // const minutely = () => {
@@ -1574,7 +1589,7 @@ create(store, {
         success: (result) => {
           log('[rainRadarApiHost result]', result.data)
           if(result.data.status == 'failed'){
-            warn([failed])
+            warn(result.data.status)
             return
           }
           let rainRadarImg = result.data.images[0][0]
@@ -1733,6 +1748,7 @@ create(store, {
     const t = this
     let windowWidth = globalData.windowWidth*2/3
     const aniStart = (item) =>{
+      let i = ('.'+item).toString()
       this.animate(item, [
         { opacity: 0.0},
         { opacity: 1.0}
@@ -1740,39 +1756,96 @@ create(store, {
           log('_aniStart',item)
       }.bind(this))
     }
-    const aniStop = (item) =>{
-      this.animate(item, [
-        { opacity: 1.0},
-        { opacity: 0.0}
-        ], 1200, function () {
-          // log('aniStop',item)
-      }.bind(this))
-    }
-    // const setSunSet = () =>{
-    //   log('_setSunSet')
-    //   t.setData({
-    //     'planetRise': t.data.forecastData.daily[0].astro.planetRise,
-    //     'planetSet': t.data.forecastData.daily[0].astro.planetSet,
-    //     'refreshSunset': !t.data.refreshSunset
-    //   })
+    // const aniStop = (item) =>{
+    //   this.animate(item, [
+    //     { opacity: 1.0},
+    //     { opacity: 0.0}
+    //     ], 1200, function () {
+    //       // log('aniStop',item)
+    //   }.bind(this))
     // }
-    var observerGroup =['firstObserverAni','temperatureObserverAni','thirdObserverAni','rainObserverAni','radarObserverAni','fourthObserverAni','fifthObserverAni','sixthObserverAni']
-    observerGroup.forEach((item,index)=>{
-      let i = observerGroup[index]
-      i = wx.createIntersectionObserver()
-      item = ('.'+item).toString()
-      i.relativeToViewport({top:windowWidth}).observe(item, (res) => {
-        if (res.boundingClientRect.top > 0) {
-          aniStart(item),
-          item == '.firstObserverAni' ? t.reqRadar() : 'log(item)'
-          i.disconnect()
-        }else if (res.boundingClientRect.bottom <= 0) {
-          // log(res.boundingClientRect,item)
-          // aniStop(item)
-        }
-      })
-      // log(item,index,i)
-     })
+    // var observerGroup =['firstObserverAni','temperatureObserverAni','thirdObserverAni','rainObserverAni','radarObserverAni','fourthObserverAni','fifthObserverAni','sixthObserverAni']
+    let firstObserverAni  = wx.createIntersectionObserver(),
+    temperatureObserverAni = wx.createIntersectionObserver(),
+    thirdObserverAni = wx.createIntersectionObserver(),
+    rainObserverAni = wx.createIntersectionObserver(),
+    radarObserverAni = wx.createIntersectionObserver(),
+    fourthObserverAni = wx.createIntersectionObserver(),
+    fifthObserverAni = wx.createIntersectionObserver(),
+    sixthObserverAni = wx.createIntersectionObserver()
+
+    firstObserverAni.relativeToViewport().observe('.firstObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.firstObserverAni'),
+        t.reqRadar(),
+        firstObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    temperatureObserverAni.relativeToViewport().observe('.temperatureObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.temperatureObserverAni'),
+        temperatureObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    thirdObserverAni.relativeToViewport().observe('.thirdObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.thirdObserverAni')
+        thirdObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    rainObserverAni.relativeToViewport().observe('.rainObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.rainObserverAni'),
+        rainObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    radarObserverAni.relativeToViewport().observe('.radarObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.radarObserverAni'),
+        radarObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    fourthObserverAni.relativeToViewport().observe('.fourthObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.fourthObserverAni'),
+        fourthObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    fifthObserverAni.relativeToViewport().observe('.fifthObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.fifthObserverAni'),
+        fifthObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    sixthObserverAni.relativeToViewport().observe('.sixthObserverAni', (res) => {
+      if (res.boundingClientRect.top > 0) {
+        aniStart('.sixthObserverAni'),
+        sixthObserverAni.disconnect()
+      }else if (res.boundingClientRect.bottom <= 0) {
+      }
+    })
+    // observerGroup.forEach((item,index)=>{
+    //   let i = wx.createIntersectionObserver()
+    //   item = ('.'+item).toString()
+    //   i.relativeToViewport().observe(item, (res) => {
+    //     if (res.boundingClientRect.top > 0) {
+    //       aniStart(item),
+    //       item == '.firstObserverAni' ? t.reqRadar() : item == '.sixthObserverAni' ? (i.disconnect(),log('disconnect')):'log(item)'
+    //       log('relativeToViewport',i)
+    //     }else if (res.boundingClientRect.bottom <= 0) {
+    //       // log(res.boundingClientRect,item)
+    //       // aniStop(item)
+    //     }
+    //   })
+    //   // log(item,index,i)
+    //  })
   },
   onShareAppMessage(a) {
     const t = this
@@ -1857,7 +1930,7 @@ create(store, {
     this.selectComponent('#headImage').getNASAImage()
   },
   getWeatherImage(){
-      this.selectComponent('#headImage').getWeatherImage()
+      this.selectComponent('#headImage').getWeatherImage(this.data.forecastData.realtime.skycon)
   },
   onDev() {
     const t = this
@@ -1870,7 +1943,7 @@ create(store, {
     //自动获取系统定位的location,请求数据
     const t = this
     log(`[refreshLocation]`, t.store.data.startScreen)
-    let time = util.formatDate(new Date())
+    let time = dayjs(new Date()).format('YYYY-MM-DD')
     let date = util.getDates(7, time)
     app.saveData("lastRefreshTime", date[0].time)
     if (t.store.data.startScreen !== 'auth') {
@@ -2330,6 +2403,41 @@ create(store, {
     let fileName = util.formatDateClear(new Date()).concat(globalData.openid)
     log('filename',fileName,util.formatDateClear(new Date()))
     cloudUpload(event.detail.resultSrc, fileName)
+  },
+  checkIsAccept() {
+    const t = this
+    wx.cloud.database().collection('mini-subscribe-user-daily').where({
+      openid: app.globalData.openid,
+      done:false
+    }).get({
+      success(res) {
+        log('[checkIsAccept daily]',res)
+        if(res.data.length == 0){
+          t.store.data.subscribeType.oneTime = false
+        }else if(res.data.length > 0){
+          t.store.data.subscribeType.oneTime = true
+        }
+      },
+      fail(res) {
+        t.store.data.subscribeType.oneTime = false
+      }
+    })
+    wx.cloud.database().collection('warning-subscribe-user').where({
+      openid: app.globalData.openid,
+      done:false
+    }).get({
+      success(res) {
+        log('[checkIsAccept warning]',res)
+        if(res.data.length == 0){
+          t.store.data.subscribeType.warning = false
+        }else if(res.data.length > 0){
+          t.store.data.subscribeType.warning = true
+        }
+      },
+      fail(res) {
+        t.store.data.subscribeType.warning = false
+      }
+    })
   },
   openSnackBar(){
     const t = this

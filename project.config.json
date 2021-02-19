@@ -40,7 +40,7 @@
     "useApiHostProcess": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.14.1",
+  "libVersion": "2.13.1",
   "appid": "wx7b4bbc2d9c538e84",
   "projectname": "%E5%A5%87%E5%A6%99%E5%A4%A9%E6%B0%94v2",
   "miniprogramRoot": "miniprogram/",
@@ -272,6 +272,12 @@
         {
           "name": "pages/subscribe/webview/webview",
           "pathName": "pages/subscribe/webview/webview",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/subscribe/subscribe",
+          "pathName": "pages/subscribe/subscribe",
           "scene": null
         }
       ]

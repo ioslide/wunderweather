@@ -26,9 +26,10 @@ exports.main = async (event, context) => {
       //     return false;
       //   }
       // }
-      console.log('isToday', dayjs('').isSame(userWeatherData.startTime),userWeatherData.startTime)
-      let today = dayjs(new Date()).format('YYYY-MM-DD')
+
       try {
+        let today = dayjs(new Date()).format('YYYY-MM-DD')
+        console.log('isToday', dayjs('').isSame(userWeatherData.startTime),userWeatherData.startTime)
         if (dayjs(today).isSame(dayjs(userWeatherData.startTime)) == true) {
           let getAccessToken = await db.collection("mini-subscribe-accessToken").doc("ACCESS_TOKEN").get();
           let accessToken = getAccessToken.data.token;
@@ -86,15 +87,26 @@ exports.main = async (event, context) => {
             }
           }
 
-          let onetimeTemplateData = {
-            'touser': userWeatherData.touser,
-            'page': 'pages/index/index',
-            'data': subscribeWeatherData,
-            'templateId': userWeatherData.templateId,
-          }
+          // let onetimeTemplateData = {
+          //   'touser': userWeatherData.touser,
+          //   'page': 'pages/index/index',
+          //   'data': subscribeWeatherData,
+          //   'templateId': userWeatherData.templateId,
+          // }
 
-          console.log('----------onetimeTemplateData-----------', onetimeTemplateData)
-          await templateMessage.sendSubscribeMsg(accessToken, onetimeTemplateData);
+          // console.log('----------onetimeTemplateData-----------', onetimeTemplateData)
+          // await templateMessage.sendSubscribeMsg(accessToken, onetimeTemplateData);
+
+          await cloud.openapi.subscribeMessage.send({
+            touser: userWeatherData.touser,
+            miniprogram: {
+              "appid": "wx7b4bbc2d9c538e84",
+              "pagepath": "pages/index/index"
+            },
+            data: subscribeWeatherData,
+            templateId: userWeatherData.templateId,
+          });
+
           return db
             .collection('mini-subscribe-user-daily')
             .doc(userWeatherData._id)

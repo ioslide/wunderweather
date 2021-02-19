@@ -5,7 +5,7 @@
 
 <view>
 	<view class="cu-list menu text-left" style="width: 100%;">
-		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
+		<!-- <label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
 			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" style="width:100%;">
 				<text>
 					<block wx:if="{{$.languageValue == 'zh_CN'}}">公众号长期日常天气订阅</block>
@@ -17,15 +17,15 @@
 					<sc-switch class="sc-switch" name="switch" checked="{{$.subscribeType.longTerm}}" bind:change="switchChange" themeValue="{{$.themeValue}}" data-cur="longTerm"></sc-switch>
 				</view>
 			</sc-cell>
-		</label>
+		</label> -->
 
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
 			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
 				<text>
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">小程序一次性日常天气订阅</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">小程序一次性日常天氣訂閱</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">一次性日常天气订阅</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">一次性日常天氣訂閱</block>
 					<block wx:if="{{$.languageValue == 'ja'}}">ミニプログラム1日1回の天気サブスクリプション</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Mini program one-time daily weather subscription</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">one-time daily weather subscription</block>
 				</text>
 				<view slot="action">
 					<sc-switch class="sc-switch" name="switch" checked="{{$.subscribeType.oneTime}}" bind:change="switchChange" themeValue="{{$.themeValue}}"  data-cur="oneTime"></sc-switch>
@@ -36,10 +36,10 @@
 		<label class="flex justify-left align-center flex-sub {{$.themeValue == 'light'?'solid-bottom-light':'solid-bottom-dark'}} ">
 			<sc-cell cellHeight="50" right-icon="iconfont icon-right" value="switch" themeValue="{{$.themeValue}}" switch="!0" style="width:100%;">
 				<text>
-					<block wx:if="{{$.languageValue == 'zh_CN'}}">公众号灾害天气预警订阅</block>
-					<block wx:if="{{$.languageValue == 'zh_TW'}}">公眾號災害天氣預警訂閱</block>
-					<block wx:if="{{$.languageValue == 'ja'}}">パブリックアカウントの厳しい天候の警告サブスクリプション</block>
-					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">Public Account Severe Weather Warning Subscription</block>
+					<block wx:if="{{$.languageValue == 'zh_CN'}}">灾害天气预警订阅</block>
+					<block wx:if="{{$.languageValue == 'zh_TW'}}">災害天氣預警訂閱</block>
+					<block wx:if="{{$.languageValue == 'ja'}}">プログラム災害天気予報購読</block>
+					<block wx:if="{{$.languageValue == 'en_GB' || $.languageValue == 'en_US' }}">disaster weather warning subscription</block>
 				</text>
 				<view slot="action">
 					<sc-switch class="sc-switch" name="switch" checked="{{$.subscribeType.warning}}" bind:change="switchChange" themeValue="{{$.themeValue}}"  data-cur="warning"></sc-switch>
@@ -47,11 +47,10 @@
 			</sc-cell>
 		</label>
 
-
 	</view>
-	<view >
-		<button class="authButton"  wx:if="{{haveUnionid == false}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"></button>
-	</view>
+	<!-- <view >
+		<button class="authButton"  wx:if="{{haveMiniOpenid == false}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"></button>
+	</view> -->
   <sc-date-picker id="datepicker" bind:open="pickerOpen" bind:close="pickerClose" bind:opened="pickerOpened" subData="{{subData}}"  bind:closed="pickerClosed"  bind:cancel="datePickerCancel"  bind:submit="datePickerSubmit"></sc-date-picker>
   <sc-time-picker id="timepicker" bind:open="timePickerOpen" bind:close="timePickerClose" bind:opened="timePickerOpened" bind:closed="timePickerClosed" bind:cancel="timePickerCancel" bind:submit="timePickerSubmit"></sc-time-picker>
 </view>

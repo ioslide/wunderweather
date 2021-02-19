@@ -20,7 +20,7 @@ create.Component(store,{
         t.store.data.indexHeadImageValue == 'Bing' ? t.getBingImage() : 
         t.store.data.indexHeadImageValue == 'NASA' ?  t.getNASAImage() :  
         t.store.data.indexHeadImageValue == 'Customize' ?  t.getCustomizeImage(): 
-        t.store.data.indexHeadImageValue == 'Weather' ?  t.getWeatherImage() : log(t.store.data.indexHeadImageValue)
+        t.store.data.indexHeadImageValue == 'Weather' ?  t.getWeatherImage('none') : log(t.store.data.indexHeadImageValue)
       }
     }
   },
@@ -125,7 +125,7 @@ create.Component(store,{
         }
       });
     },
-    getWeatherImage(){
+    getWeatherImage(newRealtimeSkycon){
       // log('[getWeatherImage]')
       const t = this
       let timeProperty = sunCalc.getTimes(new Date(),t.store.data.latitude, t.store.data.longitude, 0)
@@ -148,20 +148,20 @@ create.Component(store,{
       let intNight = dayjs(new Date()).format('YYYY-MM-DD')+ ' 00:00'
       let int24Night = dayjs(new Date()).format('YYYY-MM-DD')+ ' 24:00'
       let nightEnd = dayjs(timeProperty.nightEnd).format('YYYY-MM-DD HH:mm')
-      let nauticalDawn =dayjs(timeProperty.nauticalDawn).format('YYYY-MM-DD HH:mm')
-      let sunrise =dayjs(timeProperty.sunrise).format('YYYY-MM-DD HH:mm')
-      let sunriseEnd =dayjs(timeProperty.sunriseEnd).format('YYYY-MM-DD HH:mm') 
+      // let nauticalDawn =dayjs(timeProperty.nauticalDawn).format('YYYY-MM-DD HH:mm')
+      // let sunrise =dayjs(timeProperty.sunrise).format('YYYY-MM-DD HH:mm')
+      // let sunriseEnd =dayjs(timeProperty.sunriseEnd).format('YYYY-MM-DD HH:mm') 
       let goldenHourEnd = dayjs(timeProperty.goldenHourEnd).format('YYYY-MM-DD HH:mm')
       let solarNoon = dayjs(timeProperty.solarNoon).format('YYYY-MM-DD HH:mm')
-      let goldenHour = dayjs(timeProperty.goldenHour).format('YYYY-MM-DD HH:mm')
-      let sunsetStart = dayjs(timeProperty.sunsetStart).format('YYYY-MM-DD HH:mm')
-      let sunset = dayjs(timeProperty.sunset).format('YYYY-MM-DD HH:mm')
-      let dusk = dayjs(timeProperty.dusk).format('YYYY-MM-DD HH:mm')
-      let nauticalDusk = dayjs(timeProperty.nauticalDusk).format('YYYY-MM-DD HH:mm')
+      // let goldenHour = dayjs(timeProperty.goldenHour).format('YYYY-MM-DD HH:mm')
+      // let sunsetStart = dayjs(timeProperty.sunsetStart).format('YYYY-MM-DD HH:mm')
+      // let sunset = dayjs(timeProperty.sunset).format('YYYY-MM-DD HH:mm')
+      // let dusk = dayjs(timeProperty.dusk).format('YYYY-MM-DD HH:mm')
+      // let nauticalDusk = dayjs(timeProperty.nauticalDusk).format('YYYY-MM-DD HH:mm')
       let night = dayjs(timeProperty.night).format('YYYY-MM-DD HH:mm')
       let nowTime = dayjs(new Date()).format('YYYY-MM-DD HH:mm')
       // let nowTime = '2021-01-11 01:10'
-      let nadir = dayjs(timeProperty.nadir).format('YYYY-MM-DD HH:mm') 
+      // let nadir = dayjs(timeProperty.nadir).format('YYYY-MM-DD HH:mm') 
       var timeArr = [intNight,nightEnd,goldenHourEnd,solarNoon,night,int24Night]
       var timeNameArr = ['late_evening','early_morning','late_morning','afternoon','early_evening']
       var timeGroupName = 'afternoon'
@@ -171,49 +171,16 @@ create.Component(store,{
           compareDate.isBetween(arr[index],arr[index+1]) == true ? (timeGroupName = timeNameArr[index],log(`%c  timeGroupName`, 'color:#e0c184; font-weight: bold',timeNameArr[index])): timeGroupName ='afternoon'
         }
       })
-      
-
-      // console.group(`%c  time`, 'color:#e0c184; font-weight: bold')
-      // log('--------Now Time--------',nowTime)
-      // console.group(`%c  late_evening`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(intNight,nightEnd))
-      // log('timeProperty.intNight',intNight)
-      // log('timeProperty.nadir',nadir)  //午夜,看是在12点之前还是之后
-      // log('timeProperty.nightEnd',nightEnd)  //夜晚结束
-      // console.groupEnd()
-
-      // console.group(`%c  early_morning`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(nightEnd, goldenHourEnd))
-      // log('timeProperty.nightEnd',nightEnd)  //夜晚结束
-      // log('timeProperty.nauticalDawn',nauticalDawn)  //曙光开始
-      // log('timeProperty.sunrise',sunrise) //日出开始
-      // log('timeProperty.sunriseEnd',sunriseEnd) //日出结束
-      // log('timeProperty.goldenHourEnd',goldenHourEnd) //早晨黄金时间结束
-      // console.groupEnd()
-
-
-      // console.group(`%c  late_morning`, 'color:#e0c184; font-weight: bold', compareDate.isBetween(goldenHourEnd, solarNoon))
-      // log('timeProperty.goldenHourEnd',goldenHourEnd) //早晨黄金时间结束
-      // log('timeProperty.solarNoon',solarNoon)  //正午
-      // console.groupEnd()
-
-      // console.group(`%c  afternoon`, 'color:#e0c184; font-weight: bold',compareDate.isBetween(solarNoon, night))
-      // log('timeProperty.solarNoon',solarNoon)  //正午
-      // log('timeProperty.goldenHour',goldenHour)  //黄金时间开始
-      // log('timeProperty.sunsetStart',sunsetStart) //日落开始
-      // log('timeProperty.sunset',sunset) //日落结束，黄昏开始
-      // log('timeProperty.dusk',dusk) 
-      // log('timeProperty.nauticalDusk',nauticalDusk) 
-      // log('timeProperty.night',night) //夜晚开始
-      // console.groupEnd()
-
-      // console.group(`%c  early_evening`, 'color:#e0c184; font-weight: bold',compareDate.isBetween(night, int24Night))
-      // log('timeProperty.night',night) //夜晚开始
-      // log('timeProperty.nadir',nadir)  //午夜
-      // log('timeProperty.int24Night',int24Night)
-      // console.groupEnd()
-      // console.groupEnd()
+ 
 
       let prePageData = getCurrentPages()[0].data
-      let realtimeSkycon = prePageData.forecastData.realtime.skycon
+      log('3333',newRealtimeSkycon)
+      let realtimeSkycon = ''
+      if(newRealtimeSkycon == 'none'){
+        realtimeSkycon = prePageData.forecastData.realtime.skycon
+      }else{
+        realtimeSkycon = newRealtimeSkycon
+      }
 
       var weatherImageGroupLength = {
         afternoon :{
@@ -300,6 +267,7 @@ create.Component(store,{
         headBackgroundAni: true
       })
     })()
+    return weatherFileNameList[0]
   },
     navChange(e) {
       log(`[navChange] => ${e.currentTarget.dataset.cur}`)

@@ -16,7 +16,7 @@ create(store, {
     Custom: app.globalData.Custom,
     datePicker: {},
     timePicker: {},
-    haveUnionid: '',
+    // haveMiniOpenid: false,
     use: [
       'style',
       'themeValue',
@@ -24,39 +24,37 @@ create(store, {
       'subscribeType'
     ]
   },
-  onLoad(){
+  onLoad() {
     const t = this
-    let haveUnionid = wx.getStorageSync('haveUnionid')
-      wx.getSetting({
-        success: function (res) {
-          if (res.authSetting['scope.userInfo']) {
-            wx.getUserInfo({
-              success: function (res) {
-                t.setData({
-                  haveUnionid : true
-                }),
-                t.getContext()
-              }
-            });
-          }else{
-            t.setData({
-              haveUnionid : false
-            })
-          }
-        }
-      })
+    // wx.getSetting({
+    //   success: function (res) {
+    //     log(res)
+    //     if (res.authSetting['scope.userInfo']) {
+    //       wx.getUserInfo({
+    //         success: function (res) {
+    //           t.getContext()
+    //         }
+    //       });
+    //     } else {
+    //       t.setData({
+    //         haveMiniOpenid: false
+    //       })
+    //     }
+    //   }
+    // })
   },
-  onHide(){
+  onHide() {
     const t = this
     t.changeSubscribeType()
   },
-  changeSubscribeType(){
+  changeSubscribeType() {
     const t = this
     let subscribeType = {
       oneTime: t.store.data.subscribeType.oneTime,
       longTerm: t.store.data.subscribeType.longTerm,
       warning: t.store.data.subscribeType.warning
     }
+    log(subscribeType)
     app.changeStorage('subscribeType', subscribeType)
   },
   onReady() {
@@ -69,51 +67,54 @@ create(store, {
       delta: 1
     })
   },
-  bindGetUserInfo (e) {
-    console.log(e)
-    const t = this
-    if(e.detail.errMsg == "getUserInfo:fail auth deny"){
-      wx.showToast({
-        title: '请完成授权',
-      })
-    }else if(e.detail.errMsg == "getUserInfo:ok"){
-      t.setData({
-        haveUnionid : true
-      }),
-      t.getContext()
-    }
-  },
-  getContext(){
-    const t = this
-    wx.cloud.callFunction({
-      name: "openapi",
-      data: {
-        action: 'getContext',
-      },
-    }).then(function (res) {
-      log('[wxContext]',res.result)
-      app.globalData.openid = res.result.openid
-      app.globalData.unionid  = res.result.unionid
-      wx.setStorage({
-        data: res.result,
-        key: 'wxContext',
-      })
-      wx.setStorage({
-        data: true,
-        key: 'hasWxContext',
-      })
-      wx.setStorage({
-        data: true,
-        key: 'haveUserInfo',
-      })
-      return  res.result
-    }).catch(console.error), wx.login({
-      success: function (e) {
-        // GET https://api.weixin.qq.com/sns/jscode2session?appid=wx7b4bbc2d9c538e84&secret=4ebadf0e08f79dccd6b894ffa8716d49&js_code=001BBC000k8oYK1b6d400cPaTO2BBC0j&grant_type=authorization_code
-        console.log("login ", e);
-      }
-    })
-  },
+  // bindGetUserInfo(e) {
+  //   console.log(e)
+  //   const t = this
+  //   if (e.detail.errMsg == "getUserInfo:fail auth deny") {
+  //     wx.showToast({
+  //       title: '请完成授权',
+  //     })
+  //   } else if (e.detail.errMsg == "getUserInfo:ok") {
+  //     t.setData({
+  //         haveMiniOpenid: true
+  //       }),
+  //       t.getContext()
+  //   }
+  // },
+  // getContext() {
+  //   const t = this
+  //   wx.cloud.callFunction({
+  //     name: "openapi",
+  //     data: {
+  //       action: 'getContext',
+  //     },
+  //   }).then(function (res) {
+  //     log('[wxContext]', res.result)
+  //     app.globalData.openid = res.result.openid
+  //     // t.setData({
+  //     //   haveMiniOpenid: true
+  //     // })
+  //     app.globalData.unionid = res.result.unionid
+  //     wx.setStorage({
+  //       data: res.result,
+  //       key: 'wxContext',
+  //     })
+  //     wx.setStorage({
+  //       data: true,
+  //       key: 'hasWxContext',
+  //     })
+  //     wx.setStorage({
+  //       data: true,
+  //       key: 'haveUserInfo',
+  //     })
+  //     return res.result
+  //   }).catch(console.error), wx.login({
+  //     success: function (e) {
+  //       // GET https://api.weixin.qq.com/sns/jscode2session?appid=wx7b4bbc2d9c538e84&secret=4ebadf0e08f79dccd6b894ffa8716d49&js_code=001BBC000k8oYK1b6d400cPaTO2BBC0j&grant_type=authorization_code
+  //       console.log("login ", e);
+  //     }
+  //   })
+  // },
   onShareAppMessage(a) {
     const t = this
     return {
@@ -148,35 +149,35 @@ create(store, {
     // }
     // app.changeStorage('subscribeType', subscribeType)
     if (e.currentTarget.dataset.cur == 'longTerm' && t.store.data.subscribeType.longTerm == true) {
-      this.data.timePicker.open();
+      t.data.timePicker.open();
     } else if (e.currentTarget.dataset.cur == 'longTerm' && t.store.data.subscribeType.longTerm == false) {
       t.unSubscribeLongTermDailyWeather()
     } else if (e.currentTarget.dataset.cur == 'oneTime' && t.store.data.subscribeType.oneTime == true) {
-      this.data.datePicker.open();
+      t.data.datePicker.open();
     } else if (e.currentTarget.dataset.cur == 'oneTime' && t.store.data.subscribeType.oneTime == false) {
       t.unSubscribeOneTimeDailyWeather()
     } else if (e.currentTarget.dataset.cur == 'warning' && t.store.data.subscribeType.warning == true) {
       t.subscribeWarning()
-    }else if (e.currentTarget.dataset.cur == 'warning' && t.store.data.subscribeType.warning == false) {
+    } else if (e.currentTarget.dataset.cur == 'warning' && t.store.data.subscribeType.warning == false) {
       t.unSubscribeWarning()
     }
   },
   timePickerOpen(e) {
-    log('timePickerOpen', e)
+    // log('timePickerOpen', e)
   },
   timePickerClose(e) {
-    log('timePickerClose', e)
+    // log('timePickerClose', e)
   },
   timePickerOpened(e) {
-    log('timePickerOpened', e)
+    // log('timePickerOpened', e)
   },
   timePickerClosed(e) {
-    log('timePickerClosed', e)
+    // log('timePickerClosed', e)
   },
   timePickerCancel(e) {
     const t = this
     t.store.data.subscribeType.longTerm = !t.store.data.subscribeType.longTerm
-    log('timePickerCancel', e)
+    // log('timePickerCancel', e)
   },
   timePickerSubmit(e) {
     log(e);
@@ -184,8 +185,8 @@ create(store, {
     var
       pages = getCurrentPages(),
       prevPage = pages[0];
-    let pickTime = dayjs(e.detail.value.toString()).hour().toString() + dayjs(e.detail.value.toString()).minute().toString()
-    log(pickTime)
+    let pickTime = dayjs(e.detail.value).format('HHmm')
+    log(pickTime, dayjs(e.detail.value).format('HHmm'))
     const templateId = 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk'
     const subDailyWeatherCloudFn = () => {
       let longtermData = {
@@ -198,8 +199,9 @@ create(store, {
         longitude: prevPage.data.longitude,
         templateId: templateId,
         done: false,
-        openid:app.globalData.openid,
-        unionid:app.globalData.unionid
+        openid: app.globalData.openid,
+        oaOpenid: '',
+        unionid: app.globalData.unionid
       }
       wx.cloud.callFunction({
         name: 'openapi',
@@ -236,13 +238,13 @@ create(store, {
     }
     subDailyWeatherCloudFn()
   },
-  
+
   unSubscribeLongTermDailyWeather() {
     const t = this
     let longTermData = {
       action: 'unSubscribeLongTermDailyWeather',
-      openid:app.globalData.openid,
-      unionid:app.globalData.unionid,
+      openid: app.globalData.openid,
+      unionid: app.globalData.unionid,
       templateId: 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk'
     }
     wx.cloud.callFunction({
@@ -314,8 +316,8 @@ create(store, {
         longitude: prevPage.data.longitude,
         templateId: templateId,
         done: false,
-        openid:app.globalData.openid,
-        unionid:app.globalData.unionid
+        openid: app.globalData.openid,
+        unionid: app.globalData.unionid
       }
       prevPage.data.subData = onetimeData
       log('[onetimeData]', onetimeData)
@@ -391,9 +393,9 @@ create(store, {
     let onetimeData = {
       action: 'unSubscribeOneTimeDailyWeather',
       templateId: templateId,
-      done:false,
-      openid:app.globalData.openid,
-      unionid:app.globalData.unionid
+      done: false,
+      openid: app.globalData.openid,
+      unionid: app.globalData.unionid
     }
     wx.cloud.callFunction({
       name: 'openapi',
@@ -430,11 +432,11 @@ create(store, {
       }
     })
   },
-  subscribeWarning(){
+  subscribeWarning() {
     const t = this
     var
-    pages = getCurrentPages(),
-    prevPage = pages[0];
+      pages = getCurrentPages(),
+      prevPage = pages[0];
     let templateId = 'rKArzpKfNo9HrTqsaOKnsV77gpTrkJaciWdmQnOidqs'
     const subDailyWeatherCloudFn = () => {
       let subData = {
@@ -443,10 +445,10 @@ create(store, {
         language: t.store.data.languageValue,
         latitude: prevPage.data.latitude,
         longitude: prevPage.data.longitude,
-        done:false,
+        done: false,
         templateId: templateId,
-        openid:app.globalData.openid,
-        unionid:app.globalData.unionid
+        openid: app.globalData.openid,
+        unionid: app.globalData.unionid
       }
       wx.cloud.callFunction({
         name: 'openapi',
@@ -513,8 +515,8 @@ create(store, {
     let templateId = 'rKArzpKfNo9HrTqsaOKnsV77gpTrkJaciWdmQnOidqs'
     let longTermData = {
       action: 'unSubscribeWarning',
-      openid:app.globalData.openid,
-      unionid:app.globalData.unionid,
+      openid: app.globalData.openid,
+      unionid: app.globalData.unionid,
       templateId: templateId
     }
     wx.cloud.callFunction({

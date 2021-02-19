@@ -78,7 +78,7 @@
   -webkit-align-items: start;
   align-items: start;
   padding: 32rpx 56rpx;
-  background: #009688;
+  background: rgba(0, 150, 135, 0.388);
   color: #fff
 }
 

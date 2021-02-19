@@ -108,23 +108,6 @@ Component({
     _returnEventData: function (e) {
       console.log("" + this.data.openTypeToBindEvent[this.properties.openType], e.detail, {})
       this.properties.disabled || this.triggerEvent("" + this.data.openTypeToBindEvent[this.properties.openType], e.detail, {})
-      wx.cloud.callFunction({
-        name: 'getUserInfo-unionid',
-        data: {},
-        success: res => {
-          console.log(res)
-          if(res.subscribe == 1){
-            console.log('用户已关注')
-            this.triggerEvent('isUserSubOA',1)
-          }else if(res.subscribe == 0){
-            console.log('用户未关注')
-            this.triggerEvent('isUserSubOA',0)
-          }
-        },
-        fail: err => {
-          console.log(err)
-        }
-      })
     },
     _tap: function (e) {
       this._addRipple_(e), this.setData({

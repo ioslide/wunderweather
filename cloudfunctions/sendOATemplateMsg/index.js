@@ -1,5 +1,7 @@
 const cloud = require('wx-server-sdk');
 const templateMessage = require('templateMessage.js');
+const dayjs = require('day.js')
+
 const rp = require('request-promise');
 cloud.init({
   env: 'wunderweather-nwepb'
@@ -17,7 +19,9 @@ exports.main = async (event, context) => {
 
     const sendPromises = AllUserWeatherData.data.map(async userWeatherData => {
       try {
-        if (isToday(userWeatherData.startTime) == true) {
+        let today = dayjs(new Date()).format('HHmm')
+        console.log('isToday',dayjs(today).isSame(dayjs(userWeatherData.startTime)),userWeatherData.startTime)
+        if (dayjs(today).isSame(dayjs(userWeatherData.startTime)) == true) {
           let getAccessToken = await db.collection("oa-subscribe-accessToken").doc("ACCESS_TOKEN").get();
           let accessToken = getAccessToken.data.token;
 
@@ -55,13 +59,6 @@ exports.main = async (event, context) => {
             uri: 'https://api.caiyunapp.com/v2.5/F4i9DpgD0R1DIcPP/' + userWeatherData.longitude + ',' + userWeatherData.latitude + '/weather.json?lang=' + userWeatherData.language + '&dailysteps=30&unit=' + userWeatherData.unit,
             json: true
           })
-          let getOAUserList = await rp({
-            method: 'GET',
-            uri: 'https://api.weixin.qq.com/cgi-bin/user/get?access_token=' + accessToken,
-            json: true
-          })
-          let getOAUserListOpenid = getOAUserList.data.openid
-          console.log('getOAUserListOpenid', getOAUserListOpenid)
           console.log(getWeatherData)
           // let temperature = getWeatherData.result.daily.temperature[0]
           // let skycon = weatherSkycon[getWeatherData.result.realtime.skycon]
@@ -89,19 +86,28 @@ exports.main = async (event, context) => {
             }
           }
 
-          for (let i = 0; i < getOAUserListOpenid.length; i++) {
-            let longtermTemplateData = {
-              'touser': getOAUserListOpenid[i],
-              "miniprogram": {
+          console.log('userWeatherData.oaOpenid',userWeatherData.oaOpenid)
+
+            // let longtermTemplateData = {
+            //   'touser': userWeatherData.oaOpenid,
+            //   "miniprogram": {
+            //     "appid": "wx7b4bbc2d9c538e84",
+            //     "pagepath": "pages/index/index"
+            //   },
+            //   'data': weatherData,
+            //   'template_id': 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk',
+            // }
+            // console.log('longtermTemplateData', longtermTemplateData)
+            // await templateMessage.sendTemplateMsg(accessToken, longtermTemplateData);
+            await cloud.openapi.subscribeMessage.send({
+              touser: userWeatherData.oaOpenid,
+              miniprogram: {
                 "appid": "wx7b4bbc2d9c538e84",
                 "pagepath": "pages/index/index"
               },
-              'data': weatherData,
-              'template_id': 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk',
-            }
-            console.log('longtermTemplateData', longtermTemplateData)
-            // await templateMessage.sendTemplateMsg(accessToken, longtermTemplateData);
-          }
+              data: weatherData,
+              templateId: 'oOTpsU26qGPpShCbFypuJj6eLlpDm_Yba9Jz500G4dk',
+            });
         }
       } catch (e) {
         return e;

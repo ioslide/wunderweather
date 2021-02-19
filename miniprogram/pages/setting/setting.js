@@ -381,6 +381,11 @@ create(store, {
       url: e.currentTarget.dataset.cur + '/' + e.currentTarget.dataset.cur
     });
   },
+  navSubscribe(e) {
+    wx.navigateTo({
+      url: '../subscribe/subscribe'
+    });
+  },
   onShareAppMessage(a) {
     return {
       title: '奇妙天气',

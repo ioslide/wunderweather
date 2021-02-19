@@ -118,7 +118,7 @@ async function subscribeWarning(event) {
 async function unSubscribeWarning(event) {
   const db = cloud.database();
   const result = await db
-    .collection('oa-subscribe-user-daily')
+    .collection('warning-subscribe-user')
     .where({
       openid: event.openid,
       templateId: event.templateId
@@ -154,7 +154,7 @@ async function subscribeLongtermDailyWeather(event) {
     data: {
       ...event,
       touser: OPENID
-    },
+    }
   });
   return result;
 }

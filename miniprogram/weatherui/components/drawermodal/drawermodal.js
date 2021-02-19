@@ -40,6 +40,7 @@ create.Component(store, {
           t.setData({
             historyCityList: wx.getStorageSync('historyCityList')
           })
+          console.log('historyCityList',wx.getStorageSync('historyCityList'))
         }
         if (t.properties.drawerModalName == "DrawerModalR") {
           wx.vibrateShort()
